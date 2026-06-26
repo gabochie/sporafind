@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sporafind — Pricing</title>
+<meta name="description" content="Choose the right plan for your diaspora intelligence needs.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23006B3C'/><path d='M16 4l3.6 11.1H31l-9.3 6.7 3.6 11.1L16 25.2 7.7 32.9l3.6-11.1L2 15.1h11.4L16 4z' fill='%23D4A017'/></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --s0:#0b0b0b;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;--s4:#333;
+  --bd:#2a2a2a;--bds:#383838;
+  --t0:#fff;--t1:#ededed;--t2:#999;--t3:#555;
+  --green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444;
+  --gr-dim:rgba(0,107,60,.15);--gl-dim:rgba(0,168,90,.12);--gd-dim:rgba(212,160,23,.12);
+  --ff:'Inter',system-ui,-apple-system,sans-serif;
+  --fm:'Space Grotesk','Inter',sans-serif;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 12px 48px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--s0)}
+body{
+  font-family:var(--ff);background:var(--s0);color:var(--t1);
+  display:flex;flex-direction:column;min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--ff)}
+
+/* Topbar */
+.topbar{
+  background:var(--s1);border-bottom:1px solid var(--bd);
+  padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;z-index:100;
+}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.logomark{
+  width:30px;height:30px;border-radius:7px;background:var(--green);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.logomark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff15,transparent 50%);}
+.star{
+  width:13px;height:13px;background:var(--gold);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.logotext{font-family:var(--fm);font-size:14px;font-weight:700;letter-spacing:-.3px;color:var(--t1);}
+.logotext span{color:var(--gold);}
+.logotext small{font-size:10px;font-weight:400;color:var(--t3);margin-left:2px;}
+.topright{display:flex;align-items:center;gap:8px;}
+.btn-outline{
+  padding:6px 12px;border:1px solid var(--bds);border-radius:7px;
+  background:transparent;font-size:12px;font-weight:500;color:var(--t2);
+  cursor:pointer;font-family:var(--ff);transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.btn-outline:hover{background:var(--s2);color:var(--t1);border-color:var(--tm);}
+
+/* Hero */
+.hero{
+  text-align:center;padding:64px 20px 48px;
+  background:linear-gradient(180deg,var(--s1) 0%,var(--s0) 100%);
+  border-bottom:1px solid var(--bd);
+}
+.hero h1{font-family:var(--fm);font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;}
+.hero h1 span{color:var(--gold);}
+.hero p{font-size:15px;color:var(--t2);max-width:520px;margin:0 auto;line-height:1.6;}
+
+/* Toggle */
+.toggle-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:28px;}
+.toggle-label{font-size:13px;color:var(--t2);font-weight:500;}
+.toggle-label.active{color:var(--t1);}
+.toggle{
+  width:44px;height:24px;border-radius:12px;background:var(--s3);border:1px solid var(--bds);
+  position:relative;cursor:pointer;transition:all .2s;
+}
+.toggle.active{background:var(--green);border-color:var(--gl);}
+.toggle-knob{
+  width:18px;height:18px;border-radius:50%;background:var(--t2);
+  position:absolute;top:2px;left:2px;transition:all .2s;
+}
+.toggle.active .toggle-knob{left:22px;background:#fff;}
+.toggle-save{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--gd-dim);color:var(--gold);font-weight:600;display:none;}
+.toggle.active ~ .toggle-save{display:inline;}
+
+/* Cards */
+.pricing-grid{
+  display:flex;gap:20px;max-width:960px;margin:0 auto;padding:48px 20px 64px;
+  justify-content:center;flex-wrap:wrap;
+}
+.card{
+  background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);
+  padding:32px 28px;width:280px;display:flex;flex-direction:column;
+  transition:all .2s;position:relative;
+}
+.card:hover{border-color:var(--bds);transform:translateY(-2px);box-shadow:var(--shadow);}
+.card.highlighted{
+  border-color:var(--gl);background:linear-gradient(180deg,var(--s1) 0%,#0a1f12 100%);
+  box-shadow:0 0 0 1px var(--gl-dim),var(--shadow-lg);
+}
+.badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--gl);color:#fff;font-size:11px;font-weight:600;
+  padding:4px 14px;border-radius:20px;letter-spacing:.3px;
+}
+.card-name{font-family:var(--fm);font-size:13px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.card-price{font-family:var(--fm);font-size:40px;font-weight:700;color:var(--t1);letter-spacing:-1px;}
+.card-price span{font-size:16px;font-weight:400;color:var(--t2);letter-spacing:0;}
+.card-desc{font-size:13px;color:var(--t2);margin:8px 0 20px;line-height:1.5;}
+.card-cta{
+  width:100%;padding:12px;border-radius:var(--radius-sm);border:none;
+  font-size:14px;font-weight:600;font-family:var(--ff);
+  transition:all .15s;margin-bottom:24px;
+}
+.card-cta.primary{background:var(--green);color:#fff;}
+.card-cta.primary:hover{background:var(--gl);}
+.card-cta.secondary{background:var(--s2);color:var(--t1);border:1px solid var(--bds);}
+.card-cta.secondary:hover{background:var(--s3);border-color:var(--tm);}
+.features{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1;}
+.features li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;color:var(--t2);line-height:1.4;
+}
+.features li i{color:var(--gl);font-size:16px;flex-shrink:0;margin-top:1px;}
+.features li.missing i{color:var(--t3);}
+
+/* Loading / Error states */
+.loading-state{text-align:center;padding:64px 20px;color:var(--t3);}
+.loading-state i{font-size:24px;display:block;margin-bottom:12px;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-state{text-align:center;padding:64px 20px;color:var(--t2);}
+.error-state i{font-size:32px;display:block;margin-bottom:12px;color:var(--amber);}
+.error-state h3{margin-bottom:6px;font-weight:600;}
+.error-state p{font-size:13px;color:var(--t3);}
+.empty-state{text-align:center;padding:64px 20px;color:var(--t2);}
+.empty-state i{font-size:32px;display:block;margin-bottom:12px;color:var(--t3);}
+.empty-state h3{margin-bottom:6px;font-weight:600;}
+
+/* Footer */
+.footer{
+  text-align:center;padding:24px 20px 40px;
+  border-top:1px solid var(--bd);font-size:12px;color:var(--t3);
+}
+.footer a{color:var(--t2);text-decoration:underline;}
+
+/* Faq */
+.faq{max-width:640px;margin:0 auto;padding:0 20px 64px;}
+.faq h2{font-family:var(--fm);font-size:20px;font-weight:600;text-align:center;margin-bottom:24px;color:var(--t1);}
+.faq-item{border-bottom:1px solid var(--bd);padding:16px 0;}
+.faq-q{font-size:14px;font-weight:500;color:var(--t1);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+.faq-q i{font-size:16px;color:var(--t2);transition:transform .2s;}
+.faq-q.open i{transform:rotate(45deg);}
+.faq-a{font-size:13px;color:var(--t2);line-height:1.6;padding-top:10px;display:none;}
+.faq-a.show{display:block;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="logo">
+    <div class="logomark"><div class="star"></div></div>
+    <div class="logotext">Spora<span>find</span><small>beta</small></div>
+  </a>
+  <div class="topright">
+    <a href="/" class="btn-outline"><i class="ti ti-arrow-left"></i> Back to app</a>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Simple, transparent <span>pricing</span></h1>
+  <p>Choose the plan that fits your workflow. All plans include access to the global diaspora database from Companies House.</p>
+  <div class="toggle-wrap">
+    <span class="toggle-label active" id="lbl-monthly">Monthly</span>
+    <div class="toggle" id="billing-toggle" onclick="toggleBilling()">
+      <div class="toggle-knob"></div>
+    </div>
+    <span class="toggle-label" id="lbl-yearly">Yearly</span>
+    <span class="toggle-save">Save ~20%</span>
+  </div>
+</div>
+
+<div id="pricing-container">
+  <div class="loading-state"><i class="ti ti-loader"></i><p>Loading plans…</p></div>
+</div>
+
+<div class="faq">
+  <h2>Frequently asked questions</h2>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Can I switch plans later? <i class="ti ti-plus"></i></div>
+    <div class="faq-a">Yes, you can upgrade or downgrade at any time. Changes take effect on your next billing cycle.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Is there a free trial for Pro? <i class="ti ti-plus"></i></div>
+    <div class="faq-a">We offer a 14-day free trial on the Pro plan. No credit card required.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept? <i class="ti ti-plus"></i></div>
+    <div class="faq-a">We accept all major credit cards, debit cards, and bank transfers for annual Enterprise plans.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Can I get a refund? <i class="ti ti-plus"></i></div>
+    <div class="faq-a">Yes, we offer a 30-day money-back guarantee on all paid plans. No questions asked.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Sporafind. Built from official Companies House data. <a href="/">Back to app</a></p>
+</div>
+
+<script>
+const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  ? "http://localhost:8000" : "https://api.sporafind.com";
+
+let billingYearly = false;
+let plans = [];
+
+async function loadPricing() {
+  const container = document.getElementById("pricing-container");
+  try {
+    const res = await fetch(`${API_BASE}/pricing`);
+    if (!res.ok) throw new Error("Failed to load");
+    const data = await res.json();
+    plans = data.plans || [];
+    if (!plans.length) {
+      container.innerHTML = `<div class="empty-state"><i class="ti ti-receipt-off"></i><h3>No plans available</h3><p>Check back soon.</p></div>`;
+      return;
+    }
+    renderCards();
+  } catch {
+    container.innerHTML = `<div class="error-state"><i class="ti ti-cloud-off"></i><h3>Could not load pricing</h3><p>Make sure the API server is running</p></div>`;
+  }
+}
+
+function renderCards() {
+  const container = document.getElementById("pricing-container");
+  container.innerHTML = `<div class="pricing-grid">${plans.map(p => {
+    const price = billingYearly ? p.price_yearly : p.price_monthly;
+    const period = billingYearly ? "/year" : "/month";
+    const isFree = price === 0;
+    return `<div class="card${p.highlighted ? ' highlighted' : ''}">
+      ${p.highlighted ? '<div class="badge">Most popular</div>' : ''}
+      <div class="card-name">${p.display_name}</div>
+      <div class="card-price">${isFree ? 'Free' : `$${price.toLocaleString()}`}${!isFree ? `<span>${period}</span>` : ''}</div>
+      <div class="card-desc">${p.description}</div>
+      <button class="card-cta ${isFree ? 'secondary' : 'primary'}" onclick="selectPlan('${p.name}')">
+        ${isFree ? 'Get started' : 'Subscribe'}
+      </button>
+      <ul class="features">${(p.features||[]).map(f => `<li><i class="ti ti-circle-check"></i>${f}</li>`).join('')}</ul>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function toggleBilling() {
+  billingYearly = !billingYearly;
+  document.getElementById("billing-toggle").classList.toggle("active", billingYearly);
+  document.getElementById("lbl-monthly").classList.toggle("active", !billingYearly);
+  document.getElementById("lbl-yearly").classList.toggle("active", billingYearly);
+  renderCards();
+}
+
+function selectPlan(name) {
+  const msg = `Selected "${name}" plan (${billingYearly ? 'yearly' : 'monthly'})`;
+  const existing = document.querySelector(".toast");
+  if (existing) existing.remove();
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = `<i class="ti ti-circle-check"></i><span>${msg}</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="ti ti-x"></i></button>`;
+  const style = document.createElement("style");
+  style.textContent = `.toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:var(--s1);border:1px solid var(--bds);border-radius:10px;
+    padding:12px 18px;display:flex;align-items:center;gap:10px;
+    font-size:13px;color:var(--t1);z-index:999;
+    box-shadow:var(--shadow-lg);animation:fadeIn .25s ease;
+  }
+  .toast i{color:var(--gl);font-size:18px;}
+  .toast-close{background:none;border:none;color:var(--t3);cursor:pointer;padding:2px;}
+  @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
+  document.head.appendChild(style);
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = "0"; toast.style.transition = "opacity .3s"; setTimeout(() => toast.remove(), 300); }, 3000);
+}
+
+function toggleFaq(el) {
+  el.classList.toggle("open");
+  const answer = el.nextElementSibling;
+  answer.classList.toggle("show");
+}
+
+loadPricing();
+</script>
+</body>
+</html>
