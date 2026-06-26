@@ -1,4 +1,11 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Sporafind — Build Roadmap</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -80,6 +87,8 @@ h1 span{color:var(--gold);}
 .tag-frontend{background:#2e1a0a;color:var(--gold);border:1px solid #4f2a1a;}
 .tag-infra{background:#2e0a0a;color:var(--red);border:1px solid #4f1a1a;}
 .tag-biz{background:#1a2e2e;color:var(--teal);border:1px solid #1a4f4f;}
+.tag-content{background:#2a1a3e;color:var(--purple);border:1px solid #3a2a5f;}
+.tag-qa{background:#1a2e1a;color:var(--gl);border:1px solid #2a4f2a;}
 .architecture-box{
   background:var(--s1);border:1px solid var(--bd);border-radius:10px;
   padding:18px;margin-bottom:20px;
@@ -96,6 +105,7 @@ h1 span{color:var(--gold);}
 }
 .arch-badge.current{background:var(--green);color:#fff;}
 .arch-badge.future{background:var(--s3);color:var(--tm);border:1px solid var(--bd);}
+.arch-badge.shipped{background:var(--blue);color:#fff;}
 .note{background:#1a1a0a;border:1px solid #3f3f0a;border-radius:8px;padding:12px 16px;font-size:12px;color:var(--t2);line-height:1.6;margin-top:14px;}
 .note strong{color:var(--t1);}
 .note code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gl);}
@@ -106,22 +116,30 @@ h1 span{color:var(--gold);}
 }
 </style>
 
+</head>
+<body>
+
 <h1>Spora<span>find</span> <span style="font-size:14px;color:var(--t2);font-weight:400;font-family:'Inter',sans-serif;">Build Roadmap</span></h1>
-<div class="meta">From intelligence database to diaspora social platform. A phased build where each phase funds the next.</div>
+<div class="meta">Ghanaian diaspora intelligence platform. Phase A is live — each phase funds the next.</div>
 
 <div class="vision-box">
   <h3>🌍 The Vision</h3>
-  <p><strong>Phase A (now):</strong> Read-only diaspora intelligence from Companies House data. Syndicates, recruiters, and researchers pay to search, filter, and export.<br>
-  <strong>Phase B-D (future):</strong> Diaspora members claim their scraped profile, verify, and opt into paid connections. The platform becomes a two-sided marketplace: intelligence data on one side, social networking with tiered pricing on the other. Each phase is unlocked by revenue from the previous.</p>
+  <p><strong>Phase A (live):</strong> Read-only diaspora intelligence with blog, pricing, and admin tools. Syndicates, recruiters, and researchers pay to search, filter, and export. <strong>Frontend:</strong> Express + EJS on Vercel serverless. <strong>Backend:</strong> FastAPI on Vercel with Supabase (PostgreSQL). <strong>CI/CD:</strong> GitHub Actions + automated testing.<br>
+  <strong>Phase B-D (future):</strong> Diaspora members claim their scraped profile, verify, and opt into paid connections. Blog & content marketing drives organic sign-ups. The platform evolves into a two-sided marketplace: intelligence data on one side, social networking with tiered pricing on the other.</p>
 </div>
 
 <div class="architecture-box">
   <h3><span>◆</span> Data Architecture</h3>
   <div class="arch-grid">
     <div class="arch-card">
-      <div class="arch-badge current">CURRENT</div>
+      <div class="arch-badge shipped">SHIPPED</div>
       <h4>profiles (scraped)</h4>
-      <p>Companies House officer records. Read-only, never modified by users. Has <code>claimed_by</code> FK to <code>users</code> as a nullable column — ready for Phase B.</p>
+      <p>Companies House officer records. Read-only, never modified by users. Has <code>claimed_by</code> FK to <code>users</code> — ready for Phase B.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-badge shipped">SHIPPED</div>
+      <h4>blog_posts + pricing_plans</h4>
+      <p><code>blog_posts</code>: published/draft posts, tags, categories, analytics, full-text search. <code>pricing_plans</code>: DB-driven tiers with featured flagging. Both served via FastAPI.</p>
     </div>
     <div class="arch-card">
       <div class="arch-badge future">PHASE B</div>
@@ -131,12 +149,7 @@ h1 span{color:var(--gold);}
     <div class="arch-card">
       <div class="arch-badge future">PHASE C</div>
       <h4>pricing_tiers + connections (new tables)</h4>
-      <p><code>pricing_tiers</code>: per-user pricing for Chat, Intro, Meeting. <code>connections</code>: tracks who paid to connect, status, Stripe payment intents.</p>
-    </div>
-    <div class="arch-card">
-      <div class="arch-badge future">PHASE D</div>
-      <h4>direct sign-ups</h4>
-      <p>Diaspora members create profiles without a scraped record. Feeds, groups, events tables added. Full community platform.</p>
+      <p><code>connections</code>: tracks who paid to connect, status, Stripe payment intents. Messaging threads tied to each connection.</p>
     </div>
   </div>
 </div>
@@ -148,15 +161,15 @@ h1 span{color:var(--gold);}
     <div class="ditem"><i class="ti ti-users"></i> <strong>Phase B-C buyer:</strong> Same + diaspora members seeking visibility</div>
     <div class="ditem"><i class="ti ti-coin"></i> <strong>Phase A pricing:</strong> Free + $19/mo paid + Enterprise (per-seat)</div>
     <div class="ditem"><i class="ti ti-currency-dollar"></i> <strong>Phase C pricing:</strong> Platform takes 15% cut on connection fees</div>
-    <div class="ditem"><i class="ti ti-code"></i> <strong>Backend:</strong> FastAPI (Python)</div>
+    <div class="ditem"><i class="ti ti-code"></i> <strong>Backend:</strong> FastAPI (Python) on Vercel</div>
     <div class="ditem"><i class="ti ti-database"></i> <strong>Database:</strong> Supabase Free tier (pgvector included)</div>
-    <div class="ditem"><i class="ti ti-key"></i> <strong>Auth:</strong> Better Auth (self-hosted, $0)</div>
-    <div class="ditem"><i class="ti ti-settings"></i> <strong>Workers:</strong> Modal.com ($30/mo free credit)</div>
-    <div class="ditem"><i class="ti ti-cloud"></i> <strong>Deploy:</strong> Koyeb (free: 1 app, 1 vCPU, 512MB, always-on)</div>
-    <div class="ditem"><i class="ti ti-cloud"></i> <strong>Frontend:</strong> Vercel Hobby (free static hosting)</div>
+    <div class="ditem"><i class="ti ti-server"></i> <strong>Frontend:</strong> Express + EJS on Vercel serverless</div>
+    <div class="ditem"><i class="ti ti-key"></i> <strong>Auth:</strong> session.js (client-side) → Better Auth (future)</div>
+    <div class="ditem"><i class="ti ti-cloud"></i> <strong>Deploy:</strong> Vercel (frontend + backend, serverless)</div>
     <div class="ditem"><i class="ti ti-currency-dollar-off"></i> <strong>LLM:</strong> Gemini free tier + open-source on Modal</div>
-    <div class="ditem"><i class="ti ti-building"></i> <strong>Data (scraped):</strong> Companies House free API → Bright Data post-validation</div>
+    <div class="ditem"><i class="ti ti-building"></i> <strong>Data:</strong> Companies House free API → Bright Data post-validation</div>
     <div class="ditem"><i class="ti ti-user-plus"></i> <strong>Data (user):</strong> Opt-in claimed profiles + direct sign-ups</div>
+    <div class="ditem"><i class="ti ti-test-pipe"></i> <strong>Testing:</strong> pytest (backend) + vitest (frontend) — CI via GitHub Actions</div>
   </div>
 </div>
 
@@ -165,26 +178,32 @@ h1 span{color:var(--gold);}
 <script>
 const PHASES = [
   {
-    letter:"A", label:"Intelligence Database", weeks:"Weeks 1-4", icon:"🔍", color:"var(--green)",
-    desc:"Read-only Companies House search. Syndicates and recruiters pay to find and export diaspora profiles.",
+    letter:"A", label:"Intelligence Platform", weeks:"Weeks 1-6", icon:"🔍", color:"var(--green)",
+    desc:"Companies House search, blog & content engine, pricing & admin. Syndicates and recruiters pay to find and export diaspora profiles.",
     tasks:[
-      {name:"Supabase project + DB schema",desc:"Create Free tier project. Enable pgvector. Run migration with <code>profiles</code>, <code>orgs</code>, <code>users</code>, <code>community_submissions</code>, <code>exports</code>, <code>search_history</code>. Profile has <code>claimed_by</code> FK ready for Phase B.",tag:"infra"},
-      {name:"FastAPI scaffold + auth",desc:"<code>routers/</code>, <code>models/</code>, <code>schemas/</code>, <code>services/</code>. Better Auth with magic link. CORS, health check, lifespan.",tag:"backend"},
-      {name:"Profiles & orgs REST API",desc:"<code>GET /profiles</code>, <code>GET /orgs</code> — paginated, filterable by segment/country/origin. Stats endpoint.",tag:"backend"},
-      {name:"Search endpoint",desc:"<code>POST /search</code> with keyword matching (<code>ilike</code>), facet counts, pagination.",tag:"backend"},
-      {name:"Export endpoint",desc:"<code>POST /export</code> — CSV generation, tracked per user for usage metering.",tag:"backend"},
+      {name:"Supabase project + DB schema",desc:"Create Free tier project. Enable pgvector. Run migrations for <code>profiles</code>, <code>orgs</code>, <code>users</code>, <code>community_submissions</code>, <code>exports</code>, <code>search_history</code>, <code>pricing_plans</code>, <code>blog_posts</code>. Profile has <code>claimed_by</code> FK ready for Phase B.",tag:"infra"},
+      {name:"FastAPI scaffold + routers",desc:"<code>routers/</code>, <code>models/</code>, <code>database.py</code> with async SQLAlchemy. CORS, health check, lifespan. DB connection via Supabase pooler.",tag:"backend"},
+      {name:"Profiles & orgs REST API",desc:"<code>GET /profiles</code>, <code>GET /orgs</code> — paginated, filterable by segment/country/origin. Stats endpoint with facet counts.",tag:"backend"},
+      {name:"Search endpoint",desc:"<code>POST /search</code> with keyword matching (<code>ilike</code>), facet counts, pagination. Public access with optional API key.",tag:"backend"},
+      {name:"Export endpoint",desc:"<code>POST /export</code> — CSV generation, tracked per user for usage metering. Secured behind auth.",tag:"backend"},
       {name:"Companies House ingestion",desc:"Fetch all Ghanaian officers from CH API. Paginate, parse, load into <code>profiles</code>. Enrich with company details.",tag:"data"},
-      {name:"Frontend — onboarding gate",desc:"Full-screen sign-up → magic link → 3-step wizard (role, interest, region) → app view. Tool is hidden until authenticated.",tag:"frontend"},
-      {name:"Frontend — async API wiring",desc:"Replace all mock data with <code>fetch()</code> to live API. Grid, stats, sidebar, search, filters all driven by API calls.",tag:"frontend"},
-      {name:"Auth UI",desc:"Sign-in button in topbar. Magic link modal (or redirects to onboarding sign-in). Avatar with dropdown (profile, saved searches, settings, sign out).",tag:"frontend"},
+      {name:"Frontend — Express + EJS scaffold",desc:"Express server with EJS templating, static file serving, session.js injection. Vercel serverless deployment with <code>@vercel/node</code>.",tag:"frontend"},
+      {name:"Frontend — async API wiring",desc:"Replace all mock data with <code>fetch()</code> to live FastAPI proxies (Express → backend). Grid, stats, sidebar, search, filters all driven by API calls.",tag:"frontend"},
+      {name:"Blog system",desc:"Full blog: <code>blog_posts</code> table in Supabase, CRUD admin panel, public listing with tags/categories, EJS templates, sitemap & RSS feeds.",tag:"content"},
+      {name:"Pricing page",desc:"DB-driven pricing plans served from FastAPI, proxied through Express. Dynamic billing toggle (monthly/yearly). Three tiers: Free, Pro, Enterprise.",tag:"frontend"},
+      {name:"Admin panel",desc:"Blog CRUD with WYSIWYG editor, draft/publish workflow, activity log viewer. Secured via admin key header.",tag:"frontend"},
+      {name:"Rebrand to SporaFind",desc:"Rename from DiasporaFinder to SporaFind across 23+ files. Update domains, emails, brand references, navigation, SEO metadata.",tag:"infra"},
+      {name:"Vercel deploy (backend + frontend)",desc:"Deploy FastAPI to Vercel (sporafind-api, <code>api.sporafind.com</code>). Deploy Express+EJS to Vercel (sporafind, <code>sporafind.com</code>). Both with custom domains.",tag:"infra"},
+      {name:"Database connection fix",desc:"Fix DNS resolution for Supabase (<code>db.xwmonodzahlsfyyjauzi.supabase.co</code> is IPv6-only). Switch to pooler (<code>aws-0-eu-west-1.pooler.supabase.com:6543</code>). Disable asyncpg prepared statement cache for pgbouncer compatibility.",tag:"infra"},
+      {name:"Auth UI",desc:"Sign-in button in topbar. Magic link modal. Avatar with dropdown (profile, saved searches, settings, sign out). Session state via session.js.",tag:"frontend"},
       {name:"Email capture → upsell",desc:"3-interaction trigger opens sign-in. Bottom-bar buttons (Export, Deep Scan) prompt auth if not signed in.",tag:"frontend"},
-      {name:"Docker + Koyeb deploy",desc:"Koyeb free tier: 1 app, 1 vCPU, 512MB RAM, always-on, no cold starts. Deploy via CLI or koyeb.yaml.",tag:"infra"},
-      {name:"Vercel deploy + e2e test",desc:"Deploy frontend to Vercel Hobby. Full flow: sign-up → search → filter → export. Fix integration bugs.",tag:"infra"},
+      {name:"CI/CD + automated testing",desc:"GitHub Actions workflow with two jobs: backend pytest (19 tests) + frontend vitest (16 tests). PostgreSQL service container for backend tests. Runs on every push/PR to main.",tag:"qa"},
+      {name:"API key auth layer",desc:"<code>verify_public_access</code> and <code>verify_admin</code> dependency system. Optional public key for read endpoints. Admin key for blog CRUD and activity logs.",tag:"backend"},
     ]
   },
   {
-    letter:"B", label:"Claim + Verify", weeks:"Weeks 5-8", icon:"🆔", color:"var(--blue)",
-    desc:"Diaspora members claim their scraped profile, verify themselves, and opt into being discoverable. Scraped data stays read-only; user data lives in a separate table.",
+    letter:"B", label:"Claim + Verify", weeks:"Weeks 7-10", icon:"🆔", color:"var(--blue)",
+    desc:"Diaspora members claim their scraped profile, verify themselves, and opt into being discoverable. Content marketing via blog drives organic discovery.",
     tasks:[
       {name:"Create user_profiles table",desc:"New table: bio, photo, interests, verified status, linked to <code>profiles</code> via FK. Claimed profiles get a verified badge in search results.",tag:"backend"},
       {name:"Claim profile endpoint",desc:"<code>POST /profiles/:id/claim</code> — authenticated user claims a scraped profile. Sets <code>claimed_by</code> FK. Creates <code>user_profile</code> record.",tag:"backend"},
@@ -193,23 +212,25 @@ const PHASES = [
       {name:"Verified badge in grid + detail",desc:"Green checkmark badge on claimed profiles. Subtle differentiation from unclaimed scraped records.",tag:"frontend"},
       {name:"Notification: profile claimed",desc:"Email notification to the user when someone views or saves their profile. Optional opt-in.",tag:"backend"},
       {name:"Admin: claim moderation queue",desc:"Dashboard to review claim requests. Flag potential impersonation. Approve/reject with reason.",tag:"frontend"},
+      {name:"Blog-driven content marketing",desc:"Regular blog posts: diaspora success stories, Ghana market intelligence, visa & investment guides. SEO optimisation. Subscriber email list.",tag:"content"},
     ]
   },
   {
-    letter:"C", label:"Social + Pricing Tiers", weeks:"Weeks 9-12", icon:"💰", color:"var(--gold)",
-    desc:"Diaspora members set their own connection prices. Paying users connect with leaders, entrepreneurs, and orgs. Platform takes a cut.",
+    letter:"C", label:"Social + Pricing Tiers", weeks:"Weeks 11-14", icon:"💰", color:"var(--gold)",
+    desc:"Diaspora members set their own connection prices. Paying users connect with leaders, entrepreneurs, and orgs. Platform takes a cut. Stripe-powered payments.",
     tasks:[
-      {name:"Create pricing_tiers + connections tables",desc:"<code>pricing_tiers</code>: per-profile pricing for Chat ($0), Intro ($19), Meeting ($99). <code>connections</code>: requester, target, tier, status, Stripe payment intent.",tag:"backend"},
+      {name:"Create connections table",desc:"<code>connections</code>: requester, target, tier, status, Stripe payment intent. Messaging threads tied to each connection. Read-only archive for compliance.",tag:"backend"},
       {name:"Stripe integration",desc:"Payment intents for one-time connection fees. Webhook to update connection status. Platform fee (15%) deducted automatically.",tag:"biz"},
       {name:"Connect button on claimed profiles",desc:"'Connect' button → tier selection modal (Chat / Intro / Meeting) → Stripe payment → messaging opens. Button hidden on unclaimed profiles.",tag:"frontend"},
       {name:"Messaging system",desc:"Simple thread-based messaging between connector and connectee. Only accessible after payment. Read-only for compliance.",tag:"backend"},
       {name:"Dashboard — connections",desc:"List of connections made, pending, received. Status tracking. Export connection history.",tag:"frontend"},
       {name:"Stripe onboarding for claimed users",desc:"Claimed users set up Stripe Connect to receive payouts. Platform handles disputes, refunds.",tag:"biz"},
       {name:"Usage metering + plan enforcement",desc:"Free tier: view profiles only. Paid tier ($19/mo): unlimited search + 10 connections/mo. Enterprise: API access.",tag:"backend"},
+      {name:"Better Auth migration",desc:"Replace session.js with Better Auth (self-hosted). Magic link auth, session management, role-based access (user, admin).",tag:"backend"},
     ]
   },
   {
-    letter:"D", label:"Open Network", weeks:"Weeks 13+", icon:"🌍", color:"var(--purple)",
+    letter:"D", label:"Open Network", weeks:"Weeks 15+", icon:"🌍", color:"var(--purple)",
     desc:"Direct sign-ups for diaspora members without a scraped profile. Full community features: feeds, groups, events, multi-region expansion.",
     tasks:[
       {name:"Direct sign-up for diaspora members",desc:"Anyone can create a profile without a scraped record. Linked to <code>user_profiles</code>. Onboarding tailored for new members.",tag:"backend"},
@@ -224,23 +245,41 @@ const PHASES = [
   },
 ];
 
-const TAG_CLASS = {backend:"tag-backend",ai:"tag-ai",data:"tag-data",frontend:"tag-frontend",infra:"tag-infra",biz:"tag-biz"};
-const TAG_ICON = {backend:"ti-code",ai:"ti-sparkles",data:"ti-database",frontend:"ti-device-desktop",infra:"ti-server",biz:"ti-coin"};
-const STORAGE_KEY = "sf-roadmap-v1";
+const TAG_CLASS = {backend:"tag-backend",ai:"tag-ai",data:"tag-data",frontend:"tag-frontend",infra:"tag-infra",biz:"tag-biz",content:"tag-content",qa:"tag-qa"};
+const TAG_ICON = {backend:"ti-code",ai:"ti-sparkles",data:"ti-database",frontend:"ti-device-desktop",infra:"ti-server",biz:"ti-coin",content:"ti-edit",qa:"ti-test-pipe"};
+const STORAGE_KEY = "sf-roadmap-v3";
+
+PHASES.forEach(p => {
+  p.tasks.forEach((t, i) => {
+    t.id = p.letter + "-" + i;
+  });
+});
 
 function loadState(){
   try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):{};}catch{return{};}
 }
+
 function saveState(s){localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
 
-function render(){
-  const state=loadState();
-  const allTasks=PHASES.flatMap(p=>p.tasks);
-  const total=allTasks.length;
-  const done=new Set(Object.entries(state).filter(([,v])=>v).map(([k])=>k)).size;
-  const pct=Math.round(done/total*100);
+function statusLabel(done, total){
+  if(done===total)return "🎉 All complete!";
+  if(done===0)return "🔴 Not started";
+  const pct=done/total;
+  if(pct<0.1)return "🟡 Just started";
+  if(pct<0.3)return "🟢 In progress";
+  if(pct<0.7)return "🔵 Halfway there";
+  return "✅ Final stretch";
+}
 
-  let html=`
+function render(){
+  try{
+    const state=loadState();
+    const allTasks=PHASES.flatMap(p=>p.tasks);
+    const total=allTasks.length;
+    const done=allTasks.filter(t=>state[t.id]).length;
+    const pct=Math.round(done/total*100);
+
+    let html=`
 <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;flex-wrap:wrap;">
   <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:${pct===100?'var(--gl)':'var(--gold)'}">${pct}%</div>
   <div style="flex:1;min-width:120px;">
@@ -252,55 +291,70 @@ function render(){
       <span>${100-pct}% remaining</span>
     </div>
   </div>
-  <div style="font-size:12px;color:var(--t2);">${pct===100?'🎉 All complete!':done===0?'🔴 Not started':done<10?'🟡 Just started':done<20?'🟢 In progress':'✅ Final stretch'}</div>
+  <div style="font-size:12px;color:var(--t2);">${statusLabel(done, total)}</div>
 </div>`;
 
-  for(const p of PHASES){
-    const pDone=p.tasks.filter(t=>state[t.name]).length;
-    const pTot=p.tasks.length;
-    const pPct=Math.round(pDone/pTot*100);
-    const allDone=pDone>=pTot;
+    for(const p of PHASES){
+      const pDone=p.tasks.filter(t=>state[t.id]).length;
+      const pTot=p.tasks.length;
+      const pPct=Math.round(pDone/pTot*100);
+      const allDone=pDone>=pTot;
 
-    html+=`<div class="phase">
+      html+=`<div class="phase">
       <div class="ph">
         <div class="ph-letter ${p.letter}">${p.letter}</div>
         <span style="font-size:18px">${p.icon}</span>
         <div style="flex:1;">
           <div class="ph-title">${p.label}</div>
           <div class="ph-desc">${p.desc}</div>
+          <div style="margin-top:4px;display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;max-width:200px;height:5px;background:var(--s3);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;border-radius:3px;background:${p.color};transition:width .4s ease;width:${pPct}%"></div>
+            </div>
+            <span style="font-size:10px;color:var(--t2);font-weight:500;">${pDone}/${pTot}</span>
+          </div>
         </div>
         <span class="ph-week">${p.weeks}</span>
-        <div style="font-size:11px;font-weight:600;color:${allDone?'var(--gl)':'var(--t2)'};flex-shrink:0;">${pDone}/${pTot}</div>
       </div>
       <div class="ph-body">`;
-    for(const t of p.tasks){
-      const ch=state[t.name]?"checked":"";
-      html+=`<div class="task">
-        <input class="task-cb" type="checkbox" id="${t.name}" ${ch}>
-        <label class="task-body" for="${t.name}">
+      for(const t of p.tasks){
+        const ch=state[t.id]?"checked":"";
+        html+=`<div class="task">
+        <input class="task-cb" type="checkbox" id="${t.id}" ${ch}>
+        <label class="task-body" for="${t.id}">
           <div class="tn">${t.name}</div>
           <div class="td">${t.desc}</div>
         </label>
         <span class="tag ${TAG_CLASS[t.tag]}"><i class="ti ${TAG_ICON[t.tag]}" style="margin-right:2px;font-size:9px"></i>${t.tag}</span>
       </div>`;
+      }
+      html+=`</div></div>`;
     }
-    html+=`</div></div>`;
-  }
 
-  html+=`<div class="note">
+    html+=`<div class="note">
     <strong>■ Key design rule:</strong> Scraped data (<code>profiles</code>) and user data (<code>user_profiles</code>) live in separate tables.
     Only the <code>claimed_by</code> FK links them. This keeps you legally safe and lets you build the social layer without touching the intelligence product.
     &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Gate:</strong> Each phase starts <em>only</em> when the previous phase generates enough revenue to fund the build time.
-    &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Zero-cost until Phase A ships:</strong> Everything on free tiers — Supabase Free, Koyeb free tier, Modal $30 credit, Vercel Hobby, Gemini free API.
     &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Phase A is the wedge:</strong> Prove demand, build a user base, generate revenue. Then expand to the network.
+    &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Stack:</strong> FastAPI + Express + EJS + PostgreSQL on Vercel.
   </div>`;
 
-  document.getElementById("app").innerHTML=html;
-  document.querySelectorAll(".task-cb").forEach(cb=>{
-    cb.addEventListener("change",()=>{
-      const st=loadState();st[cb.id]=cb.checked;saveState(st);render();
-    });
-  });
+    document.getElementById("app").innerHTML=html;
+  }catch(e){
+    document.getElementById("app").innerHTML = '<div class="note" style="color:var(--red);border-color:var(--red);">Error rendering roadmap: ' + e.message + '</div>';
+  }
 }
+
+document.getElementById("app").addEventListener("change", function(e){
+  const cb = e.target.closest(".task-cb");
+  if(!cb)return;
+  const st = loadState();
+  st[cb.id] = cb.checked;
+  saveState(st);
+  render();
+});
+
 render();
 </script>
+</body>
+</html>

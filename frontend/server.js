@@ -37,7 +37,7 @@ app.set('views', path.join(DIR, 'views'));
 
 app.use(express.json());
 
-app.get(['/admin', '/workspace', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources'], (req, res) => {
+app.get(['/admin', '/workspace', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap'], (req, res) => {
   res.redirect(301, req.path + '.html');
 });
 
@@ -179,7 +179,7 @@ app.get('/sitemap.xml', async (req, res) => {
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published');
   const site = 'https://sporafind.com';
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources'];
+  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap'];
   staticPages.forEach(p => { xml += `  <url><loc>${site}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`; });
   blogPosts.forEach(p => { xml += `  <url><loc>${site}/blog/${p.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`; });
   xml += '</urlset>';
