@@ -4,8 +4,6 @@ import pytest_asyncio
 from typing import AsyncGenerator
 
 from httpx import AsyncClient, ASGITransport
-from sqlalchemy import event
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PG_UUID
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 from app.database import Base, get_db
@@ -16,31 +14,10 @@ os.environ.setdefault("ENVIRONMENT", "test")
 os.environ.setdefault("ADMIN_KEY", "test-admin-key")
 os.environ.setdefault("PUBLIC_API_KEY", "")
 
-TEST_DB_URL = os.environ.get("TEST_DATABASE_URL", "")
-USE_SQLITE = "sqlite" in TEST_DB_URL or not TEST_DB_URL
-
-
-def _patch_pg_types():
-    from sqlalchemy import types as sa_types
-
-    @sa_types.TypeEngine.compiles(ARRAY, "sqlite")
-    def compile_array_sqlite(type_, compiler, **kw):
-        return compiler.process(sa_types.Text())
-
-    @sa_types.TypeEngine.compiles(JSONB, "sqlite")
-    def compile_jsonb_sqlite(type_, compiler, **kw):
-        return compiler.process(sa_types.JSON())
-
-    @sa_types.TypeEngine.compiles(PG_UUID, "sqlite")
-    def compile_uuid_sqlite(type_, compiler, **kw):
-        return compiler.process(sa_types.String(36))
-
-
-def _get_test_url():
-    if USE_SQLITE:
-        _patch_pg_types()
-        return "sqlite+aiosqlite:///./test.db"
-    return TEST_DB_URL
+TEST_DB_URL = os.environ.get(
+    "TEST_DATABASE_URL",
+    "postgresql+asyncpg://postgres:postgres@localhost:5432/sporafind_test",
+)
 
 
 @pytest.fixture(scope="session")
@@ -54,16 +31,13 @@ def event_loop():
 
 @pytest_asyncio.fixture(scope="session")
 async def engine():
-    url = _get_test_url()
-    e = create_async_engine(url, echo=False)
+    e = create_async_engine(TEST_DB_URL, echo=False)
     async with e.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield e
     async with e.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
     await e.dispose()
-    if USE_SQLITE and os.path.exists("test.db"):
-        os.remove("test.db")
 
 
 @pytest_asyncio.fixture

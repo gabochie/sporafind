@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sporafind_test
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready
+      interval: 5s
+      timeout: 3s
+      retries: 5
