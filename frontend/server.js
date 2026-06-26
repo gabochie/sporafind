@@ -170,6 +170,12 @@ app.get('/api/analytics/posts', async (req, res) => {
   });
 });
 
+app.get('/investors', (req, res) => res.render('investors'));
+app.get('/investors/metrics', (req, res) => res.render('investors-metrics'));
+app.get('/investors/financials', (req, res) => res.render('investors-financials'));
+app.get('/investors/deck', (req, res) => res.render('investors-deck'));
+app.get('/investors/data-room', (req, res) => res.render('investors-data-room'));
+
 app.get('/sitemap.xml', async (req, res) => {
   let blogPosts = [];
   try {
@@ -179,7 +185,7 @@ app.get('/sitemap.xml', async (req, res) => {
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published');
   const site = 'https://sporafind.com';
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising'];
+  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising', '/investors', '/investors/metrics', '/investors/financials', '/investors/deck', '/investors/data-room'];
   staticPages.forEach(p => { xml += `  <url><loc>${site}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`; });
   blogPosts.forEach(p => { xml += `  <url><loc>${site}/blog/${p.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`; });
   xml += '</urlset>';

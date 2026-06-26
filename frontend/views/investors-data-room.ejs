@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Sporafind — Data Room</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);padding:32px 24px;max-width:960px;margin:0 auto;line-height:1.5}
+h1{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1 span{color:var(--gold)}
+h2{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+h2 span{color:var(--gold)}
+h3{font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--t1)}
+.subtitle{color:var(--t2);font-size:13px;margin-bottom:16px;border-left:3px solid var(--green);padding-left:14px}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);text-decoration:none;margin-bottom:16px;padding:6px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:6px}
+.back-link:hover{color:var(--t1);background:var(--s2)}
+.section{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px;margin-bottom:16px}
+.section .heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;cursor:pointer;user-select:none}
+.section .heading h2{margin:0}
+.section .heading i{color:var(--tm);transition:transform .2s}
+.section .heading i.open{transform:rotate(180deg)}
+.section .body{font-size:13px;color:var(--t2);line-height:1.7;overflow:hidden;transition:max-height .3s}
+.section .body.collapsed{max-height:0;padding-top:0;padding-bottom:0}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.data-item{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:10px 12px}
+.data-item .label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px}
+.data-item .value{font-size:13px;font-weight:500;color:var(--t1);margin-top:2px}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:12px}
+th{text-align:left;padding:8px 12px;color:var(--tm);font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--bd)}
+td{padding:8px 12px;border-bottom:1px solid var(--bd);color:var(--t2)}
+td:first-child{font-weight:500;color:var(--t1)}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;margin:2px}
+.tag-green{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a}
+.tag-yellow{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a}
+.tag-red{background:#2e1a1a;color:var(--red);border:1px solid #4f2a2a}
+.tag-blue{background:#0a1a2e;color:var(--blue);border:1px solid #1a2a4f}
+.milestone{display:flex;align-items:start;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.milestone:last-child{border-bottom:none}
+.milestone .date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tm);width:70px;flex-shrink:0;padding-top:1px}
+.milestone .desc{color:var(--t2);line-height:1.5}
+.milestone .status-tag{flex-shrink:0}
+@media(max-width:640px){
+  body{padding:16px 12px}
+  .data-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a href="/investors" class="back-link"><i class="ti ti-arrow-left"></i> Back to Investor Overview</a>
+<h1><span>◆</span> Investor Data Room</h1>
+<div class="subtitle">Comprehensive reference for due diligence. All sections sourced from the live platform, financial model, and public registry data. Last updated: June 2026.</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Company Overview</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <div class="data-grid">
+      <div class="data-item"><div class="label">Company Name</div><div class="value">SporaFind Ltd</div></div>
+      <div class="data-item"><div class="label">Founded</div><div class="value">2025</div></div>
+      <div class="data-item"><div class="label">Founder</div><div class="value">Gabochie</div></div>
+      <div class="data-item"><div class="label">Headquarters</div><div class="value">London, UK</div></div>
+      <div class="data-item"><div class="label">Website</div><div class="value">sporafind.com</div></div>
+      <div class="data-item"><div class="label">Sector</div><div class="value">Professional Networking / SaaS</div></div>
+      <div class="data-item"><div class="label">Target Market</div><div class="value">African Diaspora Professionals</div></div>
+      <div class="data-item"><div class="label">Business Model</div><div class="value">Subscription (Free / $29 / $99) + Platform Fees</div></div>
+      <div class="data-item"><div class="label">Current Stage</div><div class="value">Pre-Seed · Phase A Live</div></div>
+      <div class="data-item"><div class="label">Funding Target</div><div class="value">$50,000 – $150,000</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Cap Table</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <p><strong>Pre-Seed Round Structure:</strong> SporaFind is pre-incorporation. The founder holds 100% equity. The pre-seed round will be structured as a <strong>Standard SAFE (YC SAFE)</strong> with a valuation cap and no discount, or priced round at the investor's preference. Allocations will be finalised post-incorporation.</p>
+    <table>
+      <tr><th>Shareholder</th><th>Class</th><th>Ownership</th><th>Status</th></tr>
+      <tr><td>Gabochie (Founder)</td><td>Ordinary</td><td>100%</td><td><span class="tag tag-green">Current</span></td></tr>
+      <tr><td>Pre-Seed Investors</td><td>SAFE / Convertible</td><td>TBD</td><td><span class="tag tag-yellow">This Round</span></td></tr>
+      <tr><td>ESOP Pool</td><td>Options</td><td>10% (post-round)</td><td><span class="tag tag-blue">Planned</span></td></tr>
+    </table>
+    <p style="margin-top:8px;font-size:11px;color:var(--tm)"><strong>Note:</strong> ESOP pool will be created as part of the pre-seed round to attract key hires. Founder is open to standard vesting terms (4-year, 1-year cliff).</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Product Roadmap</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <div class="milestone"><div class="date">Phase A</div><div class="desc"><strong>Foundation — Live</strong><br>Profile searchable database + Companies House integration + blog + pricing + admin panel. Deployed on sporafind.com with CI/CD and 35 automated tests.</div><span class="tag tag-green status-tag">✓ Completed</span></div>
+    <div class="milestone"><div class="date">Phase B</div><div class="desc"><strong>Claim + Verify — In Development</strong><br>Diaspora members claim their profiles and verify diaspora identity. Requires auth, verification workflow, and moderation tools. Opens the door to authenticated networking.</div><span class="tag tag-yellow status-tag">In Progress</span></div>
+    <div class="milestone"><div class="date">Phase C</div><div class="desc"><strong>Connections — Planned</strong><br>Messaging, mentorship matching, job board, collaboration tools, and platform fee infrastructure. The full network effect.</div><span class="tag tag-blue status-tag">Planned</span></div>
+    <div class="milestone"><div class="date">Phase D</div><div class="desc"><strong>Scale — Future</strong><br>Mobile apps, API marketplace, diaspora events, grant funding programmes. Geographic expansion to US, Canada, EU diaspora hubs.</div><span class="tag tag-blue status-tag">Future</span></div>
+    <p style="margin-top:10px">Full interactive roadmap: <a href="/roadmap" style="color:var(--gl)">sporafind.com/roadmap</a></p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Market Sizing</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <div class="data-grid">
+      <div class="data-item"><div class="label">TAM (Total Addressable Market)</div><div class="value">$5.2B</div></div>
+      <div class="data-item"><div class="label">SAM (Serviceable Addressable Market)</div><div class="value">$850M</div></div>
+      <div class="data-item"><div class="label">SOM (Serviceable Obtainable Market)</div><div class="value">$42M (year 5)</div></div>
+      <div class="data-item"><div class="label">Target Users (Year 1)</div><div class="value">2,000–5,000</div></div>
+      <div class="data-item"><div class="label">Target Users (Year 3)</div><div class="value">25,000–50,000</div></div>
+      <div class="data-item"><div class="label">Target Users (Year 5)</div><div class="value">150,000+</div></div>
+    </div>
+    <p><strong>Methodology:</strong> TAM based on 30M diaspora professionals × $174/yr avg SaaS spend for niche professional networks. SAM based on English-speaking diaspora in UK/US/Canada (40% of TAM). SOM assumes 0.3% market capture at year 5, conservative given network effects.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Competition Analysis</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Platform</th><th>Type</th><th>Diaspora Focus</th><th>Org Data</th><th>Revenue Model</th><th>Threat Level</th></tr>
+      <tr><td>LinkedIn</td><td>General professional</td><td>✕</td><td>Partial</td><td>Premium + Recruiter</td><td><span class="tag tag-yellow">Indirect</span></td></tr>
+      <tr><td>Afropolitan</td><td>Diaspora social</td><td>✓</td><td>✕</td><td>Community + Events</td><td><span class="tag tag-yellow">Indirect</span></td></tr>
+      <tr><td>Diaspora.org</td><td>Diaspora social</td><td>✓</td><td>✕</td><td>Donation</td><td><span class="tag tag-green">Low</span></td></tr>
+      <tr><td>Meetup / Eventbrite</td><td>Event platforms</td><td>✕</td><td>✕</td><td>Fees per ticket</td><td><span class="tag tag-green">Low</span></td></tr>
+      <tr><td>Angellist / Wellfound</td><td>Startup jobs</td><td>✕</td><td>✕</td><td>Recruiter SaaS</td><td><span class="tag tag-green">Low</span></td></tr>
+      <tr><td><strong>SporaFind</strong></td><td><strong>Diaspora professional</strong></td><td><strong>✓</strong></td><td><strong>✓</strong></td><td><strong>$0/$29/$99 + Fees</strong></td><td><span class="tag tag-green">—</span></td></tr>
+    </table>
+    <p style="margin-top:8px"><strong>Key moat:</strong> Companies House integration providing real-time organisation data linked to diaspora professionals. No competitor has this data layer.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Technical Architecture</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <div class="data-grid">
+      <div class="data-item"><div class="label">Frontend</div><div class="value">Express + EJS · Static HTML via Vercel</div></div>
+      <div class="data-item"><div class="label">Backend API</div><div class="value">FastAPI (Python 3.12) · Async</div></div>
+      <div class="data-item"><div class="label">Database</div><div class="value">PostgreSQL 16 · Supabase</div></div>
+      <div class="data-item"><div class="label">Hosting</div><div class="value">Vercel (frontend + backend serverless)</div></div>
+      <div class="data-item"><div class="label">CI/CD</div><div class="value">GitHub Actions (35 tests on push)</div></div>
+      <div class="data-item"><div class="label">Domain</div><div class="value">sporafind.com + api.sporafind.com</div></div>
+      <div class="data-item"><div class="label">Data Source</div><div class="value">Companies House API (UK)</div></div>
+      <div class="data-item"><div class="label">ORM</div><div class="value">SQLAlchemy 2.0 + asyncpg</div></div>
+      <div class="data-item"><div class="label">Test Framework</div><div class="value">pytest (backend) · vitest + supertest (frontend)</div></div>
+      <div class="data-item"><div class="label">Auth Ready</div><div class="value">Supabase Auth integration ready</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Risk Analysis</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr>
+      <tr><td>Low initial adoption / network effect cold start</td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-red">High</span></td><td>Seed with diaspora organisations, targeted outreach, content marketing. Phase A does not require network effects — value exists in searchable database.</td></tr>
+      <tr><td>Companies House data limitations</td><td><span class="tag tag-green">Low</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Multiple registry integrations planned (US, Canada, EU). Manual diaspora profile tagging as fallback.</td></tr>
+      <tr><td>Competition from larger platforms</td><td><span class="tag tag-green">Low</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Niche focus + data moat. LinkedIn is too generic to serve diaspora-specific needs effectively.</td></tr>
+      <tr><td>Regulatory / compliance (GDPR, data)</td><td><span class="tag tag-green">Low</span></td><td><span class="tag tag-green">Low</span></td><td>Data sourced from public registries. Privacy-first architecture. UK-based with GDPR compliance built in.</td></tr>
+      <tr><td>Revenue slower than projected</td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Lean operations. Pre-seed provides 12–18 month runway. Freemium model drives user acquisition first.</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Legal & Compliance</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <ul>
+      <li><strong>Incorporation:</strong> UK private limited company (plans to incorporate post-seed)</li>
+      <li><strong>Data:</strong> All profile data sourced from public registries (Companies House). GDPR-compliant data handling.</li>
+      <li><strong>Terms of Service:</strong> Standard SaaS terms — ready for legal review</li>
+      <li><strong>Privacy Policy:</strong> GDPR-compliant — ready for legal review</li>
+      <li><strong>Trademark:</strong> "SporaFind" — available for registration (UKIPO search pending)</li>
+      <li><strong>IP:</strong> All code, design, and data pipelines are original work of the founder. No third-party IP encumbrances.</li>
+      <li><strong>Insurance:</strong> To be obtained post-incorporation</li>
+    </ul>
+    <p style="margin-top:8px;font-size:11px;color:var(--tm)">Legal documents available for investor review upon request. Contact <a href="mailto:gabochie@sporafind.com" style="color:var(--gl)">gabochie@sporafind.com</a>.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Use of Funds — Detail</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <table>
+      <tr><th>Category</th><th>Allocation</th><th>Amount ($150K)</th><th>Details</th></tr>
+      <tr><td>Engineering</td><td>40%</td><td>$60,000</td><td>Phase B (Claim + Verify), Phase C (Connections), search improvements, data pipeline expansion</td></tr>
+      <tr><td>Marketing & Growth</td><td>25%</td><td>$37,500</td><td>Diaspora community outreach, content marketing, targeted ads, diaspora org partnerships</td></tr>
+      <tr><td>Operations</td><td>20%</td><td>$30,000</td><td>Hosting (Vercel + Supabase), data pipeline costs, tooling, contractor support</td></tr>
+      <tr><td>Legal & Admin</td><td>15%</td><td>$22,500</td><td>Incorporation, legal docs, trademark, accounting, compliance</td></tr>
+    </table>
+    <p style="margin-top:8px;font-size:11px;color:var(--tm)">Allocations are estimates. Founder has discretion to reallocate up to 10% between categories based on actual needs.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Key Metrics Summary</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <div class="data-grid">
+      <div class="data-item"><div class="label">Platform Status</div><div class="value">Live — sporafind.com</div></div>
+      <div class="data-item"><div class="label">API Status</div><div class="value">Live — api.sporafind.com</div></div>
+      <div class="data-item"><div class="label">Automated Tests</div><div class="value">35 (backend 19 + frontend 16)</div></div>
+      <div class="data-item"><div class="label">CI/CD</div><div class="value">GitHub Actions — push/PR to main</div></div>
+      <div class="data-item"><div class="label">Pricing Tiers</div><div class="value">3 (Free / $29 Pro / $99 Enterprise)</div></div>
+      <div class="data-item"><div class="label">Projected MRR (Mo 12)</div><div class="value">~$6,000 – $12,000 (base case)</div></div>
+      <div class="data-item"><div class="label">Projected ARR (Mo 12)</div><div class="value">~$72,000 – $144,000 (base case)</div></div>
+      <div class="data-item"><div class="label">Runway Target</div><div class="value">12–18 months post-seed</div></div>
+      <div class="data-item"><div class="label">Diaspora Served</div><div class="value">30M+ globally (TAM)</div></div>
+      <div class="data-item"><div class="label">Data Sources</div><div class="value">Companies House + more planned</div></div>
+    </div>
+    <p style="margin-top:8px">Live metrics dashboard: <a href="/investors/metrics" style="color:var(--gl)">sporafind.com/investors/metrics</a></p>
+  </div>
+</div>
+
+<div class="section" style="border-color:var(--gl)">
+  <div class="heading" onclick="toggle(this.closest('.section'))">
+    <h2><span>◆</span> Contact & Next Steps</h2><i class="ti ti-chevron-down"></i>
+  </div>
+  <div class="body">
+    <p>Thank you for your interest in SporaFind. All materials in this data room are current as of June 2026. For additional information, references, or to schedule a follow-up discussion:</p>
+    <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+      <div><strong>Email:</strong> <a href="mailto:gabochie@sporafind.com" style="color:var(--gl)">gabochie@sporafind.com</a></div>
+      <div><strong>Website:</strong> <a href="https://sporafind.com" style="color:var(--gl)">sporafind.com</a></div>
+      <div><strong>API:</strong> <a href="https://api.sporafind.com" style="color:var(--gl)">api.sporafind.com</a></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <a href="/investors" class="back-link" style="margin:0">← Investor Overview</a>
+      <a href="/investors/deck" class="back-link" style="margin:0">← Pitch Deck</a>
+      <a href="/investors/financials" class="back-link" style="margin:0">← Financial Model</a>
+      <a href="/investors/metrics" class="back-link" style="margin:0">← Live Metrics</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggle(section){
+  const body = section.querySelector('.body');
+  const icon = section.querySelector('.heading i');
+  body.classList.toggle('collapsed');
+  icon.classList.toggle('open');
+}
+// First section open by default, rest collapsed
+document.querySelectorAll('.section').forEach((s, i) => {
+  if(i > 3) s.querySelector('.body').classList.add('collapsed');
+});
+</script>
+</body>
+</html>

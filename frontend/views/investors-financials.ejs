@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<title>Sporafind — Financial Model</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);padding:32px 24px;max-width:960px;margin:0 auto;line-height:1.5}
+h1{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h1 span{color:var(--gold)}
+h2{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+h2 span{color:var(--gold)}
+.subtitle{color:var(--t2);font-size:13px;margin-bottom:16px;border-left:3px solid var(--green);padding-left:14px}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);text-decoration:none;margin-bottom:16px;padding:6px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:6px}
+.back-link:hover{color:var(--t1);background:var(--s2)}
+.assumptions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.assume-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px 14px}
+.assume-card label{font-size:11px;color:var(--t2);display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.assume-card label span{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--t1)}
+.assume-card input[type=range]{width:100%;height:5px;-webkit-appearance:none;appearance:none;background:var(--s3);border-radius:3px;border:1px solid var(--bd);outline:none}
+.assume-card input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gl);cursor:pointer;border:2px solid var(--s0)}
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.fm-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px;text-align:center}
+.fm-card .fm-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700}
+.fm-card .fm-label{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.chart-box{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:20px}
+.chart-box h3{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.chart-box h3 i{color:var(--gl)}
+.chart-box canvas{max-height:260px}
+.summary-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.summary-table th{padding:8px 12px;font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;text-align:right;border-bottom:2px solid var(--bd)}
+.summary-table th:first-child{text-align:left}
+.summary-table td{padding:8px 12px;font-size:12px;text-align:right;border-bottom:1px solid var(--bd);color:var(--t2);font-family:'JetBrains Mono',monospace}
+.summary-table td:first-child{text-align:left;color:var(--t1);font-family:'Inter',sans-serif;font-weight:500}
+.summary-table tr:last-child td{border-bottom:none;font-weight:700;color:var(--gl);font-size:13px}
+.btn{display:inline-block;font-size:11px;font-weight:600;padding:8px 16px;border-radius:6px;background:var(--gl);color:var(--s0);border:none;cursor:pointer;text-decoration:none;transition:all .15s;margin-right:8px}
+.btn:hover{background:#00c86e}
+.btn-outline{background:transparent;color:var(--t1);border:1px solid var(--bd)}
+.btn-outline:hover{background:var(--s2)}
+.scenario-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+.scenario-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:14px;text-align:center}
+.scenario-card.highlight{border-color:var(--gl);box-shadow:0 0 0 1px var(--gl)}
+.scenario-card .sc-name{font-size:11px;color:var(--tm);text-transform:uppercase;letter-spacing:1px}
+.scenario-card .sc-rev{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--t1);margin:6px 0}
+.scenario-card .sc-detail{font-size:10px;color:var(--t2);line-height:1.5}
+.scenario-card .sc-tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:8px;margin-top:6px}
+.tag-conservative{background:#2e1a1a;color:var(--red);border:1px solid #4f2a2a}
+.tag-base{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a}
+.tag-optimistic{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a}
+@media(max-width:640px){
+  body{padding:16px 12px}
+  .assumptions,.metrics-row,.scenario-cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a href="/investors" class="back-link"><i class="ti ti-arrow-left"></i> Back to Investor Overview</a>
+<h1><span>◆</span> Financial Model</h1>
+<div class="subtitle">Interactive 12-month projection. Adjust the sliders to see how changes in growth, conversion, and pricing affect revenue and runway. All calculations run client-side.</div>
+
+<h2><span>◆</span> Key Assumptions</h2>
+<div class="assumptions">
+  <div class="assume-card"><label>Monthly new signups <span id="val-growth">200</span></label><input type="range" id="slider-growth" min="50" max="2000" step="50" value="200"></div>
+  <div class="assume-card"><label>Free → Pro conversion <span id="val-conv">5%</span></label><input type="range" id="slider-conv" min="1" max="15" step="0.5" value="5"></div>
+  <div class="assume-card"><label>Pro → Enterprise conversion <span id="val-ent-conv">3%</span></label><input type="range" id="slider-ent-conv" min="0.5" max="10" step="0.5" value="3"></div>
+  <div class="assume-card"><label>Monthly churn rate <span id="val-churn">5%</span></label><input type="range" id="slider-churn" min="1" max="15" step="0.5" value="5"></div>
+  <div class="assume-card"><label>Monthly growth in signups <span id="val-mom">10%</span></label><input type="range" id="slider-mom" min="0" max="30" step="1" value="10"></div>
+  <div class="assume-card"><label>Monthly burn rate <span id="val-burn">$4,000</span></label><input type="range" id="slider-burn" min="2000" max="10000" step="500" value="4000"></div>
+</div>
+
+<h2><span>◆</span> 12-Month Projection</h2>
+<div class="metrics-row" id="metricsRow">
+  <div class="fm-card"><div class="fm-num" id="fm-mrr" style="color:var(--gl)">—</div><div class="fm-label">MRR (month 12)</div></div>
+  <div class="fm-card"><div class="fm-num" id="fm-arr" style="color:var(--gold)">—</div><div class="fm-label">ARR run-rate</div></div>
+  <div class="fm-card"><div class="fm-num" id="fm-total-users" style="color:var(--blue)">—</div><div class="fm-label">Total users (mo 12)</div></div>
+  <div class="fm-card"><div class="fm-num" id="fm-runway" style="color:var(--purple)">—</div><div class="fm-label">Months of runway</div></div>
+</div>
+
+<div class="chart-box">
+  <h3><i class="ti ti-chart-line"></i> Monthly Revenue Projection</h3>
+  <canvas id="revenueChart"></canvas>
+</div>
+
+<h2><span>◆</span> Scenario Analysis</h2>
+<div class="scenario-cards" id="scenarioCards"></div>
+
+<h2><span>◆</span> Monthly Breakdown</h2>
+<div class="chart-box">
+  <table class="summary-table" id="monthlyTable">
+    <thead><tr><th>Month</th><th>New Users</th><th>Free</th><th>Pro</th><th>Enterprise</th><th>MRR</th><th>Burn</th><th>Net</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div style="display:flex;gap:8px;margin-bottom:20px">
+  <button class="btn" onclick="downloadCSV()">📥 Download CSV</button>
+  <a href="/investors/financials" class="btn btn-outline">🔄 Reset to defaults</a>
+</div>
+
+<div class="note" style="background:#1a1a0a;border:1px solid #3f3f0a;border-radius:8px;padding:12px 16px;font-size:12px;color:var(--t2);line-height:1.6">
+<strong>■ Notes:</strong> MRR = Monthly Recurring Revenue (Pro $29 + Enterprise $99). ARR = MRR × 12. Runway = cash remaining ÷ monthly net burn. Churn applied monthly. Growth compounds monthly. Phase C connection fees (15% platform take) not included — this is a pure subscription model projection. <a href="/investors" style="color:var(--gl);">Back to Investor Overview →</a>
+</div>
+
+<script>
+const PRO_PRICE = 29, ENT_PRICE = 99;
+let revenueChart = null;
+
+function calc(){
+  const growth = parseInt(document.getElementById('slider-growth').value);
+  const conv = parseFloat(document.getElementById('slider-conv').value) / 100;
+  const entConv = parseFloat(document.getElementById('slider-ent-conv').value) / 100;
+  const churn = parseFloat(document.getElementById('slider-churn').value) / 100;
+  const mom = parseFloat(document.getElementById('slider-mom').value) / 100;
+  const burn = parseInt(document.getElementById('slider-burn').value);
+
+  document.getElementById('val-growth').textContent = growth;
+  document.getElementById('val-conv').textContent = (conv * 100).toFixed(1) + '%';
+  document.getElementById('val-ent-conv').textContent = (entConv * 100).toFixed(1) + '%';
+  document.getElementById('val-churn').textContent = (churn * 100).toFixed(0) + '%';
+  document.getElementById('val-mom').textContent = (mom * 100).toFixed(0) + '%';
+  document.getElementById('val-burn').textContent = '$' + burn.toLocaleString();
+
+  let free = 0, pro = 0, ent = 0;
+  let months = [], mrrData = [], freeData = [], proData = [], entData = [], usersData = [];
+  let newUsers = growth;
+
+  for(let m = 1; m <= 12; m++){
+    const newFree = Math.round(newUsers * (1 - conv));
+    const newPro = Math.round(newUsers * conv * (1 - entConv));
+    const newEnt = Math.round(newUsers * conv * entConv);
+
+    free = Math.round(free * (1 - churn) + newFree);
+    pro = Math.round(pro * (1 - churn) + newPro);
+    ent = Math.round(ent * (1 - churn) + newEnt);
+
+    const mrr = pro * PRO_PRICE + ent * ENT_PRICE;
+    months.push('M' + m);
+    mrrData.push(mrr);
+    freeData.push(free);
+    proData.push(pro);
+    entData.push(ent);
+    usersData.push(free + pro + ent);
+
+    newUsers = Math.round(newUsers * (1 + mom));
+  }
+
+  const finalMRR = mrrData[11];
+  const finalARR = finalMRR * 12;
+  const totalUsers = usersData[11];
+  const annualRevenue = mrrData.reduce((a,b) => a+b, 0);
+  const annualBurn = burn * 12;
+  const monthsRunway = annualRevenue > annualBurn ? 60 : Math.floor((50000 + annualRevenue) / Math.max(annualBurn - annualRevenue, 1));
+
+  document.getElementById('fm-mrr').textContent = '$' + finalMRR.toLocaleString();
+  document.getElementById('fm-arr').textContent = '$' + finalARR.toLocaleString();
+  document.getElementById('fm-total-users').textContent = totalUsers.toLocaleString();
+  document.getElementById('fm-runway').textContent = Math.min(monthsRunway, 60) + ' mo';
+
+  // Scenarios
+  const scenarios = [
+    {name:'Conservative',mult:0.5,tag:'tag-conservative',label:'Half growth'},
+    {name:'Base Case',mult:1,tag:'tag-base',label:'Current assumptions',highlight:true},
+    {name:'Optimistic',mult:2,tag:'tag-optimistic',label:'Double growth'},
+  ];
+  document.getElementById('scenarioCards').innerHTML = scenarios.map(s => {
+    const scMRR = Math.round(finalMRR * s.mult);
+    return `<div class="scenario-card${s.highlight?' highlight':''}"><div class="sc-name">${s.name}</div><div class="sc-rev">$${scMRR.toLocaleString()}</div><div class="sc-detail">MRR month 12 · ${s.label}</div><span class="sc-tag ${s.tag}">${scMRR > 50000 ? '🚀 Scale' : scMRR > 10000 ? '📈 Growing' : '🌱 Early'}</span></div>`;
+  }).join('');
+
+  // Table
+  let tableHtml = '';
+  for(let i = 0; i < 12; i++){
+    const net = mrrData[i] - burn;
+    tableHtml += `<tr><td>Month ${i+1}</td><td>${(i===0?growth:Math.round(growth*Math.pow(1+mom,i))).toLocaleString()}</td><td>${freeData[i].toLocaleString()}</td><td>${proData[i].toLocaleString()}</td><td>${entData[i].toLocaleString()}</td><td>$${mrrData[i].toLocaleString()}</td><td>$${burn.toLocaleString()}</td><td style="color:${net>=0?'var(--gl)':'var(--red)'}">${net>=0?'+':''}$${net.toLocaleString()}</td></tr>`;
+  }
+  document.querySelector('#monthlyTable tbody').innerHTML = tableHtml;
+
+  // Chart
+  const ctx = document.getElementById('revenueChart');
+  if(revenueChart) revenueChart.destroy();
+  revenueChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'MRR', data: mrrData, borderColor: '#00a85a', backgroundColor: 'rgba(0,168,90,0.1)', fill: true, tension: 0.3, pointRadius: 3 },
+        { label: 'Burn', data: Array(12).fill(burn), borderColor: '#ef4444', borderDash: [4,4], pointRadius: 0, borderWidth: 1.5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#a0a0a0', font: { size: 11 }, boxWidth: 12, padding: 12 } }
+      },
+      scales: {
+        x: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: '#2a2a2a' } },
+        y: { ticks: { color: '#666', font: { size: 10 }, callback: v => '$'+v.toLocaleString() }, grid: { color: '#2a2a2a' } }
+      }
+    }
+  });
+}
+
+document.querySelectorAll('.assume-card input[type=range]').forEach(el => {
+  el.addEventListener('input', calc);
+});
+calc();
+
+function downloadCSV(){
+  const table = document.getElementById('monthlyTable');
+  let csv = 'Month,New Users,Free,Pro,Enterprise,MRR,Burn,Net\n';
+  table.querySelectorAll('tbody tr').forEach(row => {
+    const cells = row.querySelectorAll('td');
+    csv += Array.from(cells).map(c => c.textContent.replace(/,/g,'')).join(',') + '\n';
+  });
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sporafind-financial-model.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

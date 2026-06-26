@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Sporafind — Pitch Deck</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.deck-header{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;border-bottom:1px solid var(--bd);flex-shrink:0;font-size:12px}
+.deck-header .brand{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.deck-header .brand span{color:var(--gold)}
+.deck-header .controls{display:flex;align-items:center;gap:10px}
+.deck-header .counter{color:var(--t2);font-size:11px}
+.deck-slide{flex:1;overflow-y:auto;padding:40px 24px;display:flex;justify-content:center}
+.slide-content{max-width:800px;width:100%}
+.slide-content h1{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.slide-content h1 span{color:var(--gold)}
+.slide-content h2{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.slide-content h2 span{color:var(--gold)}
+.slide-content .sub{color:var(--t2);font-size:14px;margin-bottom:24px;border-left:3px solid var(--green);padding-left:14px}
+.slide-content p{font-size:14px;line-height:1.7;color:var(--t2);margin-bottom:12px}
+.slide-content ul{list-style:none;margin:12px 0}
+.slide-content ul li{padding:6px 0 6px 20px;font-size:14px;color:var(--t2);position:relative}
+.slide-content ul li::before{content:'';position:absolute;left:0;top:12px;width:8px;height:8px;border-radius:2px;background:var(--gl)}
+.slide-content .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.slide-content .stat-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:16px;text-align:center}
+.slide-content .stat-card .num{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--gl)}
+.slide-content .stat-card .lbl{font-size:11px;color:var(--tm);margin-top:4px}
+.slide-content .traction-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.slide-content .traction-item{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:10px 12px}
+.slide-content .traction-item .check{color:var(--gl);margin-right:6px}
+.slide-content .use-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.slide-content .use-item{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.slide-content .use-item .pct{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gl)}
+.slide-content .tier-box{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:14px;margin:10px 0;display:flex;justify-content:space-between;align-items:center}
+.slide-content .tier-box .tier-name{font-weight:600}
+.slide-content .tier-box .tier-amt{font-family:'JetBrains Mono',monospace;color:var(--gl);font-weight:700}
+.footer-ui{display:flex;justify-content:space-between;align-items:center;padding:10px 24px;border-top:1px solid var(--bd);flex-shrink:0;font-size:11px;color:var(--tm)}
+.footer-ui .nav-arrows{display:flex;gap:8px}
+.footer-ui button{background:var(--s1);border:1px solid var(--bd);border-radius:6px;color:var(--t1);padding:6px 14px;cursor:pointer;font-size:11px;font-weight:500;transition:all .15s;font-family:'Inter',sans-serif}
+.footer-ui button:hover{background:var(--s2);border-color:var(--bds)}
+.footer-ui button:disabled{opacity:.35;cursor:default}
+.footer-ui button.primary{background:var(--gl);color:var(--s0);border-color:var(--gl)}
+.footer-ui button.primary:hover{background:#00c86e}
+.progress-bar{height:2px;background:var(--bd);flex-shrink:0}
+.progress-bar .fill{height:100%;background:var(--gl);transition:width .3s}
+@media(max-width:640px){
+  .slide-content h1{font-size:26px}
+  .slide-content h2{font-size:20px}
+  .slide-content .stat-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="deck-header">
+  <div class="brand"><span>◆</span> SporaFind · Pitch Deck</div>
+  <div class="controls">
+    <span class="counter" id="slideCounter">1 / 10</span>
+    <button onclick="location.href='/investors'" style="background:transparent;border:1px solid var(--bd);border-radius:6px;color:var(--t2);padding:4px 10px;cursor:pointer;font-size:10px">✕ Close</button>
+  </div>
+</div>
+<div class="progress-bar"><div class="fill" id="progressFill" style="width:10%"></div></div>
+<div class="deck-slide" id="slideContainer"></div>
+<div class="footer-ui">
+  <span>Press ← → or j/k to navigate</span>
+  <div class="nav-arrows">
+    <button id="prevBtn" onclick="prevSlide()">← Prev</button>
+    <button id="nextBtn" class="primary" onclick="nextSlide()">Next →</button>
+  </div>
+</div>
+<script>
+const slides = [
+  {
+    title: 'Connecting the African Diaspora',
+    subtitle: 'The professional network for diaspora Africans worldwide',
+    content: `<div class="stat-grid">
+      <div class="stat-card"><div class="num">30M+</div><div class="lbl">African diaspora globally</div></div>
+      <div class="stat-card"><div class="num">$100B+</div><div class="lbl">Annual diaspora earnings</div></div>
+      <div class="stat-card"><div class="num">Live</div><div class="lbl">Platform status — deployed on sporafind.com</div></div>
+    </div>
+    <p>SporaFind is a professional diaspora network that helps African professionals discover peers, share opportunities, and build community — powered by real organisation data from Companies House and other registries.</p>
+    <div style="margin-top:24px;padding:12px;background:var(--s1);border:1px solid var(--bd);border-radius:8px;text-align:center;font-size:12px;color:var(--t2)"><strong style="color:var(--gl)">Pre-Seed Round:</strong> $50K – $150K · <strong style="color:var(--gl)">Use of Funds:</strong> 40% Engineering · 25% Marketing · 20% Operations · 15% Legal/Admin</div>`
+  },
+  {
+    title: 'The Problem',
+    subtitle: 'Diaspora Africans lack a dedicated professional network',
+    content: `<ul>
+      <li><strong>No single platform</strong> connects diaspora professionals across countries and industries — LinkedIn is generic and doesn't serve the diaspora context</li>
+      <li><strong>Discovery is broken</strong> — African professionals can't easily find each other based on heritage, industry, or location</li>
+      <li><strong>Opportunities are fragmented</strong> — diaspora hiring, mentorship, and collaboration happen in silos (WhatsApp groups, regional forums, word of mouth)</li>
+      <li><strong>No diaspora-specific data</strong> — organisations can't target diaspora talent pools; professionals can't signal diaspora affiliation</li>
+      <li><strong>$1.7T market gap</strong> — the African diaspora economy is underserved by existing professional network tools</li>
+    </ul>`
+  },
+  {
+    title: 'The Solution',
+    subtitle: 'A dedicated professional network for the African diaspora',
+    content: `<div class="stat-grid">
+      <div class="stat-card"><div class="num" style="font-size:20px">Profile + Org</div><div class="lbl">Dual data model</div></div>
+      <div class="stat-card"><div class="num" style="font-size:20px">CH + More</div><div class="lbl">Companies House integration</div></div>
+      <div class="stat-card"><div class="num" style="font-size:20px">3 Tiers</div><div class="lbl">Free / Pro $29 / Enterprise $99</div></div>
+    </div>
+    <p><strong>Phase A (Live):</strong> Profile searchable database + organisation records linked to diaspora professionals. Users can search, filter, and discover diaspora talent.</p>
+    <p><strong>Phase B (In Development):</strong> Claim + Verify — diaspora members claim their profiles and verify diaspora identity. Opens the door to verified networking.</p>
+    <p><strong>Phase C (Planned):</strong> Connections — messaging, mentorship matching, job board, and collaboration tools. The full network effect.</p>`
+  },
+  {
+    title: 'Traction',
+    subtitle: 'Built and deployed — real metrics, real infrastructure',
+    content: `<div class="traction-grid">
+      <div class="traction-item"><span class="check">✓</span> Live platform at <strong>sporafind.com</strong></div>
+      <div class="traction-item"><span class="check">✓</span> API deployed at <strong>api.sporafind.com</strong></div>
+      <div class="traction-item"><span class="check">✓</span> Database with diaspora profiles + org data</div>
+      <div class="traction-item"><span class="check">✓</span> Companies House data pipeline</div>
+      <div class="traction-item"><span class="check">✓</span> 3-tier pricing configured (Free / $29 / $99)</div>
+      <div class="traction-item"><span class="check">✓</span> Blog engine with CMS admin panel</div>
+      <div class="traction-item"><span class="check">✓</span> CI/CD with GitHub Actions (35 tests)</div>
+      <div class="traction-item"><span class="check">✓</span> Supabase PostgreSQL production database</div>
+      <div class="traction-item"><span class="check">✓</span> Dark theme UI with responsive design</div>
+      <div class="traction-item"><span class="check">✓</span> Full investor collateral suite</div>
+    </div>`
+  },
+  {
+    title: 'Business Model',
+    subtitle: 'Subscription SaaS with network-effect expansion',
+    content: `<div class="tier-box"><div><div class="tier-name">Free</div><div style="font-size:11px;color:var(--tm)">Browse profiles, basic search</div></div><div class="tier-amt">$0</div></div>
+    <div class="tier-box" style="border-color:var(--gl)"><div><div class="tier-name">Pro</div><div style="font-size:11px;color:var(--tm)">Advanced filters, saved searches, profile alerts</div></div><div class="tier-amt">$29/mo</div></div>
+    <div class="tier-box" style="border-color:var(--gold)"><div><div class="tier-name">Enterprise</div><div style="font-size:11px;color:var(--tm)">Org accounts, talent sourcing, API access, white-glove support</div></div><div class="tier-amt">$99/mo</div></div>
+    <p style="margin-top:16px"><strong>Future revenue:</strong> Phase C introduces a 15% platform fee on connection-facilitated contracts (consulting gigs, mentorship bookings, job placements). This creates a take-rate revenue stream on top of subscriptions.</p>`
+  },
+  {
+    title: 'Market Opportunity',
+    subtitle: 'Large, growing, and underserved',
+    content: `<div class="stat-grid">
+      <div class="stat-card"><div class="num">30M+</div><div class="lbl">African diaspora professionals</div></div>
+      <div class="stat-card"><div class="num">$1.7T</div><div class="lbl">Diaspora economic output</div></div>
+      <div class="stat-card"><div class="num">$100B+</div><div class="lbl">Annual diaspora earnings</div></div>
+    </div>
+    <p>Diaspora Africans are one of the fastest-growing immigrant groups in North America and Europe. In the UK alone, over 500,000 diaspora Africans hold professional roles across finance, tech, healthcare, law, and academia.</p>
+    <p>Existing platforms (LinkedIn, Afropolitan, Diaspora.org) either lack diaspora-specific features or focus on social/cultural connection rather than professional networking. SporaFind targets the white space between LinkedIn (too generic) and community platforms (too social).</p>`
+  },
+  {
+    title: 'Competition',
+    subtitle: 'How SporaFind differentiates',
+    content: `<table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:12px">
+      <tr style="border-bottom:2px solid var(--bd)"><th style="text-align:left;padding:8px 12px;color:var(--tm)">Platform</th><th style="text-align:center;padding:8px 12px;color:var(--tm)">Diaspora-specific</th><th style="text-align:center;padding:8px 12px;color:var(--tm)">Org data</th><th style="text-align:center;padding:8px 12px;color:var(--tm)">Professional</th><th style="text-align:center;padding:8px 12px;color:var(--tm)">Pricing</th></tr>
+      <tr style="border-bottom:1px solid var(--bd)"><td style="padding:8px 12px;font-weight:500">LinkedIn</td><td style="text-align:center;color:var(--tm)">✕</td><td style="text-align:center;color:var(--tm)">Partial</td><td style="text-align:center;color:var(--gl)">✓</td><td style="text-align:center">Free / Premium</td></tr>
+      <tr style="border-bottom:1px solid var(--bd)"><td style="padding:8px 12px;font-weight:500">Afropolitan</td><td style="text-align:center;color:var(--gl)">✓</td><td style="text-align:center;color:var(--tm)">✕</td><td style="text-align:center;color:var(--tm)">Social</td><td style="text-align:center">Community</td></tr>
+      <tr style="border-bottom:1px solid var(--bd)"><td style="padding:8px 12px;font-weight:500">Diaspora.org</td><td style="text-align:center;color:var(--gl)">✓</td><td style="text-align:center;color:var(--tm)">✕</td><td style="text-align:center;color:var(--tm)">Social</td><td style="text-align:center">Free</td></tr>
+      <tr style="border-bottom:1px solid var(--bd)"><td style="padding:8px 12px;font-weight:500;color:var(--gl)">SporaFind</td><td style="text-align:center;color:var(--gl)">✓</td><td style="text-align:center;color:var(--gl)">✓</td><td style="text-align:center;color:var(--gl)">✓</td><td style="text-align:center">$0 / $29 / $99</td></tr>
+    </table>
+    <p><strong>Key advantage:</strong> SporaFind's integration with Companies House provides real organisation data linked to diaspora professionals — something no competitor offers. This data advantage creates a defensible moat.</p>`
+  },
+  {
+    title: 'Use of Funds',
+    subtitle: '$50K – $150K pre-seed allocation',
+    content: `<div class="use-grid">
+      <div class="use-item"><span>Engineering (Phase B + C features)</span><span class="pct">40%</span></div>
+      <div class="use-item"><span>Marketing & growth</span><span class="pct">25%</span></div>
+      <div class="use-item"><span>Operations & data pipeline</span><span class="pct">20%</span></div>
+      <div class="use-item"><span>Legal, compliance, admin</span><span class="pct">15%</span></div>
+    </div>
+    <p><strong>Engineering:</strong> Build Claim + Verify (Phase B), Connections framework (Phase C), and improve search / filters. Hire 1–2 part-time developers.</p>
+    <p><strong>Marketing:</strong> Diaspora community outreach, content marketing (blog, LinkedIn), targeted ads to diaspora professionals in UK/US, partnerships with diaspora organisations.</p>
+    <p><strong>Operations:</strong> Data pipeline expansion (more registry integrations), hosting (Vercel + Supabase), tooling.</p>
+    <p><strong>Legal/Admin:</strong> Incorporation, terms of service, privacy policy, trademark, compliance with UK/US regulations.</p>`
+  },
+  {
+    title: 'The Team',
+    subtitle: 'Founder with deep diaspora + tech expertise',
+    content: `<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px;margin:12px 0;display:flex;align-items:start;gap:16px">
+      <div style="width:60px;height:60px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--gl);flex-shrink:0">G</div>
+      <div><div style="font-weight:600;font-size:16px">Gabochie</div><div style="font-size:12px;color:var(--tm);margin:2px 0 6px">Founder & Lead Developer</div>
+      <ul style="margin:0"><li>Full-stack developer with experience building production SaaS platforms</li><li>Deep understanding of diaspora professional community needs</li><li>Built SporaFind from concept to deployed platform (backend API, frontend, CI/CD, investor materials)</li><li>Committed to building a world-class diaspora professional network</li></ul></div>
+    </div>
+    <p><strong>Advisors sought:</strong> We are actively seeking diaspora business leaders, product advisors, and industry experts to join our advisory board as part of this round.</p>`
+  },
+  {
+    title: 'Ask & Next Steps',
+    subtitle: 'Join us in building the professional home for the African diaspora',
+    content: `<div class="stat-grid">
+      <div class="stat-card"><div class="num">$50K – $150K</div><div class="lbl">Pre-seed round target</div></div>
+      <div class="stat-card"><div class="num">12–18 mo</div><div class="lbl">Runway target</div></div>
+      <div class="stat-card"><div class="num">Now</div><div class="lbl">Investing begins</div></div>
+    </div>
+    <p style="margin-top:16px"><strong>What we offer investors:</strong></p>
+    <ul>
+      <li>A live, deployed platform with paying customers ready to onboard — not just a pitch deck</li>
+      <li>A clear product roadmap (3 phases) with measurable milestones</li>
+      <li>Real data pipeline (Companies House) that creates defensible advantage</li>
+      <li>Transparent financial model and metrics dashboard</li>
+      <li>A massive, underserved market with strong tailwinds (diaspora growth, remote work, African tech ecosystem expansion)</li>
+    </ul>
+    <div style="margin-top:24px;padding:16px;background:var(--s1);border:1px solid var(--gl);border-radius:10px;text-align:center">
+      <div style="font-size:14px;color:var(--t2);margin-bottom:8px">Ready to invest or want to learn more?</div>
+      <a href="mailto:gabochie@sporafind.com" style="display:inline-block;font-size:13px;font-weight:600;padding:10px 24px;border-radius:6px;background:var(--gl);color:var(--s0);text-decoration:none;margin:4px">Email gabochie@sporafind.com</a>
+      <a href="/investors/financials" style="display:inline-block;font-size:13px;font-weight:600;padding:10px 24px;border-radius:6px;background:var(--s1);color:var(--t1);border:1px solid var(--bd);text-decoration:none;margin:4px">View Financial Model</a>
+    </div>`
+  }
+];
+
+let currentSlide = 0;
+
+function renderSlide(idx){
+  currentSlide = Math.max(0, Math.min(idx, slides.length - 1));
+  const s = slides[currentSlide];
+  document.getElementById('slideContainer').innerHTML = `<div class="slide-content"><h1><span>◆</span> ${s.title}</h1><div class="sub">${s.subtitle}</div>${s.content}</div>`;
+  document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + slides.length;
+  document.getElementById('progressFill').style.width = ((currentSlide + 1) / slides.length * 100) + '%';
+  document.getElementById('prevBtn').disabled = currentSlide === 0;
+  document.getElementById('nextBtn').textContent = currentSlide === slides.length - 1 ? 'Finish' : 'Next →';
+}
+function nextSlide(){ if(currentSlide < slides.length - 1) renderSlide(currentSlide + 1); else window.location.href = '/investors'; }
+function prevSlide(){ if(currentSlide > 0) renderSlide(currentSlide - 1); }
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight' || e.key === 'j') nextSlide();
+  if(e.key === 'ArrowLeft' || e.key === 'k') prevSlide();
+});
+
+renderSlide(0);
+</script>
+</body>
+</html>
