@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* HERO */
+.hero{background:var(--navy);min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 48px 80px;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:800px;width:100%;margin:0 auto;text-align:center;position:relative;z-index:2;}
+.hero-h1{font-family:'Space Grotesk',sans-serif;font-size:60px;font-weight:800;line-height:1.05;letter-spacing:-2.5px;color:#fff;margin-bottom:20px;}
+.hero-h1 .accent{color:var(--gold);}
+.hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:600px;margin:0 auto;}
+
+/* SECTION SHARED */
+.section{padding:100px 48px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:16px;}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;}
+.section-sub{font-size:17px;color:var(--text-mid);line-height:1.65;max-width:560px;}
+.centered{text-align:center;}
+.centered .section-sub{margin:0 auto;}
+
+/* CONTACT TWO-COLUMN */
+.contact-section{background:#fff;padding:100px 48px;}
+.contact-inner{max-width:1100px;margin:0 auto;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:64px;align-items:start;}
+.contact-form-wrap{}
+.contact-form-wrap h3{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.4px;margin-bottom:8px;}
+.contact-form-wrap>p{font-size:15px;color:var(--text-muted);margin-bottom:32px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text-dark);margin-bottom:6px;}
+.form-group label .required{color:#DC2626;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:0.5px solid var(--cream2);border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text-dark);background:#fff;transition:border-color 0.15s;outline:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,107,60,0.08);}
+.form-group textarea{resize:vertical;min-height:130px;}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A9BB0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+.btn-submit{width:100%;padding:14px;border:none;border-radius:9px;font-size:15px;font-weight:700;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-submit:hover{background:var(--gold-dark);}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* CONTACT INFO CARDS */
+.contact-info{display:flex;flex-direction:column;gap:16px;}
+.contact-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:28px 28px;display:flex;align-items:flex-start;gap:18px;transition:border-color 0.2s;}
+.contact-card:hover{border-color:rgba(0,107,60,0.25);}
+.contact-card-icon{width:46px;height:46px;border-radius:10px;background:rgba(0,107,60,0.1);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);flex-shrink:0;}
+.contact-card-body{}
+.contact-card-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--text-dark);margin-bottom:4px;}
+.contact-card-value{font-size:15px;color:var(--text-mid);line-height:1.5;}
+
+/* MAP SECTION */
+.map-section{background:var(--navy);padding:100px 48px;}
+.map-section-inner{max-width:1100px;margin:0 auto;}
+.map-card{background:var(--navy2);border:0.5px solid rgba(255,255,255,0.07);border-radius:var(--radius-lg);padding:60px 48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.map-visual{height:260px;border-radius:var(--radius-lg);background:var(--navy3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border:0.5px solid rgba(255,255,255,0.06);}
+.map-visual-inner{text-align:center;}
+.map-visual-inner i{font-size:48px;color:var(--green);opacity:0.5;}
+.map-visual-inner p{font-family:'Space Grotesk',sans-serif;font-size:14px;color:rgba(255,255,255,0.3);margin-top:12px;letter-spacing:0.5px;}
+.map-info h3{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.8px;color:#fff;margin-bottom:12px;}
+.map-info p{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.65;margin-bottom:24px;}
+.map-detail{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.map-detail i{font-size:18px;color:var(--gold);flex-shrink:0;margin-top:2px;}
+.map-detail div{font-size:14px;color:rgba(255,255,255,0.6);}
+.map-detail div strong{color:#fff;font-weight:500;}
+
+/* SOCIAL STRIP */
+.social-strip{background:var(--cream);padding:48px 48px;border-top:0.5px solid var(--cream2);border-bottom:0.5px solid var(--cream2);}
+.social-strip-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.social-label{font-size:12px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;flex-shrink:0;}
+.social-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.social-link{width:44px;height:44px;border-radius:10px;border:0.5px solid var(--cream2);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--text-mid);transition:all 0.2s;background:var(--white);}
+.social-link:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-2px);}
+
+/* FAQ */
+.faq-section{background:#fff;padding:100px 48px;}
+.faq-inner{max-width:800px;margin:0 auto;}
+.faq-list{margin-top:48px;display:flex;flex-direction:column;gap:0;}
+.faq-item{border-bottom:0.5px solid var(--cream2);padding:0;}
+.faq-question{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 0;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:var(--text-dark);text-align:left;gap:16px;transition:color 0.15s;}
+.faq-question:hover{color:var(--green);}
+.faq-question i{font-size:20px;color:var(--text-muted);flex-shrink:0;transition:transform 0.2s;}
+.faq-item.open .faq-question i{transform:rotate(180deg);color:var(--green);}
+.faq-answer{padding:0 0 20px;font-size:14px;color:var(--text-mid);line-height:1.7;display:none;}
+.faq-item.open .faq-answer{display:block;}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;z-index:999;background:var(--navy);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:20px 28px;display:flex;align-items:center;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,0.4);transform:translateY(120px);opacity:0;transition:all 0.4s ease;pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{width:40px;height:40px;border-radius:50%;background:rgba(0,107,60,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--green);flex-shrink:0;}
+.toast-text{}
+.toast-text strong{display:block;font-size:15px;color:#fff;margin-bottom:2px;}
+.toast-text span{font-size:13px;color:rgba(255,255,255,0.5);}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* UTILS */
+.mt-8{margin-top:8px;}
+.mt-16{margin-top:16px;}
+.mt-24{margin-top:24px;}
+.mt-40{margin-top:40px;}
+.mt-64{margin-top:64px;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.animate-in{animation:fadeUp 0.6s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
+      <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-inner">
+    <h1 class="hero-h1">Get in <span class="accent">touch</span></h1>
+    <p class="hero-sub">Have a question, a partnership idea, or need help finding the right people? We'd love to hear from you. Our team typically responds within 4 hours.</p>
+  </div>
+</section>
+
+<!-- CONTACT TWO-COLUMN -->
+<section class="contact-section">
+  <div class="contact-inner">
+    <div class="centered">
+      <div class="section-eyebrow"><i class="ti ti-mail" aria-hidden="true"></i> Write to us</div>
+      <h2 class="section-h2">Let's start a conversation.</h2>
+      <p class="section-sub centered" style="margin:0 auto;">Fill in the form and we'll get back to you within one business day.</p>
+    </div>
+    <div class="contact-grid">
+      <!-- LEFT: FORM -->
+      <div class="contact-form-wrap">
+        <h3>Send us a message</h3>
+        <p>All fields marked with <span style="color:#DC2626;">*</span> are required.</p>
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="name">Full name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="">Select a topic…</option>
+              <option value="general">General inquiry</option>
+              <option value="sales">Sales</option>
+              <option value="support">Support</option>
+              <option value="partnership">Partnership</option>
+              <option value="media">Media</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us how we can help…"></textarea>
+          </div>
+          <button type="submit" class="btn-submit"><i class="ti ti-send" aria-hidden="true"></i> Send message</button>
+        </form>
+      </div>
+      <!-- RIGHT: INFO CARDS -->
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="contact-card-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+          <div class="contact-card-body">
+            <div class="contact-card-title">Email us</div>
+            <div class="contact-card-value">hello@sporafind.com</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon"><i class="ti ti-building-skyscraper" aria-hidden="true"></i></div>
+          <div class="contact-card-body">
+            <div class="contact-card-title">Office</div>
+            <div class="contact-card-value">19 Independence Avenue<br>Accra, Ghana</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon"><i class="ti ti-phone" aria-hidden="true"></i></div>
+          <div class="contact-card-body">
+            <div class="contact-card-title">Phone</div>
+            <div class="contact-card-value">+233 30 200 1234</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+          <div class="contact-card-body">
+            <div class="contact-card-title">Hours</div>
+            <div class="contact-card-value">Monday – Friday<br>8:00 AM – 6:00 PM GMT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICE MAP -->
+<section class="map-section">
+  <div class="map-section-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="color:var(--gold);justify-content:center;"><i class="ti ti-map-pin" aria-hidden="true"></i> Our location</div>
+      <h2 class="section-h2" style="color:#fff;">Find us in Accra.</h2>
+      <p class="section-sub centered" style="color:rgba(255,255,255,0.5);margin:0 auto;">We're based in the heart of Ghana's capital — reachable and ready to connect.</p>
+    </div>
+    <div class="map-card mt-64">
+      <div class="map-visual">
+        <div class="map-visual-inner">
+          <i class="ti ti-map-2" aria-hidden="true"></i>
+          <p>Map placeholder<br>19 Independence Avenue, Accra</p>
+        </div>
+      </div>
+      <div class="map-info">
+        <h3>19 Independence Avenue</h3>
+        <p>Our team works from our Accra office in the central business district, close to the major diaspora institutions and investment partners we collaborate with daily.</p>
+        <div class="map-detail">
+          <i class="ti ti-map-pin" aria-hidden="true"></i>
+          <div><strong>Address:</strong> 19 Independence Avenue, Accra, Ghana</div>
+        </div>
+        <div class="map-detail">
+          <i class="ti ti-car" aria-hidden="true"></i>
+          <div><strong>Parking:</strong> Secure parking available on-site</div>
+        </div>
+        <div class="map-detail">
+          <i class="ti ti-building" aria-hidden="true"></i>
+          <div><strong>Nearest landmark:</strong> 200 m from Independence Arch</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL STRIP -->
+<div class="social-strip">
+  <div class="social-strip-inner">
+    <span class="social-label">Follow us</span>
+    <div class="social-links">
+      <a href="javascript:void(0)" class="social-link" aria-label="Twitter / X" onclick="alert('Coming soon (demo)')"><i class="ti ti-brand-x" aria-hidden="true"></i></a>
+      <a href="javascript:void(0)" class="social-link" aria-label="LinkedIn" onclick="alert('Coming soon (demo)')"><i class="ti ti-brand-linkedin" aria-hidden="true"></i></a>
+      <a href="javascript:void(0)" class="social-link" aria-label="WhatsApp" onclick="alert('Coming soon (demo)')"><i class="ti ti-brand-whatsapp" aria-hidden="true"></i></a>
+      <a href="javascript:void(0)" class="social-link" aria-label="YouTube" onclick="alert('Coming soon (demo)')"><i class="ti ti-brand-youtube" aria-hidden="true"></i></a>
+      <a href="javascript:void(0)" class="social-link" aria-label="GitHub" onclick="alert('Coming soon (demo)')"><i class="ti ti-brand-github" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="justify-content:center;"><i class="ti ti-question-mark" aria-hidden="true"></i> Frequently asked</div>
+      <h2 class="section-h2">Quick answers to common questions.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item open">
+        <button class="faq-question">
+          How quickly do you respond to inquiries?
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div class="faq-answer">We respond to all inquiries within 4 hours during business hours (Mon–Fri, 8AM–6PM GMT). For urgent matters, mark your email with "URGENT" in the subject line and we'll prioritise your message.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Can I book a product demo through this form?
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div class="faq-answer">Absolutely. Select "Sales" in the subject dropdown and mention you'd like a demo in your message. We'll reach out within 24 hours to schedule a 30-minute walkthrough tailored to your use case.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Do you work with organisations outside Ghana?
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div class="faq-answer">Yes. Sporafind serves clients across Africa, Europe, North America, and the Middle East. Our platform covers the Ghanaian diaspora in 67 countries, and we regularly partner with international development organisations, investment groups, and governments.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          Can I visit your Accra office in person?
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div class="faq-answer">Yes! We welcome visitors by appointment. Please reach out via the contact form or email us at hello@sporafind.com to schedule a visit. Our office is at 19 Independence Avenue, Accra, with secure parking available.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon"><i class="ti ti-check" aria-hidden="true"></i></div>
+  <div class="toast-text">
+    <strong>Message sent!</strong>
+    <span>We'll be in touch within 4 hours.</span>
+  </div>
+</div>
+
+<script>
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// Form validation and simulated submit
+const form = document.getElementById('contactForm');
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const toast = document.getElementById('toast');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  let valid = true;
+
+  [nameInput, emailInput].forEach(inp => {
+    inp.style.borderColor = '';
+  });
+
+  if (!nameInput.value.trim()) {
+    nameInput.style.borderColor = '#DC2626';
+    valid = false;
+  }
+  if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+    emailInput.style.borderColor = '#DC2626';
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  const btn = form.querySelector('.btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true" style="animation:spin 0.8s linear infinite;"></i> Sending…';
+
+  setTimeout(() => {
+    toast.classList.add('show');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send" aria-hidden="true"></i> Send message';
+    form.reset();
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }, 1200);
+});
+</script>
+</body>
+</html>

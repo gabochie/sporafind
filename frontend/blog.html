@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* BLOG HERO */
+.blog-hero{background:var(--navy);padding:120px 48px 80px;position:relative;overflow:hidden;}
+.blog-hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.blog-hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,23,0.08) 0%,transparent 60%);pointer-events:none;}
+.blog-hero-inner{max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:2;}
+.blog-hero-title{font-family:'Space Grotesk',sans-serif;font-size:64px;font-weight:800;letter-spacing:-2.5px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.blog-hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.7;max-width:600px;margin:0 auto;}
+
+/* BLOG LAYOUT */
+.blog-section{padding:80px 48px;}
+.blog-section-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start;}
+
+/* FEATURED POST */
+.featured-post{position:relative;border-radius:var(--radius-lg);overflow:hidden;background:var(--navy);border:0.5px solid rgba(255,255,255,0.08);margin-bottom:48px;}
+.featured-post-inner{display:grid;grid-template-columns:1fr 1fr;min-height:380px;}
+.featured-post-img{background:var(--navy2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.featured-post-img canvas{width:100%;height:100%;object-fit:cover;}
+.featured-post-body{padding:40px 36px;display:flex;flex-direction:column;justify-content:center;}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;letter-spacing:0.3px;text-transform:uppercase;margin-bottom:16px;}
+.badge-gold{background:rgba(212,160,23,0.12);color:var(--gold);border:0.5px solid rgba(212,160,23,0.25);}
+.badge-green{background:rgba(0,107,60,0.12);color:var(--green);border:0.5px solid rgba(0,107,60,0.2);}
+.badge-blue{background:rgba(59,130,246,0.12);color:#3B82F6;border:0.5px solid rgba(59,130,246,0.2);}
+.badge-purple{background:rgba(139,92,246,0.12);color:#8B5CF6;border:0.5px solid rgba(139,92,246,0.2);}
+.post-title{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.8px;color:#fff;margin-bottom:12px;line-height:1.2;}
+.post-title a{color:#fff;transition:color 0.15s;}
+.post-title a:hover{color:var(--gold);}
+.post-excerpt{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.65;margin-bottom:20px;}
+.post-meta{display:flex;align-items:center;gap:16px;font-size:13px;color:rgba(255,255,255,0.35);flex-wrap:wrap;}
+.post-meta .author{color:rgba(255,255,255,0.6);font-weight:500;}
+.post-meta .sep{color:rgba(255,255,255,0.15);}
+.post-meta i{font-size:14px;margin-right:4px;}
+
+/* BLOG GRID */
+.blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.blog-card{background:#fff;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;}
+.blog-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.06);}
+.blog-card-img{height:180px;background:var(--cream2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.blog-card-img canvas{width:100%;height:100%;object-fit:cover;}
+.blog-card-body{padding:24px 22px;}
+.blog-card .badge{margin-bottom:10px;}
+.blog-card .post-title{font-size:18px;letter-spacing:-0.4px;margin-bottom:8px;color:var(--text-dark);}
+.blog-card .post-title a{color:var(--text-dark);}
+.blog-card .post-title a:hover{color:var(--green);}
+.blog-card .post-excerpt{font-size:14px;color:var(--text-muted);margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.blog-card .post-meta{font-size:12px;color:var(--slate);}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:32px;}
+.sidebar-card{background:#fff;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:28px 24px;}
+.sidebar-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;margin-bottom:16px;color:var(--text-dark);}
+.sidebar-cat{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--cream2);font-size:14px;color:var(--text-mid);transition:color 0.15s;cursor:pointer;}
+.sidebar-cat:hover{color:var(--green);}
+.sidebar-cat:last-child{border-bottom:none;}
+.sidebar-cat span{font-size:12px;color:var(--text-muted);background:var(--cream);padding:2px 8px;border-radius:4px;}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+.tag{font-size:12px;padding:5px 12px;border-radius:6px;background:var(--cream);color:var(--text-mid);border:0.5px solid var(--cream2);cursor:pointer;transition:all 0.15s;}
+.tag:hover{background:var(--green);color:#fff;border-color:var(--green);}
+.newsletter-box{background:var(--navy);border-radius:var(--radius-lg);padding:28px 24px;border:0.5px solid rgba(255,255,255,0.08);}
+.newsletter-box .sidebar-title{color:#fff;}
+.newsletter-box p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:16px;}
+.newsletter-input-group{display:flex;flex-direction:column;gap:10px;}
+.newsletter-input-group input{padding:11px 14px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.15s;}
+.newsletter-input-group input::placeholder{color:rgba(255,255,255,0.3);}
+.newsletter-input-group input:focus{border-color:var(--gold);}
+.newsletter-input-group button{padding:11px;border-radius:8px;border:none;background:var(--gold);color:#0A0E1A;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.newsletter-input-group button:hover{background:var(--gold-dark);}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:48px;}
+.page-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:0.5px solid var(--cream2);background:#fff;font-size:14px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;}
+.page-btn:hover{border-color:var(--green);color:var(--green);}
+.page-btn.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+.page-btn.next{width:auto;padding:0 16px;gap:6px;display:flex;align-items:center;}
+
+/* CTA SECTION */
+.cta-section{background:var(--green);padding:100px 48px;}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.cta-sub{font-size:18px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:36px;}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-white:hover{background:var(--cream);}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:15px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-outline-white:hover{border-color:#fff;background:rgba(255,255,255,0.07);}
+.cta-note{font-size:13px;color:rgba(255,255,255,0.5);margin-top:16px;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
+      <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- BLOG HERO -->
+<section class="blog-hero">
+  <div class="blog-hero-bg-grid"></div>
+  <div class="blog-hero-glow"></div>
+  <div class="blog-hero-inner">
+    <h1 class="blog-hero-title">Blog</h1>
+    <p class="blog-hero-sub">Insights on diaspora intelligence, African investment, and the global Ghanaian community</p>
+  </div>
+</section>
+
+<!-- BLOG CONTENT -->
+<section class="blog-section">
+  <div class="blog-section-inner">
+
+    <!-- MAIN -->
+    <div>
+
+      <!-- FEATURED POST -->
+      <div class="featured-post">
+        <div class="featured-post-inner">
+          <div class="featured-post-img">
+            <canvas id="featuredGlobe" width="540" height="380"></canvas>
+          </div>
+          <div class="featured-post-body">
+            <span class="badge badge-gold"><i class="ti ti-star" aria-hidden="true"></i> Featured</span>
+            <h2 class="post-title"><a href="#">The State of the Ghanaian Diaspora 2026</a></h2>
+            <p class="post-excerpt">A comprehensive analysis of diaspora demographics, investment trends, and economic impact across 67 countries. Drawing on Sporafind's proprietary intelligence, this report reveals how 4.2 million Ghanaians abroad are reshaping capital flows, entrepreneurship, and cultural influence on a global scale — with actionable insights for investors, policymakers, and community leaders.</p>
+            <div class="post-meta">
+              <span class="author"><i class="ti ti-user" aria-hidden="true"></i> Esi Kwarteng</span>
+              <span class="sep">·</span>
+              <span><i class="ti ti-calendar" aria-hidden="true"></i> June 22, 2026</span>
+              <span class="sep">·</span>
+              <span><i class="ti ti-clock" aria-hidden="true"></i> 12 min read</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOG GRID -->
+      <div class="blog-grid">
+
+        <div class="blog-card">
+          <div class="blog-card-img">
+            <canvas id="blogCanvas0" width="400" height="180"></canvas>
+          </div>
+          <div class="blog-card-body">
+            <span class="badge badge-green">Product</span>
+            <h3 class="post-title"><a href="#">How We Built Africa's Largest Diaspora Knowledge Graph</a></h3>
+            <p class="post-excerpt">Behind the scenes of Sporafind's knowledge graph — ingesting 14 data sources, resolving entity identity, and training the signal confidence model that powers every search.</p>
+            <div class="post-meta">
+              <span class="author">Esi Kwarteng</span>
+              <span class="sep">·</span>
+              <span>June 15, 2026</span>
+              <span class="sep">·</span>
+              <span>8 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-card-img">
+            <canvas id="blogCanvas1" width="400" height="180"></canvas>
+          </div>
+          <div class="blog-card-body">
+            <span class="badge badge-purple">Research</span>
+            <h3 class="post-title"><a href="#">Ghanaian Entrepreneurs in the UK: A Data Story</a></h3>
+            <p class="post-excerpt">We analysed 12,400+ Ghanaian-founded businesses registered in England and Wales — uncovering sector concentrations, revenue clusters, and the hidden network of diaspora founders.</p>
+            <div class="post-meta">
+              <span class="author">Kwame Adjei</span>
+              <span class="sep">·</span>
+              <span>June 8, 2026</span>
+              <span class="sep">·</span>
+              <span>6 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-card-img">
+            <canvas id="blogCanvas2" width="400" height="180"></canvas>
+          </div>
+          <div class="blog-card-body">
+            <span class="badge badge-green">Product</span>
+            <h3 class="post-title"><a href="#">Introducing Pan-African Scope: 54 Nations in One Search</a></h3>
+            <p class="post-excerpt">Sporafind now covers all 54 African nations. Search across borders to find diaspora professionals, investors, and organisations from any African country.</p>
+            <div class="post-meta">
+              <span class="author">Ama Serwaa</span>
+              <span class="sep">·</span>
+              <span>June 1, 2026</span>
+              <span class="sep">·</span>
+              <span>5 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-card-img">
+            <canvas id="blogCanvas3" width="400" height="180"></canvas>
+          </div>
+          <div class="blog-card-body">
+            <span class="badge badge-blue">Community</span>
+            <h3 class="post-title"><a href="#">The Remittance Revolution: Diaspora Investment in 2026</a></h3>
+            <p class="post-excerpt">Remittances to Ghana hit a record high this year. But the bigger story is the shift — from sending money home to direct investment in Ghanaian startups, real estate, and infrastructure.</p>
+            <div class="post-meta">
+              <span class="author">Nana Yaa Asante</span>
+              <span class="sep">·</span>
+              <span>May 25, 2026</span>
+              <span class="sep">·</span>
+              <span>7 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-card-img">
+            <canvas id="blogCanvas4" width="400" height="180"></canvas>
+          </div>
+          <div class="blog-card-body">
+            <span class="badge badge-gold">Data</span>
+            <h3 class="post-title"><a href="#">AI Signal Accuracy: How We Score 94% Confidence</a></h3>
+            <p class="post-excerpt">Every Sporafind profile comes with a confidence score. Here's how our multi-signal AI model combines cross-referenced public records, entity resolution, and probabilistic inference.</p>
+            <div class="post-meta">
+              <span class="author">Dr. Kofi Mensah</span>
+              <span class="sep">·</span>
+              <span>May 18, 2026</span>
+              <span class="sep">·</span>
+              <span>10 min read</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-card-img">
+            <canvas id="blogCanvas5" width="400" height="180"></canvas>
+          </div>
+          <div class="blog-card-body">
+            <span class="badge badge-purple">Research</span>
+            <h3 class="post-title"><a href="#">Five Segments That Define the Ghanaian Diaspora</a></h3>
+            <p class="post-excerpt">Sporafind's proprietary segmentation model classifies 4.2M+ profiles into five types: regular members, leaders, entrepreneurs, investors, and organisations. Here's what we found.</p>
+            <div class="post-meta">
+              <span class="author">Esi Kwarteng</span>
+              <span class="sep">·</span>
+              <span>May 10, 2026</span>
+              <span class="sep">·</span>
+              <span>6 min read</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn" onclick="alert('Page 2 (demo)')">2</button>
+        <button class="page-btn" onclick="alert('Page 3 (demo)')">3</button>
+        <button class="page-btn" onclick="alert('More pages (demo)')">…</button>
+        <button class="page-btn" onclick="alert('Page 12 (demo)')">12</button>
+        <button class="page-btn next" onclick="alert('Next page (demo)')">Next <i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Categories</div>
+        <div class="sidebar-cat">Research <span>14</span></div>
+        <div class="sidebar-cat">Product <span>9</span></div>
+        <div class="sidebar-cat">Community <span>7</span></div>
+        <div class="sidebar-cat">Data <span>6</span></div>
+        <div class="sidebar-cat">Company <span>4</span></div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Tags</div>
+        <div class="tag-cloud">
+          <span class="tag">diaspora</span>
+          <span class="tag">Ghana</span>
+          <span class="tag">investment</span>
+          <span class="tag">AI intelligence</span>
+          <span class="tag">remittances</span>
+          <span class="tag">entrepreneurs</span>
+          <span class="tag">knowledge graph</span>
+          <span class="tag">segmentation</span>
+          <span class="tag">capital</span>
+          <span class="tag">pan-african</span>
+        </div>
+      </div>
+
+      <div class="newsletter-box">
+        <div class="sidebar-title">Stay informed</div>
+        <p>Get the latest diaspora intelligence insights, product updates, and research delivered to your inbox every month.</p>
+        <div class="newsletter-input-group">
+          <input type="email" placeholder="you@example.com">
+          <button onclick="alert('Subscribed! (demo)')"><i class="ti ti-send" aria-hidden="true"></i> Subscribe</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Your next diaspora investor is already out there.</h2>
+    <p class="cta-sub">Sporafind will find them in seconds. Stop guessing. Start closing.</p>
+    <div class="cta-actions">
+      <button class="btn-cta-white" onclick="location.href='workspace.html'"><i class="ti ti-rocket" aria-hidden="true"></i> Start your free trial</button>
+      <button class="btn-cta-outline-white" onclick="location.href='contact.html'"><i class="ti ti-calendar" aria-hidden="true"></i> Book a live demo</button>
+    </div>
+    <div class="cta-note">No credit card · 14-day trial · Cancel anytime</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </div>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Small decorative canvases for featured post and blog cards
+(function(){
+  const featuredCanvas = document.getElementById('featuredGlobe');
+  if(featuredCanvas){
+    const ctx = featuredCanvas.getContext('2d');
+    const W = featuredCanvas.width, H = featuredCanvas.height;
+    ctx.fillStyle = '#0E1627';
+    ctx.beginPath();
+    ctx.roundRect(0,0,W,H,16);
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+    ctx.lineWidth = 0.5;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+    const cx = W*0.5, cy = H*0.5;
+    for(let r=1;r<=3;r++){
+      ctx.beginPath();
+      ctx.arc(cx,cy,r*30,0,Math.PI*2);
+      ctx.strokeStyle = 'rgba(212,160,23,0.06)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+    const dots = [
+      {x:W*0.25,y:H*0.25},{x:W*0.70,y:H*0.20},{x:W*0.80,y:H*0.50},
+      {x:W*0.65,y:H*0.75},{x:W*0.20,y:H*0.65},{x:W*0.40,y:H*0.40},
+      {x:W*0.55,y:H*0.30},{x:W*0.75,y:H*0.35},{x:W*0.30,y:H*0.80},
+    ];
+    dots.forEach(d=>{
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,3,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(212,160,23,0.5)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,7,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(212,160,23,0.08)';
+      ctx.fill();
+    });
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,8,0,Math.PI*2);
+    ctx.fillStyle = '#006B3C';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cx,cy,4,0,Math.PI*2);
+    ctx.fillStyle = '#D4A017';
+    ctx.fill();
+
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.textAlign = 'center';
+    ctx.fillText('Global Ghanaian diaspora', cx, H-14);
+  }
+
+  const colors = ['#0E1627','#16213A','#1A1A2E','#111827','#1c1917','#0f172a'];
+  for(let i=0;i<6;i++){
+    const c = document.getElementById('blogCanvas'+i);
+    if(!c) continue;
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fillRect(0,0,W,H);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 0.5;
+    for(let x=0;x<W;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=35){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+    const cx = W*(0.3+Math.random()*0.4), cy = H*(0.3+Math.random()*0.4);
+    ctx.beginPath();
+    ctx.arc(cx,cy,20+Math.random()*15,0,Math.PI*2);
+    ctx.strokeStyle = 'rgba(212,160,23,0.08)';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx,cy,3+Math.random()*2,0,Math.PI*2);
+    ctx.fillStyle = 'rgba(0,107,60,0.6)';
+    ctx.fill();
+
+    for(let j=0;j<4;j++){
+      const x = Math.random()*W, y = Math.random()*H;
+      ctx.beginPath();
+      ctx.arc(x,y,1.5+Math.random()*2,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(212,160,23,0.15)';
+      ctx.fill();
+    }
+  }
+})();
+</script>
+</body>
+</html>

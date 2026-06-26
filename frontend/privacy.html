@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* HERO (minimal for privacy) */
+.hero-mini{background:var(--navy);padding:120px 48px 80px;position:relative;overflow:hidden;text-align:center;}
+.hero-mini .hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-mini .hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.15) 0%,rgba(212,160,23,0.05) 40%,transparent 70%);pointer-events:none;}
+.hero-mini-inner{max-width:760px;margin:0 auto;position:relative;z-index:2;}
+.hero-mini-h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.hero-mini-sub{font-size:16px;color:rgba(255,255,255,0.5);line-height:1.6;}
+.hero-mini-ghost{display:inline-flex;align-items:center;gap:6px;background:rgba(212,160,23,0.1);border:0.5px solid rgba(212,160,23,0.25);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:0.4px;text-transform:uppercase;margin-bottom:24px;}
+
+/* PRIVACY CONTENT */
+.privacy{padding:80px 48px;}
+.privacy-inner{max-width:760px;margin:0 auto;}
+.privacy-body{font-size:15px;color:var(--text-mid);line-height:1.75;}
+.privacy-body p{margin-bottom:20px;}
+.privacy-body strong{color:var(--text-dark);font-weight:500;}
+.privacy-h2{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.8px;color:var(--text-dark);margin-top:48px;margin-bottom:16px;padding-top:8px;}
+.privacy-h2:first-of-type{margin-top:0;}
+.privacy-h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;letter-spacing:-0.3px;color:var(--text-dark);margin-top:32px;margin-bottom:10px;}
+.privacy-body ul{margin:0 0 20px 20px;padding:0;}
+.privacy-body li{margin-bottom:8px;font-size:15px;color:var(--text-mid);line-height:1.7;}
+.privacy-body a{color:var(--green);text-decoration:underline;}
+.privacy-body a:hover{color:var(--green-dark);}
+.privacy-divider{height:1px;background:var(--cream2);margin:48px 0;}
+.privacy-intro{font-size:16px;color:var(--text-mid);line-height:1.75;margin-bottom:8px;}
+
+/* SECTION SHARED */
+.section{padding:100px 48px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+
+/* CTA SECTION */
+.cta-section{background:var(--green);padding:80px 48px;}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:12px;}
+.cta-sub{font-size:17px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:32px;}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-white:hover{background:var(--cream);}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:15px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-outline-white:hover{border-color:#fff;background:rgba(255,255,255,0.07);}
+.cta-note{font-size:13px;color:rgba(255,255,255,0.5);margin-top:14px;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .hero-mini-h1{font-size:36px;}
+  .privacy-body{font-size:14px;}
+  .privacy-h2{font-size:24px;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
+}
+@media(max-width:600px){
+  nav{padding:0 20px;}
+  .hero-mini{padding:100px 20px 60px;}
+  .privacy{padding:60px 20px;}
+  .cta-section{padding:60px 20px;}
+  footer{padding:48px 20px 32px;}
+  .footer-top{grid-template-columns:1fr;gap:24px;}
+  .cta-h2{font-size:30px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="pricing.html" class="btn-primary-nav">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-mini">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-mini-inner">
+    <div class="hero-mini-ghost"><i class="ti ti-shield-lock" aria-hidden="true"></i> Legal</div>
+    <h1 class="hero-mini-h1">Privacy Policy</h1>
+    <p class="hero-mini-sub">Last updated: June 1, 2026</p>
+  </div>
+</section>
+
+<!-- PRIVACY CONTENT -->
+<section class="privacy">
+  <div class="privacy-inner">
+    <div class="privacy-body">
+
+      <p class="privacy-intro">This Privacy Policy describes how Sporafind ("we", "our", or "us") collects, uses, stores, shares, and protects your personal information when you access or use our AI-powered diaspora intelligence platform, website, and related services (collectively, the "Service").</p>
+
+      <p>By using the Service, you agree to the collection and use of information in accordance with this policy. If you do not agree, please do not use the Service.</p>
+
+      <div class="privacy-divider"></div>
+
+      <h2 class="privacy-h2">1. Information We Collect</h2>
+
+      <p>We collect information you provide directly, information automatically collected through your use of the Service, and information我们从 publicly available sources to power our diaspora intelligence engine.</p>
+
+      <h3 class="privacy-h3">1.1 Personal Data You Provide</h3>
+      <p>When you create an account, subscribe to a plan, contact our team, or participate in a demo, we collect:</p>
+      <ul>
+        <li><strong>Account information:</strong> name, email address, organisation name, job title, phone number, and billing address.</li>
+        <li><strong>Payment information:</strong> processed by our third-party payment processors. We do not store full credit card numbers or banking details on our servers.</li>
+        <li><strong>Communications:</strong> records of your correspondence with our support, sales, and customer success teams.</li>
+      </ul>
+
+      <h3 class="privacy-h3">1.2 Usage Data</h3>
+      <p>We automatically collect certain information when you use the Service, including:</p>
+      <ul>
+        <li><strong>Log data:</strong> IP address, browser type, operating system, referring URLs, pages visited, and timestamps.</li>
+        <li><strong>Device data:</strong> device type, screen resolution, unique device identifiers, and browser settings.</li>
+        <li><strong>Interaction data:</strong> search queries, profiles viewed, filters applied, exports generated, and feature usage patterns.</li>
+        <li><strong>Performance data:</strong> page load times, error messages, and API call metrics used to monitor and improve service reliability.</li>
+      </ul>
+
+      <h3 class="privacy-h3">1.3 Profile Data from Public Sources</h3>
+      <p>Sporafind's core intelligence is built from publicly available data sources, including:</p>
+      <ul>
+        <li>Public social media profiles and professional network pages</li>
+        <li>Company registries and business filings (e.g., Companies House, SEC filings)</li>
+        <li>Public news articles, press releases, and media mentions</li>
+        <li>Academic publications and institutional directories</li>
+        <li>Government databases, trade registers, and publicly maintained diaspora records</li>
+        <li>Crunchbase, Bloomberg, and other publicly accessible business intelligence sources</li>
+      </ul>
+      <p>This data is aggregated, structured, and enriched by our AI models to produce diaspora profiles. Where we display information about individuals identified through these sources, we do so on the basis of our legitimate interest in providing diaspora intelligence services. If you believe your publicly available data has been included in error or wish to exercise your data rights, please contact us at the address below.</p>
+
+      <h2 class="privacy-h2">2. How We Use Your Information</h2>
+      <p>We use the information we collect for the following purposes:</p>
+      <ul>
+        <li><strong>To provide and maintain the Service:</strong> authenticating users, processing searches, generating profiles, enabling exports, and delivering platform features as described in our product documentation.</li>
+        <li><strong>To improve and develop the Service:</strong> analysing usage patterns to refine AI models, improve segmentation accuracy, and develop new features that better serve our users.</li>
+        <li><strong>To communicate with you:</strong> sending account-related notices, billing information, security alerts, and product updates. We may also send marketing communications about new features or offerings, which you can opt out of at any time.</li>
+        <li><strong>To ensure security and prevent abuse:</strong> monitoring for unauthorised access, detecting fraudulent activity, enforcing our terms of service, and protecting the integrity of the platform.</li>
+        <li><strong>To comply with legal obligations:</strong> responding to lawful requests from regulators, law enforcement, or other government authorities as required by applicable law.</li>
+      </ul>
+
+      <h2 class="privacy-h2">3. Data Sharing and Disclosure</h2>
+      <p>We do not sell your personal information. We may share your data in the following circumstances:</p>
+      <ul>
+        <li><strong>Service providers:</strong> with third-party vendors who process data on our behalf for cloud hosting (AWS), payment processing (Stripe), analytics (PostHog), email delivery (Resend), and customer support (Intercom). These providers are contractually bound to protect your data and may only use it for the purposes we specify.</li>
+        <li><strong>Affiliates:</strong> with Gabochie Intelligence Ltd, our parent company, for internal administrative purposes and product development.</li>
+        <li><strong>Legal compliance:</strong> when required by law, court order, or government regulation, or to establish or exercise our legal rights or defend against legal claims.</li>
+        <li><strong>Business transfers:</strong> in connection with a merger, acquisition, restructuring, or sale of assets, in which case your information will remain subject to this Privacy Policy (or a substantially similar policy) unless you are notified otherwise.</li>
+        <li><strong>With your consent:</strong> we may share information for any other purpose with your explicit consent.</li>
+      </ul>
+      <p>Aggregated, anonymised data that cannot reasonably identify an individual may be shared for research, reporting, or benchmarking purposes without restriction.</p>
+
+      <h2 class="privacy-h2">4. Data Retention</h2>
+      <p>We retain your personal information for as long as your account is active or as needed to provide the Service. Specifically:</p>
+      <ul>
+        <li><strong>Account data:</strong> retained for the duration of your account plus 90 days after account deletion to allow for recovery, after which it is permanently deleted or anonymised.</li>
+        <li><strong>Usage data:</strong> retained for up to 24 months for analytics and service improvement purposes, after which it is aggregated and anonymised.</li>
+        <li><strong>Profile data from public sources:</strong> periodically refreshed to maintain accuracy. Historical versions may be retained for audit and provenance tracking purposes.</li>
+        <li><strong>Billing records:</strong> retained for the period required by applicable tax and financial regulations (typically 6-7 years).</li>
+      </ul>
+      <p>You may request earlier deletion of your data in accordance with your rights described in Section 6 below.</p>
+
+      <h2 class="privacy-h2">5. Data Security</h2>
+      <p>We implement industry-standard technical and organisational measures to protect your personal information, including:</p>
+      <ul>
+        <li>Encryption of data in transit using TLS 1.3 protocols</li>
+        <li>Encryption of data at rest using AES-256</li>
+        <li>Access controls and authentication mechanisms for all internal systems</li>
+        <li>Regular security audits, vulnerability assessments, and penetration testing</li>
+        <li>Employee training on data protection and privacy best practices</li>
+        <li>Strict least-privilege access policies for production data</li>
+      </ul>
+      <p>While we take every reasonable precaution, no method of electronic storage or transmission is 100% secure. We cannot guarantee absolute security but will notify you promptly of any data breach affecting your personal information as required by applicable law.</p>
+
+      <h2 class="privacy-h2">6. Your Rights</h2>
+      <p>Depending on your jurisdiction, you may have the following rights regarding your personal data:</p>
+      <ul>
+        <li><strong>Right of access:</strong> request a copy of the personal data we hold about you.</li>
+        <li><strong>Right to rectification:</strong> request correction of inaccurate or incomplete data.</li>
+        <li><strong>Right to erasure ("right to be forgotten"):</strong> request deletion of your personal data where there is no compelling reason for its continued processing.</li>
+        <li><strong>Right to restrict processing:</strong> request that we restrict the processing of your data in certain circumstances.</li>
+        <li><strong>Right to data portability:</strong> request a structured, machine-readable copy of your data for transfer to another service provider.</li>
+        <li><strong>Right to object:</strong> object to processing based on legitimate interests, including profiling for direct marketing purposes.</li>
+        <li><strong>Right to withdraw consent:</strong> where processing is based on consent, you may withdraw that consent at any time without affecting the lawfulness of processing based on consent before its withdrawal.</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at <a href="mailto:privacy@sporafind.com">privacy@sporafind.com</a>. We will respond to your request within 30 days. If you are in the European Economic Area (EEA) or the United Kingdom, you also have the right to lodge a complaint with your local data protection supervisory authority.</p>
+
+      <h2 class="privacy-h2">7. Cookies and Tracking Technologies</h2>
+      <p>We use cookies and similar tracking technologies to enhance your experience, analyse usage, and support our security operations. Specifically:</p>
+      <ul>
+        <li><strong>Essential cookies:</strong> required for authentication, session management, and platform functionality. These cannot be disabled.</li>
+        <li><strong>Analytics cookies:</strong> help us understand how users interact with the platform so we can improve features and performance.</li>
+        <li><strong>Preference cookies:</strong> remember your settings, language, and display preferences across sessions.</li>
+      </ul>
+      <p>You can control cookies through your browser settings. Disabling certain cookies may affect platform functionality. We do not use cookies for third-party advertising or cross-site tracking. For more details, please refer to our <a href="privacy.html#cookies">Cookie Policy</a>.</p>
+
+      <h2 class="privacy-h2">8. Children's Privacy</h2>
+      <p>Sporafind is not directed at individuals under the age of 16. We do not knowingly collect personal information from children. If we become aware that a child under 16 has provided us with personal data, we will take steps to delete such information promptly. If you believe a child has provided us with personal data, please contact us immediately at <a href="mailto:privacy@sporafind.com">privacy@sporafind.com</a>.</p>
+
+      <h2 class="privacy-h2">9. International Data Transfers</h2>
+      <p>Sporafind is headquartered in Ghana and operates globally. Your personal data may be transferred to, stored, and processed in countries outside your country of residence, including Ghana, the United States, the United Kingdom, and the European Economic Area.</p>
+      <p>When we transfer data across borders, we ensure appropriate safeguards are in place, including:</p>
+      <ul>
+        <li>Standard Contractual Clauses (SCCs) as approved by the European Commission</li>
+        <li>Data Processing Agreements (DPAs) with all sub-processors</li>
+        <li>Adequacy decisions where applicable under GDPR Article 45</li>
+        <li>Binding Corporate Rules for intra-group transfers where required</li>
+      </ul>
+      <p>By using the Service, you consent to the transfer of your information to countries that may have different data protection laws than your own, subject to the safeguards described above.</p>
+
+      <h2 class="privacy-h2">10. Changes to This Privacy Policy</h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in our practices, legal requirements, or operational needs. Material changes will be notified via:</p>
+      <ul>
+        <li>Email to the address associated with your account</li>
+        <li>A prominent notice on the Sporafind platform</li>
+        <li>An update to the "Last updated" date at the top of this policy</li>
+      </ul>
+      <p>We encourage you to review this policy periodically. Your continued use of the Service after changes take effect constitutes acceptance of the updated policy. If you do not agree with any material change, you may close your account and request deletion of your data.</p>
+
+      <h2 class="privacy-h2">11. Contact Us</h2>
+      <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:</p>
+      <ul>
+        <li><strong>Email:</strong> <a href="mailto:privacy@sporafind.com">privacy@sporafind.com</a></li>
+        <li><strong>Data Protection Officer:</strong> <a href="mailto:dpo@sporafind.com">dpo@sporafind.com</a></li>
+        <li><strong>Postal address:</strong> Sporafind (Gabochie Intelligence Ltd), 18 Independence Avenue, Accra, Ghana</li>
+        <li><strong>Phone:</strong> +233 30 200 1234</li>
+      </ul>
+      <p>For users in the European Economic Area, our EU representative can be contacted at <a href="mailto:eu-rep@sporafind.com">eu-rep@sporafind.com</a>.</p>
+      <p>For users in the United Kingdom, our UK representative can be contacted at <a href="mailto:uk-rep@sporafind.com">uk-rep@sporafind.com</a>.</p>
+
+      <p style="margin-top:48px;font-size:13px;color:var(--text-muted);border-top:1px solid var(--cream2);padding-top:24px;">This Privacy Policy is governed by the laws of the Republic of Ghana, without regard to its conflict of laws principles. Any disputes arising under this policy shall be resolved in the courts of Accra, Ghana.</p>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Get the full diaspora intelligence picture.</h2>
+    <p class="cta-sub">Start searching, segmenting, and connecting with verified Ghanaian diaspora profiles across 67 countries.</p>
+    <div class="cta-actions">
+      <a href="pricing.html" class="btn-cta-white"><i class="ti ti-rocket" aria-hidden="true"></i> Start your free trial</a>
+      <a href="contact.html" class="btn-cta-outline-white"><i class="ti ti-calendar" aria-hidden="true"></i> Book a live demo</a>
+    </div>
+    <div class="cta-note">No credit card · 14-day trial · Cancel anytime</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

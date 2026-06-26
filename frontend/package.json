@@ -1,0 +1,17 @@
+{
+  "name": "sporafind-web",
+  "version": "1.0.0",
+  "description": "Sporafind web frontend — Express + EJS",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "vercel-build": "echo vercel-build done"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@vercel/node": "^3.0.0"
+  }
+}

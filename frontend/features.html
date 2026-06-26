@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--green-light:#E8F5EE;
+  --gold:#D4A017;--gold-dark:#a87d10;--gold-light:#FFF8E7;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;--bg:#F4F6F9;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff}
+.nav-wordmark span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s}
+.nav-links a:hover{color:#fff}
+.nav-cta{display:flex;align-items:center;gap:10px}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s}
+.btn-primary-nav:hover{background:var(--gold-dark)}
+
+/* HERO */
+.page-hero{background:var(--navy);padding:120px 48px 80px;position:relative;overflow:hidden}
+.page-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.page-hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none}
+.page-hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:2;text-align:center}
+.page-hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px}
+.page-hero-eyebrow i{font-size:14px}
+.page-hero-h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px}
+.page-hero-h1 span{color:var(--gold)}
+.page-hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:640px;margin:0 auto}
+
+/* SECTION */
+.section{padding:100px 48px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--text-mid);line-height:1.65;max-width:640px}
+.centered{text-align:center}
+.centered .section-sub{margin:0 auto}
+
+/* FEATURE DETAIL CARDS */
+.feature-detail-grid{display:flex;flex-direction:column;gap:32px;margin-top:64px}
+.feature-detail-card{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;background:var(--cream);border-radius:var(--radius-lg);padding:48px 56px;border:0.5px solid var(--cream2)}
+.feature-detail-card:nth-child(even){direction:rtl}
+.feature-detail-card:nth-child(even) .feature-detail-text{direction:ltr}
+.feature-detail-card.featured{background:var(--navy);border-color:rgba(212,160,23,0.15)}
+.feature-detail-text{max-width:480px}
+.feature-detail-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.feature-detail-icon.green{background:var(--green-light);color:var(--green)}
+.feature-detail-icon.gold{background:var(--gold-light);color:var(--gold)}
+.feature-detail-icon.blue{background:#DBEAFE;color:#2563EB}
+.feature-detail-icon.purple{background:#EDE9FE;color:#6D28D9}
+.feature-detail-icon.teal{background:#ECFEFF;color:#0E7490}
+.feature-detail-icon.dark{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)}
+.feature-detail-title{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.6px;margin-bottom:12px}
+.feature-detail-title.light{color:#fff}
+.feature-detail-body{font-size:15px;color:var(--text-mid);line-height:1.7;margin-bottom:20px}
+.feature-detail-body.light{color:rgba(255,255,255,0.55)}
+.feature-detail-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.feature-detail-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-mid)}
+.feature-detail-list li.light{color:rgba(255,255,255,0.6)}
+.feature-detail-list li i{font-size:16px;color:var(--green);margin-top:2px;flex-shrink:0}
+.feature-detail-list li.light i{color:var(--gold)}
+.feature-detail-visual{display:flex;align-items:center;justify-content:center}
+.feature-detail-card:nth-child(even) .feature-detail-visual{direction:ltr}
+.feature-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%}
+.feature-stat-card{background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:24px;text-align:center}
+.feature-stat-card .stat-val{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:var(--gold);letter-spacing:-1px}
+.feature-stat-card .stat-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px}
+.feature-visual-code{background:var(--navy2);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:28px;width:100%;font-family:'SF Mono','Monaco','Consolas',monospace;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.8}
+.feature-visual-code .code-green{color:#4CAF82}
+.feature-visual-code .code-gold{color:var(--gold)}
+.feature-visual-code .code-comment{color:rgba(255,255,255,0.25)}
+
+/* CAPABILITIES TABLE */
+.cap-table{width:100%;border-collapse:collapse;margin-top:48px}
+.cap-table th{text-align:left;padding:14px 20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);background:var(--cream);border-bottom:1px solid var(--cream2)}
+.cap-table td{padding:16px 20px;font-size:14px;color:var(--text-mid);border-bottom:0.5px solid var(--cream2)}
+.cap-table td:first-child{font-weight:600;color:var(--text-dark)}
+.cap-table tr:hover td{background:var(--cream)}
+.cap-table .check{color:var(--green);font-size:18px}
+.cap-table .cross{color:var(--slate3);font-size:18px}
+
+/* PIPELINE VISUAL */
+.pipeline{display:flex;align-items:center;gap:0;margin-top:32px;width:100%}
+.pipeline-step{flex:1;text-align:center;padding:24px 16px;position:relative}
+.pipeline-step:not(:last-child)::after{content:'';position:absolute;top:50%;right:-16px;width:32px;height:2px;background:var(--gold);opacity:0.3}
+.pipeline-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px}
+.pipeline-label{font-size:13px;font-weight:600;color:var(--text-dark)}
+.pipeline-desc{font-size:11px;color:var(--text-muted);margin-top:4px}
+
+/* TECH STACK */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
+.tech-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius);padding:24px;text-align:center}
+.tech-card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px}
+.tech-card-name{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:4px}
+.tech-card-desc{font-size:12px;color:var(--text-muted)}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25)}
+.footer-copy span{color:var(--gold)}
+.footer-bottom-links{display:flex;gap:24px}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3)}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7)}
+
+/* CTA */
+.cta-section{background:var(--green);padding:80px 48px;text-align:center}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1.05;color:#fff;margin-bottom:12px}
+.cta-sub{font-size:16px;color:rgba(255,255,255,0.7);margin-bottom:28px}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-cta-white:hover{background:var(--cream)}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:14px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-left:12px}
+.btn-cta-outline-white:hover{border-color:#fff}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page-hero,.section{padding-left:20px;padding-right:20px}
+  .page-hero-h1{font-size:36px}
+  .section-h2{font-size:30px}
+  .feature-detail-card{grid-template-columns:1fr;gap:32px;padding:32px 24px;direction:ltr!important}
+  .feature-detail-card:nth-child(even) .feature-detail-text{direction:ltr!important}
+  .feature-detail-text{max-width:100%}
+  .tech-grid{grid-template-columns:repeat(2,1fr)}
+  footer{padding:48px 20px 32px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+  .pipeline{flex-direction:column;gap:24px}
+  .pipeline-step:not(:last-child)::after{display:none}
+  .feature-stat-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr}
+  .page-hero-h1{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html" style="color:#fff">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="pricing.html" class="btn-primary-nav">Get early access →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow"><i class="ti ti-sparkles"></i> Platform features</div>
+    <h1 class="page-hero-h1">The intelligence stack<br>your diaspora work <span>deserves</span>.</h1>
+    <p class="page-hero-sub">Sporafind combines AI signal intelligence, cross-source profiling, and natural language search to give you the most complete picture of the Ghanaian — and African — diaspora ever built.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+
+    <div class="feature-detail-grid">
+
+      <!-- 1. AI Search -->
+      <div class="feature-detail-card">
+        <div class="feature-detail-text">
+          <div class="feature-detail-icon green"><i class="ti ti-search"></i></div>
+          <h2 class="feature-detail-title">Natural language AI search</h2>
+          <p class="feature-detail-body">Stop wrestling with boolean queries and dropdown menus. Sporafind understands context the way you do. Type what you need — in plain English — and the AI returns precision-ranked results in seconds.</p>
+          <ul class="feature-detail-list">
+            <li><i class="ti ti-check"></i> Context-aware query parsing — "Ghanaian fintech founders in London with healthcare exits" works</li>
+            <li><i class="ti ti-check"></i> Multi-source cross-referencing across 14+ public and proprietary datasets</li>
+            <li><i class="ti ti-check"></i> Automatic segment classification on every result</li>
+            <li><i class="ti ti-check"></i> Saved search history with one-click re-runs</li>
+          </ul>
+        </div>
+        <div class="feature-detail-visual">
+          <div class="feature-visual-code">
+            <span class="code-comment">// Your search query → AI parsed output</span><br><br>
+            <span class="code-gold">Input:</span> "Ghanaian fintech founders in London<br>with healthcare exits"<br><br>
+            <span class="code-gold">AI Parse:</span><br>
+            {<br>
+            &nbsp;&nbsp;origin: <span class="code-green">"Ghanaian"</span>,<br>
+            &nbsp;&nbsp;segment: <span class="code-green">"Entrepreneur"</span>,<br>
+            &nbsp;&nbsp;sector: [<span class="code-green">"Fintech"</span>, <span class="code-green">"Healthcare"</span>],<br>
+            &nbsp;&nbsp;location: <span class="code-green">"London, UK"</span>,<br>
+            &nbsp;&nbsp;filters: {has_exits: <span class="code-green">true</span>}<br>
+            }<br><br>
+            <span class="code-gold">Results: 142 profiles</span> <span class="code-comment">// 0.4 seconds</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Segmentation Engine -->
+      <div class="feature-detail-card">
+        <div class="feature-detail-text">
+          <div class="feature-detail-icon gold"><i class="ti ti-layout-grid"></i></div>
+          <h2 class="feature-detail-title">Five-class segmentation engine</h2>
+          <p class="feature-detail-body">Every profile in Sporafind is automatically classified into one of five segment types using AI signal analysis across 14 data sources. This isn't keyword tagging — it's behavioural and positional inference.</p>
+          <ul class="feature-detail-list">
+            <li><i class="ti ti-check"></i> <strong>Regular people</strong> — diaspora members, professionals, creatives, students</li>
+            <li><i class="ti ti-check"></i> <strong>Leaders</strong> — politicians, diplomats, executives, academics with influence</li>
+            <li><i class="ti ti-check"></i> <strong>Entrepreneurs</strong> — founders, operators, business owners (identified via company registrations, media, business filings)</li>
+            <li><i class="ti ti-check"></i> <strong>Investors</strong> — angels, VCs, PE professionals, HNW/UHNW individuals</li>
+            <li><i class="ti ti-check"></i> <strong>Organisations</strong> — associations, syndicates, professional bodies, cultural groups, think tanks</li>
+          </ul>
+        </div>
+        <div class="feature-detail-visual">
+          <div style="width:100%">
+            <div class="pipeline">
+              <div class="pipeline-step">
+                <div class="pipeline-icon" style="background:#DBEAFE;color:#1D4ED8"><i class="ti ti-users"></i></div>
+                <div class="pipeline-label">Regular</div>
+                <div class="pipeline-desc">3.9M+ profiles</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon" style="background:#EDE9FE;color:#6D28D9"><i class="ti ti-crown"></i></div>
+                <div class="pipeline-label">Leaders</div>
+                <div class="pipeline-desc">24.8K profiles</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon" style="background:#FEF3C7;color:#B45309"><i class="ti ti-rocket"></i></div>
+                <div class="pipeline-label">Entrepreneurs</div>
+                <div class="pipeline-desc">94.2K profiles</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon" style="background:#DCFCE7;color:#15803D"><i class="ti ti-chart-line"></i></div>
+                <div class="pipeline-label">Investors</div>
+                <div class="pipeline-desc">18.3K profiles</div>
+              </div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon" style="background:#ECFEFF;color:#0E7490"><i class="ti ti-building-community"></i></div>
+                <div class="pipeline-label">Organisations</div>
+                <div class="pipeline-desc">12.4K mapped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Organisation Discovery -->
+      <div class="feature-detail-card">
+        <div class="feature-detail-text">
+          <div class="feature-detail-icon blue"><i class="ti ti-building-community"></i></div>
+          <h2 class="feature-detail-title">Organisation discovery & mapping</h2>
+          <p class="feature-detail-body">Beyond individual profiles, Sporafind maps the institutional landscape of the diaspora. Find every association, investment syndicate, professional body, cultural organisation, and think tank — with membership estimates and leadership signals.</p>
+          <ul class="feature-detail-list">
+            <li><i class="ti ti-check"></i> 6 organisation types with AI-classified categories</li>
+            <li><i class="ti ti-check"></i> Membership size estimation from public signals</li>
+            <li><i class="ti ti-check"></i> Leadership identification with role and tenure</li>
+            <li><i class="ti ti-check"></i> Engagement history and event footprint analysis</li>
+          </ul>
+        </div>
+        <div class="feature-detail-visual">
+          <div class="feature-stat-grid">
+            <div class="feature-stat-card"><div class="stat-val">4,100+</div><div class="stat-label">Diaspora associations</div></div>
+            <div class="feature-stat-card"><div class="stat-val">2,300+</div><div class="stat-label">Professional bodies</div></div>
+            <div class="feature-stat-card"><div class="stat-val">1,840+</div><div class="stat-label">Investment syndicates</div></div>
+            <div class="feature-stat-card"><div class="stat-val">2,900+</div><div class="stat-label">Community organisations</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. AI Outreach -->
+      <div class="feature-detail-card">
+        <div class="feature-detail-text">
+          <div class="feature-detail-icon purple"><i class="ti ti-mail-forward"></i></div>
+          <h2 class="feature-detail-title">AI-crafted outreach generation</h2>
+          <p class="feature-detail-body">Every profile comes with an outreach angle. One click generates a personalised draft that accounts for the person's segment, sector, location, investment history, and known affiliations. DR-optimised copy — not generic templates.</p>
+          <ul class="feature-detail-list">
+            <li><i class="ti ti-check"></i> Segment-aware messaging — investors get deals, leaders get partnerships</li>
+            <li><i class="ti ti-check"></i> Personalisation variables auto-filled from profile data</li>
+            <li><i class="ti ti-check"></i> Tone controls — formal, warm, direct, academic</li>
+            <li><i class="ti ti-check"></i> One-click export to email or CRM sequence</li>
+          </ul>
+        </div>
+        <div class="feature-detail-visual">
+          <div class="feature-visual-code">
+            <span class="code-comment">// AI-generated outreach draft (Investor segment)</span><br><br>
+            <span class="code-gold">Subject:</span> Building Africa's fintech rails —<br>a conversation<br><br>
+            Hi Kwame,<br><br>
+            I noticed your work with digital<br>payment infrastructure across your<br>portfolio companies. With Ghana's<br>mobile money transactions hitting<br>₵1 trillion this year...<br><br>
+            <span class="code-comment">// Personalisation factors used:</span><br>
+            <span class="code-green">→ Fintech sector match</span><br>
+            <span class="code-green">→ Past exits in payments</span><br>
+            <span class="code-green">→ London timezone</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Export & CRM Sync -->
+      <div class="feature-detail-card">
+        <div class="feature-detail-text">
+          <div class="feature-detail-icon teal"><i class="ti ti-download"></i></div>
+          <h2 class="feature-detail-title">Export, sync, and API access</h2>
+          <p class="feature-detail-body">Get your data out in the format you need. Filtered lists, full segments, or individual profiles — export to CSV, push directly to your CRM, or integrate via the Sporafind API.</p>
+          <ul class="feature-detail-list">
+            <li><i class="ti ti-check"></i> CSV export with full metadata — segment, location, confidence score, industry tags</li>
+            <li><i class="ti ti-check"></i> Native HubSpot and Salesforce integration</li>
+            <li><i class="ti ti-check"></i> Notion and Airtable sync for workspace workflows</li>
+            <li><i class="ti ti-check"></i> RESTful API with webhook support for custom integrations</li>
+          </ul>
+        </div>
+        <div class="feature-detail-visual">
+          <div class="feature-visual-code">
+            <span class="code-comment">// API response — single profile</span><br><br>
+            {<br>
+            &nbsp;&nbsp;id: <span class="code-green">"df_prod_8a7b..."</span>,<br>
+            &nbsp;&nbsp;name: <span class="code-green">"Kwame Asante"</span>,<br>
+            &nbsp;&nbsp;segment: <span class="code-green">"investor"</span>,<br>
+            &nbsp;&nbsp;confidence: <span class="code-green">0.96</span>,<br>
+            &nbsp;&nbsp;location: {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;city: <span class="code-green">"London"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;country: <span class="code-green">"UK"</span><br>
+            &nbsp;&nbsp;},<br>
+            &nbsp;&nbsp;sectors: [<span class="code-green">"Fintech"</span>],<br>
+            &nbsp;&nbsp;wealth_tier: <span class="code-green">"HNW"</span><br>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Ghana-first scope -->
+      <div class="feature-detail-card featured">
+        <div class="feature-detail-text">
+          <div class="feature-detail-icon dark"><i class="ti ti-world"></i></div>
+          <h2 class="feature-detail-title light">Ghana-first. Pan-African ready.</h2>
+          <p class="feature-detail-body light">Sporafind started with the Ghanaian diaspora because that's where the deepest intelligence is. But the architecture is built for all 54 African nations. Growth plan customers unlock the full pan-African scope.</p>
+          <ul class="feature-detail-list">
+            <li class="light"><i class="ti ti-check"></i> Deepest coverage of Ghanaian diaspora globally — 4.2M+ profiles</li>
+            <li class="light"><i class="ti ti-check"></i> 67 countries with active diaspora presence mapped</li>
+            <li class="light"><i class="ti ti-check"></i> 54 African nations available on Growth plan and above</li>
+            <li class="light"><i class="ti ti-check"></i> Country-level filtering and cross-diaspora comparison</li>
+          </ul>
+        </div>
+        <div class="feature-detail-visual">
+          <div class="feature-stat-grid">
+            <div class="feature-stat-card"><div class="stat-val">4.2M+</div><div class="stat-label">Ghanaians identified</div></div>
+            <div class="feature-stat-card"><div class="stat-val">67</div><div class="stat-label">Countries covered</div></div>
+            <div class="feature-stat-card"><div class="stat-val">54</div><div class="stat-label">African nations</div></div>
+            <div class="feature-stat-card"><div class="stat-val">94%</div><div class="stat-label">AI accuracy rate</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CAPABILITIES COMPARISON -->
+    <div style="margin-top:100px">
+      <div class="centered">
+        <div class="section-eyebrow" style="justify-content:center">Capability matrix</div>
+        <h2 class="section-h2">What's included, by plan</h2>
+        <p class="section-sub centered" style="margin:0 auto">Every plan builds on the one before. Detailed breakdown of features across Starter, Growth, and Enterprise tiers.</p>
+      </div>
+      <table class="cap-table">
+        <thead>
+          <tr><th>Capability</th><th style="text-align:center">Starter</th><th style="text-align:center">Growth</th><th style="text-align:center">Enterprise</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Profile views / month</td><td style="text-align:center">500</td><td style="text-align:center;font-weight:600">Unlimited</td><td style="text-align:center;font-weight:600">Unlimited</td></tr>
+          <tr><td>AI natural language search</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>People segmentation (5-class)</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>Organisation discovery</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>Ghana scope only</td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="cross">—</span></td></tr>
+          <tr><td>Pan-African scope</td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>AI outreach generation</td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>CSV export</td><td style="text-align:center">100 records</td><td style="text-align:center;font-weight:600">Unlimited</td><td style="text-align:center;font-weight:600">Unlimited</td></tr>
+          <tr><td>CRM integrations</td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="check">✓</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>Dedicated AI scans</td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>White-label option</td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>API access</td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="cross">—</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+          <tr><td>Support</td><td style="text-align:center">Email</td><td style="text-align:center;font-weight:600">Priority</td><td style="text-align:center;font-weight:600">SLA + dedicated</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TECH POWERING THIS -->
+    <div style="margin-top:100px">
+      <div class="centered">
+        <div class="section-eyebrow" style="justify-content:center">Under the hood</div>
+        <h2 class="section-h2">The technology behind the intelligence</h2>
+        <p class="section-sub centered" style="margin:0 auto">Sporafind runs on a stack purpose-built for diaspora-scale data processing.</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-card-icon" style="background:var(--green-light);color:var(--green)"><i class="ti ti-brain"></i></div>
+          <div class="tech-card-name">Signal AI</div>
+          <div class="tech-card-desc">Proprietary ML models trained on 14+ diaspora-specific data sources</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-card-icon" style="background:var(--gold-light);color:var(--gold-dark)"><i class="ti ti-database"></i></div>
+          <div class="tech-card-name">Diaspora Graph</div>
+          <div class="tech-card-desc">Entity-resolution knowledge graph linking people, orgs, and locations</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-card-icon" style="background:#DBEAFE;color:#2563EB"><i class="ti ti-api"></i></div>
+          <div class="tech-card-name">Query Engine</div>
+          <div class="tech-card-desc">Natural-language-to-structured-search with context disambiguation</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-card-icon" style="background:#ECFEFF;color:#0E7490"><i class="ti ti-lock"></i></div>
+          <div class="tech-card-name">Privacy Layer</div>
+          <div class="tech-card-desc">GDPR-compliant data handling with on-demand profile redaction</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Ready to see it in action?</h2>
+    <p class="cta-sub">14-day free trial. No credit card needed. Start finding diaspora profiles that matter.</p>
+    <div>
+      <a href="pricing.html" class="btn-cta-white"><i class="ti ti-rocket"></i> Start free trial</a>
+      <a href="contact.html" class="btn-cta-outline-white"><i class="ti ti-calendar"></i> Book a demo</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segments — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--green-light:#E8F5EE;
+  --gold:#D4A017;--gold-dark:#a87d10;--gold-light:#FFF8E7;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff}
+.nav-wordmark span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s}
+.nav-links a:hover{color:#fff}
+.nav-links a.active{color:#fff}
+.nav-cta{display:flex;align-items:center;gap:10px}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s}
+.btn-primary-nav:hover{background:var(--gold-dark)}
+
+/* HERO */
+.page-hero{background:var(--navy);padding:120px 48px 80px;position:relative;overflow:hidden}
+.page-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.page-hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none}
+.page-hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:2;text-align:center}
+.page-hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px}
+.page-hero-h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px}
+.page-hero-h1 span{color:var(--gold)}
+.page-hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:640px;margin:0 auto}
+
+/* SECTION */
+.section{padding:100px 48px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:7px;justify-content:center}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;text-align:center}
+.section-sub{font-size:16px;color:var(--text-mid);line-height:1.65;max-width:640px;margin:0 auto;text-align:center}
+
+/* SEGMENT DEEP DIVE */
+.seg-deep-grid{display:flex;flex-direction:column;gap:40px;margin-top:64px}
+.seg-deep-card{border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--cream2)}
+.seg-deep-header{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding:48px 56px}
+.seg-deep-header.people{background:#EFF6FF;border-bottom:0.5px solid #DBEAFE}
+.seg-deep-header.leaders{background:#F5F3FF;border-bottom:0.5px solid #EDE9FE}
+.seg-deep-header.entrepreneurs{background:#FFFBEB;border-bottom:0.5px solid #FEF3C7}
+.seg-deep-header.investors{background:#F0FDF4;border-bottom:0.5px solid #BBF7D0}
+.seg-deep-header.orgs{background:#ECFEFF;border-bottom:0.5px solid #A5F3FC}
+.seg-deep-header-right{text-align:right}
+.seg-deep-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
+.seg-deep-name{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:8px}
+.seg-deep-count{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;letter-spacing:-2px}
+.seg-deep-count-label{font-size:14px;font-weight:500;margin-top:4px}
+.seg-deep-body{font-size:15px;line-height:1.7;max-width:480px}
+.seg-deep-details{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cream2)}
+.seg-deep-detail{background:var(--white);padding:28px 32px}
+.seg-deep-detail-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:6px}
+.seg-deep-detail-value{font-size:15px;color:var(--text-dark);line-height:1.5}
+.seg-deep-detail-value strong{font-weight:600}
+.seg-deep-detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.seg-deep-detail-tags span{font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px;background:var(--cream);color:var(--text-mid)}
+
+/* COUNTRY TABLE */
+.country-table{width:100%;border-collapse:collapse;margin-top:48px;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden}
+.country-table th{text-align:left;padding:14px 20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);background:var(--cream);border-bottom:0.5px solid var(--cream2)}
+.country-table td{padding:14px 20px;font-size:14px;color:var(--text-mid);border-bottom:0.5px solid var(--cream2)}
+.country-table tr:last-child td{border-bottom:none}
+.country-table tr:hover td{background:var(--cream)}
+.country-table .bar-wrap{width:120px;height:6px;background:var(--cream2);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
+.country-table .bar-fill{height:100%;border-radius:3px}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25)}
+.footer-copy span{color:var(--gold)}
+.footer-bottom-links{display:flex;gap:24px}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3)}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7)}
+
+/* CTA */
+.cta-section{background:var(--green);padding:80px 48px;text-align:center}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1.05;color:#fff;margin-bottom:12px}
+.cta-sub{font-size:16px;color:rgba(255,255,255,0.7);margin-bottom:28px}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-cta-white:hover{background:var(--cream)}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:14px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-left:12px}
+.btn-cta-outline-white:hover{border-color:#fff}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page-hero,.section{padding-left:20px;padding-right:20px}
+  .page-hero-h1{font-size:36px}
+  .section-h2{font-size:30px}
+  .seg-deep-header{grid-template-columns:1fr;gap:24px;padding:32px 24px}
+  .seg-deep-header-right{text-align:left}
+  .seg-deep-details{grid-template-columns:1fr}
+  .seg-deep-name{font-size:26px}
+  .seg-deep-count{font-size:36px}
+  footer{padding:48px 20px 32px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html" class="active">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="pricing.html" class="btn-primary-nav">Get early access →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow"><i class="ti ti-layout-grid"></i> Segmentation model</div>
+    <h1 class="page-hero-h1">Five categories.<br><span>One complete</span> diaspora picture.</h1>
+    <p class="page-hero-sub">Sporafind classifies every profile and organisation using AI signal analysis across 14 data sources. Each segment is defined by behavioural, positional, and financial signals — not guesswork.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+
+    <p style="text-align:center;font-size:15px;color:var(--text-muted);margin-bottom:8px">Segments overview</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+      <div style="text-align:center;padding:24px 12px;background:#EFF6FF;border-radius:var(--radius-lg);border:0.5px solid #DBEAFE">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#1D4ED8">3.9M</div>
+        <div style="font-size:12px;color:#1D4ED8;font-weight:500;margin-top:4px">Regular people</div>
+      </div>
+      <div style="text-align:center;padding:24px 12px;background:#F5F3FF;border-radius:var(--radius-lg);border:0.5px solid #EDE9FE">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#6D28D9">24.8K</div>
+        <div style="font-size:12px;color:#6D28D9;font-weight:500;margin-top:4px">Leaders</div>
+      </div>
+      <div style="text-align:center;padding:24px 12px;background:#FFFBEB;border-radius:var(--radius-lg);border:0.5px solid #FEF3C7">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#B45309">94.2K</div>
+        <div style="font-size:12px;color:#B45309;font-weight:500;margin-top:4px">Entrepreneurs</div>
+      </div>
+      <div style="text-align:center;padding:24px 12px;background:#F0FDF4;border-radius:var(--radius-lg);border:0.5px solid #BBF7D0">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#15803D">18.3K</div>
+        <div style="font-size:12px;color:#15803D;font-weight:500;margin-top:4px">Investors</div>
+      </div>
+      <div style="text-align:center;padding:24px 12px;background:#ECFEFF;border-radius:var(--radius-lg);border:0.5px solid #A5F3FC">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#0E7490">12.4K</div>
+        <div style="font-size:12px;color:#0E7490;font-weight:500;margin-top:4px">Organisations</div>
+      </div>
+    </div>
+
+    <div class="seg-deep-grid">
+
+      <!-- Regular People -->
+      <div class="seg-deep-card">
+        <div class="seg-deep-header people">
+          <div>
+            <div class="seg-deep-icon" style="background:#DBEAFE;color:#1D4ED8"><i class="ti ti-users"></i></div>
+            <h2 class="seg-deep-name" style="color:#1E40AF">Regular people</h2>
+            <p class="seg-deep-body" style="color:#1D4ED8">The foundation of every diaspora network. Professionals, creatives, workers, and students living abroad — the future generation of investors and the human capital pipeline connecting Ghana to the world.</p>
+          </div>
+          <div class="seg-deep-header-right">
+            <div class="seg-deep-count" style="color:#1D4ED8">3,900,000+</div>
+            <div class="seg-deep-count-label" style="color:#1D4ED8">identified globally</div>
+          </div>
+        </div>
+        <div class="seg-deep-details">
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Data sources</div>
+            <div class="seg-deep-detail-value"><strong>12+ sources</strong> — LinkedIn, public directories, academic registries, professional networks</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Key signals</div>
+            <div class="seg-deep-detail-value"><strong>Occupation, education, location, professional affiliations, years abroad</strong></div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Top sectors</div>
+            <div class="seg-deep-detail-tags">
+              <span>Healthcare</span><span>Technology</span><span>Education</span><span>Finance</span><span>Engineering</span><span>Law</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaders -->
+      <div class="seg-deep-card">
+        <div class="seg-deep-header leaders">
+          <div>
+            <div class="seg-deep-icon" style="background:#EDE9FE;color:#6D28D9"><i class="ti ti-crown"></i></div>
+            <h2 class="seg-deep-name" style="color:#4C1D95">Leaders</h2>
+            <p class="seg-deep-body" style="color:#5B21B6">Politicians, diplomats, executives, academics, and public figures with measurable influence. The connectors who open doors and shape narratives across borders — identified by position, appointment, publications, and media footprint.</p>
+          </div>
+          <div class="seg-deep-header-right">
+            <div class="seg-deep-count" style="color:#6D28D9">24,800</div>
+            <div class="seg-deep-count-label" style="color:#6D28D9">profiles with public influence</div>
+          </div>
+        </div>
+        <div class="seg-deep-details">
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Leadership tiers</div>
+            <div class="seg-deep-detail-value"><strong>4 levels</strong> — C-suite, appointed officials, elected officials, academic leadership</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Influence metrics</div>
+            <div class="seg-deep-detail-value"><strong>Position rank, appointment type, media mentions, organisational scope, network size</strong></div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Top countries</div>
+            <div class="seg-deep-detail-tags">
+              <span>United States</span><span>United Kingdom</span><span>Canada</span><span>Germany</span><span>Netherlands</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entrepreneurs -->
+      <div class="seg-deep-card">
+        <div class="seg-deep-header entrepreneurs">
+          <div>
+            <div class="seg-deep-icon" style="background:#FEF3C7;color:#B45309"><i class="ti ti-rocket"></i></div>
+            <h2 class="seg-deep-name" style="color:#78350F">Entrepreneurs</h2>
+            <p class="seg-deep-body" style="color:#92400E">Founders, operators, and business owners running ventures in the diaspora and back home. Identified by company registrations, media mentions, business filings, funding announcements, and founder network analysis.</p>
+          </div>
+          <div class="seg-deep-header-right">
+            <div class="seg-deep-count" style="color:#B45309">94,200</div>
+            <div class="seg-deep-count-label" style="color:#B45309">active founders tracked</div>
+          </div>
+        </div>
+        <div class="seg-deep-details">
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Company stage</div>
+            <div class="seg-deep-detail-value"><strong>Pre-seed through Series C</strong> — with funding history and team size signals</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Sector coverage</div>
+            <div class="seg-deep-detail-value"><strong>14 industry clusters</strong> — Fintech, HealthTech, CleanTech, EdTech, Logistics, Media, Real Estate, SaaS</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Key signals</div>
+            <div class="seg-deep-detail-tags">
+              <span>Company registration</span><span>Funding raised</span><span>Patent filings</span><span>Media coverage</span><span>Team size</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Investors -->
+      <div class="seg-deep-card">
+        <div class="seg-deep-header investors">
+          <div>
+            <div class="seg-deep-icon" style="background:#BBF7D0;color:#15803D"><i class="ti ti-chart-line"></i></div>
+            <h2 class="seg-deep-name" style="color:#14532D">Investors</h2>
+            <p class="seg-deep-body" style="color:#166534">Angel investors, VC partners, PE professionals, fund managers, and high-net-worth individuals with deployable capital. Every investor profile includes wealth tier classification and verified deal history.</p>
+          </div>
+          <div class="seg-deep-header-right">
+            <div class="seg-deep-count" style="color:#16A34A">18,340</div>
+            <div class="seg-deep-count-label" style="color:#16A34A">investors with deployable capital</div>
+          </div>
+        </div>
+        <div class="seg-deep-details">
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Wealth tiers</div>
+            <div class="seg-deep-detail-value"><strong>HNW ($1M–$30M), UHNW ($30M+)</strong> — classified by asset signals, holdings, and position</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Investment focus</div>
+            <div class="seg-deep-detail-value"><strong>Angel, Venture Capital, Private Equity, Real Estate, Impact Investing, Diaspora Bonds</strong></div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Deal range</div>
+            <div class="seg-deep-detail-tags">
+              <span>$50K–$500K (Angel)</span><span>$500K–$5M (VC)</span><span>$5M–$50M (PE)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Organisations -->
+      <div class="seg-deep-card">
+        <div class="seg-deep-header orgs">
+          <div>
+            <div class="seg-deep-icon" style="background:#A5F3FC;color:#0E7490"><i class="ti ti-building-community"></i></div>
+            <h2 class="seg-deep-name" style="color:#164E63">Organisations</h2>
+            <p class="seg-deep-body" style="color:#155E75">Diaspora associations, investment syndicates, professional bodies, community and cultural organisations, and think tanks — complete with membership estimates and leadership data.</p>
+          </div>
+          <div class="seg-deep-header-right">
+            <div class="seg-deep-count" style="color:#0E7490">12,412</div>
+            <div class="seg-deep-count-label" style="color:#0E7490">organisations across 67 countries</div>
+          </div>
+        </div>
+        <div class="seg-deep-details">
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Organisation types</div>
+            <div class="seg-deep-detail-value"><strong>6 categories</strong> — Associations, Investment Syndicates, Professional Bodies, Community Orgs, Cultural Groups, Think Tanks</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Membership data</div>
+            <div class="seg-deep-detail-value"><strong>Size ranges</strong> — Small (&lt;100), Medium (100–1,000), Large (1,000–5,000), Very Large (5,000+)</div>
+          </div>
+          <div class="seg-deep-detail">
+            <div class="seg-deep-detail-label">Org breakdown</div>
+            <div class="seg-deep-detail-tags">
+              <span>4,100 Associations</span><span>2,300 Professional</span><span>1,840 Investment</span><span>2,900 Community</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TOP COUNTRIES TABLE -->
+    <div style="margin-top:100px">
+      <div class="section-eyebrow">Global footprint</div>
+      <h2 class="section-h2">Diaspora distribution by country</h2>
+      <p class="section-sub">The top 10 diaspora destinations by profile count. Full country-level filtering available in the platform.</p>
+      <table class="country-table">
+        <thead>
+          <tr><th>Country</th><th>Profiles</th><th>% of total</th><th>Top segments</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>United States</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#006B3C"></div></div>820,000</td><td>19.1%</td><td>Regular, Entrepreneurs, Leaders</td></tr>
+          <tr><td><strong>United Kingdom</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:66%;background:#006B3C"></div></div>540,000</td><td>12.6%</td><td>Regular, Investors, Entrepreneurs</td></tr>
+          <tr><td><strong>Canada</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:46%;background:#006B3C"></div></div>380,000</td><td>8.9%</td><td>Regular, Entrepreneurs, Leaders</td></tr>
+          <tr><td><strong>Germany</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:26%;background:#D4A017"></div></div>210,000</td><td>4.9%</td><td>Regular, Entrepreneurs</td></tr>
+          <tr><td><strong>Netherlands</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:20%;background:#D4A017"></div></div>160,000</td><td>3.7%</td><td>Regular, Students</td></tr>
+          <tr><td><strong>United Arab Emirates</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:17%;background:#D4A017"></div></div>140,000</td><td>3.3%</td><td>Entrepreneurs, Investors, Regular</td></tr>
+          <tr><td><strong>Australia</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:12%;background:#8A9BB0"></div></div>98,000</td><td>2.3%</td><td>Regular, Entrepreneurs</td></tr>
+          <tr><td><strong>Switzerland</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:8%;background:#8A9BB0"></div></div>62,000</td><td>1.4%</td><td>Investors, Leaders</td></tr>
+          <tr><td><strong>France</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:7%;background:#8A9BB0"></div></div>55,000</td><td>1.3%</td><td>Regular, Students</td></tr>
+          <tr><td><strong>South Africa</strong></td><td><div class="bar-wrap"><div class="bar-fill" style="width:6%;background:#8A9BB0"></div></div>48,000</td><td>1.1%</td><td>Entrepreneurs, Regular</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Find your segment. Start connecting.</h2>
+    <p class="cta-sub">Every profile comes with AI-verified signals. No cold outreach — just precision engagement.</p>
+    <div>
+      <a href="pricing.html" class="btn-cta-white"><i class="ti ti-rocket"></i> Start free trial</a>
+      <a href="workspace.html" class="btn-cta-outline-white"><i class="ti ti-search"></i> Try a sample search</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

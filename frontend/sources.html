@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Sources — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo a{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* HERO */
+.hero{background:var(--navy);min-height:65vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:140px 48px 100px;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:800px;width:100%;margin:0 auto;position:relative;z-index:2;text-align:center;}
+.hero-icon{width:64px;height:64px;border-radius:16px;background:rgba(0,107,60,0.15);border:0.5px solid rgba(0,107,60,0.3);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--green);margin:0 auto 24px;}
+.hero-h1{font-family:'Space Grotesk',sans-serif;font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-2.5px;color:#fff;margin-bottom:20px;}
+.hero-h1 .accent{color:var(--gold);}
+.hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;margin-bottom:0;font-weight:400;max-width:600px;margin-left:auto;margin-right:auto;}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:48px;margin-top:44px;flex-wrap:wrap;}
+.hero-stat{text-align:center;}
+.hero-stat-val{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--gold);letter-spacing:-1px;}
+.hero-stat-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
+
+/* SECTION SHARED */
+.section{padding:100px 48px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:16px;}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;}
+.section-sub{font-size:17px;color:var(--text-mid);line-height:1.65;max-width:560px;}
+.section-sub strong{color:var(--text-dark);}
+.centered{text-align:center;}
+.centered .section-sub{margin:0 auto;}
+
+/* SOURCE CARDS */
+.sources{background:var(--white);}
+.sources-inner{max-width:1100px;margin:0 auto;}
+.sources-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px;}
+.source-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:36px 32px;transition:border-color 0.2s,transform 0.2s;}
+.source-card:hover{border-color:rgba(0,107,60,0.3);transform:translateY(-2px);}
+.source-card-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;}
+.source-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.source-icon.green{background:#EAF3DE;color:var(--green);}
+.source-icon.gold{background:rgba(212,160,23,0.12);color:var(--gold);}
+.source-icon.navy{background:rgba(8,13,26,0.08);color:var(--navy);}
+.source-icon.slate{background:rgba(138,155,176,0.15);color:var(--slate2);}
+.source-icon.teal{background:#ECFEFF;color:#0E7490;}
+.source-icon.purple{background:#F5F3FF;color:#6D28D9;}
+.source-card-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.3px;}
+.source-card-body{font-size:15px;color:var(--text-mid);line-height:1.65;margin-bottom:14px;}
+.source-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.source-tag{font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;background:rgba(0,107,60,0.08);color:var(--green);border:0.5px solid rgba(0,107,60,0.15);}
+.source-tag.gold-t{background:rgba(212,160,23,0.1);color:var(--gold-dark);border-color:rgba(212,160,23,0.2);}
+.source-tag.slate-t{background:rgba(138,155,176,0.12);color:var(--slate2);border-color:rgba(138,155,176,0.2);}
+
+/* INTRO SECTION */
+.intro{background:var(--white);padding:0 48px 80px;}
+.intro-inner{max-width:1100px;margin:0 auto;}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.intro-text{font-size:16px;color:var(--text-mid);line-height:1.7;}
+.intro-text strong{color:var(--text-dark);}
+.intro-text p{margin-bottom:16px;}
+.intro-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.intro-stat-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius);padding:24px 20px;text-align:center;}
+.intro-stat-num{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:var(--green);letter-spacing:-1px;}
+.intro-stat-label{font-size:13px;color:var(--text-muted);margin-top:4px;}
+
+/* METHODOLOGY */
+.methodology{background:var(--navy);padding:100px 48px;}
+.methodology-inner{max-width:1100px;margin:0 auto;}
+.methodology-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:48px;border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid rgba(255,255,255,0.06);}
+.method-card{background:var(--navy2);padding:40px 36px;position:relative;}
+.method-card:not(:last-child){border-right:0.5px solid rgba(255,255,255,0.06);}
+.method-icon{width:48px;height:48px;border-radius:12px;background:rgba(0,107,60,0.15);border:0.5px solid rgba(0,107,60,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);margin-bottom:20px;}
+.method-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-0.3px;}
+.method-body{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.65;}
+.method-body strong{color:rgba(255,255,255,0.8);font-weight:500;}
+
+/* NOT COLLECTED */
+.not-collected{background:var(--cream);padding:100px 48px;}
+.not-collected-inner{max-width:800px;margin:0 auto;}
+.not-collected-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px;}
+.nc-card{background:#fff;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:32px 28px;text-align:center;transition:border-color 0.2s;}
+.nc-card:hover{border-color:rgba(212,160,23,0.3);}
+.nc-icon{width:48px;height:48px;border-radius:12px;background:rgba(212,160,23,0.1);border:0.5px solid rgba(212,160,23,0.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold-dark);margin:0 auto 16px;}
+.nc-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.3px;margin-bottom:8px;}
+.nc-body{font-size:14px;color:var(--text-mid);line-height:1.55;}
+
+/* TRANSPARENCY NOTE */
+.transparency{background:var(--navy);padding:80px 48px;}
+.transparency-inner{max-width:800px;margin:0 auto;text-align:center;}
+.transparency-icon{width:56px;height:56px;border-radius:14px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.25);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--gold);margin:0 auto 20px;}
+.transparency-h2{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;letter-spacing:-1.2px;color:#fff;margin-bottom:16px;}
+.transparency-body{font-size:16px;color:rgba(255,255,255,0.55);line-height:1.7;max-width:640px;margin:0 auto;}
+.transparency-body strong{color:rgba(255,255,255,0.85);font-weight:500;}
+.transparency-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px;}
+.transparency-item{background:var(--navy2);border:0.5px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:20px 16px;text-align:center;}
+.transparency-item-val{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--gold);letter-spacing:-0.5px;}
+.transparency-item-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
+
+/* CTA */
+.cta-section{background:var(--green);padding:100px 48px;}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.cta-sub{font-size:18px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:36px;}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-white:hover{background:var(--cream);}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:15px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-outline-white:hover{border-color:#fff;background:rgba(255,255,255,0.07);}
+.cta-note{font-size:13px;color:rgba(255,255,255,0.5);margin-top:16px;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.animate-in{animation:fadeUp 0.6s ease forwards;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .nav-inner{justify-content:space-between;}
+  .hero-h1{font-size:42px;}
+  .hero-sub{font-size:16px;}
+  .sources-grid{grid-template-columns:1fr;}
+  .intro-grid{grid-template-columns:1fr;gap:32px;}
+  .not-collected-grid{grid-template-columns:1fr;}
+  .methodology-grid{grid-template-columns:1fr;}
+  .method-card:not(:last-child){border-right:none;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
+  .transparency-grid{grid-template-columns:1fr 1fr;}
+  .section-h2{font-size:32px;}
+  .cta-h2{font-size:32px;}
+  .intro-stat-grid{grid-template-columns:1fr;}
+}
+@media(max-width:576px){
+  nav{padding:0 20px;}
+  .hero{padding:120px 20px 60px;}
+  .section{padding:60px 20px;}
+  .footer-top{grid-template-columns:1fr;}
+  .hero-stats{flex-direction:column;gap:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <a href="index.html">
+        <div class="nav-logomark"><div class="nav-star"></div></div>
+        <div class="nav-wordmark">Spora<span>Find</span></div>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="admin.html">Sign in</a>
+    </div>
+    <div class="nav-cta">
+      <a href="pricing.html" class="btn-primary-nav">Get early access →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-icon"><i class="ti ti-database" aria-hidden="true"></i></div>
+    <h1 class="hero-h1">Data <span class="accent">Sources</span></h1>
+    <p class="hero-sub">Transparency in how we build diaspora intelligence — every dataset, every signal, every method.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">40+</div>
+        <div class="hero-stat-label">Data sources integrated</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">14</div>
+        <div class="hero-stat-label">Countries' business registries</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">99.7%</div>
+        <div class="hero-stat-label">Data source uptime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-inner">
+    <div class="intro-grid">
+      <div>
+        <div class="section-eyebrow"><i class="ti ti-info-circle" aria-hidden="true"></i> How we source data</div>
+        <h2 class="section-h2">Built on verified,<br>public signals.</h2>
+        <div class="intro-text">
+          <p>Sporafind aggregates diaspora intelligence exclusively from <strong>public, legally obtainable data sources</strong>. We do not purchase, scrape, or infer private data. Every profile in our system is reconstructed from signals that individuals and organisations have voluntarily made public.</p>
+          <p>Our AI cross-references <strong>40+ distinct data sources</strong> — from business registries to academic databases — to build a coherent, de-duplicated, and confidence-scored profile. The result is intelligence that respects privacy while delivering precision.</p>
+        </div>
+      </div>
+      <div class="intro-stat-grid">
+        <div class="intro-stat-card">
+          <div class="intro-stat-num">40+</div>
+          <div class="intro-stat-label">Active data feeds</div>
+        </div>
+        <div class="intro-stat-card">
+          <div class="intro-stat-num">14</div>
+          <div class="intro-stat-label">Daily refresh cycles</div>
+        </div>
+        <div class="intro-stat-card">
+          <div class="intro-stat-num">3.2B</div>
+          <div class="intro-stat-label">Data points processed</div>
+        </div>
+        <div class="intro-stat-card">
+          <div class="intro-stat-num">94%</div>
+          <div class="intro-stat-label">Average confidence score</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCE CATEGORIES -->
+<section class="section sources">
+  <div class="sources-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="justify-content:center;"><i class="ti ti-layers-difference" aria-hidden="true"></i> Source categories</div>
+      <h2 class="section-h2">Every data class we use.</h2>
+      <p class="section-sub centered" style="margin:0 auto;">Seven categories of signal intelligence that power every Sporafind profile.</p>
+    </div>
+    <div class="sources-grid">
+
+      <div class="source-card">
+        <div class="source-card-header">
+          <div class="source-icon green"><i class="ti ti-users" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Professional Networks</div>
+          </div>
+        </div>
+        <p class="source-card-body">LinkedIn public profiles, Xing, and professional association directories. We collect signal-level data only — job titles, industries, stated expertise — never private messages or non-public connections.</p>
+        <div class="source-tags">
+          <span class="source-tag">LinkedIn public data</span>
+          <span class="source-tag">Xing</span>
+          <span class="source-tag">Professional bodies</span>
+          <span class="source-tag gold-t">Signal data only</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card-header">
+          <div class="source-icon gold"><i class="ti ti-building-bank" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Business Registries</div>
+          </div>
+        </div>
+        <p class="source-card-body">Companies House (UK), SEC EDGAR (US), Ghana Registrar General's Department, CAC (Nigeria), plus 20+ other business registries across Africa, Europe, and North America. Director names, company roles, and filing histories.</p>
+        <div class="source-tags">
+          <span class="source-tag">Companies House</span>
+          <span class="source-tag">SEC EDGAR</span>
+          <span class="source-tag">Ghana RGD</span>
+          <span class="source-tag">CAC Nigeria</span>
+          <span class="source-tag">20+ registries</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card-header">
+          <div class="source-icon navy"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Financial Data</div>
+          </div>
+        </div>
+        <p class="source-card-body">Crunchbase company profiles, PitchBook investor data, SEC filings (13D, 13G, Form 4), Bloomberg terminal feeds, and public market disclosures. Investment history, fund data, and institutional affiliations.</p>
+        <div class="source-tags">
+          <span class="source-tag">Crunchbase</span>
+          <span class="source-tag">PitchBook</span>
+          <span class="source-tag">SEC filings</span>
+          <span class="source-tag">Bloomberg</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card-header">
+          <div class="source-icon teal"><i class="ti ti-books" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Academic Databases</div>
+          </div>
+        </div>
+        <p class="source-card-body">ORCID researcher profiles, Google Scholar publication records, university faculty directories, and ResearchGate. Academic affiliation, field of study, publication history, and institutional roles.</p>
+        <div class="source-tags">
+          <span class="source-tag">ORCID</span>
+          <span class="source-tag">Google Scholar</span>
+          <span class="source-tag">Faculty directories</span>
+          <span class="source-tag">ResearchGate</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card-header">
+          <div class="source-icon purple"><i class="ti ti-newspaper" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Public Records</div>
+          </div>
+        </div>
+        <p class="source-card-body">News media archives (global English, French, Portuguese, and Twi-language outlets), press release distribution networks, and public appointments registers. Media mentions, appointments, and public recognitions.</p>
+        <div class="source-tags">
+          <span class="source-tag">Media archives</span>
+          <span class="source-tag">Press releases</span>
+          <span class="source-tag">Appointments registers</span>
+          <span class="source-tag gold-t">4-language coverage</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card-header">
+          <div class="source-icon slate"><i class="ti ti-building-community" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Organisational Data</div>
+          </div>
+        </div>
+        <p class="source-card-body">NGO directories (Guidestar, NGO Advisor), diaspora association listings, cultural organisation registries, and community foundation databases. Membership estimates, leadership rosters, and programme portfolios.</p>
+        <div class="source-tags">
+          <span class="source-tag">Guidestar</span>
+          <span class="source-tag">NGO directories</span>
+          <span class="source-tag">Diaspora associations</span>
+          <span class="source-tag">Cultural registries</span>
+        </div>
+      </div>
+
+      <div class="source-card" style="grid-column:1/-1;">
+        <div class="source-card-header">
+          <div class="source-icon green"><i class="ti ti-map-pins" aria-hidden="true"></i></div>
+          <div>
+            <div class="source-card-title">Geographic & Demographic Data</div>
+          </div>
+        </div>
+        <p class="source-card-body">Census data from diaspora-hosting nations (UK, US, Canada, Germany, Netherlands, Italy, Spain, South Africa, Australia), diaspora migration statistics from national statistical offices, and World Bank remittance flow data. Geographic distribution, population estimates, migration trends, and remittance corridors.</p>
+        <div class="source-tags">
+          <span class="source-tag">National census data</span>
+          <span class="source-tag">Migration statistics</span>
+          <span class="source-tag">World Bank remittance data</span>
+          <span class="source-tag gold-t">9+ national statistical offices</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="methodology">
+  <div class="methodology-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="color:var(--gold);justify-content:center;"><i class="ti ti-cpu" aria-hidden="true"></i> AI methodology</div>
+      <h2 class="section-h2" style="color:#fff;">How AI processes<br>raw data into intelligence.</h2>
+      <p class="section-sub centered" style="color:rgba(255,255,255,0.5);margin:0 auto;">Three layers of machine intelligence transform scattered public signals into structured, actionable diaspora profiles.</p>
+    </div>
+    <div class="methodology-grid">
+      <div class="method-card">
+        <div class="method-icon"><i class="ti ti-crosshair" aria-hidden="true"></i></div>
+        <div class="method-title">Cross-Referencing</div>
+        <div class="method-body">Our entity-resolution engine matches records across disparate sources — a LinkedIn profile with a Companies House director record, an ORCID iD with a Crunchbase founder entry. <strong>Every connection is verified bidirectionally</strong> before it enters the profile graph.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-icon"><i class="ti ti-layers-subtract" aria-hidden="true"></i></div>
+        <div class="method-title">Deduplication</div>
+        <div class="method-body">Name variants, transliteration differences (Kwesi / Kweisi), and duplicate listings are resolved through fuzzy matching on multiple identity dimensions — name, email hash, institutional affiliation, geographic location. <strong>One person, one profile</strong> — always.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-icon"><i class="ti ti-gauge" aria-hidden="true"></i></div>
+        <div class="method-title">Confidence Scoring</div>
+        <div class="method-body">Every data point receives a signal-confidence score based on source authority, cross-reference count, recency, and internal consistency. Profiles are ranked by overall confidence — you see <strong>94% average accuracy</strong> across the platform, with per-field scores on every profile card.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOT COLLECTED -->
+<section class="not-collected">
+  <div class="not-collected-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="justify-content:center;"><i class="ti ti-shield-lock" aria-hidden="true"></i> Privacy by design</div>
+      <h2 class="section-h2">What we do <span style="color:var(--green);">NOT</span> collect.</h2>
+      <p class="section-sub centered" style="margin:0 auto;">Sporafind is built on a strict data ethics framework. Some categories are permanently out of scope — and we maintain a public audit trail to verify this.</p>
+    </div>
+    <div class="not-collected-grid">
+      <div class="nc-card">
+        <div class="nc-icon"><i class="ti ti-message-off" aria-hidden="true"></i></div>
+        <div class="nc-title">No private messages</div>
+        <div class="nc-body">We never access, process, or store direct messages, DMs, WhatsApp chats, email inboxes, or any private communication channel.</div>
+      </div>
+      <div class="nc-card">
+        <div class="nc-icon"><i class="ti ti-coin-off" aria-hidden="true"></i></div>
+        <div class="nc-title">No non-public financials</div>
+        <div class="nc-body">We do not access bank account data, private portfolio statements, credit scores, or any non-public financial records.</div>
+      </div>
+      <div class="nc-card">
+        <div class="nc-icon"><i class="ti ti-fingerprint-off" aria-hidden="true"></i></div>
+        <div class="nc-title">No biometric data</div>
+        <div class="nc-body">We do not collect, store, or process fingerprints, facial recognition data, voice prints, or any biometric identifiers.</div>
+      </div>
+      <div class="nc-card">
+        <div class="nc-icon"><i class="ti ti-browser-off" aria-hidden="true"></i></div>
+        <div class="nc-title">No browsing history</div>
+        <div class="nc-body">We do not track, purchase, or infer web browsing history, search history, clickstream data, or device telemetry.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPARENCY NOTE -->
+<section class="transparency">
+  <div class="transparency-inner">
+    <div class="transparency-icon"><i class="ti ti-refresh" aria-hidden="true"></i></div>
+    <h2 class="transparency-h2">Data freshness &amp; update frequency</h2>
+    <p class="transparency-body">We believe transparency includes <strong>being precise about data age</strong>. Every profile card displays a "last verified" timestamp per source. Our platform-wide update cadence is documented below, and all changes are logged in our public <a href="changelog.html" style="color:var(--gold);text-decoration:underline;">changelog</a>.</p>
+    <div class="transparency-grid">
+      <div class="transparency-item">
+        <div class="transparency-item-val">Real-time</div>
+        <div class="transparency-item-label">SEC filings, news feeds</div>
+      </div>
+      <div class="transparency-item">
+        <div class="transparency-item-val">Daily</div>
+        <div class="transparency-item-label">Business registries, Crunchbase</div>
+      </div>
+      <div class="transparency-item">
+        <div class="transparency-item-val">Weekly</div>
+        <div class="transparency-item-label">LinkedIn signals, directories</div>
+      </div>
+      <div class="transparency-item">
+        <div class="transparency-item-val">Monthly</div>
+        <div class="transparency-item-label">Census, NGO databases</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Trust the intelligence. Verify the source.</h2>
+    <p class="cta-sub">Every Sporafind profile links back to its original sources. Start exploring the diaspora with full transparency.</p>
+    <div class="cta-actions">
+      <a href="pricing.html" class="btn-cta-white"><i class="ti ti-rocket" aria-hidden="true"></i> Start your free trial</a>
+      <a href="javascript:void(0)" class="btn-cta-outline-white" onclick="alert('PDF download started (demo)')"><i class="ti ti-file-text" aria-hidden="true"></i> Download data methodology PDF</a>
+    </div>
+    <div class="cta-note">No credit card · 14-day trial · Cancel anytime</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

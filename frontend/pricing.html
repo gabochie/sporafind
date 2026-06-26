@@ -1,294 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sporafind — Pricing</title>
-<meta name="description" content="Choose the right plan for your diaspora intelligence needs.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23006B3C'/><path d='M16 4l3.6 11.1H31l-9.3 6.7 3.6 11.1L16 25.2 7.7 32.9l3.6-11.1L2 15.1h11.4L16 4z' fill='%23D4A017'/></svg>">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-:root {
-  --s0:#0b0b0b;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;--s4:#333;
-  --bd:#2a2a2a;--bds:#383838;
-  --t0:#fff;--t1:#ededed;--t2:#999;--t3:#555;
-  --green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444;
-  --gr-dim:rgba(0,107,60,.15);--gl-dim:rgba(0,168,90,.12);--gd-dim:rgba(212,160,23,.12);
-  --ff:'Inter',system-ui,-apple-system,sans-serif;
-  --fm:'Space Grotesk','Inter',sans-serif;
-  --radius:12px;--radius-sm:8px;
-  --shadow:0 4px 24px rgba(0,0,0,.3);--shadow-lg:0 12px 48px rgba(0,0,0,.5);
-}
 *{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--s0)}
-body{
-  font-family:var(--ff);background:var(--s0);color:var(--t1);
-  display:flex;flex-direction:column;min-height:100vh;
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--green-light:#E8F5EE;
+  --gold:#D4A017;--gold-dark:#a87d10;--gold-light:#FFF8E7;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
 }
-a{color:inherit;text-decoration:none}
-button{cursor:pointer;font-family:var(--ff)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
 
-/* Topbar */
-.topbar{
-  background:var(--s1);border-bottom:1px solid var(--bd);
-  padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  position:sticky;top:0;z-index:100;
-}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
-.logomark{
-  width:30px;height:30px;border-radius:7px;background:var(--green);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  position:relative;overflow:hidden;
-}
-.logomark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff15,transparent 50%);}
-.star{
-  width:13px;height:13px;background:var(--gold);
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-}
-.logotext{font-family:var(--fm);font-size:14px;font-weight:700;letter-spacing:-.3px;color:var(--t1);}
-.logotext span{color:var(--gold);}
-.logotext small{font-size:10px;font-weight:400;color:var(--t3);margin-left:2px;}
-.topright{display:flex;align-items:center;gap:8px;}
-.btn-outline{
-  padding:6px 12px;border:1px solid var(--bds);border-radius:7px;
-  background:transparent;font-size:12px;font-weight:500;color:var(--t2);
-  cursor:pointer;font-family:var(--ff);transition:all .15s;display:flex;align-items:center;gap:5px;
-}
-.btn-outline:hover{background:var(--s2);color:var(--t1);border-color:var(--tm);}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff}
+.nav-wordmark span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s}
+.nav-links a:hover{color:#fff}
+.nav-cta{display:flex;align-items:center;gap:10px}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s}
+.btn-primary-nav:hover{background:var(--gold-dark)}
 
-/* Hero */
-.hero{
-  text-align:center;padding:64px 20px 48px;
-  background:linear-gradient(180deg,var(--s1) 0%,var(--s0) 100%);
-  border-bottom:1px solid var(--bd);
-}
-.hero h1{font-family:var(--fm);font-size:36px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;}
-.hero h1 span{color:var(--gold);}
-.hero p{font-size:15px;color:var(--t2);max-width:520px;margin:0 auto;line-height:1.6;}
+/* HERO */
+.page-hero{background:var(--navy);padding:120px 48px 80px;position:relative;overflow:hidden}
+.page-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.page-hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none}
+.page-hero-inner{max-width:800px;margin:0 auto;position:relative;z-index:2;text-align:center}
+.page-hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px}
+.page-hero-h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px}
+.page-hero-h1 span{color:var(--gold)}
+.page-hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:560px;margin:0 auto}
 
-/* Toggle */
-.toggle-wrap{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:28px;}
-.toggle-label{font-size:13px;color:var(--t2);font-weight:500;}
-.toggle-label.active{color:var(--t1);}
-.toggle{
-  width:44px;height:24px;border-radius:12px;background:var(--s3);border:1px solid var(--bds);
-  position:relative;cursor:pointer;transition:all .2s;
-}
-.toggle.active{background:var(--green);border-color:var(--gl);}
-.toggle-knob{
-  width:18px;height:18px;border-radius:50%;background:var(--t2);
-  position:absolute;top:2px;left:2px;transition:all .2s;
-}
-.toggle.active .toggle-knob{left:22px;background:#fff;}
-.toggle-save{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--gd-dim);color:var(--gold);font-weight:600;display:none;}
-.toggle.active ~ .toggle-save{display:inline;}
+/* PRICING */
+.pricing-section{background:#fff;padding:100px 48px}
+.pricing-inner{max-width:1100px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.price-card{border-radius:var(--radius-lg);padding:40px 36px;border:0.5px solid var(--cream2);background:var(--white);display:flex;flex-direction:column}
+.price-card.popular{background:var(--navy);border-color:rgba(212,160,23,0.4);position:relative;transform:scale(1.03)}
+.popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gold);color:#0A0E1A;font-size:11px;font-weight:700;padding:5px 16px;border-radius:20px;white-space:nowrap;letter-spacing:0.3px}
+.price-tier{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.price-tier.light{color:rgba(255,255,255,0.4)}
+.price-amount{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;letter-spacing:-2px;color:var(--text-dark);line-height:1}
+.price-amount.light{color:#fff}
+.price-amount span{font-size:18px;font-weight:500;letter-spacing:0;color:var(--text-muted)}
+.price-amount.light span{color:rgba(255,255,255,0.4)}
+.price-desc{font-size:14px;color:var(--text-mid);margin:12px 0 28px;line-height:1.6;flex:1}
+.price-desc.light{color:rgba(255,255,255,0.5)}
+.price-list{list-style:none;margin-bottom:32px}
+.price-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-mid);padding:10px 0;border-bottom:0.5px solid var(--cream2)}
+.price-list li.light{color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.07)}
+.price-list li:last-child{border-bottom:none}
+.price-list li i{font-size:16px;color:var(--green);flex-shrink:0;margin-top:2px}
+.price-list li i.gold-i{color:var(--gold)}
+.btn-price{width:100%;padding:14px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-price-outline{background:transparent;border:0.5px solid var(--cream2);color:var(--text-dark)}
+.btn-price-outline:hover{border-color:var(--green);color:var(--green)}
+.btn-price-gold{background:var(--gold);color:#0A0E1A}
+.btn-price-gold:hover{background:var(--gold-dark)}
+.btn-price-ghost-light{background:rgba(255,255,255,0.08);color:#fff;border:0.5px solid rgba(255,255,255,0.15)}
+.btn-price-ghost-light:hover{background:rgba(255,255,255,0.15)}
 
-/* Cards */
-.pricing-grid{
-  display:flex;gap:20px;max-width:960px;margin:0 auto;padding:48px 20px 64px;
-  justify-content:center;flex-wrap:wrap;
-}
-.card{
-  background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);
-  padding:32px 28px;width:280px;display:flex;flex-direction:column;
-  transition:all .2s;position:relative;
-}
-.card:hover{border-color:var(--bds);transform:translateY(-2px);box-shadow:var(--shadow);}
-.card.highlighted{
-  border-color:var(--gl);background:linear-gradient(180deg,var(--s1) 0%,#0a1f12 100%);
-  box-shadow:0 0 0 1px var(--gl-dim),var(--shadow-lg);
-}
-.badge{
-  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
-  background:var(--gl);color:#fff;font-size:11px;font-weight:600;
-  padding:4px 14px;border-radius:20px;letter-spacing:.3px;
-}
-.card-name{font-family:var(--fm);font-size:13px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-.card-price{font-family:var(--fm);font-size:40px;font-weight:700;color:var(--t1);letter-spacing:-1px;}
-.card-price span{font-size:16px;font-weight:400;color:var(--t2);letter-spacing:0;}
-.card-desc{font-size:13px;color:var(--t2);margin:8px 0 20px;line-height:1.5;}
-.card-cta{
-  width:100%;padding:12px;border-radius:var(--radius-sm);border:none;
-  font-size:14px;font-weight:600;font-family:var(--ff);
-  transition:all .15s;margin-bottom:24px;
-}
-.card-cta.primary{background:var(--green);color:#fff;}
-.card-cta.primary:hover{background:var(--gl);}
-.card-cta.secondary{background:var(--s2);color:var(--t1);border:1px solid var(--bds);}
-.card-cta.secondary:hover{background:var(--s3);border-color:var(--tm);}
-.features{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1;}
-.features li{
-  display:flex;align-items:flex-start;gap:8px;
-  font-size:13px;color:var(--t2);line-height:1.4;
-}
-.features li i{color:var(--gl);font-size:16px;flex-shrink:0;margin-top:1px;}
-.features li.missing i{color:var(--t3);}
+/* FAQ */
+.faq-section{background:var(--cream);padding:100px 48px}
+.faq-inner{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:0.5px solid var(--cream2);padding:24px 0}
+.faq-q{font-size:16px;font-weight:600;color:var(--text-dark);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.faq-a{font-size:14px;color:var(--text-mid);line-height:1.7;margin-top:12px;display:none}
+.faq-a.open{display:block}
 
-/* Loading / Error states */
-.loading-state{text-align:center;padding:64px 20px;color:var(--t3);}
-.loading-state i{font-size:24px;display:block;margin-bottom:12px;animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.error-state{text-align:center;padding:64px 20px;color:var(--t2);}
-.error-state i{font-size:32px;display:block;margin-bottom:12px;color:var(--amber);}
-.error-state h3{margin-bottom:6px;font-weight:600;}
-.error-state p{font-size:13px;color:var(--t3);}
-.empty-state{text-align:center;padding:64px 20px;color:var(--t2);}
-.empty-state i{font-size:32px;display:block;margin-bottom:12px;color:var(--t3);}
-.empty-state h3{margin-bottom:6px;font-weight:600;}
+/* COMPARE TABLE */
+.compare-section{background:#fff;padding:80px 48px}
+.compare-inner{max-width:900px;margin:0 auto}
+.compare-table{width:100%;border-collapse:collapse;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden}
+.compare-table th{text-align:left;padding:16px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;background:var(--cream);border-bottom:1px solid var(--cream2)}
+.compare-table th:first-child{width:40%}
+.compare-table th:not(:first-child){text-align:center;width:20%}
+.compare-table td{padding:14px 20px;font-size:14px;color:var(--text-mid);border-bottom:0.5px solid var(--cream2)}
+.compare-table td:not(:first-child){text-align:center}
+.compare-table tr:hover td{background:var(--cream)}
+.compare-table .check{color:var(--green)}
+.compare-table .dash{color:var(--slate3)}
 
-/* Footer */
-.footer{
-  text-align:center;padding:24px 20px 40px;
-  border-top:1px solid var(--bd);font-size:12px;color:var(--t3);
+/* CTA */
+.cta-section{background:var(--navy);padding:80px 48px;text-align:center}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;color:#fff;margin-bottom:12px}
+.cta-sub{font-size:16px;color:rgba(255,255,255,0.5);margin-bottom:28px}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-cta-white:hover{background:var(--cream)}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:14px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-cta-outline-white:hover{border-color:#fff}
+.cta-note{font-size:13px;color:rgba(255,255,255,0.35);margin-top:16px}
+
+/* GUARANTEE STRIP */
+.guarantee-strip{background:var(--green-light);padding:40px 48px;text-align:center;border-top:0.5px solid rgba(0,107,60,0.1);border-bottom:0.5px solid rgba(0,107,60,0.1)}
+.guarantee-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.guarantee-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);font-weight:500}
+.guarantee-item i{font-size:20px}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px}
+.footer-inner{max-width:1100px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25)}
+.footer-copy span{color:var(--gold)}
+.footer-bottom-links{display:flex;gap:24px}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3)}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7)}
+
+/* TOGGLE */
+.billing-toggle{display:inline-flex;align-items:center;gap:12px;background:var(--cream);border-radius:30px;padding:4px;margin-bottom:48px}
+.billing-toggle span{padding:8px 20px;border-radius:24px;font-size:14px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all 0.15s}
+.billing-toggle span.active{background:var(--white);color:var(--text-dark);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.save-badge{font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:4px;margin-left:4px;vertical-align:middle}
+
+@media(max-width:1000px){
+  .pricing-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}
+  .price-card.popular{transform:none}
 }
-.footer a{color:var(--t2);text-decoration:underline;}
-
-/* Faq */
-.faq{max-width:640px;margin:0 auto;padding:0 20px 64px;}
-.faq h2{font-family:var(--fm);font-size:20px;font-weight:600;text-align:center;margin-bottom:24px;color:var(--t1);}
-.faq-item{border-bottom:1px solid var(--bd);padding:16px 0;}
-.faq-q{font-size:14px;font-weight:500;color:var(--t1);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
-.faq-q i{font-size:16px;color:var(--t2);transition:transform .2s;}
-.faq-q.open i{transform:rotate(45deg);}
-.faq-a{font-size:13px;color:var(--t2);line-height:1.6;padding-top:10px;display:none;}
-.faq-a.show{display:block;}
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .page-hero,.pricing-section,.faq-section,.compare-section,.guarantee-strip{padding-left:20px;padding-right:20px}
+  .page-hero-h1{font-size:36px}
+  footer{padding:48px 20px 32px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr}
+  .compare-table{font-size:13px}
+  .compare-table th,.compare-table td{padding:10px 12px}
+}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <a href="/" class="logo">
-    <div class="logomark"><div class="star"></div></div>
-    <div class="logotext">Spora<span>find</span><small>beta</small></div>
-  </a>
-  <div class="topright">
-    <a href="/" class="btn-outline"><i class="ti ti-arrow-left"></i> Back to app</a>
-  </div>
-</div>
-
-<div class="hero">
-  <h1>Simple, transparent <span>pricing</span></h1>
-  <p>Choose the plan that fits your workflow. All plans include access to the global diaspora database from Companies House.</p>
-  <div class="toggle-wrap">
-    <span class="toggle-label active" id="lbl-monthly">Monthly</span>
-    <div class="toggle" id="billing-toggle" onclick="toggleBilling()">
-      <div class="toggle-knob"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html" class="active" style="color:#fff">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
     </div>
-    <span class="toggle-label" id="lbl-yearly">Yearly</span>
-    <span class="toggle-save">Save ~20%</span>
+    <div class="nav-cta">
+      <a href="admin.html" class="btn-ghost-nav">Sign in</a>
+      <a href="#plans" class="btn-primary-nav">Get early access →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero" id="plans">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow"><i class="ti ti-receipt"></i> Pricing</div>
+    <h1 class="page-hero-h1">Straightforward plans.<br><span>Real diaspora</span> intelligence.</h1>
+    <p class="page-hero-sub">Start free. Scale when you're ready. All plans include Ghana-first scope, AI-powered segmentation, and natural language search.</p>
+  </div>
+</section>
+
+<div class="guarantee-strip">
+  <div class="guarantee-inner">
+    <div class="guarantee-item"><i class="ti ti-shield-check"></i> No credit card required</div>
+    <div class="guarantee-item"><i class="ti ti-calendar"></i> 14-day free trial on all plans</div>
+    <div class="guarantee-item"><i class="ti ti-x-circle"></i> Cancel anytime</div>
+    <div class="guarantee-item"><i class="ti ti-lock"></i> GDPR compliant</div>
   </div>
 </div>
 
-<div id="pricing-container">
-  <div class="loading-state"><i class="ti ti-loader"></i><p>Loading plans…</p></div>
-</div>
+<section class="pricing-section">
+  <div class="pricing-inner">
+    <div style="display:flex;align-items:center;justify-content:center;flex-direction:column">
+      <div class="billing-toggle" id="billingToggle">
+        <span class="active" onclick="setBilling('monthly')">Monthly</span>
+        <span onclick="setBilling('annual')">Annual <span class="save-badge">Save 20%</span></span>
+      </div>
+    </div>
 
-<div class="faq">
-  <h2>Frequently asked questions</h2>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">Can I switch plans later? <i class="ti ti-plus"></i></div>
-    <div class="faq-a">Yes, you can upgrade or downgrade at any time. Changes take effect on your next billing cycle.</div>
+    <div class="pricing-grid" id="pricingGrid">
+      <div class="price-card" style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)" id="pricingLoading">
+        <i class="ti ti-loader" style="animation:spin 1s linear infinite;display:block;font-size:32px;margin-bottom:12px"></i>
+        Loading pricing...
+      </div>
+    </div>
   </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">Is there a free trial for Pro? <i class="ti ti-plus"></i></div>
-    <div class="faq-a">We offer a 14-day free trial on the Pro plan. No credit card required.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept? <i class="ti ti-plus"></i></div>
-    <div class="faq-a">We accept all major credit cards, debit cards, and bank transfers for annual Enterprise plans.</div>
-  </div>
-  <div class="faq-item">
-    <div class="faq-q" onclick="toggleFaq(this)">Can I get a refund? <i class="ti ti-plus"></i></div>
-    <div class="faq-a">Yes, we offer a 30-day money-back guarantee on all paid plans. No questions asked.</div>
-  </div>
-</div>
+</section>
 
-<div class="footer">
-  <p>&copy; 2026 Sporafind. Built from official Companies House data. <a href="/">Back to app</a></p>
-</div>
+<section class="compare-section">
+  <div class="compare-inner">
+    <div style="text-align:center;margin-bottom:48px">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:12px">Feature comparison</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:8px">See exactly what's included</h2>
+      <p style="font-size:15px;color:var(--text-mid)">Every plan builds on the one before it. Full transparency on what you get.</p>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr><th>Feature</th><th>Starter</th><th>Growth</th><th>Enterprise</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI natural language search</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>5-class segmentation</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Organisation discovery</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Profile views / month</td><td>500</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Ghana diaspora scope</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Pan-African scope (54 nations)</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>AI outreach generation</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>CSV export</td><td>100 records</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>HubSpot / Salesforce sync</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Wealth tier signals (HNW/UHNW)</td><td><span class="dash">—</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Saved lists & alerts</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>API access</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Dedicated AI scan runs</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>White-label option</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>SLA + compliance support</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Onboarding & training</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="faq-inner">
+    <div style="text-align:center;margin-bottom:48px">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:12px">FAQ</div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px">Frequently asked questions</h2>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I switch plans later? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a open">Yes. You can upgrade or downgrade at any time. Upgrades take effect immediately. Downgrades apply at the start of your next billing cycle. All data is preserved.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What does "Ghana scope" vs "Pan-African scope" mean? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Ghana scope limits search to Ghanaian diaspora profiles globally. Pan-African scope expands to Ghanaian + all 54 African nations' diaspora data — including Nigerians, Kenyans, South Africans, Ethiopians, and more — in a single search surface.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is there a free trial? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Every plan comes with a 14-day free trial. No credit card required. Full access to all features in your chosen plan. Cancel anytime with one click.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How is AI confidence scored? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Each profile receives a confidence score (0–100%) based on how many data sources corroborate the profile, the freshness of the data, and the specificity of the match. Scores above 80% are considered high-signal and verified across 3+ sources.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I export data to my CRM? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Growth and Enterprise plans include native HubSpot and Salesforce integration. CSV and XLSX export is available on all plans. Notion and Airtable sync coming in Q3 2026.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What data sources power the intelligence? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Sporafind cross-references LinkedIn, Companies House, Crunchbase, public business registries, news media, academic databases, professional networks, NGO directories, diaspora association listings, and 8 other public and proprietary sources. We never access private data.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Is my data secure? <i class="ti ti-chevron-down"></i></div>
+      <div class="faq-a">Yes. Sporafind is GDPR-compliant. All data is encrypted in transit and at rest. We never sell or share your search data or exports. Enterprise plans include dedicated data processing agreements and on-premise deployment options.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Still have questions? Talk to us.</h2>
+    <p class="cta-sub">We're building Sporafind for the people who move capital, build bridges, and grow Ghana. Let's talk about what you need.</p>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn-cta-white"><i class="ti ti-calendar"></i> Book a call</a>
+      <a href="contact.html" class="btn-cta-outline-white"><i class="ti ti-mail"></i> Email us</a>
+    </div>
+    <div class="cta-note">Enterprise demos available within 24 hours</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script>
-const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "http://localhost:8000" : "https://api.sporafind.com";
-
-let billingYearly = false;
-let plans = [];
-
 async function loadPricing() {
-  const container = document.getElementById("pricing-container");
+  const grid = document.getElementById('pricingGrid');
+  const loading = document.getElementById('pricingLoading');
   try {
-    const res = await fetch(`${API_BASE}/pricing`);
-    if (!res.ok) throw new Error("Failed to load");
-    const data = await res.json();
-    plans = data.plans || [];
-    if (!plans.length) {
-      container.innerHTML = `<div class="empty-state"><i class="ti ti-receipt-off"></i><h3>No plans available</h3><p>Check back soon.</p></div>`;
+    const r = await fetch('/api/pricing');
+    const data = await r.json();
+    if (data.plans && data.plans.length) {
+      loading.style.display = 'none';
+      grid.innerHTML = data.plans.map((p, i) => {
+        const isPopular = p.highlighted;
+        const isCustom = p.price_monthly === 0;
+        return `<div class="price-card${isPopular ? ' popular' : ''}">
+          ${isPopular ? '<div class="popular-badge">Most popular</div>' : ''}
+          <div class="price-tier${isPopular ? ' light' : ''}">${p.display_name}</div>
+          <div class="price-amount${isPopular ? ' light' : ''}" data-monthly="${p.price_monthly}" data-yearly="${p.price_yearly}">
+            ${isCustom ? '<span style="font-size:38px">Custom</span>' : '$' + p.price_monthly + '<span>/mo</span>'}
+          </div>
+          <p class="price-desc${isPopular ? ' light' : ''}">${p.description}</p>
+          <ul class="price-list">
+            ${(p.features||[]).map(f => `<li${isPopular ? ' class="light"' : ''}><i class="ti ti-check${isPopular ? ' gold-i' : ''}"></i> ${f}</li>`).join('')}
+          </ul>
+          <button class="btn-price ${i === 1 ? 'btn-price-gold' : i === 0 ? 'btn-price-outline' : 'btn-price-ghost-light'}" onclick="location.href='${isCustom ? 'contact.html' : 'workspace.html'}'">
+            ${isCustom ? 'Talk to the team →' : (isPopular ? '<i class="ti ti-rocket"></i> Start 14-day free trial' : 'Start free trial')}
+          </button>
+        </div>`;
+      }).join('');
       return;
     }
-    renderCards();
-  } catch {
-    container.innerHTML = `<div class="error-state"><i class="ti ti-cloud-off"></i><h3>Could not load pricing</h3><p>Make sure the API server is running</p></div>`;
-  }
+  } catch {}
+  // Fallback: hardcoded
+  grid.innerHTML = `<div class="price-card">
+    <div class="price-tier">Starter</div>
+    <div class="price-amount" id="starterPrice">$49<span>/mo</span></div>
+    <p class="price-desc">For individuals and small teams exploring diaspora connections and running initial outreach.</p>
+    <ul class="price-list">
+      <li><i class="ti ti-check"></i> 500 profile views / month</li>
+      <li><i class="ti ti-check"></i> Full AI segmentation (5 classes)</li>
+      <li><i class="ti ti-check"></i> Organisation discovery</li>
+      <li><i class="ti ti-check"></i> Ghana diaspora scope</li>
+      <li><i class="ti ti-check"></i> CSV export (100 records)</li>
+      <li><i class="ti ti-check"></i> Email support</li>
+    </ul>
+    <button class="btn-price btn-price-outline" onclick="location.href='workspace.html'">Start free trial</button>
+  </div>
+  <div class="price-card popular">
+    <div class="popular-badge">Most popular</div>
+    <div class="price-tier light">Growth</div>
+    <div class="price-amount light" id="growthPrice">$199<span>/mo</span></div>
+    <p class="price-desc light">For operators, investment teams, and agencies running active diaspora engagement programmes.</p>
+    <ul class="price-list">
+      <li class="light"><i class="ti ti-check gold-i"></i> Unlimited profile views</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> Full 5-segment model with wealth tier</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> Pan-African scope unlock (54 nations)</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> AI outreach generation</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> Unlimited CSV + XLSX export</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> HubSpot & Salesforce integrations</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> Priority support</li>
+    </ul>
+    <button class="btn-price btn-price-gold" onclick="location.href='workspace.html'"><i class="ti ti-rocket"></i> Start 14-day free trial</button>
+  </div>
+  <div class="price-card">
+    <div class="price-tier">Enterprise</div>
+    <div class="price-amount" style="font-size:38px">Custom</div>
+    <p class="price-desc">For governments, development banks, investment authorities, and institutions operating at national scale.</p>
+    <ul class="price-list">
+      <li><i class="ti ti-check"></i> Everything in Growth, plus:</li>
+      <li><i class="ti ti-check"></i> Dedicated AI scan runs</li>
+      <li><i class="ti ti-check"></i> White-label option</li>
+      <li><i class="ti ti-check"></i> Custom data integrations</li>
+      <li><i class="ti ti-check"></i> SLA + compliance support</li>
+      <li><i class="ti ti-check"></i> Onboarding & training</li>
+      <li><i class="ti ti-check"></i> API access with dedicated rate limits</li>
+    </ul>
+    <button class="btn-price btn-price-ghost-light" onclick="location.href='contact.html'" style="background:var(--navy);color:#fff;border:0.5px solid rgba(255,255,255,0.15)">Talk to the team →</button>
+  </div>`;
 }
-
-function renderCards() {
-  const container = document.getElementById("pricing-container");
-  container.innerHTML = `<div class="pricing-grid">${plans.map(p => {
-    const price = billingYearly ? p.price_yearly : p.price_monthly;
-    const period = billingYearly ? "/year" : "/month";
-    const isFree = price === 0;
-    return `<div class="card${p.highlighted ? ' highlighted' : ''}">
-      ${p.highlighted ? '<div class="badge">Most popular</div>' : ''}
-      <div class="card-name">${p.display_name}</div>
-      <div class="card-price">${isFree ? 'Free' : `$${price.toLocaleString()}`}${!isFree ? `<span>${period}</span>` : ''}</div>
-      <div class="card-desc">${p.description}</div>
-      <button class="card-cta ${isFree ? 'secondary' : 'primary'}" onclick="selectPlan('${p.name}')">
-        ${isFree ? 'Get started' : 'Subscribe'}
-      </button>
-      <ul class="features">${(p.features||[]).map(f => `<li><i class="ti ti-circle-check"></i>${f}</li>`).join('')}</ul>
-    </div>`;
-  }).join('')}</div>`;
-}
-
-function toggleBilling() {
-  billingYearly = !billingYearly;
-  document.getElementById("billing-toggle").classList.toggle("active", billingYearly);
-  document.getElementById("lbl-monthly").classList.toggle("active", !billingYearly);
-  document.getElementById("lbl-yearly").classList.toggle("active", billingYearly);
-  renderCards();
-}
-
-function selectPlan(name) {
-  const msg = `Selected "${name}" plan (${billingYearly ? 'yearly' : 'monthly'})`;
-  const existing = document.querySelector(".toast");
-  if (existing) existing.remove();
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.innerHTML = `<i class="ti ti-circle-check"></i><span>${msg}</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="ti ti-x"></i></button>`;
-  const style = document.createElement("style");
-  style.textContent = `.toast{
-    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-    background:var(--s1);border:1px solid var(--bds);border-radius:10px;
-    padding:12px 18px;display:flex;align-items:center;gap:10px;
-    font-size:13px;color:var(--t1);z-index:999;
-    box-shadow:var(--shadow-lg);animation:fadeIn .25s ease;
-  }
-  .toast i{color:var(--gl);font-size:18px;}
-  .toast-close{background:none;border:none;color:var(--t3);cursor:pointer;padding:2px;}
-  @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
-  document.head.appendChild(style);
-  document.body.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = "0"; toast.style.transition = "opacity .3s"; setTimeout(() => toast.remove(), 300); }, 3000);
-}
+loadPricing();
 
 function toggleFaq(el) {
-  el.classList.toggle("open");
   const answer = el.nextElementSibling;
-  answer.classList.toggle("show");
+  answer.classList.toggle('open');
+  const icon = el.querySelector('i');
+  if(answer.classList.contains('open')){
+    icon.style.transform = 'rotate(180deg)';
+  } else {
+    icon.style.transform = '';
+  }
 }
 
-loadPricing();
+function setBilling(type){
+  document.querySelectorAll('#billingToggle span').forEach(s => s.classList.remove('active'));
+  if(type === 'annual') {
+    document.querySelector('#billingToggle span:last-child').classList.add('active');
+    document.querySelectorAll('.price-amount[data-monthly]').forEach(el => {
+      const yearly = el.dataset.yearly;
+      if (yearly && yearly !== '0') el.innerHTML = '$' + yearly + '<span>/yr</span>';
+    });
+  } else {
+    document.querySelector('#billingToggle span:first-child').classList.add('active');
+    document.querySelectorAll('.price-amount[data-monthly]').forEach(el => {
+      const monthly = el.dataset.monthly;
+      if (monthly && monthly !== '0') el.innerHTML = '$' + monthly + '<span>/mo</span>';
+    });
+  }
+  // Fallback for hardcoded IDs
+  const sP = document.getElementById('starterPrice');
+  const gP = document.getElementById('growthPrice');
+  if (sP && !sP.dataset.monthly) sP.innerHTML = type === 'annual' ? '$39<span>/mo</span>' : '$49<span>/mo</span>';
+  if (gP && !gP.dataset.monthly) gP.innerHTML = type === 'annual' ? '$159<span>/mo</span>' : '$199<span>/mo</span>';
+}
+
+// Open first FAQ by default
+document.querySelectorAll('.faq-a')[0].classList.add('open');
 </script>
 </body>
 </html>

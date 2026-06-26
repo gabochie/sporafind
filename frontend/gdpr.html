@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDPR Compliance — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{display:inline-flex;align-items:center;padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{display:inline-flex;align-items:center;padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* HERO */
+.hero-subpage{background:var(--navy);padding:140px 48px 80px;position:relative;overflow:hidden;text-align:center;}
+.hero-subpage .hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-subpage .hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.hero-subpage-inner{max-width:760px;margin:0 auto;position:relative;z-index:2;}
+.hero-subpage h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;letter-spacing:-2.5px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.hero-subpage h1 .accent{color:var(--gold);}
+.hero-subpage p{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:520px;margin:0 auto;}
+
+/* DOCUMENT CONTENT */
+.doc-section{background:#fff;padding:64px 48px 80px;}
+.doc-inner{max-width:760px;margin:0 auto;}
+.doc-section h2{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;letter-spacing:-0.8px;color:var(--text-dark);margin-bottom:16px;margin-top:56px;padding-top:8px;}
+.doc-section h2:first-child{margin-top:0;}
+.doc-section h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.4px;color:var(--text-dark);margin-bottom:10px;margin-top:28px;}
+.doc-section p{font-size:16px;color:var(--text-mid);line-height:1.8;margin-bottom:16px;}
+.doc-section ul{padding-left:24px;margin-bottom:20px;}
+.doc-section ul li{font-size:16px;color:var(--text-mid);line-height:1.75;margin-bottom:6px;}
+.doc-section ul li::marker{color:var(--gold);}
+.doc-section strong{color:var(--text-dark);font-weight:600;}
+.doc-section .highlight-box{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius);padding:20px 24px;margin:24px 0;}
+.doc-section .highlight-box p:last-child{margin-bottom:0;}
+.doc-section .highlight-box .label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:6px;}
+.doc-section .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;background:rgba(0,107,60,0.1);color:var(--green);margin-right:6px;margin-bottom:4px;}
+.doc-divider{height:0.5px;background:var(--cream2);margin:0;}
+
+/* RIGHTS GRID */
+.rights-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0;}
+.rights-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius);padding:20px;transition:border-color 0.2s;}
+.rights-card:hover{border-color:rgba(0,107,60,0.2);}
+.rights-card .rights-icon{width:36px;height:36px;border-radius:8px;background:rgba(0,107,60,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--green);margin-bottom:10px;}
+.rights-card h4{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+.rights-card p{font-size:14px;color:var(--text-mid);line-height:1.6;margin-bottom:0;}
+
+/* GDPR REQUEST FORM */
+.gdpr-request{background:var(--cream);padding:80px 48px;}
+.gdpr-request-inner{max-width:640px;margin:0 auto;text-align:center;}
+.gdpr-request h2{font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;}
+.gdpr-request .sub{font-size:16px;color:var(--text-mid);margin-bottom:36px;line-height:1.65;}
+.gdpr-form{text-align:left;background:#fff;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:40px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:0.5px solid var(--cream2);border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:14px;color:var(--text-dark);background:#fff;transition:border-color 0.15s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--green);}
+.form-group textarea{resize:vertical;min-height:120px;}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A9BB0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;cursor:pointer;}
+.btn-gdpr-submit{width:100%;padding:14px;background:var(--green);color:#fff;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-gdpr-submit:hover{background:var(--green-dark);}
+.form-success{display:none;text-align:center;padding:40px 20px;}
+.form-success .success-icon{width:56px;height:56px;border-radius:50%;background:rgba(0,107,60,0.1);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--green);margin:0 auto 16px;}
+.form-success h3{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.form-success p{font-size:15px;color:var(--text-mid);}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .rights-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+}
+@media(max-width:700px){
+  nav{padding:0 20px;}
+  .hero-subpage{padding:120px 20px 60px;}
+  .hero-subpage h1{font-size:34px;}
+  .doc-section{padding:48px 20px 64px;}
+  .doc-section h2{font-size:24px;}
+  .gdpr-request{padding:60px 20px;}
+  .gdpr-request h2{font-size:26px;}
+  .gdpr-form{padding:24px;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
+  .footer-bottom{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="pricing.html" class="btn-primary-nav">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-subpage">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-subpage-inner">
+    <h1><span class="accent">GDPR</span> Compliance</h1>
+    <p>Your data rights. Our commitments.</p>
+  </div>
+</section>
+
+<!-- DOCUMENT CONTENT -->
+<section class="doc-section">
+  <div class="doc-inner">
+
+    <h2>Overview</h2>
+    <p>At Sporafind, we are deeply committed to protecting the privacy and personal data of our users. This page explains how we comply with the General Data Protection Regulation (GDPR) — the European Union's comprehensive data protection framework — and what that means for you as a data subject. We process personal data lawfully, fairly, and transparently, and we have designed our platform with privacy at its core.</p>
+    <p>This GDPR Compliance page applies to all users of the Sporafind platform, website visitors, and individuals whose data may appear in our diaspora intelligence datasets. It describes our role as both data controller and data processor, the legal bases we rely on, the rights you hold, and the measures we take to safeguard your information.</p>
+
+    <h2>Data Controller Information</h2>
+    <p>Sporafind is a product of <strong>Gabochie Intelligence Ltd</strong>, a Ghanaian company headquartered in Accra, Ghana. We act as the data controller for the personal data we collect directly from our users and platform visitors.</p>
+    <div class="highlight-box">
+      <div class="label">Data Controller</div>
+      <p><strong>Sporafind / Gabochie Intelligence Ltd</strong><br>
+      Accra, Ghana<br>
+      Email: privacy@sporafind.com</p>
+    </div>
+
+    <h2>Data Protection Officer</h2>
+    <p>We have appointed a Data Protection Officer (DPO) who is responsible for overseeing our data protection strategy and ensuring our compliance with GDPR requirements. The DPO serves as the primary point of contact for data subjects and supervisory authorities.</p>
+    <div class="highlight-box">
+      <div class="label">Data Protection Officer</div>
+      <p><strong>DPO, Gabochie Intelligence Ltd</strong><br>
+      Email: dpo@sporafind.com<br>
+      All enquiries related to data protection, privacy, and GDPR rights should be directed to this address. We commit to responding to all legitimate requests within the statutory timeframe of one month.</p>
+    </div>
+
+    <h2>Legal Basis for Processing</h2>
+    <p>Under the GDPR, we are required to establish a lawful basis for any processing of personal data. Sporafind relies on the following legal bases depending on the context of processing:</p>
+    <ul>
+      <li><strong>Contractual necessity (Article 6(1)(b))</strong> — We process personal data as necessary to deliver the services you have requested under our Terms of Service. This includes account creation, authentication, billing, and platform access management.</li>
+      <li><strong>Legitimate interests (Article 6(1)(f))</strong> — We process certain data for our legitimate business interests, including platform security, fraud prevention, product improvement, analytics, and direct marketing of similar services, provided these interests are not overridden by your fundamental rights and freedoms. You have the right to object to processing based on legitimate interests.</li>
+      <li><strong>Consent (Article 6(1)(a))</strong> — Where we rely on your consent, we will obtain it through a clear affirmative action before processing begins. You have the right to withdraw your consent at any time without affecting the lawfulness of processing based on consent before its withdrawal. This applies to non-essential cookies, certain marketing communications, and optional data collection programmes.</li>
+      <li><strong>Legal obligation (Article 6(1)(c))</strong> — We may process personal data where necessary to comply with a legal or regulatory obligation to which we are subject, including tax, anti-money laundering, and record-keeping requirements.</li>
+    </ul>
+
+    <h2>Your Rights Under GDPR</h2>
+    <p>As a data subject, you have the following rights under the GDPR. We have designed our systems and processes to enable you to exercise these rights freely and without hindrance.</p>
+
+    <div class="rights-grid">
+      <div class="rights-card">
+        <div class="rights-icon"><i class="ti ti-eye" aria-hidden="true"></i></div>
+        <h4>Right to Access</h4>
+        <p>You have the right to obtain confirmation of whether we process your personal data and, if so, to request a copy of that data along with information about our processing activities.</p>
+      </div>
+      <div class="rights-card">
+        <div class="rights-icon"><i class="ti ti-pencil" aria-hidden="true"></i></div>
+        <h4>Right to Rectification</h4>
+        <p>If your personal data is inaccurate or incomplete, you have the right to have it corrected or completed without undue delay.</p>
+      </div>
+      <div class="rights-card">
+        <div class="rights-icon"><i class="ti ti-trash" aria-hidden="true"></i></div>
+        <h4>Right to Erasure</h4>
+        <p>Also known as the "right to be forgotten," this entitles you to request the deletion of your personal data where it is no longer necessary for the purposes collected, or where you withdraw consent or object to processing.</p>
+      </div>
+      <div class="rights-card">
+        <div class="rights-icon"><i class="ti ti-ban" aria-hidden="true"></i></div>
+        <h4>Right to Restrict Processing</h4>
+        <p>You may request that we restrict the processing of your data while we verify its accuracy, consider an objection, or determine whether our legitimate grounds override your interests.</p>
+      </div>
+      <div class="rights-card">
+        <div class="rights-icon"><i class="ti ti-download" aria-hidden="true"></i></div>
+        <h4>Right to Data Portability</h4>
+        <p>You have the right to receive your personal data in a structured, commonly used, machine-readable format and to transmit that data to another controller without hindrance from us.</p>
+      </div>
+      <div class="rights-card">
+        <div class="rights-icon"><i class="ti ti-shield-off" aria-hidden="true"></i></div>
+        <h4>Right to Object</h4>
+        <p>You may object, on grounds relating to your particular situation, to processing of your personal data based on legitimate interests or for direct marketing purposes. We will cease processing unless we demonstrate compelling legitimate grounds.</p>
+      </div>
+    </div>
+
+    <h2>Data We Collect and Why</h2>
+    <p>We collect and process only the personal data that is necessary for the specific purposes for which it was obtained. Below is a summary of the categories of data we process and the purposes of processing:</p>
+    <ul>
+      <li><strong>Account data</strong> — Name, email address, organisation name, billing details, and password hash. Collected for account creation, authentication, service delivery, billing, and customer support.</li>
+      <li><strong>Usage data</strong> — IP address, browser type, device information, session timestamps, feature interactions, and page views. Collected to maintain platform security, improve user experience, and analyse product usage patterns.</li>
+      <li><strong>Profile and search data</strong> — Search queries, filters applied, bookmarked profiles, exported datasets, and CRM sync activity. Collected to deliver the core diaspora intelligence service, improve AI model accuracy, and provide personalised recommendations.</li>
+      <li><strong>Communication data</strong> — Email correspondence, support ticket content, and survey responses. Collected to provide customer support, respond to enquiries, and improve our services based on user feedback.</li>
+      <li><strong>Payment data</strong> — Credit card information is processed directly by our PCI-DSS compliant payment processor (Stripe). We do not store full card numbers on our servers. Billing address and transaction history are retained for accounting and tax compliance.</li>
+    </ul>
+    <p>We do not process special categories of personal data (sensitive data such as race, religion, health, or political opinions) unless you have explicitly provided such information in a support communication. Where we do, we will seek your explicit consent.</p>
+
+    <h2>Data Retention Periods</h2>
+    <p>We retain personal data only for as long as necessary to fulfil the purposes for which it was collected, or as required by applicable law. Our retention schedules are as follows:</p>
+    <ul>
+      <li><strong>Account data</strong> — Retained for the duration of your account's active status plus 12 months following account deletion to allow for reinstatement and to satisfy legal obligations.</li>
+      <li><strong>Usage data</strong> — Aggregated analytics retained indefinitely in de-identified form. Raw usage logs retained for 24 months.</li>
+      <li><strong>Communication data</strong> — Support correspondence retained for 36 months following resolution of the enquiry.</li>
+      <li><strong>Billing and payment data</strong> — Transaction records retained for 7 years to comply with tax and accounting regulations.</li>
+      <li><strong>Diaspora intelligence data</strong> — Publicly sourced intelligence data is periodically refreshed. Data associated with your searches and exports is retained for the duration of your subscription plus 90 days.</li>
+    </ul>
+    <p>When retention periods expire, personal data is securely deleted or anonymised so that it can no longer be attributed to an identifiable individual.</p>
+
+    <h2>International Data Transfers</h2>
+    <p>Sporafind operates globally, and your personal data may be transferred to and processed in countries outside the European Economic Area (EEA). Where we transfer personal data from the EEA to countries not deemed adequate by the European Commission, we rely on <strong>Standard Contractual Clauses (SCCs)</strong> adopted by the European Commission as an appropriate safeguard under Article 46 of the GDPR.</p>
+    <p>Our primary infrastructure is hosted in the United States through Google Cloud Platform and Amazon Web Services. Both providers are certified under the EU-US Data Privacy Framework and have executed SCCs with us. We conduct Transfer Impact Assessments (TIAs) for all international data flows to ensure an equivalent level of protection is maintained.</p>
+    <p>If you would like a copy of the relevant SCCs or further information about our transfer safeguards, please contact our DPO at <strong>dpo@sporafind.com</strong>.</p>
+
+    <h2>Security Measures</h2>
+    <p>We implement a comprehensive set of technical and organisational security measures to protect your personal data against accidental or unlawful destruction, loss, alteration, unauthorised disclosure, and access. Our security programme includes:</p>
+    <ul>
+      <li><strong>Encryption</strong> — All data in transit is encrypted using TLS 1.3. Data at rest is encrypted using AES-256 encryption. Database backups are also encrypted.</li>
+      <li><strong>Access controls</strong> — Role-based access control (RBAC) with least-privilege principles. Multi-factor authentication (MFA) is enforced for all team members with administrative access. Access logs are reviewed quarterly.</li>
+      <li><strong>Regular assessments</strong> — We conduct quarterly vulnerability scans and annual penetration tests by independent third-party security firms. Our application is subject to regular code review and dependency scanning.</li>
+      <li><strong>Employee training</strong> — All employees complete mandatory data protection and information security training upon onboarding and annually thereafter. We maintain a culture of privacy by design and default.</li>
+      <li><strong>Incident response</strong> — We maintain a documented Incident Response Plan (IRP) that includes containment, eradication, recovery, and post-incident review procedures. Our team is trained to respond within 24 hours of detection.</li>
+    </ul>
+
+    <h2>Subprocessors</h2>
+    <p>We engage trusted third-party service providers (subprocessors) to assist in delivering the Sporafind platform. Each subprocessor is subject to a Data Processing Agreement (DPA) that reflects the requirements of Article 28 of the GDPR. Current subprocessors include:</p>
+    <ul>
+      <li><strong>Google Cloud Platform (GCP)</strong> — Cloud infrastructure, compute, storage, and database services. DPA via Google's GDPR-compliant data processing terms. Subprocessing of account and usage data.</li>
+      <li><strong>Amazon Web Services (AWS)</strong> — Cloud infrastructure, CDN, and ancillary computing services. DPA via AWS GDPR-compliant terms. Subprocessing of account and usage data.</li>
+      <li><strong>Cloudflare</strong> — Content delivery network (CDN), DDoS protection, and DNS services. Edge-cached static assets only; no personal data processed at the edge layer.</li>
+      <li><strong>MongoDB Atlas</strong> — Managed database platform. Subprocessing of application data including user accounts, metadata, and intelligence dataset indices.</li>
+      <li><strong>Stripe</strong> — Payment processing. Subprocessing of billing data. PCI-DSS Level 1 certified. We do not store full card numbers.</li>
+      <li><strong>SendGrid (Twilio)</strong> — Transactional email delivery (account verification, notifications, password resets). Subprocessing of email addresses and message metadata.</li>
+      <li><strong>HubSpot</strong> — CRM and customer support platform. Subprocessing of contact data and support correspondence.</li>
+    </ul>
+    <p>We review our subprocessor list at least annually. If we engage a new subprocessor that processes personal data, we will update this page and notify affected users via email or in-app notification at least 30 days prior to engagement.</p>
+
+    <h2>Data Breach Notification Process</h2>
+    <p>Sporafind has implemented a robust data breach detection, investigation, and notification process that complies with Articles 33 and 34 of the GDPR. In the unlikely event of a personal data breach:</p>
+    <ul>
+      <li><strong>Detection and assessment</strong> — Our security monitoring systems and team are trained to detect and assess potential breaches. Upon confirmation, we classify the breach by severity, data types involved, affected data subjects, and risk level.</li>
+      <li><strong>Internal escalation</strong> — The incident response team is activated immediately. The DPO is informed within 4 hours of confirmed breach. A containment and remediation plan is executed.</li>
+      <li><strong>Regulatory notification</strong> — Where the breach is likely to result in a risk to the rights and freedoms of natural persons, we will notify the relevant supervisory authority within 72 hours of becoming aware of the breach, as required by Article 33.</li>
+      <li><strong>Data subject notification</strong> — Where the breach is likely to result in a high risk to your rights and freedoms (Article 34), we will communicate the nature of the breach, contact details of our DPO, likely consequences, and measures taken or proposed to address the breach directly to affected data subjects without undue delay.</li>
+      <li><strong>Documentation</strong> — All breaches, regardless of notification requirement, are documented internally including facts, effects, and remedial actions taken, as required by Article 33(5).</li>
+    </ul>
+
+    <h2>How to Exercise Your Rights</h2>
+    <p>You may exercise any of your GDPR rights by submitting a request through the form below or by contacting our DPO directly:</p>
+    <div class="highlight-box">
+      <div class="label">Contact Our DPO</div>
+      <p><strong>Email:</strong> dpo@sporafind.com<br>
+      <strong>Response time:</strong> We commit to responding to all legitimate requests within 30 days. In complex cases or where we receive a high volume of requests, we may extend this period by a further 60 days, but we will inform you of any such extension within the first 30 days.</p>
+    </div>
+    <p>When submitting a request, we may need to verify your identity before processing your request. This is a security measure to ensure that personal data is not disclosed to unauthorised persons. We may ask for additional information reasonably necessary to confirm your identity.</p>
+    <p>Please be as specific as possible in your request to help us process it efficiently. If you are requesting access to or deletion of data that appears in our diaspora intelligence datasets, please provide sufficient identifying information (such as name, approximate location, and professional context) so that we can accurately locate and process your data.</p>
+
+    <h2>Complaints</h2>
+    <p>If you believe that our processing of your personal data infringes the GDPR, you have the <strong>right to lodge a complaint with a supervisory authority</strong>, particularly in the EU member state of your habitual residence, place of work, or place of the alleged infringement.</p>
+    <p>We encourage you to contact our DPO first so that we may address your concerns directly and resolve any issues promptly. You may also contact the Ghana Data Protection Commission (DPC) as our lead supervisory authority in Ghana, or the data protection authority in your country of residence if you are located in the European Union.</p>
+
+  </div>
+</section>
+
+<!-- GDPR REQUEST FORM -->
+<section class="gdpr-request" id="request-form">
+  <div class="gdpr-request-inner">
+    <h2>Submit a GDPR Request</h2>
+    <p class="sub">Use this form to submit an access, rectification, erasure, restriction, portability, or objection request. We will respond within 30 days.</p>
+    <div class="gdpr-form" id="gdprFormContainer">
+      <form id="gdprRequestForm" onsubmit="handleGDPRSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Full name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="requestType">Request type</label>
+          <select id="requestType" name="requestType" required>
+            <option value="">Select a request type...</option>
+            <option value="access">Right to Access — Request a copy of my data</option>
+            <option value="rectification">Right to Rectification — Correct inaccurate data</option>
+            <option value="erasure">Right to Erasure — Delete my data</option>
+            <option value="restrict">Right to Restrict Processing</option>
+            <option value="portability">Right to Data Portability — Export my data</option>
+            <option value="object">Right to Object — Object to processing</option>
+            <option value="other">Other GDPR-related enquiry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" placeholder="Please describe your request in detail, including any relevant information that will help us locate and process your data." required></textarea>
+        </div>
+        <button type="submit" class="btn-gdpr-submit"><i class="ti ti-send" aria-hidden="true"></i> Submit request</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon"><i class="ti ti-check" aria-hidden="true"></i></div>
+        <h3>Request submitted</h3>
+        <p>Thank you. We have received your GDPR request and will review it within 30 days. A confirmation has been sent to your email address. If you have any urgent enquiries, please contact dpo@sporafind.com.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function handleGDPRSubmit(e) {
+  e.preventDefault();
+  document.getElementById('gdprRequestForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+</script>
+
+</body>
+</html>

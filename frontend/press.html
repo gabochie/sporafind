@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press & Media — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* HERO */
+.hero{background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:140px 48px 100px;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:800px;width:100%;margin:0 auto;text-align:center;position:relative;z-index:2;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:24px;}
+.hero-eyebrow i{font-size:14px;}
+.hero-h1{font-family:'Space Grotesk',sans-serif;font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-2.5px;color:#fff;margin-bottom:20px;}
+.hero-h1 .accent{color:var(--gold);}
+.hero-sub{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;margin-bottom:0;font-weight:400;max-width:600px;margin:0 auto;}
+
+/* SECTION SHARED */
+.section{padding:100px 48px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:16px;}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;}
+.section-sub{font-size:17px;color:var(--text-mid);line-height:1.65;max-width:560px;}
+.section-sub strong{color:var(--text-dark);}
+.centered{text-align:center;}
+.centered .section-sub{margin:0 auto;}
+
+/* PRESS KIT */
+.press-kit{background:var(--cream);padding:100px 48px;}
+.press-kit-inner{max-width:1100px;margin:0 auto;}
+.kit-card{background:#fff;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.kit-left h3{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.6px;margin-bottom:12px;}
+.kit-left p{font-size:15px;color:var(--text-mid);line-height:1.65;max-width:400px;}
+.kit-features{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px;}
+.kit-feat{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-dark);font-weight:500;}
+.kit-feat i{font-size:16px;color:var(--green);}
+.btn-kit{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;background:var(--gold);color:#0A0E1A;font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;margin-top:28px;}
+.btn-kit:hover{background:var(--gold-dark);}
+.btn-kit i{font-size:18px;}
+.kit-right{display:flex;align-items:center;justify-content:center;}
+.kit-mock{width:260px;height:200px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:12px;border:0.5px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.kit-mock-star{width:40px;height:40px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.kit-mock-label{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.5px;text-transform:uppercase;}
+
+/* FEATURED IN */
+.featured{background:#fff;padding:80px 48px;border-bottom:0.5px solid var(--cream2);}
+.featured-inner{max-width:1100px;margin:0 auto;text-align:center;}
+.featured-label{font-size:12px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:36px;}
+.featured-strip{display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;}
+.featured-item{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--text-muted);opacity:0.5;letter-spacing:-0.3px;transition:opacity 0.2s;}
+.featured-item:hover{opacity:0.8;}
+
+/* PRESS RELEASES */
+.press-releases{background:var(--cream);padding:100px 48px;}
+.press-releases-inner{max-width:900px;margin:0 auto;}
+.timeline{position:relative;margin-top:56px;}
+.timeline::before{content:'';position:absolute;left:32px;top:0;bottom:0;width:1.5px;background:var(--cream2);}
+.timeline-item{position:relative;padding-left:80px;padding-bottom:48px;}
+.timeline-item:last-child{padding-bottom:0;}
+.timeline-dot{position:absolute;left:24px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--gold);border:3px solid var(--cream);z-index:2;}
+.timeline-dot.green{background:var(--green);}
+.timeline-date{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;}
+.timeline-card{background:#fff;border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:28px 32px;transition:border-color 0.2s;}
+.timeline-card:hover{border-color:rgba(0,107,60,0.25);}
+.timeline-card h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.3px;margin-bottom:6px;}
+.timeline-card p{font-size:14px;color:var(--text-mid);line-height:1.6;}
+.timeline-tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:6px;margin-bottom:10px;}
+.timeline-tag.release{background:rgba(0,107,60,0.1);color:var(--green);border:0.5px solid rgba(0,107,60,0.2);}
+.timeline-tag.milestone{background:rgba(212,160,23,0.12);color:var(--gold-dark);border:0.5px solid rgba(212,160,23,0.25);}
+.timeline-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--green);margin-top:10px;transition:gap 0.2s;}
+.timeline-link:hover{gap:10px;}
+.timeline-link i{font-size:14px;}
+
+/* MEDIA COVERAGE */
+.media-coverage{background:#fff;padding:100px 48px;}
+.media-coverage-inner{max-width:1100px;margin:0 auto;}
+.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px;}
+.media-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:32px 28px;transition:border-color 0.2s;}
+.media-card:hover{border-color:rgba(0,107,60,0.25);}
+.media-pub{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.media-pub-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;flex-shrink:0;}
+.media-pub-name{font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+.media-card h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.2px;line-height:1.3;margin-bottom:8px;}
+.media-card p{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
+.media-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--green);transition:gap 0.2s;}
+.media-link:hover{gap:10px;}
+.media-link i{font-size:14px;}
+
+/* PRESS CONTACT */
+.press-contact{background:var(--navy);padding:100px 48px;}
+.press-contact-inner{max-width:700px;margin:0 auto;text-align:center;}
+.press-contact h2{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;color:#fff;margin-bottom:16px;}
+.press-contact .section-sub{color:rgba(255,255,255,0.5);}
+.contact-card{background:var(--navy2);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:40px;margin-top:48px;max-width:480px;margin-left:auto;margin-right:auto;}
+.contact-card .contact-icon{width:48px;height:48px;border-radius:12px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);margin:0 auto 16px;}
+.contact-card h3{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;}
+.contact-card .contact-role{font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:20px;}
+.contact-email{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--gold);color:#0A0E1A;font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.contact-email:hover{background:var(--gold-dark);}
+.contact-email i{font-size:18px;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.animate-in{animation:fadeUp 0.6s ease forwards;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .kit-card{grid-template-columns:1fr;text-align:center;}
+  .kit-left p{max-width:100%;}
+  .kit-features{justify-items:center;}
+  .media-grid{grid-template-columns:1fr 1fr;}
+  .hero-h1{font-size:42px;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  .hero{padding:120px 24px 80px;}
+  .hero-h1{font-size:32px;}
+  .section{padding:60px 24px;}
+  .section-h2{font-size:28px;}
+  .timeline-item{padding-left:60px;}
+  .timeline::before{left:22px;}
+  .timeline-dot{left:14px;}
+  .media-grid{grid-template-columns:1fr;}
+  .kit-features{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .kit-card{padding:32px 24px;}
+  .featured-strip{gap:24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
+      <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <i class="ti ti-microphone" aria-hidden="true"></i>
+      Press & media
+    </div>
+    <h1 class="hero-h1">Press & <span class="accent">Media</span></h1>
+    <p class="hero-sub">Latest news, announcements, and media coverage of Sporafind — the AI-powered diaspora intelligence platform.</p>
+  </div>
+</section>
+
+<!-- PRESS KIT -->
+<section class="press-kit">
+  <div class="press-kit-inner">
+    <div class="kit-card">
+      <div class="kit-left">
+        <h3>Download the Press Kit</h3>
+        <p>Brand assets, logos, product screenshots, and media resources for journalists, analysts, and partners covering Sporafind.</p>
+        <div class="kit-features">
+          <div class="kit-feat"><i class="ti ti-check" aria-hidden="true"></i> Logo kit (SVG & PNG)</div>
+          <div class="kit-feat"><i class="ti ti-check" aria-hidden="true"></i> Brand guidelines</div>
+          <div class="kit-feat"><i class="ti ti-check" aria-hidden="true"></i> Product screenshots</div>
+          <div class="kit-feat"><i class="ti ti-check" aria-hidden="true"></i> Team photos & bios</div>
+          <div class="kit-feat"><i class="ti ti-check" aria-hidden="true"></i> Fact sheet & stats</div>
+          <div class="kit-feat"><i class="ti ti-check" aria-hidden="true"></i> Media mentions log</div>
+        </div>
+        <button class="btn-kit" onclick="alert('Press kit download started (demo)')"><i class="ti ti-download" aria-hidden="true"></i> Download Press Kit (ZIP, 24 MB)</button>
+      </div>
+      <div class="kit-right">
+        <div class="kit-mock">
+          <div class="kit-mock-star"></div>
+          <div class="kit-mock-label">Press Kit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED IN -->
+<section class="featured">
+  <div class="featured-inner">
+    <div class="featured-label">As featured in</div>
+    <div class="featured-strip">
+      <span class="featured-item">Bloomberg</span>
+      <span class="featured-item">TechCrunch</span>
+      <span class="featured-item">Financial Times</span>
+      <span class="featured-item">Quartz Africa</span>
+      <span class="featured-item">BBC Africa</span>
+      <span class="featured-item">The Africa Report</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS RELEASES -->
+<section class="press-releases">
+  <div class="press-releases-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="justify-content:center;"><i class="ti ti-news" aria-hidden="true"></i> Press releases</div>
+      <h2 class="section-h2">Latest announcements</h2>
+      <p class="section-sub centered" style="margin:0 auto;">Stay up to date with the latest news from Sporafind and Gabochie Intelligence.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot green"></div>
+        <div class="timeline-date">June 15, 2026</div>
+        <div class="timeline-card">
+          <span class="timeline-tag release">Press release</span>
+          <h3>Sporafind Launches Pan-African Scope, Expanding to 54 Nations</h3>
+          <p>Following a successful Ghanaian diaspora beta, Sporafind expands its AI intelligence platform to cover all 54 African nations, unlocking cross-border diaspora investment signals at continental scale.</p>
+          <a href="#" class="timeline-link">Read full release <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot green"></div>
+        <div class="timeline-date">April 20, 2026</div>
+        <div class="timeline-card">
+          <span class="timeline-tag release">Press release</span>
+          <h3>Sporafind Raises $4.2M Pre-Seed to Build AI for African Diaspora Intelligence</h3>
+          <p>Gabochie Intelligence announces a $4.2 million pre-seed round led by Accra Ventures and Diaspora Capital, with participation from angel investors across the UK, US, and Ghana.</p>
+          <a href="#" class="timeline-link">Read full release <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot green"></div>
+        <div class="timeline-date">March 20, 2026</div>
+        <div class="timeline-card">
+          <span class="timeline-tag release">Press release</span>
+          <h3>Sporafind Launches AI-Powered Platform for Ghanaian Diaspora Intelligence</h3>
+          <p>The platform goes live, offering AI-driven profiling and discovery of 4.2 million+ Ghanaians across 67 countries, segmented by investor type, influence, and industry.</p>
+          <a href="#" class="timeline-link">Read full release <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">February 10, 2026</div>
+        <div class="timeline-card">
+          <span class="timeline-tag milestone">Milestone</span>
+          <h3>Gabochie Intelligence Announces Sporafind Beta</h3>
+          <p>Private beta launch of Sporafind begins with 50 partner organisations testing AI-powered diaspora profiling, organisation discovery, and signal intelligence tools.</p>
+          <a href="#" class="timeline-link">Read full release <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">January 25, 2026</div>
+        <div class="timeline-card">
+          <span class="timeline-tag milestone">Milestone</span>
+          <h3>Sporafind Wins Ghana Startup Awards — Best AI Innovation</h3>
+          <p>Sporafind takes home the Best AI Innovation award at the Ghana Startup Awards 2026, recognised for its groundbreaking use of AI in diaspora intelligence and economic development.</p>
+          <a href="#" class="timeline-link">Read full release <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA COVERAGE -->
+<section class="media-coverage">
+  <div class="media-coverage-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="justify-content:center;"><i class="ti ti-file-text" aria-hidden="true"></i> Media coverage</div>
+      <h2 class="section-h2">What the press is saying</h2>
+      <p class="section-sub centered" style="margin:0 auto;">A selection of recent media coverage featuring Sporafind and Gabochie Intelligence.</p>
+    </div>
+    <div class="media-grid">
+      <div class="media-card">
+        <div class="media-pub">
+          <div class="media-pub-icon" style="background:#1A1A2E;">B</div>
+          <span class="media-pub-name">Bloomberg</span>
+        </div>
+        <h3>The AI Platform Mapping the Ghanaian Diaspora's Investment Potential</h3>
+        <p>March 25, 2026</p>
+        <a href="#" class="media-link">Read article <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="media-card">
+        <div class="media-pub">
+          <div class="media-pub-icon" style="background:#0C9D58;">TC</div>
+          <span class="media-pub-name">TechCrunch</span>
+        </div>
+        <h3>Sporafind Raises $4.2M to Build a LinkedIn for African Diaspora Intelligence</h3>
+        <p>April 22, 2026</p>
+        <a href="#" class="media-link">Read article <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="media-card">
+        <div class="media-pub">
+          <div class="media-pub-icon" style="background:#1A3E6F;">FT</div>
+          <span class="media-pub-name">Financial Times</span>
+        </div>
+        <h3>African Startups Tap AI to Harness Diaspora Capital for Development</h3>
+        <p>May 10, 2026</p>
+        <a href="#" class="media-link">Read article <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="media-card">
+        <div class="media-pub">
+          <div class="media-pub-icon" style="background:#E3542D;">QA</div>
+          <span class="media-pub-name">Quartz Africa</span>
+        </div>
+        <h3>How Sporafind Is Using AI to Connect Ghana with Its Global Diaspora Investors</h3>
+        <p>April 28, 2026</p>
+        <a href="#" class="media-link">Read article <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="media-card">
+        <div class="media-pub">
+          <div class="media-pub-icon" style="background:#C8102E;">BBC</div>
+          <span class="media-pub-name">BBC Africa</span>
+        </div>
+        <h3>The Tech Startup Helping Ghana Track Its Diaspora Investors Worldwide</h3>
+        <p>May 5, 2026</p>
+        <a href="#" class="media-link">Read article <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="media-card">
+        <div class="media-pub">
+          <div class="media-pub-icon" style="background:#1A1A2E;">AR</div>
+          <span class="media-pub-name">The Africa Report</span>
+        </div>
+        <h3>Sporafind: The Ghanaian Startup Using AI to Map Diaspora Wealth</h3>
+        <p>June 2, 2026</p>
+        <a href="#" class="media-link">Read article <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS CONTACT -->
+<section class="press-contact">
+  <div class="press-contact-inner">
+    <h2>Press & media inquiries</h2>
+    <p class="section-sub centered" style="margin:0 auto;">For press enquiries, interview requests, or media assets, reach out to our communications team.</p>
+    <div class="contact-card">
+      <div class="contact-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+      <h3>Abena Agyemang</h3>
+      <div class="contact-role">Head of Communications · Gabochie Intelligence</div>
+      <a href="mailto:press@sporafind.com" class="contact-email"><i class="ti ti-mail" aria-hidden="true"></i> press@sporafind.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </div>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

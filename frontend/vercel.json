@@ -1,7 +1,9 @@
 {
-  "name": "sporafind",
-  "framework": null,
-  "buildCommand": null,
-  "outputDirectory": ".",
-  "devCommand": null
+  "builds": [
+    { "src": "api/server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)", "dest": "api/server.js" }
+  ]
 }

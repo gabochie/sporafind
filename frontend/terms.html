@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Use — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* HERO */
+.hero{background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:140px 48px 80px;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:760px;width:100%;margin:0 auto;position:relative;z-index:2;text-align:center;}
+.hero-h1{font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:800;line-height:1.05;letter-spacing:-2px;color:#fff;margin-bottom:16px;}
+.hero-h1 .accent{color:var(--gold);}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.6);line-height:1.65;font-weight:400;}
+
+/* DOCUMENT */
+.document{background:#fff;padding:80px 48px 100px;}
+.doc-inner{max-width:760px;margin:0 auto;}
+.doc-section{margin-bottom:40px;}
+.doc-section:last-child{margin-bottom:0;}
+.doc-h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.4px;color:var(--text-dark);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--cream2);}
+.doc-h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:var(--text-dark);margin-bottom:8px;margin-top:24px;}
+.doc-body{font-size:15px;color:var(--text-mid);line-height:1.75;margin-bottom:12px;}
+.doc-body strong{color:var(--text-dark);font-weight:600;}
+.doc-body a{color:var(--green);text-decoration:underline;}
+.doc-body a:hover{color:var(--green-dark);}
+.doc-list{padding-left:24px;margin-bottom:12px;}
+.doc-list li{font-size:15px;color:var(--text-mid);line-height:1.75;margin-bottom:6px;}
+.doc-list li strong{color:var(--text-dark);font-weight:600;}
+.doc-note{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius);padding:20px 24px;margin-top:16px;margin-bottom:16px;}
+.doc-note p{font-size:14px;color:var(--text-mid);line-height:1.7;}
+.doc-note strong{color:var(--text-dark);}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.animate-in{animation:fadeUp 0.6s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="pricing.html" class="btn-primary-nav">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-inner">
+    <h1 class="hero-h1">Terms of <span class="accent">Use</span></h1>
+    <p class="hero-sub">Last updated: June 1, 2026</p>
+  </div>
+</section>
+
+<!-- DOCUMENT CONTENT -->
+<section class="document">
+  <div class="doc-inner">
+
+    <div class="doc-section">
+      <p class="doc-body">Please read these Terms of Use ("Terms", "Agreement") carefully before using the Sporafind platform operated by Gabochie Intelligence Ltd ("Company", "we", "us", "our"). By accessing or using the platform, you agree to be bound by these Terms. If you do not agree with any part of these Terms, you must not use the platform.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">1. Acceptance of Terms</h2>
+      <p class="doc-body">By registering for, accessing, or using Sporafind in any capacity, you acknowledge that you have read, understood, and agree to be bound by these Terms, our Privacy Policy, and any additional guidelines or policies referenced herein. These Terms constitute a legally binding agreement between you ("User", "you", "your") and Gabochie Intelligence Ltd. If you are entering into this Agreement on behalf of a legal entity, you represent that you have the authority to bind that entity. The platform is offered strictly on the condition that you accept all terms contained herein. Continued use of the platform following any updates constitutes acceptance of those changes.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">2. Description of Service</h2>
+      <p class="doc-body">Sporafind is an AI-powered diaspora intelligence platform that aggregates, analyses, and surfaces information about diaspora communities — with an initial focus on Ghanaian populations across 67 countries. The platform uses artificial intelligence and machine learning models to cross-reference publicly available data from sources including but not limited to professional networks, business registries, news archives, company filings, and public records. The service provides users with:</p>
+      <ul class="doc-list">
+        <li><strong>Profile discovery and segmentation</strong> — identifying and classifying diaspora individuals and organisations by type, sector, location, and other attributes.</li>
+        <li><strong>AI-generated intelligence</strong> — confidence-scored profile data, signal analysis, and outreach recommendations.</li>
+        <li><strong>Data export and integration</strong> — downloadable datasets and API-based access to platform intelligence.</li>
+      </ul>
+      <p class="doc-body">Sporafind is a data intelligence tool. It is not a social network, a messaging platform, a credit bureau, or a recruitment agency. The service is provided on an "as is" and "as available" basis, subject to the limitations and disclaimers set out in these Terms.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">3. User Accounts and Registration</h2>
+      <p class="doc-body">To access the platform, you must register for an account. You agree to provide accurate, current, and complete information during the registration process and to update such information as necessary. You are solely responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must notify us immediately of any unauthorised use of your account or any other breach of security. We reserve the right to suspend or terminate accounts that provide false information, violate these Terms, or pose a security risk to the platform or other users. Each registration is for a single user. Sharing account credentials or permitting concurrent access by multiple users under a single account is strictly prohibited unless otherwise agreed in a separate written agreement.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">4. Acceptable Use</h2>
+      <p class="doc-body">You agree to use Sporafind only for lawful purposes and in compliance with all applicable local, national, and international laws and regulations. Specifically, you may use the platform to:</p>
+      <ul class="doc-list">
+        <li>Identify and research diaspora individuals and organisations for legitimate business, academic, governmental, or non-profit engagement.</li>
+        <li>Generate outreach materials and engagement strategies for diaspora relations programmes.</li>
+        <li>Analyse diaspora demographics, investment capacity, and community structures.</li>
+      </ul>
+      <p class="doc-body"><strong>Prohibited uses include, but are not limited to:</strong></p>
+      <ul class="doc-list">
+        <li>Using platform data for unsolicited mass communications, spam, harassment, or any form of invasive outreach.</li>
+        <li>Reselling, redistributing, or sublicensing platform data or intelligence to third parties without explicit written permission.</li>
+        <li>Using the platform for surveillance, profiling, or targeting of individuals based on protected characteristics in violation of applicable law.</li>
+        <li>Scraping, crawling, or reverse-engineering the platform or its data stores.</li>
+        <li>Uploading or transmitting malicious code, viruses, or any content that interferes with platform operations.</li>
+        <li>Using the platform to commit fraud, deception, or any unlawful activity.</li>
+      </ul>
+      <div class="doc-note">
+        <p><strong>Important:</strong> Sporafind data is provided for professional engagement purposes. Users must comply with all applicable data protection and privacy laws, including but not limited to the Ghana Data Protection Act (Act 843) and the European Union's General Data Protection Regulation (GDPR), as applicable to their use case.</p>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">5. Data Accuracy and Limitations</h2>
+      <p class="doc-body">Sporafind aggregates data from public and licensed sources and applies AI models to generate intelligence profiles. While we strive for high accuracy — our internal benchmarks target a 94% AI signal confidence rate — we make <strong>no warranty, express or implied</strong>, regarding the completeness, accuracy, reliability, suitability, or timeliness of any data, profile, or intelligence presented on the platform.</p>
+      <p class="doc-body"><strong>Key limitations you acknowledge:</strong></p>
+      <ul class="doc-list">
+        <li>Data is derived from publicly available sources and may contain inaccuracies, omissions, or outdated information.</li>
+        <li>AI-generated classifications (e.g., investor type, wealth tier, sector tags) are probabilistic signals, not definitive determinations.</li>
+        <li>Population estimates and counts (e.g., "4.2 million Ghanaians identified") are statistical projections based on available data and modelling.</li>
+        <li>The platform does not perform background checks, credit checks, or identity verification unless explicitly stated for a specific data point.</li>
+        <li>Users are responsible for independently verifying critical information before acting on it.</li>
+      </ul>
+      <p class="doc-body">We continuously improve our data models and update sources. However, the dynamic nature of diaspora populations means that some data will inevitably become stale between refresh cycles. We recommend that users treat all platform outputs as investigative leads rather than definitive facts.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">6. Subscription and Billing</h2>
+      <p class="doc-body">Access to certain features of Sporafind requires a paid subscription. Subscription plans, pricing, and feature availability are described on our Pricing page and are subject to change with notice. By selecting a paid plan, you agree to pay all applicable fees in accordance with the billing terms in effect at the time of purchase.</p>
+      <p class="doc-body">All fees are denominated in United States Dollars (USD) and are exclusive of applicable taxes, duties, or levies. You are responsible for all taxes associated with your subscription. Payments are processed through our third-party payment processors. We do not store full payment card details on our servers.</p>
+      <p class="doc-body">Subscriptions automatically renew at the end of each billing period unless cancelled before the renewal date. You authorise us to charge the then-applicable subscription fee using your selected payment method at the time of renewal. If payment fails, we may provide a grace period before suspending or terminating access. We reserve the right to change subscription fees upon 30 days' notice, with changes taking effect at the next renewal date.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">7. Cancellation and Refund Policy</h2>
+      <p class="doc-body">You may cancel your subscription at any time through your account settings or by contacting our support team. Cancellation takes effect at the end of the current billing period. You will retain access to paid features until the end of the period for which you have already paid.</p>
+      <p class="doc-body">We offer a <strong>14-day free trial</strong> on applicable plans. If you cancel during the trial period, you will not be charged. For paid subscriptions, refunds are provided on a case-by-case basis at our sole discretion, subject to the following guidelines:</p>
+      <ul class="doc-list">
+        <li>Refund requests made within 7 days of initial payment may be considered for a full refund.</li>
+        <li>No refunds are provided for partial billing periods after the 7-day window.</li>
+        <li>Annual plan cancellations may be eligible for a pro-rata refund of unused months, less a 15% administrative fee.</li>
+        <li>Refunds are processed to the original payment method and may take 5–10 business days to appear.</li>
+      </ul>
+      <div class="doc-note">
+        <p><strong>Enterprise customers:</strong> Cancellation and refund terms for enterprise agreements are governed by the specific terms set out in your signed contract.</p>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">8. Intellectual Property Rights</h2>
+      <p class="doc-body">The Sporafind platform, including but not limited to its software, code, design, algorithms, AI models, user interface, branding, trademarks ("Sporafind", "Gabochie Intelligence"), and all underlying technology, is the exclusive intellectual property of Gabochie Intelligence Ltd. These Terms do not grant you any ownership or license rights in the platform, its underlying technology, or its brand assets, except as expressly set forth herein.</p>
+      <p class="doc-body">Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use the platform for your internal business or personal use in accordance with your subscription plan. You may not copy, modify, distribute, sell, lease, reverse-engineer, or create derivative works of the platform or any portion thereof without our prior written consent.</p>
+      <p class="doc-body"><strong>Data ownership:</strong> We retain all rights, title, and interest in the aggregated datasets, intelligence profiles, AI models, and derived insights generated by the platform. The underlying public data remains in the public domain. The value we create — the signal, the classification, the intelligence — is our proprietary intellectual property.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">9. Confidentiality</h2>
+      <p class="doc-body">During your use of the platform, you may have access to proprietary information, including but not limited to platform architecture, data models, business strategies, usage analytics, unpublished features, and commercial terms ("Confidential Information"). You agree to:</p>
+      <ul class="doc-list">
+        <li>Maintain the confidentiality of all Confidential Information and not disclose it to any third party without our prior written consent.</li>
+        <li>Use Confidential Information solely for the purpose of evaluating and using the platform as permitted under these Terms.</li>
+        <li>Protect Confidential Information using at least the same degree of care you use to protect your own confidential information, but in no event less than reasonable care.</li>
+      </ul>
+      <p class="doc-body">This obligation does not apply to information that: (a) is or becomes publicly available through no fault of your own; (b) was rightfully in your possession prior to disclosure; (c) is independently developed by you without reference to our Confidential Information; or (d) is required to be disclosed by law or court order.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">10. Limitation of Liability</h2>
+      <p class="doc-body">To the maximum extent permitted by applicable law, Gabochie Intelligence Ltd, its directors, officers, employees, affiliates, agents, and licensors shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, revenue, data, goodwill, or business opportunity, arising out of or relating to your use or inability to use the platform, even if we have been advised of the possibility of such damages.</p>
+      <p class="doc-body">Our total aggregate liability to you for any claim arising out of or relating to these Terms or the platform shall not exceed the total amount paid by you to us in the twelve (12) months immediately preceding the event giving rise to the claim. This limitation applies whether the claim is based on contract, tort (including negligence), strict liability, or any other legal theory.</p>
+      <p class="doc-body"><strong>Because Sporafind is a data intelligence tool that relies on publicly available information processed through AI models, we specifically disclaim liability for:</strong></p>
+      <ul class="doc-list">
+        <li>Decisions made or actions taken based on platform data or intelligence.</li>
+        <li>Inaccuracies, omissions, or outdated information in platform datasets.</li>
+        <li>AI model misclassifications or signal errors.</li>
+        <li>Service interruptions, data loss, or unauthorised access caused by factors beyond our reasonable control.</li>
+      </ul>
+      <p class="doc-body">Some jurisdictions do not allow the exclusion or limitation of certain damages, so the above limitations may not apply to you to the extent prohibited by applicable law.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">11. Indemnification</h2>
+      <p class="doc-body">You agree to defend, indemnify, and hold harmless Gabochie Intelligence Ltd, its affiliates, directors, officers, employees, and agents from and against any and all claims, damages, losses, liabilities, costs, and expenses (including reasonable legal fees) arising out of or relating to:</p>
+      <ul class="doc-list">
+        <li>Your use of the platform in violation of these Terms or any applicable law or regulation.</li>
+        <li>Your violation of any third-party rights, including but not limited to privacy rights, data protection rights, or intellectual property rights.</li>
+        <li>Any content, data, or information you submit, upload, or transmit through the platform.</li>
+        <li>Your violation of any applicable data protection law, including the misuse of platform intelligence for unauthorised purposes.</li>
+        <li>Any dispute between you and a third party arising from your use of platform data for outreach or engagement.</li>
+      </ul>
+      <p class="doc-body">We reserve the right to assume the exclusive defence and control of any matter subject to indemnification by you, in which case you agree to cooperate fully with our defence efforts. This indemnification obligation survives termination of these Terms and your use of the platform.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">12. Termination</h2>
+      <p class="doc-body">We reserve the right to suspend or terminate your access to the platform at any time, with or without cause, with or without notice. Grounds for termination include, but are not limited to:</p>
+      <ul class="doc-list">
+        <li>Breach of any provision of these Terms.</li>
+        <li>Engaging in prohibited uses as described in Section 4.</li>
+        <li>Non-payment of subscription fees after any applicable grace period.</li>
+        <li>Creating a security risk or potential liability for the Company or its users.</li>
+        <li>Requesting termination by providing written notice to our support team.</li>
+      </ul>
+      <p class="doc-body">Upon termination, your right to access and use the platform immediately ceases. You must cease all use of the platform and delete any downloaded data or intelligence that you have not been explicitly licensed to retain. Sections 5, 8, 9, 10, 11, 12, and 13 of these Terms shall survive termination.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">13. Governing Law</h2>
+      <p class="doc-body">These Terms shall be governed by and construed in accordance with the laws of the <strong>Republic of Ghana</strong>, without regard to its conflict of law provisions. Any dispute, controversy, or claim arising out of or relating to these Terms or the use of the platform shall be resolved exclusively in the courts located in <strong>Accra, Ghana</strong>. The parties irrevocably submit to the personal jurisdiction of such courts for the purpose of any such proceeding.</p>
+      <p class="doc-body">The United Nations Convention on Contracts for the International Sale of Goods (CISG) shall not apply to these Terms. Nothing in this section prevents either party from seeking injunctive or equitable relief in any appropriate jurisdiction.</p>
+      <div class="doc-note">
+        <p><strong>Governing jurisdiction:</strong> Gabochie Intelligence Ltd is registered and operates under the laws of Ghana. Our principal place of business is in Accra, Greater Accra Region, Ghana. All platform operations, data processing, and dispute resolution are governed by Ghanaian law.</p>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">14. Changes to Terms</h2>
+      <p class="doc-body">We reserve the right to modify or replace these Terms at any time at our sole discretion. Material changes will be communicated to registered users via email or through a prominent notice on the platform at least 14 days before they take effect. Non-material changes — such as clarifications, typographical corrections, or updates to contact information — may take effect immediately upon posting.</p>
+      <p class="doc-body">Your continued use of the platform after any changes become effective constitutes your acceptance of the revised Terms. If you do not agree to the modified Terms, you must stop using the platform and cancel your subscription. The date of the most recent update is displayed at the top of this page. We encourage you to review these Terms periodically.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2 class="doc-h2">15. Contact</h2>
+      <p class="doc-body">If you have any questions, concerns, or requests regarding these Terms, or if you need to provide legal notice to Gabochie Intelligence Ltd, you may reach us through the following channels:</p>
+      <ul class="doc-list" style="margin-top:12px;">
+        <li><strong>Email:</strong> <a href="mailto:legal@gabochie.com">legal@gabochie.com</a></li>
+        <li><strong>Postal address:</strong> Gabochie Intelligence Ltd, PMB 150, Accra Central, Greater Accra Region, Ghana</li>
+        <li><strong>Platform contact:</strong> <a href="contact.html">contact page</a></li>
+      </ul>
+      <p class="doc-body" style="margin-top:16px;">For general support inquiries, please visit our <a href="#">Help Centre</a> or email <a href="mailto:support@sporafind.com">support@sporafind.com</a>. Legal notices and service of process should be directed to the postal address above, marked "Attention: Legal Department."</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </div>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

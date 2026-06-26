@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Changelog — Sporafind</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-links a.active{color:var(--gold);}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* CHANGELOG HERO */
+.changelog-hero{background:var(--navy);padding:140px 48px 80px;position:relative;overflow:hidden;}
+.changelog-hero-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.changelog-hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.changelog-hero-inner{max-width:800px;margin:0 auto;position:relative;z-index:2;text-align:center;}
+.changelog-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px;}
+.changelog-eyebrow i{font-size:14px;}
+.changelog-hero h1{font-family:'Space Grotesk',sans-serif;font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.changelog-hero h1 span{color:var(--gold);}
+.changelog-hero p{font-size:18px;color:rgba(255,255,255,0.55);line-height:1.65;max-width:560px;margin:0 auto 40px;}
+.changelog-hero-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.btn-cl-hero{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--gold);color:#0A0E1A;font-size:14px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cl-hero:hover{background:var(--gold-dark);}
+.btn-cl-hero i{font-size:17px;}
+.btn-cl-ghost{display:inline-flex;align-items:center;gap:7px;padding:13px 22px;background:transparent;color:rgba(255,255,255,0.7);font-size:14px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.2);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cl-ghost:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-cl-ghost i{font-size:16px;}
+
+/* SUBSCRIBE BAR */
+.subscribe-bar{background:var(--navy2);border-top:0.5px solid rgba(255,255,255,0.06);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:32px 48px;}
+.subscribe-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.subscribe-text{display:flex;align-items:center;gap:10px;}
+.subscribe-text i{font-size:22px;color:var(--gold);}
+.subscribe-text div{font-size:15px;color:rgba(255,255,255,0.8);font-weight:500;}
+.subscribe-text small{font-size:13px;color:rgba(255,255,255,0.4);font-weight:400;display:block;margin-top:2px;}
+.subscribe-form{display:flex;gap:8px;flex-wrap:wrap;}
+.subscribe-form input{padding:10px 14px;border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;min-width:240px;transition:border-color 0.2s;}
+.subscribe-form input::placeholder{color:rgba(255,255,255,0.3);}
+.subscribe-form input:focus{border-color:var(--gold);}
+.subscribe-form button{padding:10px 20px;background:var(--gold);color:#0A0E1A;font-size:14px;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;white-space:nowrap;}
+.subscribe-form button:hover{background:var(--gold-dark);}
+
+/* TIMELINE SECTION */
+.timeline-section{padding:72px 48px 100px;}
+.timeline-inner{max-width:800px;margin:0 auto;}
+
+/* Timeline header with RSS */
+.timeline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
+.timeline-header-left h2{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;color:var(--text-dark);}
+.timeline-header-left p{font-size:15px;color:var(--text-mid);margin-top:4px;}
+.timeline-header-right{display:flex;align-items:center;gap:12px;}
+.rss-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-muted);transition:color 0.15s;}
+.rss-link:hover{color:var(--gold);}
+.rss-link i{font-size:16px;}
+
+/* Timeline entries */
+.timeline{position:relative;}
+.timeline::before{content:'';position:absolute;top:0;left:44px;bottom:0;width:1.5px;background:var(--cream2);}
+
+.release{margin-bottom:56px;position:relative;padding-left:80px;}
+.release:last-child{margin-bottom:0;}
+
+.release-dot{position:absolute;left:36px;top:4px;width:18px;height:18px;border-radius:50%;background:var(--green);border:3px solid var(--cream);z-index:2;display:flex;align-items:center;justify-content:center;}
+.release-dot.major{background:var(--gold);}
+.release-dot.patch{background:var(--slate2);}
+.release-dot i{font-size:8px;color:var(--navy);}
+
+.release-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:4px;}
+.release-version{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;letter-spacing:-0.5px;color:var(--text-dark);}
+.release-version .tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:5px;margin-left:8px;vertical-align:middle;letter-spacing:0.3px;text-transform:uppercase;}
+.release-version .tag.major{background:#FEF3C7;color:#92400E;}
+.release-version .tag.minor{background:#DBEAFE;color:#1E40AF;}
+.release-version .tag.patch{background:#F0FDF4;color:#166534;}
+.release-version .tag.alpha{background:#F3E8FF;color:#6B21A8;}
+.release-version .tag.beta{background:#FFEDD5;color:#9A3412;}
+.release-date{font-size:14px;color:var(--text-muted);}
+
+.release-description{font-size:15px;color:var(--text-mid);margin:4px 0 20px;}
+
+.release-changes{display:flex;flex-direction:column;gap:16px;}
+.change-category{}
+.change-category-header{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.change-category-header i{font-size:16px;}
+.change-category-header.added{color:var(--green);}
+.change-category-header.improved{color:#2563EB;}
+.change-category-header.fixed{color:#D97706;}
+.change-category-header.deprecated{color:#DC2626;}
+.change-list{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.change-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-mid);line-height:1.55;padding:4px 0;}
+.change-list li i{font-size:5px;margin-top:7px;flex-shrink:0;color:var(--slate);}
+.change-list li .highlight{background:rgba(212,160,23,0.1);color:var(--gold-dark);font-weight:500;padding:0 4px;border-radius:3px;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav-links{display:none;}
+  nav{padding:0 20px;}
+  .changelog-hero{padding:120px 20px 60px;}
+  .changelog-hero h1{font-size:36px;}
+  .subscribe-bar{padding:24px 20px;}
+  .subscribe-inner{flex-direction:column;align-items:stretch;}
+  .subscribe-form input{min-width:0;flex:1;}
+  .timeline-section{padding:48px 20px 72px;}
+  .release{padding-left:56px;}
+  .release-dot{left:16px;}
+  .timeline::before{left:24px;}
+  .release-version{font-size:20px;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
+  .changelog-hero-actions{flex-direction:column;align-items:center;}
+}
+@media(max-width:600px){
+  .subscribe-form{flex-direction:column;}
+  .subscribe-form input{width:100%;}
+  .timeline-header{flex-direction:column;align-items:flex-start;}
+  .footer-top{grid-template-columns:1fr;gap:24px;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+  .release-head{flex-direction:column;gap:4px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none;">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#segments">Segments</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="api-docs.html">API docs</a>
+      <a href="changelog.html" class="active">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
+      <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- CHANGELOG HERO -->
+<section class="changelog-hero">
+  <div class="changelog-hero-bg"></div>
+  <div class="changelog-hero-glow"></div>
+  <div class="changelog-hero-inner">
+    <div class="changelog-eyebrow">
+      <i class="ti ti-notebook" aria-hidden="true"></i>
+      Release notes
+    </div>
+    <h1>Changelog</h1>
+    <p>Everything we ship, break, and improve — documented in full. Follow along as Sporafind evolves from alpha to the intelligence backbone of the Ghanaian diaspora.</p>
+    <div class="changelog-hero-actions">
+      <button class="btn-cl-hero" onclick="document.getElementById('subscribe').scrollIntoView({behavior:'smooth'})"><i class="ti ti-bell" aria-hidden="true"></i> Subscribe to updates</button>
+      <a href="javascript:void(0)" class="btn-cl-ghost" onclick="alert('RSS feed coming soon (demo)')"><i class="ti ti-rss" aria-hidden="true"></i> RSS feed</a>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE BAR -->
+<div class="subscribe-bar" id="subscribe">
+  <div class="subscribe-inner">
+    <div class="subscribe-text">
+      <i class="ti ti-mail" aria-hidden="true"></i>
+      <div>
+        Stay up to date
+        <small>Get notified about new releases, features, and improvements.</small>
+      </div>
+    </div>
+    <div class="subscribe-form">
+      <input type="email" placeholder="you@example.com" aria-label="Email address">
+      <button onclick="alert('Subscribed! (demo)')">Subscribe</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="timeline-inner">
+
+    <div class="timeline-header">
+      <div class="timeline-header-left">
+        <h2>Release history</h2>
+        <p>All versions of Sporafind, in chronological order.</p>
+      </div>
+      <div class="timeline-header-right">
+        <a href="javascript:void(0)" class="rss-link" onclick="alert('RSS feed coming soon (demo)')"><i class="ti ti-rss" aria-hidden="true"></i> RSS feed</a>
+      </div>
+    </div>
+
+    <div class="timeline">
+
+      <!-- v1.2.0 -->
+      <div class="release">
+        <div class="release-dot major"><i class="ti ti-star" aria-hidden="true"></i></div>
+        <div class="release-head">
+          <div class="release-version">v1.2.0 <span class="tag major">Major</span></div>
+          <div class="release-date"><i class="ti ti-calendar" aria-hidden="true" style="margin-right:4px;"></i>June 15, 2026</div>
+        </div>
+        <p class="release-description">Pan-African scope expansion, new API endpoints, and organisation analytics. This release extends Sporafind's intelligence coverage from Ghana to all 54 African nations.</p>
+        <div class="release-changes">
+          <div class="change-category">
+            <div class="change-category-header added"><i class="ti ti-plus-circle"></i> Added</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Pan-African scope: search and segment diaspora profiles across all 54 African nations, not just Ghana</li>
+              <li><i class="ti ti-minus"></i> New <span class="highlight">/v2/people</span> API endpoint with pagination, advanced filters, and bulk lookup support</li>
+              <li><i class="ti ti-minus"></i> <span class="highlight">/v2/organisations</span> API endpoint with membership estimates, leadership signals, and engagement history</li>
+              <li><i class="ti ti-minus"></i> Organisation analytics dashboard — visual breakdowns of org types, geographic distribution, and growth trends</li>
+              <li><i class="ti ti-minus"></i> Multi-country export filter: filter and export profiles by any combination of countries</li>
+              <li><i class="ti ti-minus"></i> API key usage metrics in the dashboard with real-time rate limit monitoring</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header improved"><i class="ti ti-arrow-up-circle"></i> Improved</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> AI signal confidence scoring now calibrated per-country with region-specific training data</li>
+              <li><i class="ti ti-minus"></i> Search latency reduced by 40% across all profile types through query optimisation</li>
+              <li><i class="ti ti-minus"></i> Organisation profile cards now include founding year, registration number, and recent activity timeline</li>
+              <li><i class="ti ti-minus"></i> Wealth tier signals (HNW/UHNW) refined with additional data sources for all countries</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header fixed"><i class="ti ti-alert-circle"></i> Fixed</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Fixed edge case where profiles with mixed-country signals were incorrectly geo-tagged</li>
+              <li><i class="ti ti-minus"></i> Resolved CSV export truncation for organisations with more than 5,000 membership records</li>
+              <li><i class="ti ti-minus"></i> Corrected rate-limit header values in API responses to reflect actual allowance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.1.0 -->
+      <div class="release">
+        <div class="release-dot major"><i class="ti ti-star" aria-hidden="true"></i></div>
+        <div class="release-head">
+          <div class="release-version">v1.1.0 <span class="tag major">Major</span></div>
+          <div class="release-date"><i class="ti ti-calendar" aria-hidden="true" style="margin-right:4px;"></i>May 1, 2026</div>
+        </div>
+        <p class="release-description">Organisation discovery engine, AI-powered outreach generation, and CRM integrations. The biggest leap in platform capability since launch.</p>
+        <div class="release-changes">
+          <div class="change-category">
+            <div class="change-category-header added"><i class="ti ti-plus-circle"></i> Added</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Organisation discovery engine — search diaspora associations, investment syndicates, professional bodies, community orgs, cultural groups, and think tanks</li>
+              <li><i class="ti ti-minus"></i> AI outreach generation: one-click personalised draft for any profile, factoring in segment, sector, location, and investment history</li>
+              <li><i class="ti ti-minus"></i> HubSpot and Salesforce CRM integration — push profiles and organisations directly from the platform</li>
+              <li><i class="ti ti-minus"></i> Notion and Airtable export connectors for team collaboration workflows</li>
+              <li><i class="ti ti-minus"></i> Organisation membership size estimates with confidence indicators</li>
+              <li><i class="ti ti-minus"></i> Saved search alerts — get notified when new profiles match your saved criteria</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header improved"><i class="ti ti-arrow-up-circle"></i> Improved</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Profile cards redesigned with clearer segment badges, wealth tier indicators, and engagement readiness score</li>
+              <li><i class="ti ti-minus"></i> Search algorithm now indexes 3 additional public data sources for richer profile signals</li>
+              <li><i class="ti ti-minus"></i> Export speed improved 3x for large result sets (10,000+ records)</li>
+              <li><i class="ti ti-minus"></i> Mobile responsiveness of dashboard tables and profile cards</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header fixed"><i class="ti ti-alert-circle"></i> Fixed</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Fixed bug where some leader profiles were incorrectly classified as entrepreneurs</li>
+              <li><i class="ti ti-minus"></i> Resolved duplicate profile entries appearing in multi-country search results</li>
+              <li><i class="ti ti-minus"></i> Fixed session expiry handling that caused intermittent logouts during long sessions</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header deprecated"><i class="ti ti-x-circle"></i> Deprecated</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Legacy <span class="highlight">/v1/profiles</span> endpoint marked for deprecation — migrate to <span class="highlight">/v2/people</span></li>
+              <li><i class="ti ti-minus"></i> CSV export v1 format (flat columns) deprecated in favour of v2 (nested segment data)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.0.1 -->
+      <div class="release">
+        <div class="release-dot patch"><i class="ti ti-minus" style="font-size:10px;"></i></div>
+        <div class="release-head">
+          <div class="release-version">v1.0.1 <span class="tag patch">Patch</span></div>
+          <div class="release-date"><i class="ti ti-calendar" aria-hidden="true" style="margin-right:4px;"></i>April 10, 2026</div>
+        </div>
+        <p class="release-description">Performance improvements, infrastructure hardening, and bug fixes following public launch feedback.</p>
+        <div class="release-changes">
+          <div class="change-category">
+            <div class="change-category-header improved"><i class="ti ti-arrow-up-circle"></i> Improved</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Profile search response times reduced by 35% through database query optimisation and caching</li>
+              <li><i class="ti ti-minus"></i> Image asset delivery migrated to CDN with global edge caching — 60% faster thumbnail loading</li>
+              <li><i class="ti ti-minus"></i> Dashboard initial load time improved by 50% with lazy-loaded components</li>
+              <li><i class="ti ti-minus"></i> API rate limit increased from 100 to 500 requests per minute for authenticated users</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header fixed"><i class="ti ti-alert-circle"></i> Fixed</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Fixed pagination offset bug on organisation search results beyond page 20</li>
+              <li><i class="ti ti-minus"></i> Resolved 500 error when filtering by wealth tier with no results</li>
+              <li><i class="ti ti-minus"></i> Corrected timezone handling on profile "last active" timestamps</li>
+              <li><i class="ti ti-minus"></i> Fixed mobile navigation overlap issue on screens under 360px width</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.0.0 -->
+      <div class="release">
+        <div class="release-dot major"><i class="ti ti-star" aria-hidden="true"></i></div>
+        <div class="release-head">
+          <div class="release-version">v1.0.0 <span class="tag minor">Launch</span></div>
+          <div class="release-date"><i class="ti ti-calendar" aria-hidden="true" style="margin-right:4px;"></i>March 20, 2026</div>
+        </div>
+        <p class="release-description">Initial public launch. Sporafind is now available to everyone. The first complete platform for Ghanaian diaspora intelligence.</p>
+        <div class="release-changes">
+          <div class="change-category">
+            <div class="change-category-header added"><i class="ti ti-plus-circle"></i> Added</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> People segmentation engine with four profile types: regular diaspora, leaders, entrepreneurs, and investors</li>
+              <li><i class="ti ti-minus"></i> AI-powered profile discovery across LinkedIn, Companies House, Crunchbase, news archives, and business registries</li>
+              <li><i class="ti ti-minus"></i> Wealth tier signals (HNW/UHNW) on investor and entrepreneur profiles</li>
+              <li><i class="ti ti-minus"></i> Interactive diaspora map with real-time profile counts per country and city</li>
+              <li><i class="ti ti-minus"></i> Keyword and semantic search — find profiles by name, industry, location, or natural language queries</li>
+              <li><i class="ti ti-minus"></i> CSV export with full profile data, segment labels, and confidence scores</li>
+              <li><i class="ti ti-minus"></i> API access (v1) for programmatic profile and organisation queries</li>
+              <li><i class="ti ti-minus"></i> Three pricing tiers: Starter ($49/mo), Growth ($199/mo), and Enterprise (custom)</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header improved"><i class="ti ti-arrow-up-circle"></i> Improved</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Final pre-launch AI model training pass — signal accuracy improved from 91% to 94%</li>
+              <li><i class="ti ti-minus"></i> Onboarding flow refined based on beta user feedback (reduced from 6 steps to 3)</li>
+              <li><i class="ti ti-minus"></i> Documentation site launched at docs.sporafind.com with API reference and guides</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header fixed"><i class="ti ti-alert-circle"></i> Fixed</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> All critical and high-severity issues identified during beta testing resolved</li>
+              <li><i class="ti ti-minus"></i> Edge cases in name matching for Ghanaian names with tonal diacritics</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v0.9.0 -->
+      <div class="release">
+        <div class="release-dot patch"><i class="ti ti-minus" style="font-size:10px;"></i></div>
+        <div class="release-head">
+          <div class="release-version">v0.9.0 <span class="tag beta">Beta</span></div>
+          <div class="release-date"><i class="ti ti-calendar" aria-hidden="true" style="margin-right:4px;"></i>February 10, 2026</div>
+        </div>
+        <p class="release-description">Beta release — available to a limited set of users for testing and validation. Core search and segmentation are functional.</p>
+        <div class="release-changes">
+          <div class="change-category">
+            <div class="change-category-header added"><i class="ti ti-plus-circle"></i> Added</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Beta user onboarding with guided product walkthrough</li>
+              <li><i class="ti ti-minus"></i> Feedback widget integrated directly into the dashboard for beta testers</li>
+              <li><i class="ti ti-minus"></i> Profile reporting tool — users can flag incorrect or outdated profile data</li>
+              <li><i class="ti ti-minus"></i> Usage analytics page showing search history, export count, and API consumption</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header improved"><i class="ti ti-arrow-up-circle"></i> Improved</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> AI segmentation accuracy improved with additional training on Ghanaian business naming conventions</li>
+              <li><i class="ti ti-minus"></i> Search relevance tuned — Ghana-origin signals now weighted 2x higher than secondary sources</li>
+              <li><i class="ti ti-minus"></i> Dashboard performance optimised for beta traffic load</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header fixed"><i class="ti ti-alert-circle"></i> Fixed</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Fixed incorrect industry tagging for profiles in healthcare and education sectors</li>
+              <li><i class="ti ti-minus"></i> Resolved intermittent search timeout errors during peak usage hours</li>
+              <li><i class="ti ti-minus"></i> Corrected investor count discrepancy between dashboard and export data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- v0.8.0 -->
+      <div class="release">
+        <div class="release-dot patch"><i class="ti ti-minus" style="font-size:10px;"></i></div>
+        <div class="release-head">
+          <div class="release-version">v0.8.0 <span class="tag alpha">Alpha</span></div>
+          <div class="release-date"><i class="ti ti-calendar" aria-hidden="true" style="margin-right:4px;"></i>January 5, 2026</div>
+        </div>
+        <p class="release-description">Private alpha release. The first version of Sporafind — internal testing with select partners. Core intelligence engine operational.</p>
+        <div class="release-changes">
+          <div class="change-category">
+            <div class="change-category-header added"><i class="ti ti-plus-circle"></i> Added</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Initial AI intelligence engine capable of identifying Ghanaian diaspora profiles from public sources</li>
+              <li><i class="ti ti-minus"></i> Basic search interface with name, location, and keyword filters</li>
+              <li><i class="ti ti-minus"></i> Profile view with source attribution and confidence score</li>
+              <li><i class="ti ti-minus"></i> Authentication system with email-based signup and Google OAuth</li>
+              <li><i class="ti ti-minus"></i> Simple list export to CSV (flat format, 50-record limit)</li>
+              <li><i class="ti ti-minus"></i> Internal dashboard with basic profile count metrics</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header improved"><i class="ti ti-arrow-up-circle"></i> Improved</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Initial data pipeline processing speed — reduced from 8 hours to 45 minutes per data refresh cycle</li>
+              <li><i class="ti ti-minus"></i> Internal search indexing for faster query response times</li>
+            </ul>
+          </div>
+          <div class="change-category">
+            <div class="change-category-header fixed"><i class="ti ti-alert-circle"></i> Fixed</div>
+            <ul class="change-list">
+              <li><i class="ti ti-minus"></i> Various early-stage data deduplication issues resolved</li>
+              <li><i class="ti ti-minus"></i> Fixed profile source URL parsing errors for international domain formats</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </div>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#segments">Segments</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

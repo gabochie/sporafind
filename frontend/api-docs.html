@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sporafind API — documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
+  --code-bg:#0F1629;
+  --table-border:rgba(255,255,255,0.06);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-links a.active{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
+
+/* PAGE LAYOUT */
+.page-wrapper{padding-top:64px;display:flex;min-height:calc(100vh - 64px);}
+
+/* SIDEBAR */
+.sidebar{width:280px;flex-shrink:0;background:var(--navy);border-right:0.5px solid rgba(255,255,255,0.06);padding:40px 0 48px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-track{background:transparent;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+.sidebar-inner{padding:0 24px;}
+.sidebar-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,0.25);margin-bottom:20px;padding:0 12px;}
+.sidebar-nav{list-style:none;}
+.sidebar-nav li{margin-bottom:2px;}
+.sidebar-nav a{display:flex;align-items:center;gap:10px;padding:8px 12px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);border-radius:8px;transition:all 0.15s;position:relative;}
+.sidebar-nav a:hover{color:rgba(255,255,255,0.85);background:rgba(255,255,255,0.04);}
+.sidebar-nav a.active{color:#fff;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.2);}
+.sidebar-nav a i{font-size:16px;width:18px;text-align:center;flex-shrink:0;}
+.sidebar-nav .section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.2);padding:16px 12px 6px;pointer-events:none;}
+
+/* MAIN CONTENT */
+.main-content{flex:1;min-width:0;background:var(--white);padding:56px 64px 80px;max-width:calc(100% - 280px);}
+.content-container{max-width:780px;}
+
+/* API HERO */
+.api-hero{background:var(--navy);padding:48px 0 40px;margin:-56px -64px 0;padding-left:64px;padding-right:64px;}
+.api-hero-inner{max-width:780px;}
+.api-hero-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);margin-bottom:12px;}
+.api-hero h1{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1.8px;line-height:1.1;color:#fff;margin-bottom:10px;}
+.api-hero p{font-size:16px;color:rgba(255,255,255,0.55);line-height:1.65;margin-bottom:24px;}
+.base-url-wrap{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 18px;}
+.base-url-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--slate);}
+.base-url{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:var(--gold);letter-spacing:-0.3px;}
+.copy-btn{background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:16px;transition:color 0.15s;padding:4px;}
+.copy-btn:hover{color:var(--gold);}
+.api-hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,107,60,0.15);border:0.5px solid rgba(0,107,60,0.3);border-radius:20px;padding:4px 12px;font-size:12px;color:#4CAF82;font-weight:500;margin-left:16px;}
+
+/* HEADINGS */
+.content-container h2{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.8px;color:var(--text-dark);margin-top:56px;margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--cream2);}
+.content-container h2:first-of-type{margin-top:40px;}
+.content-container h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;letter-spacing:-0.4px;color:var(--text-dark);margin-top:36px;margin-bottom:10px;}
+.content-container p{font-size:15px;color:var(--text-mid);line-height:1.7;margin-bottom:16px;}
+.content-container p strong{color:var(--text-dark);font-weight:600;}
+
+/* ENDPOINT CARDS */
+.endpoint-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);margin-top:16px;margin-bottom:24px;overflow:hidden;transition:border-color 0.2s;}
+.endpoint-card:hover{border-color:rgba(0,107,60,0.2);}
+.endpoint-header{display:flex;align-items:center;gap:12px;padding:18px 24px;cursor:pointer;user-select:none;}
+.endpoint-method{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:3px 10px;border-radius:5px;flex-shrink:0;}
+.endpoint-method.get{background:#DCFCE7;color:#166534;}
+.endpoint-method.post{background:#DBEAFE;color:#1E40AF;}
+.endpoint-method.put{background:#FEF3C7;color:#92400E;}
+.endpoint-method.del{background:#FEE2E2;color:#991B1B;}
+.endpoint-path{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--text-dark);letter-spacing:-0.3px;}
+.endpoint-desc{font-size:13px;color:var(--text-mid);flex:1;text-align:right;}
+.endpoint-chevron{font-size:18px;color:var(--text-muted);transition:transform 0.25s;}
+.endpoint-card.open .endpoint-chevron{transform:rotate(180deg);}
+.endpoint-body{display:none;padding:0 24px 24px;border-top:0.5px solid var(--cream2);}
+.endpoint-card.open .endpoint-body{display:block;}
+.endpoint-body h4{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-top:20px;margin-bottom:8px;}
+
+/* CODE BLOCKS */
+.code-block{background:var(--code-bg);border:0.5px solid rgba(255,255,255,0.08);border-radius:8px;margin:10px 0 16px;overflow:hidden;}
+.code-header{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.code-dot{width:8px;height:8px;border-radius:50%;}
+.code-dot.red{background:#FF5F56;}
+.code-dot.yellow{background:#FFBD2E;}
+.code-dot.green{background:#27C93F;}
+.code-lang{font-size:11px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.6px;margin-left:8px;}
+.code-content{overflow-x:auto;}
+.code-content pre{font-family:'SF Mono',SFMono-Regular,ui-monospace,'Cascadia Code',Consolas,monospace;font-size:13px;line-height:1.55;color:rgba(255,255,255,0.85);padding:14px 16px;white-space:pre;tab-size:2;}
+.code-content .kw{color:#7DD3FC;}  /* keywords */
+.code-content .str{color:#A5F3FC;} /* strings */
+.code-content .fn{color:#FDE047;}  /* function/method */
+.code-content .cm{color:rgba(255,255,255,0.3);} /* comment */
+.code-content .num{color:#FCA5A5;} /* number */
+.code-content .prop{color:#6EE7B7;} /* property */
+
+/* PARAMETER TABLES */
+.param-table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px;border-radius:8px;overflow:hidden;border:0.5px solid var(--cream2);}
+.param-table thead{background:var(--cream);}
+.param-table th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-muted);border-bottom:0.5px solid var(--cream2);}
+.param-table td{padding:10px 14px;border-bottom:0.5px solid var(--cream2);color:var(--text-mid);vertical-align:top;}
+.param-table tr:last-child td{border-bottom:none;}
+.param-table td:first-child{font-family:'SF Mono',SFMono-Regular,ui-monospace,Consolas,monospace;font-size:13px;color:var(--text-dark);font-weight:500;}
+.param-table .type{font-size:12px;color:var(--slate);font-family:'Inter',sans-serif;}
+.param-table .required{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding:2px 7px;border-radius:4px;background:#FEE2E2;color:#991B1B;margin-left:6px;}
+.param-table .optional{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding:2px 7px;border-radius:4px;background:rgba(0,107,60,0.1);color:var(--green);margin-left:6px;}
+.param-table .badge-tag{font-size:10px;font-weight:500;padding:1px 6px;border-radius:4px;background:var(--cream2);color:var(--text-mid);margin-left:4px;}
+
+/* HIGHLIGHT BOXES */
+.highlight-box{background:rgba(212,160,23,0.07);border:0.5px solid rgba(212,160,23,0.2);border-radius:8px;padding:16px 20px;margin:16px 0;display:flex;align-items:flex-start;gap:12px;}
+.highlight-box i{font-size:20px;color:var(--gold);flex-shrink:0;margin-top:1px;}
+.highlight-box p{font-size:14px;color:var(--text-mid);margin:0;}
+.highlight-box.green{background:rgba(0,107,60,0.07);border-color:rgba(0,107,60,0.2);}
+.highlight-box.green i{color:var(--green);}
+
+/* WEBHOOK / SDK CARDS */
+.grid-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+.grid-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius);padding:24px 20px;transition:all 0.2s;}
+.grid-card:hover{border-color:rgba(0,107,60,0.25);transform:translateY(-1px);}
+.grid-card-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+.grid-card-icon.sdk{background:#EAF3DE;color:var(--green);}
+.grid-card-icon.webhook{background:rgba(212,160,23,0.12);color:var(--gold);}
+.grid-card-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--text-dark);letter-spacing:-0.2px;margin-bottom:4px;}
+.grid-card-body{font-size:13px;color:var(--text-mid);line-height:1.6;margin-bottom:12px;}
+.grid-card-link{font-size:13px;font-weight:600;color:var(--green);display:inline-flex;align-items:center;gap:6px;}
+.grid-card-link:hover{color:var(--green-dark);}
+
+/* INLINE CODE */
+code.inline{font-family:'SF Mono',SFMono-Regular,ui-monospace,Consolas,monospace;font-size:13px;background:var(--cream);padding:2px 7px;border-radius:5px;color:var(--text-dark);border:0.5px solid var(--cream2);}
+
+/* TOC ANCHOR OFFSET */
+.section-anchor{display:block;position:relative;top:-80px;visibility:hidden;}
+
+/* RESPONSIVE TOGGLE */
+.sidebar-toggle{display:none;background:none;border:none;color:var(--text-dark);font-size:24px;cursor:pointer;padding:4px;}
+.sidebar-overlay{display:none;}
+
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .sidebar{width:240px;}
+  .main-content{padding:40px 32px 64px;}
+  .api-hero{margin:-40px -32px 0;padding-left:32px;padding-right:32px;}
+}
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .sidebar{position:fixed;left:-280px;top:64px;bottom:0;width:280px;z-index:90;transition:left 0.3s;height:auto;}
+  .sidebar.open{left:0;}
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:89;}
+  .sidebar-overlay.show{display:block;}
+  .sidebar-toggle{display:block;}
+  .main-content{max-width:100%;padding:0 20px 48px;}
+  .api-hero{margin:0 -20px 0;padding:32px 20px;}
+  .page-wrapper{flex-direction:column;}
+  .api-hero h1{font-size:28px;}
+  .endpoint-header{flex-wrap:wrap;}
+  .endpoint-desc{width:100%;text-align:left;margin-left:0;padding-left:0;}
+  .grid-cards{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .content-container h2{font-size:24px;}
+  .base-url-wrap{flex-wrap:wrap;}
+}
+@media(max-width:480px){
+  .footer-top{grid-template-columns:1fr;}
+  .param-table{font-size:12px;display:block;overflow-x:auto;}
+  .sidebar{width:260px;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="window.location.href='index.html'">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </div>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="segments.html">Segments</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="api-docs.html" class="active">API docs</a>
+      <a href="changelog.html">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
+      <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
+    </div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation"><i class="ti ti-menu-2"></i></button>
+  </div>
+</nav>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+      <div class="sidebar-title">API Reference</div>
+      <ul class="sidebar-nav">
+        <li class="section-label">Getting started</li>
+        <li><a href="#introduction" class="active"><i class="ti ti-home"></i> Introduction</a></li>
+        <li><a href="#authentication"><i class="ti ti-key"></i> Authentication</a></li>
+        <li><a href="#rate-limits"><i class="ti ti-speedometer"></i> Rate limits</a></li>
+        <li class="section-label">Endpoints</li>
+        <li><a href="#search-profiles"><i class="ti ti-search"></i> Search profiles</a></li>
+        <li><a href="#get-profile"><i class="ti ti-user"></i> Get profile</a></li>
+        <li><a href="#organisations"><i class="ti ti-building-community"></i> Organisations</a></li>
+        <li><a href="#saved-lists"><i class="ti ti-list"></i> Saved lists</a></li>
+        <li><a href="#export-data"><i class="ti ti-download"></i> Export data</a></li>
+        <li class="section-label">Schemas</li>
+        <li><a href="#profile-schema"><i class="ti ti-file-description"></i> Profile object</a></li>
+        <li><a href="#organisation-schema"><i class="ti ti-file-description"></i> Organisation object</a></li>
+        <li><a href="#errors"><i class="ti ti-alert-triangle"></i> Error responses</a></li>
+        <li class="section-label">More</li>
+        <li><a href="#sdks"><i class="ti ti-code"></i> SDKs & libraries</a></li>
+        <li><a href="#webhooks"><i class="ti ti-webhook"></i> Webhooks</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="content-container">
+
+      <!-- API HERO -->
+      <div class="api-hero">
+        <div class="api-hero-inner">
+          <div class="api-hero-eyebrow"><i class="ti ti-code"></i> REST API</div>
+          <h1>Build with diaspora <br>intelligence.</h1>
+          <p>Sporafind's REST API gives you programmatic access to the world's richest Ghanaian diaspora intelligence — profiles, organisations, segmentation signals, and export pipelines. Use it to embed diaspora data into your own tools, workflows, and platforms.</p>
+          <div class="base-url-wrap">
+            <span class="base-url-label">Base URL</span>
+            <span class="base-url">https://api.sporafind.com/v1</span>
+            <button class="copy-btn" onclick="copyBaseUrl()" title="Copy base URL"><i class="ti ti-copy"></i></button>
+            <span class="api-hero-badge"><i class="ti ti-shield-check"></i> v1.0 — Stable</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTRODUCTION -->
+      <span class="section-anchor" id="introduction"></span>
+      <h2>Introduction</h2>
+      <p>Welcome to the Sporafind API. Every endpoint returns JSON responses and uses standard HTTP status codes. All requests must be made over HTTPS. The API is organised around <a href="#profile-schema" style="color:var(--green);font-weight:500;">profiles</a> and <a href="#organisation-schema" style="color:var(--green);font-weight:500;">organisations</a> — the two core objects in our intelligence model.</p>
+      <p>We support <strong>cursor-based pagination</strong> for all list endpoints. Each response includes a <code class="inline">next_cursor</code> field that can be passed as a query parameter to fetch the next page.</p>
+
+      <div class="highlight-box green">
+        <i class="ti ti-bulb"></i>
+        <p><strong>New to Sporafind?</strong> Every API response includes a <code class="inline">request_id</code> header that you can reference when contacting support.</p>
+      </div>
+
+      <!-- AUTHENTICATION -->
+      <span class="section-anchor" id="authentication"></span>
+      <h2>Authentication</h2>
+      <p>Authenticate all requests by including a <strong>Bearer token</strong> in the <code class="inline">Authorization</code> header. You can generate API tokens from your Sporafind dashboard under <strong>Settings → API Keys</strong>.</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+          <span class="code-lang">cURL</span>
+        </div>
+        <div class="code-content"><pre>curl https://api.sporafind.com/v1/profiles/search \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span></pre></div>
+      </div>
+      <div class="highlight-box">
+        <i class="ti ti-alert-triangle"></i>
+        <p><strong>Keep your tokens secure.</strong> Never share tokens in client-side code or public repositories. Rotate tokens regularly from your dashboard. Use <strong>restricted-scope tokens</strong> for development environments.</p>
+      </div>
+
+      <!-- RATE LIMITS -->
+      <span class="section-anchor" id="rate-limits"></span>
+      <h2>Rate limits</h2>
+      <p>Rate limits vary by plan. Every response includes rate-limit headers so you can monitor your usage. Exceeding the limit returns a <code class="inline">429 Too Many Requests</code> status.</p>
+      <table class="param-table">
+        <thead>
+          <tr><th>Plan</th><th>Requests / minute</th><th>Requests / day</th><th>Burst limit</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Starter</td><td>30</td><td>5,000</td><td>10</td></tr>
+          <tr><td>Growth</td><td>120</td><td>50,000</td><td>30</td></tr>
+          <tr><td>Enterprise</td><td>Custom</td><td>Custom</td><td>Custom</td></tr>
+        </tbody>
+      </table>
+      <p>Rate limit headers returned with every response:</p>
+      <table class="param-table">
+        <thead>
+          <tr><th>Header</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="inline">X-RateLimit-Limit</code></td><td>Max requests allowed in the current window</td></tr>
+          <tr><td><code class="inline">X-RateLimit-Remaining</code></td><td>Requests remaining in the current window</td></tr>
+          <tr><td><code class="inline">X-RateLimit-Reset</code></td><td>Unix timestamp when the window resets</td></tr>
+        </tbody>
+      </table>
+
+      <!-- SEARCH PROFILES -->
+      <span class="section-anchor" id="search-profiles"></span>
+      <h2>Search profiles</h2>
+      <p>Searches the diaspora intelligence index and returns matching profiles. Supports full-text search across names, locations, industries, and organisations, combined with segment and demographic filters.</p>
+
+      <div class="endpoint-card open">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="endpoint-method get">GET</span>
+          <span class="endpoint-path">/profiles/search</span>
+          <span class="endpoint-desc">Search diaspora profiles</span>
+          <i class="ti ti-chevron-down endpoint-chevron"></i>
+        </div>
+        <div class="endpoint-body">
+          <h4>Query parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>q<span class="optional">optional</span></td><td class="type">string</td><td>Full-text search query (names, locations, industries, organisations)</td></tr>
+              <tr><td>segment<span class="optional">optional</span></td><td class="type">string</td><td>Filter by segment. One of: <span class="badge-tag">regular</span> <span class="badge-tag">leader</span> <span class="badge-tag">entrepreneur</span> <span class="badge-tag">investor</span></td></tr>
+              <tr><td>country<span class="optional">optional</span></td><td class="type">string</td><td>ISO 3166-1 alpha-2 country code (e.g. <span class="badge-tag">GB</span>, <span class="badge-tag">US</span>, <span class="badge-tag">CA</span>)</td></tr>
+              <tr><td>industry<span class="optional">optional</span></td><td class="type">string</td><td>Industry cluster. One of: <span class="badge-tag">fintech</span> <span class="badge-tag">healthcare</span> <span class="badge-tag">tech</span> <span class="badge-tag">real_estate</span> <span class="badge-tag">energy</span> <span class="badge-tag">education</span></td></tr>
+              <tr><td>wealth_tier<span class="optional">optional</span></td><td class="type">string</td><td>Wealth signal filter: <span class="badge-tag">hnw</span> <span class="badge-tag">uhnw</span> <span class="badge-tag">mass_affluent</span></td></tr>
+              <tr><td>min_confidence<span class="optional">optional</span></td><td class="type">number</td><td>Minimum AI confidence score (0–100). Only returns profiles above this threshold.</td></tr>
+              <tr><td>cursor<span class="optional">optional</span></td><td class="type">string</td><td>Pagination cursor from a previous response's <code class="inline">next_cursor</code> field.</td></tr>
+              <tr><td>limit<span class="optional">optional</span></td><td class="type">integer</td><td>Number of results per page (1–100). Default: <span class="badge-tag">25</span></td></tr>
+            </tbody>
+          </table>
+
+          <h4>Example request</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">cURL</span>
+            </div>
+            <div class="code-content"><pre>curl <span class="str">"https://api.sporafind.com/v1/profiles/search?q=fintech+founder+london&segment=entrepreneur&wealth_tier=hnw&limit=10"</span> \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span></pre></div>
+          </div>
+
+          <h4>Response</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">JSON</span>
+            </div>
+            <div class="code-content"><pre>{
+  <span class="prop">"data"</span>: [
+    {
+      <span class="prop">"id"</span>: <span class="str">"prof_9x7k2m4n"</span>,
+      <span class="prop">"name"</span>: <span class="str">"Kwame Mensah"</span>,
+      <span class="prop">"segment"</span>: <span class="str">"entrepreneur"</span>,
+      <span class="prop">"country"</span>: <span class="str">"GB"</span>,
+      <span class="prop">"city"</span>: <span class="str">"London"</span>,
+      <span class="prop">"industry"</span>: <span class="str">"fintech"</span>,
+      <span class="prop">"wealth_tier"</span>: <span class="str">"hnw"</span>,
+      <span class="prop">"confidence"</span>: <span class="num">94</span>,
+      <span class="prop">"title"</span>: <span class="str">"Founder & CEO"</span>,
+      <span class="prop">"organisation"</span>: <span class="str">"KudiPay"</span>,
+      <span class="prop">"linkedin_url"</span>: <span class="str">"https://linkedin.com/in/kwamemensah"</span>,
+      <span class="prop">"signals"</span>: [<span class="str">"company_registration"</span>, <span class="str">"media_mention"</span>, <span class="str">"investor_network"</span>],
+      <span class="prop">"last_updated"</span>: <span class="str">"2026-06-20T14:32:00Z"</span>
+    }
+  ],
+  <span class="prop">"total"</span>: <span class="num">342</span>,
+  <span class="prop">"next_cursor"</span>: <span class="str">"eyJwYWdlIjoxfQ=="</span>,
+  <span class="prop">"has_more"</span>: <span class="kw">true</span>
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GET PROFILE -->
+      <span class="section-anchor" id="get-profile"></span>
+      <h2>Get profile</h2>
+      <p>Retrieves a single diaspora profile by its unique ID, including all enrichment data, segment classification, and signal metadata.</p>
+
+      <div class="endpoint-card open">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="endpoint-method get">GET</span>
+          <span class="endpoint-path">/profiles/{id}</span>
+          <span class="endpoint-desc">Retrieve a single profile</span>
+          <i class="ti ti-chevron-down endpoint-chevron"></i>
+        </div>
+        <div class="endpoint-body">
+          <h4>Path parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>id<span class="required">required</span></td><td class="type">string</td><td>Unique profile identifier (e.g. <code class="inline">prof_9x7k2m4n</code>)</td></tr>
+            </tbody>
+          </table>
+
+          <h4>Query parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>include_signals<span class="optional">optional</span></td><td class="type">boolean</td><td>Include full signal breakdown in response. Default: <span class="badge-tag">false</span></td></tr>
+            </tbody>
+          </table>
+
+          <h4>Example request</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">cURL</span>
+            </div>
+            <div class="code-content"><pre>curl https://api.sporafind.com/v1/profiles/prof_9x7k2m4n \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span></pre></div>
+          </div>
+
+          <h4>Response</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">JSON</span>
+            </div>
+            <div class="code-content"><pre>{
+  <span class="prop">"id"</span>: <span class="str">"prof_9x7k2m4n"</span>,
+  <span class="prop">"name"</span>: <span class="str">"Kwame Mensah"</span>,
+  <span class="prop">"segment"</span>: <span class="str">"entrepreneur"</span>,
+  <span class="prop">"country"</span>: <span class="str">"GB"</span>,
+  <span class="prop">"city"</span>: <span class="str">"London"</span>,
+  <span class="prop">"industry"</span>: <span class="str">"fintech"</span>,
+  <span class="prop">"wealth_tier"</span>: <span class="str">"hnw"</span>,
+  <span class="prop">"confidence"</span>: <span class="num">94</span>,
+  <span class="prop">"title"</span>: <span class="str">"Founder & CEO"</span>,
+  <span class="prop">"organisation"</span>: <span class="str">"KudiPay"</span>,
+  <span class="prop">"linkedin_url"</span>: <span class="str">"https://linkedin.com/in/kwamemensah"</span>,
+  <span class="prop">"signals"</span>: [<span class="str">"company_registration"</span>, <span class="str">"media_mention"</span>, <span class="str">"investor_network"</span>],
+  <span class="prop">"signal_breakdown"</span>: {
+    <span class="prop">"company_registration"</span>: { <span class="prop">"source"</span>: <span class="str">"companies_house"</span>, <span class="prop">"verified"</span>: <span class="kw">true</span>, <span class="prop">"date"</span>: <span class="str">"2024-03-15"</span> },
+    <span class="prop">"media_mention"</span>: { <span class="prop">"source"</span>: <span class="str">"tech_crunch"</span>, <span class="prop">"verified"</span>: <span class="kw">true</span>, <span class="prop">"date"</span>: <span class="str">"2025-09-02"</span> },
+    <span class="prop">"investor_network"</span>: { <span class="prop">"source"</span>: <span class="str">"crunchbase"</span>, <span class="prop">"verified"</span>: <span class="kw">false</span>, <span class="prop">"date"</span>: <span class="str">"2026-01-10"</span> }
+  },
+  <span class="prop">"engagement_angle"</span>: <span class="str">"Fintech founder with Series A exit. Approach via investor networks or Ghana fintech events in London."</span>,
+  <span class="prop">"last_updated"</span>: <span class="str">"2026-06-20T14:32:00Z"</span>
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORGANISATIONS -->
+      <span class="section-anchor" id="organisations"></span>
+      <h2>Organisations</h2>
+      <p>Returns diaspora organisations matching the search criteria. This endpoint mirrors the same intelligence model used for profiles but scoped to associations, investment syndicates, professional bodies, community organisations, and think tanks.</p>
+
+      <div class="endpoint-card open">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="endpoint-method get">GET</span>
+          <span class="endpoint-path">/organisations</span>
+          <span class="endpoint-desc">List and search organisations</span>
+          <i class="ti ti-chevron-down endpoint-chevron"></i>
+        </div>
+        <div class="endpoint-body">
+          <h4>Query parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>q<span class="optional">optional</span></td><td class="type">string</td><td>Full-text search across organisation name, description, and country</td></tr>
+              <tr><td>org_type<span class="optional">optional</span></td><td class="type">string</td><td>One of: <span class="badge-tag">association</span> <span class="badge-tag">syndicate</span> <span class="badge-tag">professional_body</span> <span class="badge-tag">community</span> <span class="badge-tag">think_tank</span></td></tr>
+              <tr><td>country<span class="optional">optional</span></td><td class="type">string</td><td>ISO 3166-1 alpha-2 country code</td></tr>
+              <tr><td>min_members<span class="optional">optional</span></td><td class="type">integer</td><td>Minimum estimated membership count</td></tr>
+              <tr><td>cursor<span class="optional">optional</span></td><td class="type">string</td><td>Pagination cursor</td></tr>
+              <tr><td>limit<span class="optional">optional</span></td><td class="type">integer</td><td>Results per page (1–100). Default: <span class="badge-tag">25</span></td></tr>
+            </tbody>
+          </table>
+
+          <h4>Example request</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">cURL</span>
+            </div>
+            <div class="code-content"><pre>curl <span class="str">"https://api.sporafind.com/v1/organisations?org_type=syndicate&country=US&limit=20"</span> \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span></pre></div>
+          </div>
+
+          <h4>Response</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">JSON</span>
+            </div>
+            <div class="code-content"><pre>{
+  <span class="prop">"data"</span>: [
+    {
+      <span class="prop">"id"</span>: <span class="str">"org_3m8n1k9p"</span>,
+      <span class="prop">"name"</span>: <span class="str">"Ghanaian Angel Network USA"</span>,
+      <span class="prop">"org_type"</span>: <span class="str">"syndicate"</span>,
+      <span class="prop">"country"</span>: <span class="str">"US"</span>,
+      <span class="prop">"city"</span>: <span class="str">"New York"</span>,
+      <span class="prop">"members_estimated"</span>: <span class="num">340</span>,
+      <span class="prop">"leadership"</span>: [<span class="str">"Dr. Esi Asare"</span>, <span class="str">"Yaw Boateng"</span>],
+      <span class="prop">"focus_sectors"</span>: [<span class="str">"fintech"</span>, <span class="str">"real_estate"</span>, <span class="str">"agritech"</span>],
+      <span class="prop">"confidence"</span>: <span class="num">87</span>,
+      <span class="prop">"last_updated"</span>: <span class="str">"2026-06-18T09:15:00Z"</span>
+    }
+  ],
+  <span class="prop">"total"</span>: <span class="num">128</span>,
+  <span class="prop">"next_cursor"</span>: <span class="str">"eyJwYWdlIjoyfQ=="</span>,
+  <span class="prop">"has_more"</span>: <span class="kw">true</span>
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAVED LISTS -->
+      <span class="section-anchor" id="saved-lists"></span>
+      <h2>Saved lists</h2>
+      <p>Retrieve and manage your saved profile and organisation lists. Lists are created from the Sporafind dashboard or via the API and persist across sessions.</p>
+
+      <div class="endpoint-card open">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="endpoint-method get">GET</span>
+          <span class="endpoint-path">/lists</span>
+          <span class="endpoint-desc">List all saved lists</span>
+          <i class="ti ti-chevron-down endpoint-chevron"></i>
+        </div>
+        <div class="endpoint-body">
+          <h4>Query parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>cursor<span class="optional">optional</span></td><td class="type">string</td><td>Pagination cursor</td></tr>
+              <tr><td>limit<span class="optional">optional</span></td><td class="type">integer</td><td>Results per page (1–100). Default: <span class="badge-tag">25</span></td></tr>
+            </tbody>
+          </table>
+
+          <h4>Example request</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">cURL</span>
+            </div>
+            <div class="code-content"><pre>curl https://api.sporafind.com/v1/lists \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span></pre></div>
+          </div>
+
+          <h4>Response</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">JSON</span>
+            </div>
+            <div class="code-content"><pre>{
+  <span class="prop">"data"</span>: [
+    {
+      <span class="prop">"id"</span>: <span class="str">"list_4k7n2m9x"</span>,
+      <span class="prop">"name"</span>: <span class="str">"London Fintech Investors"</span>,
+      <span class="prop">"profile_count"</span>: <span class="num">47</span>,
+      <span class="prop">"org_count"</span>: <span class="num">12</span>,
+      <span class="prop">"created_at"</span>: <span class="str">"2026-05-12T10:30:00Z"</span>,
+      <span class="prop">"last_updated"</span>: <span class="str">"2026-06-22T16:45:00Z"</span>
+    }
+  ],
+  <span class="prop">"next_cursor"</span>: <span class="kw">null</span>,
+  <span class="prop">"has_more"</span>: <span class="kw">false</span>
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card open">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="endpoint-method get">GET</span>
+          <span class="endpoint-path">/lists/{id}</span>
+          <span class="endpoint-desc">Get list contents</span>
+          <i class="ti ti-chevron-down endpoint-chevron"></i>
+        </div>
+        <div class="endpoint-body">
+          <h4>Path parameters</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>id<span class="required">required</span></td><td class="type">string</td><td>List identifier (e.g. <code class="inline">list_4k7n2m9x</code>)</td></tr>
+            </tbody>
+          </table>
+          <h4>Example request</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">cURL</span>
+            </div>
+            <div class="code-content"><pre>curl https://api.sporafind.com/v1/lists/list_4k7n2m9x \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span></pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPORT DATA -->
+      <span class="section-anchor" id="export-data"></span>
+      <h2>Export data</h2>
+      <p>Export filtered profile and organisation data as CSV. Exports are generated asynchronously and delivered via a download URL. This endpoint is ideal for CRM imports, offline analysis, and reporting.</p>
+
+      <div class="endpoint-card open">
+        <div class="endpoint-header" onclick="toggleEndpoint(this)">
+          <span class="endpoint-method post">POST</span>
+          <span class="endpoint-path">/exports</span>
+          <span class="endpoint-desc">Create an export job</span>
+          <i class="ti ti-chevron-down endpoint-chevron"></i>
+        </div>
+        <div class="endpoint-body">
+          <h4>Request body</h4>
+          <table class="param-table">
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>type<span class="required">required</span></td><td class="type">string</td><td>Export type: <span class="badge-tag">profiles</span> or <span class="badge-tag">organisations</span></td></tr>
+              <tr><td>filters<span class="required">required</span></td><td class="type">object</td><td>Filter object using the same parameters as the search endpoints (segment, country, industry, etc.)</td></tr>
+              <tr><td>format<span class="optional">optional</span></td><td class="type">string</td><td>Export format. Default: <span class="badge-tag">csv</span></td></tr>
+              <tr><td>list_id<span class="optional">optional</span></td><td class="type">string</td><td>Export from a saved list instead of ad-hoc filters</td></tr>
+            </tbody>
+          </table>
+
+          <h4>Example request</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">cURL</span>
+            </div>
+            <div class="code-content"><pre>curl https://api.sporafind.com/v1/exports \
+  -H <span class="str">"Authorization: Bearer df_live_abc123def456"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"type":"profiles","filters":{"segment":"investor","country":"GB","min_confidence":80},"format":"csv"}'</span></pre></div>
+          </div>
+
+          <h4>Response</h4>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+              <span class="code-lang">JSON</span>
+            </div>
+            <div class="code-content"><pre>{
+  <span class="prop">"id"</span>: <span class="str">"exp_2n5k8m1q"</span>,
+  <span class="prop">"status"</span>: <span class="str">"processing"</span>,
+  <span class="prop">"type"</span>: <span class="str">"profiles"</span>,
+  <span class="prop">"format"</span>: <span class="str">"csv"</span>,
+  <span class="prop">"estimated_rows"</span>: <span class="num">1800</span>,
+  <span class="prop">"download_url"</span>: <span class="kw">null</span>,
+  <span class="prop">"created_at"</span>: <span class="str">"2026-06-25T08:12:00Z"</span>
+}</pre></div>
+          </div>
+
+          <h4>Polling for completion</h4>
+          <div class="endpoint-card open" style="margin-top:12px;">
+            <div class="endpoint-header" onclick="toggleEndpoint(this)">
+              <span class="endpoint-method get">GET</span>
+              <span class="endpoint-path">/exports/{id}</span>
+              <span class="endpoint-desc">Check export status</span>
+              <i class="ti ti-chevron-down endpoint-chevron"></i>
+            </div>
+            <div class="endpoint-body">
+              <p>Poll this endpoint to check when the export is ready. Once <code class="inline">status</code> changes to <code class="inline">completed</code>, the <code class="inline">download_url</code> will be populated and available for 24 hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE SCHEMA -->
+      <span class="section-anchor" id="profile-schema"></span>
+      <h2>Profile object</h2>
+      <p>The profile object is the core data model in Sporafind. Every profile represents a diaspora individual with segment classification, location data, and AI-derived intelligence signals.</p>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>id</td><td class="type">string</td><td>Unique profile identifier (prefixed <code class="inline">prof_</code>)</td></tr>
+          <tr><td>name</td><td class="type">string</td><td>Full name of the individual</td></tr>
+          <tr><td>segment</td><td class="type">string</td><td>AI-classified segment: <span class="badge-tag">regular</span> <span class="badge-tag">leader</span> <span class="badge-tag">entrepreneur</span> <span class="badge-tag">investor</span></td></tr>
+          <tr><td>country</td><td class="type">string</td><td>ISO 3166-1 alpha-2 country code of residence</td></tr>
+          <tr><td>city</td><td class="type">string</td><td>City of residence</td></tr>
+          <tr><td>industry</td><td class="type">string</td><td>Primary industry cluster</td></tr>
+          <tr><td>wealth_tier</td><td class="type">string</td><td>Wealth signal: <span class="badge-tag">mass_affluent</span> <span class="badge-tag">hnw</span> <span class="badge-tag">uhnw</span></td></tr>
+          <tr><td>confidence</td><td class="type">integer</td><td>Overall AI signal confidence (0–100)</td></tr>
+          <tr><td>title</td><td class="type">string</td><td>Professional title or role</td></tr>
+          <tr><td>organisation</td><td class="type">string</td><td>Current or primary organisation</td></tr>
+          <tr><td>linkedin_url</td><td class="type">string</td><td>LinkedIn profile URL (when available)</td></tr>
+          <tr><td>signals</td><td class="type">array</td><td>List of signal types detected for this profile</td></tr>
+          <tr><td>signal_breakdown</td><td class="type">object</td><td>Detailed signal metadata per source (requires <code class="inline">include_signals=true</code>)</td></tr>
+          <tr><td>engagement_angle</td><td class="type">string</td><td>AI-generated recommended outreach approach</td></tr>
+          <tr><td>last_updated</td><td class="type">string</td><td>ISO 8601 timestamp of last update</td></tr>
+        </tbody>
+      </table>
+
+      <!-- ORGANISATION SCHEMA -->
+      <span class="section-anchor" id="organisation-schema"></span>
+      <h2>Organisation object</h2>
+      <p>The organisation object represents diaspora associations, syndicates, professional bodies, community organisations, and think tanks identified by our intelligence engine.</p>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>id</td><td class="type">string</td><td>Unique organisation identifier (prefixed <code class="inline">org_</code>)</td></tr>
+          <tr><td>name</td><td class="type">string</td><td>Organisation name</td></tr>
+          <tr><td>org_type</td><td class="type">string</td><td>Classification: <span class="badge-tag">association</span> <span class="badge-tag">syndicate</span> <span class="badge-tag">professional_body</span> <span class="badge-tag">community</span> <span class="badge-tag">think_tank</span></td></tr>
+          <tr><td>country</td><td class="type">string</td><td>ISO 3166-1 alpha-2 country code</td></tr>
+          <tr><td>city</td><td class="type">string</td><td>City of headquarters or primary operations</td></tr>
+          <tr><td>members_estimated</td><td class="type">integer</td><td>Estimated membership count</td></tr>
+          <tr><td>leadership</td><td class="type">array</td><td>List of identified leaders or officers</td></tr>
+          <tr><td>focus_sectors</td><td class="type">array</td><td>Industry sectors the organisation operates in</td></tr>
+          <tr><td>confidence</td><td class="type">integer</td><td>AI signal confidence (0–100)</td></tr>
+          <tr><td>last_updated</td><td class="type">string</td><td>ISO 8601 timestamp of last update</td></tr>
+        </tbody>
+      </table>
+
+      <!-- ERRORS -->
+      <span class="section-anchor" id="errors"></span>
+      <h2>Error responses</h2>
+      <p>The Sporafind API uses conventional HTTP status codes to indicate success or failure. Error bodies always follow the same structure.</p>
+
+      <table class="param-table">
+        <thead>
+          <tr><th>Status</th><th>Meaning</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>200</td><td>OK</td><td>Request succeeded</td></tr>
+          <tr><td>400</td><td>Bad Request</td><td>Invalid parameters or malformed request body</td></tr>
+          <tr><td>401</td><td>Unauthorized</td><td>Missing or invalid API token</td></tr>
+          <tr><td>403</td><td>Forbidden</td><td>Token lacks permissions for the requested resource</td></tr>
+          <tr><td>404</td><td>Not Found</td><td>Resource does not exist</td></tr>
+          <tr><td>429</td><td>Too Many Requests</td><td>Rate limit exceeded</td></tr>
+          <tr><td>500</td><td>Internal Server Error</td><td>Something went wrong on our side</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Error response body</h4>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+          <span class="code-lang">JSON</span>
+        </div>
+        <div class="code-content"><pre>{
+  <span class="prop">"error"</span>: {
+    <span class="prop">"type"</span>: <span class="str">"authentication_error"</span>,
+    <span class="prop">"message"</span>: <span class="str">"Invalid API token. Generate a new token from the dashboard."</span>,
+    <span class="prop">"code"</span>: <span class="str">"invalid_token"</span>,
+    <span class="prop">"request_id"</span>: <span class="str">"req_8k2m4n7x"</span>,
+    <span class="prop">"docs_url"</span>: <span class="str">"https://docs.sporafind.com/api#authentication"</span>
+  }
+}</pre></div>
+      </div>
+
+      <!-- SDKS -->
+      <span class="section-anchor" id="sdks"></span>
+      <h2>SDKs & libraries</h2>
+      <p>Use our official client libraries to integrate Sporafind into your stack. All libraries are open-source and wrap the REST API with typed interfaces.</p>
+
+      <div class="grid-cards">
+        <div class="grid-card">
+          <div class="grid-card-icon sdk"><i class="ti ti-brand-python"></i></div>
+          <div class="grid-card-title">Python</div>
+          <div class="grid-card-body">Native async support, complete type annotations, and pandas integration for data workflows.</div>
+          <a class="grid-card-link" href="javascript:void(0)" onclick="alert('SDK repository coming soon (demo)')">View on GitHub <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon sdk"><i class="ti ti-brand-javascript"></i></div>
+          <div class="grid-card-title">JavaScript / TypeScript</div>
+          <div class="grid-card-body">Full TypeScript definitions, Node.js and browser support, with Express middleware helpers.</div>
+          <a class="grid-card-link" href="javascript:void(0)" onclick="alert('SDK repository coming soon (demo)')">View on GitHub <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon sdk"><i class="ti ti-brand-ruby"></i></div>
+          <div class="grid-card-title">Ruby</div>
+          <div class="grid-card-body">Rails-compatible gem with ActiveRecord-style query chaining and built-in caching.</div>
+          <a class="grid-card-link" href="javascript:void(0)" onclick="alert('SDK repository coming soon (demo)')">View on GitHub <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon sdk"><i class="ti ti-brand-php"></i></div>
+          <div class="grid-card-title">PHP</div>
+          <div class="grid-card-body">Laravel package with facades, queued export handling, and webhook signature verification.</div>
+          <a class="grid-card-link" href="javascript:void(0)" onclick="alert('SDK repository coming soon (demo)')">View on GitHub <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon sdk"><i class="ti ti-brand-golang"></i></div>
+          <div class="grid-card-title">Go</div>
+          <div class="grid-card-body">Lightweight client with context support, retry logic, and zero external dependencies.</div>
+          <a class="grid-card-link" href="javascript:void(0)" onclick="alert('SDK repository coming soon (demo)')">View on GitHub <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon sdk"><i class="ti ti-brand-open-source"></i></div>
+          <div class="grid-card-title">Community SDKs</div>
+          <div class="grid-card-body">Community-maintained clients for Rust, Elixir, .NET, and Java. Contributions welcome.</div>
+          <a class="grid-card-link" href="javascript:void(0)" onclick="alert('Full SDK catalogue coming soon (demo)')">Browse all SDKs <i class="ti ti-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- WEBHOOKS -->
+      <span class="section-anchor" id="webhooks"></span>
+      <h2>Webhooks</h2>
+      <p>Webhooks enable real-time event notifications from Sporafind. Subscribe to events like profile enrichment completion, export readiness, and list updates — and Sporafind will POST the payload to your endpoint.</p>
+
+      <div class="highlight-box green">
+        <i class="ti ti-info-circle"></i>
+        <p><strong>Verifying webhook signatures.</strong> Every webhook request includes a <code class="inline">X-Sporafind-Signature</code> header. Verify signatures using your webhook secret to ensure the payload came from Sporafind and hasn't been tampered with.</p>
+      </div>
+
+      <div class="grid-cards">
+        <div class="grid-card">
+          <div class="grid-card-icon webhook"><i class="ti ti-user-check"></i></div>
+          <div class="grid-card-title">profile.enriched</div>
+          <div class="grid-card-body">Fires when a profile has been fully enriched with new signals or data sources.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-tag" style="background:rgba(0,107,60,0.1);color:var(--green);font-size:11px;padding:2px 8px;">profile.enriched</span>
+          </div>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon webhook"><i class="ti ti-file-export"></i></div>
+          <div class="grid-card-title">export.completed</div>
+          <div class="grid-card-body">Fires when an asynchronous export job has finished and the download URL is ready.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-tag" style="background:rgba(0,107,60,0.1);color:var(--green);font-size:11px;padding:2px 8px;">export.completed</span>
+          </div>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon webhook"><i class="ti ti-list-details"></i></div>
+          <div class="grid-card-title">list.updated</div>
+          <div class="grid-card-body">Fires when a saved list gains or loses members after a refresh.</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-tag" style="background:rgba(0,107,60,0.1);color:var(--green);font-size:11px;padding:2px 8px;">list.updated</span>
+          </div>
+        </div>
+        <div class="grid-card">
+          <div class="grid-card-icon webhook"><i class="ti ti-alert-circle"></i></div>
+          <div class="grid-card-title">alert.threshold</div>
+          <div class="grid-card-body">Fires when a custom alert threshold is met (e.g. new profiles in a saved search).</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge-tag" style="background:rgba(0,107,60,0.1);color:var(--green);font-size:11px;padding:2px 8px;">alert.threshold</span>
+          </div>
+        </div>
+      </div>
+
+      <h4>Webhook payload format</h4>
+      <div class="code-block">
+        <div class="code-header">
+          <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+          <span class="code-lang">JSON</span>
+        </div>
+        <div class="code-content"><pre>{
+  <span class="prop">"event"</span>: <span class="str">"export.completed"</span>,
+  <span class="prop">"created"</span>: <span class="str">"2026-06-25T10:30:00Z"</span>,
+  <span class="prop">"data"</span>: {
+    <span class="prop">"export_id"</span>: <span class="str">"exp_2n5k8m1q"</span>,
+    <span class="prop">"status"</span>: <span class="str">"completed"</span>,
+    <span class="prop">"download_url"</span>: <span class="str">"https://api.sporafind.com/v1/exports/exp_2n5k8m1q/download"</span>,
+    <span class="prop">"row_count"</span>: <span class="num">1800</span>
+  }
+}</pre></div>
+      </div>
+
+      <p>Configure webhook endpoints from your Sporafind dashboard under <strong>Settings → Webhooks</strong>. You can set up to 5 webhook endpoints per account on the Growth plan and above.</p>
+
+    </div>
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="cursor:pointer;" onclick="window.location.href='index.html'">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </div>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Toggle endpoint cards
+function toggleEndpoint(header) {
+  const card = header.closest('.endpoint-card');
+  if(card) card.classList.toggle('open');
+}
+
+// Copy base URL
+function copyBaseUrl() {
+  const url = 'https://api.sporafind.com/v1';
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.querySelector('.copy-btn i');
+    if(btn) {
+      btn.className = 'ti ti-check';
+      setTimeout(() => { btn.className = 'ti ti-copy'; }, 2000);
+    }
+  });
+}
+
+// Mobile sidebar toggle
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+
+// Active sidebar link tracking on scroll
+(function(){
+  const sections = document.querySelectorAll('.section-anchor');
+  const links = document.querySelectorAll('.sidebar-nav a');
+  if(!sections.length || !links.length) return;
+
+  function updateActive() {
+    let current = '';
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if(rect.top <= 150) current = sec.id;
+    });
+    links.forEach(link => {
+      link.classList.remove('active');
+      if(link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  }
+
+  window.addEventListener('scroll', updateActive, {passive:true});
+  updateActive();
+
+  // Close mobile sidebar on link click
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      if(window.innerWidth <= 768) toggleSidebar();
+    });
+  });
+})();
+</script>
+</body>
+</html>

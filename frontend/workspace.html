@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sporafind — Search Intelligence Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="/js/session.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--green-light:#E8F5EE;
+  --gold:#D4A017;--gold-dark:#a87d10;--gold-light:#FFF8E7;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;--navy4:#1C2A4A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;--cream3:#E5DFD5;
+  --slate:#8A9BB0;--slate2:#5A6880;--slate3:#B8C5D4;
+  --white:#FFFFFF;--bg:#F4F6F9;--bg2:#EBEEF3;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --red:#DC2626;--red-light:#FEE2E2;--orange:#EA580C;--orange-light:#FFEDD5;
+  --blue:#2563EB;--blue-light:#DBEAFE;--teal:#0E7490;--teal-light:#ECFEFF;
+  --purple:#6D28D9;--purple-light:#EDE9FE;
+  --radius:10px;--radius-lg:16px;--radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg:0 10px 40px rgba(0,0,0,0.12);
+  --sidebar-w:240px;--header-h:60px;
+}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);line-height:1.5;overflow:hidden}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--slate3);border-radius:4px}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;z-index:9999;display:flex;background:var(--navy);transition:opacity .35s,visibility .35s}
+.login-screen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.login-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:80px;position:relative;overflow:hidden}
+.login-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02)1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02)1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.login-bg-glow{position:absolute;top:50%;left:40%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,.15)0%,rgba(212,160,23,.05)40%,transparent 70%);pointer-events:none}
+.login-left-content{position:relative;z-index:2;max-width:440px}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.login-logomark{width:36px;height:36px;border-radius:9px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.login-star{width:16px;height:16px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.login-wordmark{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.4px;color:#fff}
+.login-wordmark span{color:var(--gold)}
+.login-h1{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;color:#fff;margin-bottom:12px}
+.login-h1 span{color:var(--gold)}
+.login-sub{font-size:15px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:32px}
+.login-features{display:flex;flex-direction:column;gap:12px}
+.login-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.55)}
+.login-feat i{width:20px;height:20px;border-radius:5px;background:rgba(0,107,60,.15);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.login-right{width:440px;display:flex;align-items:center;justify-content:center;padding:60px;background:var(--navy2)}
+.login-card{width:100%;max-width:360px;background:var(--navy3);border:.5px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);padding:36px 32px}
+.login-card-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--slate);margin-bottom:20px}
+.form-group{margin-bottom:18px}
+.form-label{font-size:12px;font-weight:500;color:rgba(255,255,255,.7);display:block;margin-bottom:5px}
+.form-input{width:100%;padding:10px 14px;background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--slate2)}
+.form-actions{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.form-remember{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.45);cursor:pointer}
+.form-remember input{accent-color:var(--gold)}
+.form-forgot{font-size:12px;color:var(--gold);font-weight:500}
+.btn-login{width:100%;padding:12px;background:var(--gold);color:#0A0E1A;font-size:14px;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-login:hover{background:var(--gold-dark)}
+.login-error{font-size:12px;color:var(--red);margin-top:10px;display:none;align-items:center;gap:6px}
+.login-error.show{display:flex}
+.login-signup{text-align:center;margin-top:18px;font-size:12px;color:rgba(255,255,255,.4)}
+.login-signup a{color:var(--gold);font-weight:500}
+
+/* WORKSPACE LAYOUT */
+.workspace-layout{display:none;height:100vh;width:100vw}
+.workspace-layout.active{display:flex}
+
+/* SIDEBAR */
+.ws-sidebar{width:var(--sidebar-w);background:var(--navy);border-right:.5px solid rgba(255,255,255,.06);display:flex;flex-direction:column;flex-shrink:0;z-index:100}
+.ws-brand{display:flex;align-items:center;gap:10px;padding:14px 18px;height:var(--header-h);border-bottom:.5px solid rgba(255,255,255,.06)}
+.ws-logomark{width:30px;height:30px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ws-star{width:13px;height:13px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ws-wordmark{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:-.3px;color:#fff}
+.ws-wordmark span{color:var(--gold)}
+.ws-plan{font-size:9px;font-weight:600;color:var(--gold);background:rgba(212,160,23,.12);padding:2px 7px;border-radius:3px;margin-left:auto}
+.ws-nav{flex:1;overflow-y:auto;padding:10px 10px}
+.ws-nav-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.2);padding:0 10px;margin-bottom:6px;margin-top:20px}
+.ws-nav-label:first-child{margin-top:0}
+.ws-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius-sm);color:rgba(255,255,255,.45);font-size:13px;font-weight:500;transition:all .12s;cursor:pointer;position:relative}
+.ws-link:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.04)}
+.ws-link.active{color:#fff;background:rgba(0,107,60,.2)}
+.ws-link.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:18px;background:var(--green);border-radius:0 3px 3px 0}
+.ws-link i{font-size:17px;width:18px;text-align:center;flex-shrink:0}
+.ws-link .badge{margin-left:auto;font-size:9px;font-weight:600;background:rgba(212,160,23,.15);color:var(--gold);padding:2px 6px;border-radius:8px}
+.ws-footer{padding:10px;border-top:.5px solid rgba(255,255,255,.06)}
+.ws-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;transition:background .12s}
+.ws-user:hover{background:rgba(255,255,255,.04)}
+.ws-user-avatar{width:30px;height:30px;border-radius:7px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:#0A0E1A;flex-shrink:0}
+.ws-user-info{flex:1;min-width:0}
+.ws-user-name{font-size:12px;font-weight:600;color:#fff}
+.ws-user-role{font-size:10px;color:var(--slate2)}
+.ws-logout-btn{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:var(--radius-sm);color:rgba(255,255,255,.25);font-size:11px;cursor:pointer;transition:color .12s;margin-top:2px}
+.ws-logout-btn:hover{color:var(--red)}
+
+/* HEADER */
+.ws-header{height:var(--header-h);background:var(--white);border-bottom:.5px solid var(--cream2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px}
+.ws-header-left{display:flex;align-items:center;gap:12px}
+.mobile-toggle{display:none;width:34px;height:34px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:transparent;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:18px}
+.ws-breadcrumb{font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+.ws-breadcrumb span{color:var(--text-dark);font-weight:500}
+.ws-header-right{display:flex;align-items:center;gap:6px}
+.ws-hdr-btn{width:34px;height:34px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:17px;transition:all .12s;position:relative}
+.ws-hdr-btn:hover{background:var(--bg);border-color:var(--cream3)}
+.ws-hdr-btn .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--red);border:1.5px solid var(--white)}
+.ws-hdr-avatar{width:34px;height:34px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
+
+/* MAIN */
+.ws-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.ws-content{flex:1;overflow-y:auto}
+
+/* PAGE VIEWS */
+.ws-view{display:none}
+.ws-view.active{display:block}
+
+/* ===== SEARCH VIEW ===== */
+.search-hero{padding:32px 32px 20px;background:var(--white);border-bottom:.5px solid var(--cream2)}
+.search-hero-title{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.6px;color:var(--text-dark);margin-bottom:4px}
+.search-hero-sub{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.search-bar-wrap{position:relative;max-width:840px}
+.search-bar{width:100%;padding:14px 48px 14px 18px;font-size:15px;border:1.5px solid var(--cream2);border-radius:var(--radius-lg);background:var(--white);font-family:'Inter',sans-serif;outline:none;color:var(--text-dark);transition:border-color .2s,box-shadow .2s}
+.search-bar:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,160,23,.12)}
+.search-bar::placeholder{color:var(--slate3);transition:opacity .3s}
+.search-bar-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:20px;pointer-events:none}
+.search-examples{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.search-example{padding:5px 12px;font-size:12px;color:var(--text-muted);background:var(--bg);border:.5px solid var(--cream2);border-radius:6px;cursor:pointer;transition:all .12s;white-space:nowrap}
+.search-example:hover{background:var(--gold-light);border-color:var(--gold);color:var(--gold-dark)}
+.search-parse-info{display:none;align-items:center;gap:16px;margin-top:14px;padding:12px 18px;background:var(--green-light);border:.5px solid rgba(0,107,60,.12);border-radius:var(--radius-sm);font-size:13px;color:var(--green-dark);animation:fadeUp .25s ease}
+.search-parse-info.show{display:flex}
+.search-parse-info i{font-size:18px;flex-shrink:0}
+.search-parse-tokens{display:flex;gap:6px;flex-wrap:wrap}
+.search-parse-token{padding:3px 9px;background:rgba(0,107,60,.1);border:.5px solid rgba(0,107,60,.2);border-radius:4px;font-size:11px;font-weight:500;color:var(--green)}
+
+/* LAYOUT: Filters + Results */
+.search-layout{display:flex;height:calc(100vh - var(--header-h) - 190px);min-height:400px}
+.search-filters{width:220px;flex-shrink:0;padding:20px 0 20px 24px;overflow-y:auto;border-right:.5px solid var(--cream2)}
+.search-filters-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);margin-bottom:14px}
+.filter-group{margin-bottom:20px}
+.filter-label{font-size:12px;font-weight:500;color:var(--text-dark);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.filter-label span{font-size:11px;color:var(--text-muted);font-weight:400}
+.filter-check{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:13px;color:var(--text-mid);cursor:pointer}
+.filter-check input{accent-color:var(--green);width:14px;height:14px;cursor:pointer}
+.filter-check .count{color:var(--text-muted);font-size:11px;margin-left:auto}
+.filter-select{width:100%;padding:6px 10px;border:.5px solid var(--cream2);border-radius:var(--radius-sm);font-size:12px;font-family:'Inter',sans-serif;color:var(--text-mid);outline:none;background:var(--white);cursor:pointer}
+.filter-active-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;font-size:11px;font-weight:500;background:var(--green-light);color:var(--green);border-radius:5px}
+.filter-tag i{font-size:14px;cursor:pointer;opacity:.7}
+.filter-tag i:hover{opacity:1}
+
+/* Confidence slider */
+.conf-slider{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--cream2);outline:none;margin:8px 0}
+.conf-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--green);cursor:pointer;border:2px solid var(--white);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.conf-range-info{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)}
+
+/* SEARCH RESULTS */
+.search-results{flex:1;padding:20px 24px;overflow-y:auto;min-width:0}
+.search-results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.search-results-count{font-size:14px;color:var(--text-mid)}
+.search-results-count strong{color:var(--text-dark)}
+.search-results-tabs{display:flex;gap:4px;background:var(--bg);border-radius:var(--radius-sm);padding:3px}
+.search-results-tab{padding:6px 14px;font-size:12px;font-weight:500;color:var(--text-muted);border-radius:4px;cursor:pointer;transition:all .12s;border:none;background:transparent;font-family:'Inter',sans-serif}
+.search-results-tab.active{background:var(--white);color:var(--text-dark);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.search-results-tab .tab-count{font-size:11px;color:var(--text-muted);margin-left:4px}
+.search-empty{text-align:center;padding:60px 20px}
+.search-empty-icon{font-size:48px;color:var(--slate3);margin-bottom:12px}
+.search-empty-title{font-size:17px;font-weight:600;color:var(--text-dark);margin-bottom:4px}
+.search-empty-sub{font-size:13px;color:var(--text-muted);max-width:360px;margin:0 auto}
+.search-loading{text-align:center;padding:60px}
+.search-loading .spinner{width:32px;height:32px;border:3px solid var(--cream2);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* PROFILE CARD */
+.profile-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);margin-bottom:10px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.profile-card:hover{box-shadow:var(--shadow-md);border-color:var(--slate3)}
+.profile-card.selected{border-color:var(--green);box-shadow:0 0 0 2px rgba(0,107,60,.12)}
+.profile-card-avatar{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;flex-shrink:0}
+.profile-card-info{flex:1;min-width:0}
+.profile-card-name{font-size:15px;font-weight:600;color:var(--text-dark)}
+.profile-card-title{font-size:12px;color:var(--text-mid);margin-top:1px}
+.profile-card-meta{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.profile-card-meta-item{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.profile-card-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.profile-card-actions{display:flex;gap:4px;flex-shrink:0;align-items:center}
+.profile-card-action{width:30px;height:30px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:15px;transition:all .12s}
+.profile-card-action:hover{background:var(--bg);border-color:var(--slate3);color:var(--text-dark)}
+.profile-card-action.saved{background:var(--green-light);color:var(--green);border-color:var(--green)}
+.profile-card-conf{display:flex;align-items:center;gap:6px}
+.profile-card-conf-bar{width:40px;height:4px;border-radius:2px;background:var(--cream2);overflow:hidden}
+.profile-card-conf-fill{height:100%;border-radius:2px}
+.profile-card-conf-fill.high{background:var(--green)}
+.profile-card-conf-fill.med{background:var(--gold)}
+.profile-card-conf-fill.low{background:var(--slate3)}
+.profile-card-conf-val{font-size:11px;font-weight:600}
+
+/* SLIDE-OVER PANEL */
+.slide-over{position:fixed;top:0;right:-560px;width:540px;height:100%;background:var(--white);box-shadow:var(--shadow-lg);z-index:300;transition:right .3s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column}
+.slide-over.open{right:0}
+.slide-over-backdrop{position:fixed;inset:0;background:rgba(8,13,26,.4);z-index:299;display:none}
+.slide-over-backdrop.open{display:block}
+.slide-over-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:.5px solid var(--cream2);flex-shrink:0}
+.slide-over-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--text-dark)}
+.slide-over-close{width:30px;height:30px;border-radius:var(--radius-sm);border:none;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:17px}
+.slide-over-close:hover{background:var(--bg2)}
+.slide-over-body{flex:1;overflow-y:auto;padding:24px}
+.slide-over-section{margin-bottom:24px}
+.slide-over-section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);margin-bottom:12px;padding-bottom:6px;border-bottom:.5px solid var(--cream2)}
+.so-profile-header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.so-profile-avatar{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;flex-shrink:0}
+.so-profile-name{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;letter-spacing:-.4px;color:var(--text-dark)}
+.so-profile-title{font-size:13px;color:var(--text-mid);margin-top:2px}
+.so-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.so-meta-item{}
+.so-meta-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:3px}
+.so-meta-value{font-size:13px;color:var(--text-dark);font-weight:500}
+.so-outreach-box{padding:16px 18px;background:var(--cream);border:.5px solid var(--cream2);border-radius:var(--radius);font-size:13px;color:var(--text-mid);line-height:1.7;position:relative}
+.so-outreach-box .copy-btn{position:absolute;top:10px;right:10px;padding:4px 8px;font-size:11px;border:.5px solid var(--cream2);border-radius:4px;background:var(--white);cursor:pointer;color:var(--text-mid);font-family:'Inter',sans-serif}
+.so-outreach-box .copy-btn:hover{background:var(--bg)}
+.so-similar{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+.so-similar-item{flex-shrink:0;width:140px;padding:12px;background:var(--cream);border:.5px solid var(--cream2);border-radius:var(--radius);text-align:center;cursor:pointer}
+.so-similar-item .ss-avatar{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin:0 auto 6px}
+.so-similar-item .ss-name{font-size:12px;font-weight:500;color:var(--text-dark)}
+.so-similar-item .ss-meta{font-size:10px;color:var(--text-muted);margin-top:2px}
+.slide-over-footer{display:flex;align-items:center;gap:8px;padding:16px 24px;border-top:.5px solid var(--cream2);flex-shrink:0}
+.slide-over-footer .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* ORG CARD */
+.org-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);margin-bottom:10px;cursor:pointer;transition:box-shadow .15s}
+.org-card:hover{box-shadow:var(--shadow-md)}
+.org-card-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.org-card-info{flex:1;min-width:0}
+.org-card-name{font-size:15px;font-weight:600;color:var(--text-dark)}
+.org-card-desc{font-size:12px;color:var(--text-mid);line-height:1.5;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.org-card-meta{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.org-card-meta-item{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+
+/* CHIPS + BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:600;white-space:nowrap}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-gold{background:var(--gold-light);color:var(--gold-dark)}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-purple{background:var(--purple-light);color:var(--purple)}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-orange{background:var(--orange-light);color:var(--orange)}
+.badge-teal{background:var(--teal-light);color:var(--teal)}
+.badge-gray{background:var(--bg2);color:var(--slate2)}
+.chip{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500;background:var(--bg);color:var(--text-mid)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .12s;white-space:nowrap}
+.btn-sm{padding:5px 11px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:10px}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:var(--green-dark)}
+.btn-gold{background:var(--gold);color:#0A0E1A}
+.btn-gold:hover{background:var(--gold-dark)}
+.btn-outline{background:transparent;border:.5px solid var(--cream3);color:var(--text-mid)}
+.btn-outline:hover{border-color:var(--slate3);color:var(--text-dark)}
+.btn-ghost{background:transparent;color:var(--text-mid)}
+.btn-ghost:hover{background:var(--bg);color:var(--text-dark)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#B91C1C}
+.btn-icon{width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center}
+
+/* SAVED LISTS */
+.lists-header{padding:28px 32px 20px;border-bottom:.5px solid var(--cream2)}
+.lists-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px}
+.lists-header p{font-size:13px;color:var(--text-muted);margin-top:4px}
+.lists-grid{padding:24px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.list-card{padding:20px;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);cursor:pointer;transition:box-shadow .15s}
+.list-card:hover{box-shadow:var(--shadow-md)}
+.list-card-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px}
+.list-card-name{font-size:15px;font-weight:600;color:var(--text-dark);margin-bottom:2px}
+.list-card-info{font-size:12px;color:var(--text-muted);margin-bottom:10px}
+.list-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:.5px solid var(--cream2)}
+.list-card-footer-item{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:3px}
+
+/* EXPORTS */
+.exports-header{padding:28px 32px 20px;border-bottom:.5px solid var(--cream2)}
+.exports-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px}
+.exports-header p{font-size:13px;color:var(--text-muted);margin-top:4px}
+.exports-body{padding:24px 32px}
+.exports-table{width:100%;border-collapse:collapse;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden}
+.exports-table th{text-align:left;padding:12px 18px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);background:var(--bg);border-bottom:.5px solid var(--cream2)}
+.exports-table td{padding:12px 18px;font-size:13px;color:var(--text-mid);border-bottom:.5px solid var(--cream2)}
+.exports-table tr:last-child td{border-bottom:none}
+.exports-table tr:hover td{background:var(--cream)}
+
+/* ACTIVITY */
+.activity-header{padding:28px 32px 20px;border-bottom:.5px solid var(--cream2)}
+.activity-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px}
+.activity-header p{font-size:13px;color:var(--text-muted);margin-top:4px}
+.activity-body{padding:24px 32px;max-width:720px}
+.activity-date-group{margin-bottom:32px}
+.activity-date-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:12px}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;transition:box-shadow .12s}
+.activity-item:hover{box-shadow:var(--shadow-sm)}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.activity-dot.green{background:var(--green)}
+.activity-dot.gold{background:var(--gold)}
+.activity-dot.blue{background:var(--blue)}
+.activity-dot.purple{background:var(--purple)}
+.activity-text{font-size:13px;color:var(--text-mid);line-height:1.5}
+.activity-text strong{color:var(--text-dark)}
+.activity-time{font-size:11px;color:var(--text-muted);margin-top:3px}
+.activity-replay{font-size:11px;color:var(--green);font-weight:500;cursor:pointer;margin-left:auto;flex-shrink:0;display:flex;align-items:center;gap:4px}
+.activity-replay:hover{text-decoration:underline}
+
+/* ACCOUNT */
+.acct-header{padding:28px 32px 20px;border-bottom:.5px solid var(--cream2)}
+.acct-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px}
+.acct-body{padding:24px 32px;max-width:720px}
+.acct-section{background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);padding:24px;margin-bottom:16px}
+.acct-section-title{font-size:15px;font-weight:600;color:var(--text-dark);margin-bottom:4px}
+.acct-section-desc{font-size:12px;color:var(--text-muted);margin-bottom:16px}
+.acct-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:.5px solid var(--cream2)}
+.acct-row:last-child{border-bottom:none}
+.acct-row-label{font-size:13px;font-weight:500;color:var(--text-dark)}
+.acct-row-desc{font-size:11px;color:var(--text-muted);margin-top:1px}
+.acct-input{width:220px;padding:7px 12px;border:.5px solid var(--cream2);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;outline:none;color:var(--text-dark);background:var(--white)}
+.acct-input:focus{border-color:var(--green)}
+.acct-select{padding:7px 12px;border:.5px solid var(--cream2);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;outline:none;color:var(--text-mid);background:var(--white);cursor:pointer}
+.toggle{position:relative;width:40px;height:22px;border-radius:11px;background:var(--cream3);cursor:pointer;transition:background .15s;flex-shrink:0}
+.toggle.active{background:var(--green)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle.active::after{transform:translateX(18px)}
+.acct-usage{display:flex;gap:20px;flex-wrap:wrap}
+.acct-usage-item{text-align:center;padding:16px 20px;background:var(--cream);border-radius:var(--radius);flex:1;min-width:120px}
+.acct-usage-val{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--text-dark);letter-spacing:-.5px}
+.acct-usage-label{font-size:11px;color:var(--text-muted);margin-top:4px}
+.acct-api-key{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg);border:.5px solid var(--cream2);border-radius:var(--radius-sm);font-family:'SF Mono','Monaco','Consolas',monospace;font-size:12px;color:var(--text-mid)}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;z-index:999;background:var(--navy);color:#fff;padding:14px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;transform:translateY(120px);opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast i{font-size:18px;color:var(--green);flex-shrink:0}
+.toast.error i{color:var(--red)}
+
+/* ONBOARDING */
+.ob-overlay{position:fixed;inset:0;z-index:9998;background:rgba(8,13,26,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all .35s}
+.ob-overlay.show{opacity:1;visibility:visible}
+.ob-card{background:var(--navy2);border:.5px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);padding:48px 44px 36px;max-width:560px;width:90%;text-align:center;transform:translateY(24px) scale(.97);transition:all .4s cubic-bezier(.22,1,.36,1)}
+.ob-overlay.show .ob-card{transform:translateY(0) scale(1)}
+.ob-logo{width:48px;height:48px;border-radius:12px;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.ob-logo-star{width:20px;height:20px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.ob-h1{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:6px}
+.ob-sub{font-size:14px;color:var(--slate);margin-bottom:32px;line-height:1.5}
+.ob-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px}
+.ob-step{background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:20px 14px;text-align:center;transition:background .2s}
+.ob-step:hover{background:rgba(255,255,255,.06)}
+.ob-step-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px}
+.ob-step-icon.green{background:rgba(0,107,60,.15);color:var(--green)}
+.ob-step-icon.gold{background:rgba(212,160,23,.15);color:var(--gold)}
+.ob-step-icon.blue{background:rgba(37,99,235,.15);color:var(--blue)}
+.ob-step-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px}
+.ob-step-desc{font-size:11px;color:var(--slate);line-height:1.4}
+.ob-actions{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+.ob-btn-primary{display:inline-flex;align-items:center;gap:7px;padding:11px 24px;background:var(--gold);color:#0A0E1A;font-size:14px;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
+.ob-btn-primary:hover{background:var(--gold-dark)}
+.ob-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;background:transparent;color:rgba(255,255,255,.5);font-size:14px;font-weight:500;border:.5px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.ob-btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.2)}
+.ob-dismiss{font-size:12px;color:var(--slate2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-top:12px}
+.ob-dismiss:hover{color:var(--slate)}
+.ob-dismiss input{accent-color:var(--gold)}
+.ob-tour{position:fixed;z-index:9999;background:var(--navy);border:.5px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:20px 22px;max-width:380px;box-shadow:0 12px 48px rgba(0,0,0,.3);opacity:0;visibility:hidden;transition:all .25s;pointer-events:none}
+.ob-tour.show{opacity:1;visibility:visible;pointer-events:auto}
+.ob-tour-arrow{position:absolute;width:10px;height:10px;background:var(--navy);border:.5px solid rgba(255,255,255,.08);transform:rotate(45deg);z-index:-1}
+.ob-tour-arrow.top{bottom:-5px;border-top:none;border-left:none}
+.ob-tour-arrow.bottom{top:-5px;border-bottom:none;border-right:none}
+.ob-tour-arrow.left{right:-5px;border-left:none;border-bottom:none}
+.ob-tour-arrow.right{left:-5px;border-right:none;border-top:none}
+.ob-tour-step{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:6px}
+.ob-tour-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:6px}
+.ob-tour-desc{font-size:13px;color:var(--slate);line-height:1.55;margin-bottom:16px}
+.ob-tour-footer{display:flex;align-items:center;justify-content:space-between}
+.ob-tour-dots{display:flex;gap:5px}
+.ob-tour-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);transition:background .2s}
+.ob-tour-dot.active{background:var(--gold)}
+.ob-tour-btn{padding:7px 18px;background:var(--gold);color:#0A0E1A;font-size:12px;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s}
+.ob-tour-btn:hover{background:var(--gold-dark)}
+.ob-tour-skip{font-size:12px;color:var(--slate2);cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;transition:color .15s}
+.ob-tour-skip:hover{color:var(--slate)}
+.ob-highlight{position:relative;z-index:9997}
+.ob-highlight::after{content:'';position:absolute;inset:-6px;border:2px solid var(--gold);border-radius:inherit;animation:obPulse 1.5s ease-in-out infinite;pointer-events:none}
+@keyframes obPulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* NOTIF DROPDOWN */
+.notif-dropdown{position:absolute;top:calc(100% + 6px);right:0;width:320px;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:200;display:none;max-height:400px;overflow-y:auto}
+.notif-dropdown.open{display:block}
+.notif-dropdown-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:.5px solid var(--cream2)}
+.notif-dropdown-title{font-size:13px;font-weight:600;color:var(--text-dark)}
+.notif-dropdown-clear{font-size:11px;color:var(--green);cursor:pointer}
+.notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 18px;border-bottom:.5px solid var(--cream2);cursor:pointer;transition:background .1s}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--cream)}
+.notif-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.notif-icon.green{background:var(--green-light);color:var(--green)}
+.notif-icon.gold{background:var(--gold-light);color:var(--gold)}
+.notif-icon.blue{background:var(--blue-light);color:var(--blue)}
+.notif-text{font-size:12px;color:var(--text-mid);line-height:1.4}
+.notif-time{font-size:10px;color:var(--text-muted);margin-top:2px}
+
+/* ANIM */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .25s ease}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .search-filters{width:190px;padding-left:16px}
+  .search-layout{flex-direction:column;height:auto}
+  .search-filters{width:100%;border-right:none;border-bottom:.5px solid var(--cream2);padding:16px 24px;display:flex;gap:16px;overflow-x:auto}
+  .filter-group{margin-bottom:0;flex-shrink:0;min-width:140px}
+  .slide-over{width:100%;right:-100%}
+}
+@media(max-width:900px){
+  :root{--sidebar-w:0px}
+  .ws-sidebar{position:fixed;left:0;top:0;bottom:0;z-index:500;transform:translateX(-100%);transition:transform .25s ease}
+  .ws-sidebar.open{transform:translateX(0);width:260px}
+  .sidebar-overlay{position:fixed;inset:0;background:rgba(8,13,26,.5);z-index:499;display:none}
+  .sidebar-overlay.open{display:block}
+  .mobile-toggle{display:flex}
+  .search-hero{padding:20px 16px}
+  .search-layout{padding:0}
+  .search-results{padding:16px}
+  .lists-grid{grid-template-columns:1fr;padding:16px}
+  .exports-body{padding:16px}
+  .activity-body{padding:16px}
+  .acct-body{padding:16px}
+  .so-meta-grid{grid-template-columns:1fr}
+  .acct-usage{flex-direction:column}
+  .acct-row{flex-direction:column;align-items:stretch;gap:8px}
+  .acct-input,.acct-select{width:100%}
+  .notif-dropdown{position:fixed;left:12px;right:12px;width:auto}
+}
+@media(max-width:600px){
+  .search-filters{flex-wrap:wrap}
+  .profile-card{flex-direction:column}
+  .profile-card-actions{align-self:flex-end}
+  .search-examples{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-left">
+    <div class="login-bg-grid"></div>
+    <div class="login-bg-glow"></div>
+    <div class="login-left-content">
+      <div class="login-logo">
+        <div class="login-logomark"><div class="login-star"></div></div>
+        <div class="login-wordmark">Spora<span>Find</span></div>
+      </div>
+      <h1 class="login-h1">Your diaspora<br><span>intelligence</span> workspace</h1>
+      <p class="login-sub">Sign in to search 4.2M+ diaspora profiles, discover investors, build lists, and extract the intelligence that moves capital and connects communities.</p>
+      <div class="login-features">
+        <div class="login-feat"><i class="ti ti-sparkles"></i> AI natural language search across 67 countries</div>
+        <div class="login-feat"><i class="ti ti-layout-grid"></i> 5-class segment classification with wealth signals</div>
+        <div class="login-feat"><i class="ti ti-building-community"></i> 12,400+ diaspora organisations mapped</div>
+      </div>
+    </div>
+  </div>
+  <div class="login-right">
+    <div class="login-card">
+      <div class="login-card-label">Sign in to your workspace</div>
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" id="loginEmail" placeholder="you@organisation.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+      </div>
+      <div class="form-actions">
+        <label class="form-remember"><input type="checkbox" checked> Remember me</label>
+        <a href="#" class="form-forgot">Forgot?</a>
+      </div>
+      <button class="btn-login" id="loginBtn" onclick="doLogin()"><i class="ti ti-login"></i> Sign in to workspace</button>
+      <div class="login-error" id="loginError"><i class="ti ti-alert-circle"></i> Invalid credentials. Try again.</div>
+      <div class="login-signup">Demo: <a href="#" id="demoLoginBtn">click for instant access</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ===== WORKSPACE LAYOUT ===== -->
+<div class="workspace-layout" id="workspaceLayout">
+
+  <!-- SIDEBAR -->
+  <aside class="ws-sidebar" id="wsSidebar">
+    <div class="ws-brand">
+      <div class="ws-logomark"><div class="ws-star"></div></div>
+      <div class="ws-wordmark">Spora<span>Find</span></div>
+      <div class="ws-plan">Growth</div>
+    </div>
+    <nav class="ws-nav">
+      <div class="ws-nav-label">Workspace</div>
+      <a class="ws-link active" data-view="search"><i class="ti ti-search"></i> Search</a>
+      <a class="ws-link" data-view="lists"><i class="ti ti-list-check"></i> Saved Lists</a>
+      <a class="ws-link" data-view="exports"><i class="ti ti-download"></i> Exports</a>
+      <a class="ws-link" data-view="activity"><i class="ti ti-timeline"></i> Activity</a>
+
+      <div class="ws-nav-label">Account</div>
+      <a class="ws-link" data-view="account"><i class="ti ti-user-circle"></i> My Account</a>
+    </nav>
+    <div class="ws-footer">
+      <div class="ws-user" id="wsUser">
+        <div class="ws-user-avatar">EK</div>
+        <div class="ws-user-info">
+          <div class="ws-user-name">Esi Kwarteng</div>
+          <div class="ws-user-role">Growth Plan · Gabochie Intel</div>
+        </div>
+      </div>
+      <div class="ws-logout-btn" id="wsLogout"><i class="ti ti-logout"></i> Sign out</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="ws-main">
+
+    <!-- HEADER -->
+    <header class="ws-header">
+      <div class="ws-header-left">
+        <button class="mobile-toggle" id="mobileToggle"><i class="ti ti-menu-2"></i></button>
+        <div class="ws-breadcrumb"><span id="wsBreadcrumb">Search</span></div>
+      </div>
+      <div class="ws-header-right">
+        <div style="position:relative">
+          <button class="ws-hdr-btn" id="notifBtn"><i class="ti ti-bell"></i><span class="dot"></span></button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-dropdown-header">
+              <span class="notif-dropdown-title">Notifications</span>
+              <span class="notif-dropdown-clear" id="clearNotifs">Mark all read</span>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon green"><i class="ti ti-user-plus"></i></div>
+              <div class="notif-text"><strong>New profiles</strong> — 23 Ghanaian investors discovered in London</div>
+              <div class="notif-time">12 min ago</div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon gold"><i class="ti ti-building"></i></div>
+              <div class="notif-text"><strong>Org discovery</strong> — 6 new diaspora associations mapped in Toronto</div>
+              <div class="notif-time">1 hr ago</div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon blue"><i class="ti ti-download"></i></div>
+              <div class="notif-text">Export <strong>Investors_USA.csv</strong> is ready to download</div>
+              <div class="notif-time">3 hr ago</div>
+            </div>
+          </div>
+        </div>
+        <button class="ws-hdr-btn"><i class="ti ti-question-mark"></i></button>
+        <div class="ws-hdr-avatar">EK</div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="ws-content">
+
+      <!-- ===== SEARCH VIEW ===== -->
+      <div class="ws-view active" id="view-search">
+        <div class="search-hero">
+          <div class="search-hero-title"><i class="ti ti-search" style="color:var(--gold);margin-right:8px"></i> AI Diaspora Search</div>
+          <div class="search-hero-sub">Describe who you're looking for in plain English. The AI parses your intent and returns precision-ranked results.</div>
+          <div class="search-bar-wrap">
+            <input class="search-bar" type="text" id="searchInput" placeholder='Try: "Ghanaian fintech founders in London with healthcare exits"' autofocus>
+            <i class="ti ti-search search-bar-icon"></i>
+          </div>
+          <div class="search-examples" id="searchExamples">
+            <span class="search-example" data-q="Ghanaian fintech founders in London">fintech founders · London</span>
+            <span class="search-example" data-q="HNW Ghanaian investors in New York healthcare">HNW investors · NYC</span>
+            <span class="search-example" data-q="Diaspora associations in Canada">orgs · Canada</span>
+            <span class="search-example" data-q="Ghanaian professors at US universities">academics · US</span>
+            <span class="search-example" data-q="Ghanaian entrepreneurs in Berlin tech">entrepreneurs · Berlin</span>
+            <span class="search-example" data-q="Ghanaian real estate investors in Dubai">real estate · Dubai</span>
+          </div>
+          <div class="search-parse-info" id="searchParseInfo">
+            <i class="ti ti-sparkles"></i>
+            <div>
+              <strong>AI parsed your query</strong>
+              <div class="search-parse-tokens" id="searchParseTokens"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-layout">
+          <!-- Filters -->
+          <div class="search-filters" id="filterPanel">
+            <div>
+              <div class="search-filters-title">Filters</div>
+              <div class="filter-active-tags" id="activeFilters"></div>
+
+              <div class="filter-group">
+                <div class="filter-label">Segment</div>
+                <label class="filter-check"><input type="checkbox" class="filter-seg" value="Regular" checked> Regular <span class="count">3.9M</span></label>
+                <label class="filter-check"><input type="checkbox" class="filter-seg" value="Leaders" checked> Leaders <span class="count">24.8K</span></label>
+                <label class="filter-check"><input type="checkbox" class="filter-seg" value="Entrepreneurs" checked> Entrepreneurs <span class="count">94.2K</span></label>
+                <label class="filter-check"><input type="checkbox" class="filter-seg" value="Investors" checked> Investors <span class="count">18.3K</span></label>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">Country</div>
+                <select class="filter-select" id="filterCountry">
+                  <option value="">All countries</option>
+                  <option>United States</option><option>United Kingdom</option><option>Canada</option>
+                  <option>Germany</option><option>Netherlands</option><option>UAE</option>
+                  <option>Australia</option><option>Switzerland</option><option>France</option>
+                  <option>South Africa</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">Sector</div>
+                <select class="filter-select" id="filterSector">
+                  <option value="">All sectors</option>
+                  <option>Fintech</option><option>Healthcare</option><option>Real Estate</option>
+                  <option>Technology</option><option>Energy</option><option>Agriculture</option>
+                  <option>Education</option><option>Manufacturing</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">Wealth tier</div>
+                <select class="filter-select" id="filterWealth">
+                  <option value="">All</option><option>HNW ($1M–$30M)</option><option>UHNW ($30M+)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-label">Min. confidence <span id="confLabel">70%</span></div>
+                <input type="range" class="conf-slider" id="confSlider" min="0" max="100" value="70">
+                <div class="conf-range-info"><span>0%</span><span>100%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div class="search-results" id="searchResults">
+            <div class="search-results-header">
+              <div class="search-results-count" id="resultCount">Start typing to search <strong>4.2M+</strong> diaspora profiles</div>
+              <div class="search-results-tabs">
+                <button class="search-results-tab active" data-tab="people">People</button>
+                <button class="search-results-tab" data-tab="orgs">Organisations</button>
+                <button class="search-results-tab" data-tab="all">All</button>
+              </div>
+            </div>
+            <div id="resultList">
+              <div class="search-empty">
+                <div class="search-empty-icon"><i class="ti ti-search"></i></div>
+                <div class="search-empty-title">Search the global Ghanaian diaspora</div>
+                <div class="search-empty-sub">Type a natural language query above or click an example search to find investors, entrepreneurs, leaders, and organisations across 67 countries.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== LISTS VIEW ===== -->
+      <div class="ws-view" id="view-lists">
+        <div class="lists-header">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <h1>Saved Lists</h1>
+              <p>Curated collections of profiles and organisations for your outreach campaigns.</p>
+            </div>
+            <button class="btn btn-primary btn-sm"><i class="ti ti-plus"></i> New list</button>
+          </div>
+        </div>
+        <div class="lists-grid">
+          <div class="list-card">
+            <div class="list-card-icon" style="background:var(--gold-light);color:var(--gold-dark)"><i class="ti ti-chart-line"></i></div>
+            <div class="list-card-name">UK Healthcare Investors</div>
+            <div class="list-card-info">164 profiles · Updated 2 days ago</div>
+            <div class="list-card-footer">
+              <span class="list-card-footer-item"><i class="ti ti-users"></i> 164</span>
+              <span class="list-card-footer-item"><i class="ti ti-map-pin"></i> United Kingdom</span>
+              <span class="list-card-footer-item"><i class="ti ti-download"></i></span>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="list-card-icon" style="background:var(--blue-light);color:var(--blue)"><i class="ti ti-crown"></i></div>
+            <div class="list-card-name">Ghanaian Leaders USA</div>
+            <div class="list-card-info">89 profiles · Updated 1 week ago</div>
+            <div class="list-card-footer">
+              <span class="list-card-footer-item"><i class="ti ti-users"></i> 89</span>
+              <span class="list-card-footer-item"><i class="ti ti-map-pin"></i> United States</span>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="list-card-icon" style="background:var(--green-light);color:var(--green)"><i class="ti ti-rocket"></i></div>
+            <div class="list-card-name">Tech Founders Canada</div>
+            <div class="list-card-info">212 profiles · Updated 2 weeks ago</div>
+            <div class="list-card-footer">
+              <span class="list-card-footer-item"><i class="ti ti-users"></i> 212</span>
+              <span class="list-card-footer-item"><i class="ti ti-map-pin"></i> Canada</span>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="list-card-icon" style="background:var(--purple-light);color:var(--purple)"><i class="ti ti-building-community"></i></div>
+            <div class="list-card-name">Diaspora Orgs Europe</div>
+            <div class="list-card-info">46 organisations · Updated 2 weeks ago</div>
+            <div class="list-card-footer">
+              <span class="list-card-footer-item"><i class="ti ti-building"></i> 46</span>
+              <span class="list-card-footer-item"><i class="ti ti-map-pin"></i> Europe</span>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="list-card-icon" style="background:var(--orange-light);color:var(--orange)"><i class="ti ti-coins"></i></div>
+            <div class="list-card-name">HNW Investors Dubai</div>
+            <div class="list-card-info">53 profiles · Updated 3 weeks ago</div>
+            <div class="list-card-footer">
+              <span class="list-card-footer-item"><i class="ti ti-users"></i> 53</span>
+              <span class="list-card-footer-item"><i class="ti ti-map-pin"></i> UAE</span>
+            </div>
+          </div>
+          <div class="list-card">
+            <div class="list-card-icon" style="background:var(--teal-light);color:var(--teal)"><i class="ti ti-world"></i></div>
+            <div class="list-card-name">Global Ghanaian Academics</div>
+            <div class="list-card-info">328 profiles · Updated 1 month ago</div>
+            <div class="list-card-footer">
+              <span class="list-card-footer-item"><i class="ti ti-users"></i> 328</span>
+              <span class="list-card-footer-item"><i class="ti ti-map-pin"></i> Global</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== EXPORTS VIEW ===== -->
+      <div class="ws-view" id="view-exports">
+        <div class="exports-header">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div>
+              <h1>Exports & Syncs</h1>
+              <p>Download profile data or push directly to your CRM.</p>
+            </div>
+            <button class="btn btn-gold btn-sm"><i class="ti ti-plus"></i> New export</button>
+          </div>
+        </div>
+        <div class="exports-body">
+          <table class="exports-table">
+            <thead><tr><th>Export name</th><th>Records</th><th>Format</th><th>Date</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">Ghanaian_Investors_USA</td><td>8,200</td><td>CSV</td><td>Jun 25, 2026</td><td><span class="badge badge-green">Ready</span></td><td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-download"></i></button></td></tr>
+              <tr><td style="font-weight:500">UK_Healthcare_Investors</td><td>164</td><td>CSV</td><td>Jun 24, 2026</td><td><span class="badge badge-green">Ready</span></td><td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-download"></i></button></td></tr>
+              <tr><td style="font-weight:500">Canada_Entrepreneurs</td><td>4,120</td><td>XLSX</td><td>Jun 22, 2026</td><td><span class="badge badge-green">Ready</span></td><td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-download"></i></button></td></tr>
+              <tr><td style="font-weight:500">HubSpot_Sync_Jun2026</td><td>2,400</td><td>HubSpot</td><td>Jun 20, 2026</td><td><span class="badge badge-blue">Synced</span></td><td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-external-link"></i></button></td></tr>
+              <tr><td style="font-weight:500">Salesforce_Leads_Q2</td><td>1,800</td><td>Salesforce</td><td>Jun 18, 2026</td><td><span class="badge badge-blue">Synced</span></td><td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-external-link"></i></button></td></tr>
+              <tr><td style="font-weight:500">Diaspora_Orgs_Directory</td><td>12,412</td><td>CSV</td><td>Jun 15, 2026</td><td><span class="badge badge-green">Ready</span></td><td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-download"></i></button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== ACTIVITY VIEW ===== -->
+      <div class="ws-view" id="view-activity">
+        <div class="activity-header">
+          <h1>Activity</h1>
+          <p>Your recent searches, discoveries, and actions across the workspace.</p>
+        </div>
+        <div class="activity-body" id="activityBody">
+          <div class="activity-date-group">
+            <div class="activity-date-label">Today</div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div><div class="activity-text"><strong>Searched</strong> — "Ghanaian fintech founders in London" — <strong>142</strong> results</div><div class="activity-time">2 hours ago</div></div>
+              <div class="activity-replay"><i class="ti ti-replay"></i> Re-run</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div><div class="activity-text"><strong>Saved</strong> — 8 profiles to <strong>"UK Healthcare Investors"</strong> list</div><div class="activity-time">3 hours ago</div></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot gold"></div>
+              <div><div class="activity-text"><strong>Exported</strong> — <strong>8,200</strong> investor profiles as CSV</div><div class="activity-time">5 hours ago</div></div>
+              <div class="activity-replay"><i class="ti ti-download"></i> Download</div>
+            </div>
+          </div>
+          <div class="activity-date-group">
+            <div class="activity-date-label">Yesterday</div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div><div class="activity-text"><strong>Searched</strong> — "HNW Ghanaian investors in healthcare" — <strong>86</strong> results</div><div class="activity-time">Yesterday at 3:14 PM</div></div>
+              <div class="activity-replay"><i class="ti ti-replay"></i> Re-run</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot purple"></div>
+              <div><div class="activity-text"><strong>Discovered</strong> — 12 diaspora associations in Washington, D.C.</div><div class="activity-time">Yesterday at 11:30 AM</div></div>
+            </div>
+          </div>
+          <div class="activity-date-group">
+            <div class="activity-date-label">This week</div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div><div class="activity-text"><strong>Searched</strong> — "Ghanaian professors at US universities" — <strong>231</strong> results</div><div class="activity-time">Mon, Jun 22</div></div>
+              <div class="activity-replay"><i class="ti ti-replay"></i> Re-run</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot gold"></div>
+              <div><div class="activity-text"><strong>Exported</strong> — <strong>4,120</strong> entrepreneur profiles as XLSX</div><div class="activity-time">Mon, Jun 22</div></div>
+              <div class="activity-replay"><i class="ti ti-download"></i> Download</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div><div class="activity-text"><strong>Created list</strong> — "Tech Founders Canada" with 212 profiles</div><div class="activity-time">Sun, Jun 21</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ACCOUNT VIEW ===== -->
+      <div class="ws-view" id="view-account">
+        <div class="acct-header">
+          <h1>My Account</h1>
+          <p>Manage your profile, subscription, and workspace preferences.</p>
+        </div>
+        <div class="acct-body">
+          <div class="acct-section">
+            <div class="acct-section-title">Profile</div>
+            <div class="acct-section-desc">Your personal details and display preferences.</div>
+            <div class="acct-row"><div><div class="acct-row-label">Full name</div><div class="acct-row-desc">Your display name across the platform</div></div><input class="acct-input" value="Esi Kwarteng"></div>
+            <div class="acct-row"><div><div class="acct-row-label">Email</div><div class="acct-row-desc">Used for notifications and login</div></div><input class="acct-input" value="esi@sporafind.com"></div>
+            <div class="acct-row"><div><div class="acct-row-label">Organisation</div><div class="acct-row-desc">Your company or institution</div></div><input class="acct-input" value="Gabochie Intelligence"></div>
+          </div>
+
+          <div class="acct-section">
+            <div class="acct-section-title">Subscription</div>
+            <div class="acct-section-desc">You're on the Growth plan. See usage and billing details below.</div>
+            <div class="acct-usage">
+              <div class="acct-usage-item"><div class="acct-usage-val">12,840</div><div class="acct-usage-label">Profiles viewed</div></div>
+              <div class="acct-usage-item"><div class="acct-usage-val">7,800</div><div class="acct-usage-label">API calls (78%)</div></div>
+              <div class="acct-usage-item"><div class="acct-usage-val">14</div><div class="acct-usage-label">Saved lists</div></div>
+              <div class="acct-usage-item"><div class="acct-usage-val">6</div><div class="acct-usage-label">Exports this month</div></div>
+            </div>
+            <div class="acct-row"><div><div class="acct-row-label">Current plan</div><div class="acct-row-desc">Growth with pan-African scope</div></div><span class="badge badge-gold">$199/mo</span></div>
+            <div class="acct-row"><div><div class="acct-row-label">Payment method</div><div class="acct-row-desc">Visa ending in 4242 · Expires 12/27</div></div><button class="btn btn-outline btn-sm">Update</button></div>
+            <div class="acct-row"><div><div class="acct-row-label">Invoices</div><div class="acct-row-desc">View and download past invoices</div></div><button class="btn btn-ghost btn-sm"><i class="ti ti-file-text"></i> View all</button></div>
+          </div>
+
+          <div class="acct-section">
+            <div class="acct-section-title">Preferences</div>
+            <div class="acct-row"><div><div class="acct-row-label">Email notifications</div><div class="acct-row-desc">New profile matches, export completions, team activity</div></div><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+            <div class="acct-row"><div><div class="acct-row-label">Weekly digest</div><div class="acct-row-desc">Saturday summary of new profiles and diaspora trends</div></div><div class="toggle" onclick="this.classList.toggle('active')"></div></div>
+            <div class="acct-row"><div><div class="acct-row-label">Default export format</div><div class="acct-row-desc">Preferred format for downloads</div></div><select class="acct-select"><option>CSV (.csv)</option><option>Excel (.xlsx)</option><option>JSON (.json)</option></select></div>
+          </div>
+
+          <div class="acct-section">
+            <div class="acct-section-title">API Access</div>
+            <div class="acct-section-desc">Your API key for custom integrations. Keep this secret.</div>
+            <div class="acct-row">
+              <div class="acct-api-key"><span>df_live_a1b2c3d4e5f67890abcdef12345678</span><button class="btn btn-ghost btn-xs" style="margin-left:auto"><i class="ti ti-copy"></i> Copy</button></div>
+            </div>
+            <div class="acct-row"><div><div class="acct-row-label">API documentation</div><div class="acct-row-desc">Full API reference for developers</div></div><a href="api-docs.html" class="btn btn-outline btn-sm"><i class="ti ti-external-link"></i> View docs</a></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE-OVER ===== -->
+<div class="slide-over-backdrop" id="slideOverBackdrop"></div>
+<div class="slide-over" id="slideOver">
+  <div class="slide-over-header">
+    <span class="slide-over-title" id="slideOverTitle">Profile details</span>
+    <button class="slide-over-close" id="slideOverClose"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="slide-over-body" id="slideOverBody">
+    <div class="so-profile-header">
+      <div class="so-profile-avatar" id="soAvatar" style="background:var(--gold-light);color:var(--gold-dark)">KA</div>
+      <div>
+        <div class="so-profile-name" id="soName">Kwame Asante</div>
+        <div class="so-profile-title" id="soTitle">Managing Partner, Asante Capital Partners</div>
+        <div style="margin-top:6px"><span class="badge badge-gold" id="soSegment">Investor</span> <span class="badge badge-gray" id="soLocation">London, UK</span></div>
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">Signal intelligence</div>
+      <div class="so-meta-grid">
+        <div class="so-meta-item"><div class="so-meta-label">Confidence score</div><div style="display:flex;align-items:center;gap:10px;margin-top:4px"><span style="font-size:18px;font-weight:700;color:var(--green)">96%</span><div style="flex:1;max-width:100px;height:5px;background:var(--cream2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--green);width:96%"></div></div></div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Wealth tier</div><div class="so-meta-value">HNW (High Net Worth)</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Data sources</div><div class="so-meta-value">LinkedIn, Crunchbase, Companies House, Bloomberg</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Segment</div><div class="so-meta-value">Investor · Fintech focus</div></div>
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">Location & origin</div>
+      <div class="so-meta-grid">
+        <div class="so-meta-item"><div class="so-meta-label">Current location</div><div class="so-meta-value">London, United Kingdom</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Ghana origin</div><div class="so-meta-value">Kumasi, Ashanti Region</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Primary sector</div><div class="so-meta-value">Fintech — Digital Payments</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Investment range</div><div class="so-meta-value">$500K – $5M per deal</div></div>
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">AI outreach draft</div>
+      <div class="so-outreach-box" id="soOutreach">
+        <button class="copy-btn" onclick="copyOutreach()"><i class="ti ti-copy"></i> Copy</button>
+        <strong style="color:var(--text-dark)">Subject:</strong> Building Africa's fintech rails<br><br>
+        Hi Kwame,<br><br>
+        I noticed your work with digital payment infrastructure across your portfolio companies. With Ghana's mobile money transactions hitting ₵1 trillion this year, we're seeing unprecedented demand for fintech solutions built by diaspora experts with global experience.<br><br>
+        I'd love to connect you with a few opportunities we're tracking in Accra's fintech ecosystem that align with your investment thesis. Would you be open to a brief call?<br><br>
+        Best,<br>
+        Esi Kwarteng · Sporafind
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">Similar profiles</div>
+      <div class="so-similar" id="soSimilar"></div>
+    </div>
+  </div>
+  <div class="slide-over-footer">
+    <button class="btn btn-outline btn-sm"><i class="ti ti-mail"></i> Draft email</button>
+    <button class="btn btn-outline btn-sm"><i class="ti ti-plus"></i> Save to list</button>
+    <button class="btn btn-primary btn-sm"><i class="ti ti-download"></i> Export</button>
+  </div>
+</div>
+
+<!-- ===== ONBOARDING ===== -->
+<div class="ob-overlay" id="obWelcome">
+  <div class="ob-card">
+    <div class="ob-logo"><div class="ob-logo-star"></div></div>
+    <div class="ob-h1">Welcome to Sporafind</div>
+    <div class="ob-sub">Your AI-powered diaspora intelligence workspace. Find, vet, and engage Ghanaian professionals and investors worldwide.</div>
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-step-icon gold"><i class="ti ti-search"></i></div>
+        <div class="ob-step-title">AI Search</div>
+        <div class="ob-step-desc">Describe who you need in plain English. The AI handles the rest.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-icon green"><i class="ti ti-list-check"></i></div>
+        <div class="ob-step-title">Save lists</div>
+        <div class="ob-step-desc">Build targeted prospect lists from your search results.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-icon blue"><i class="ti ti-download"></i></div>
+        <div class="ob-step-title">Export data</div>
+        <div class="ob-step-desc">Download your lists as CSV or PDF for downstream use.</div>
+      </div>
+    </div>
+    <div class="ob-actions">
+      <button class="ob-btn-primary" id="obStartTour"><i class="ti ti-compass"></i> Show me around</button>
+      <button class="ob-btn-ghost" id="obDismiss">Get started</button>
+    </div>
+    <label class="ob-dismiss"><input type="checkbox" id="obNever"> Don't show this again</label>
+  </div>
+</div>
+
+<div class="ob-tour" id="obTour">
+  <div class="ob-tour-arrow" id="obTourArrow"></div>
+  <div class="ob-tour-step" id="obTourStep">STEP 1 OF 4</div>
+  <div class="ob-tour-title" id="obTourTitle">Title</div>
+  <div class="ob-tour-desc" id="obTourDesc">Description</div>
+  <div class="ob-tour-footer">
+    <button class="ob-tour-skip" id="obTourSkip">Skip tour</button>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="ob-tour-dots" id="obTourDots">
+        <span class="ob-tour-dot active"></span>
+        <span class="ob-tour-dot"></span>
+        <span class="ob-tour-dot"></span>
+        <span class="ob-tour-dot"></span>
+      </div>
+      <button class="ob-tour-btn" id="obTourNext">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"><i class="ti ti-check-circle"></i><span id="toastMsg">Saved to list</span></div>
+
+<script>
+// ===== DATA =====
+const PEOPLE = [
+  {id:1,initials:'KA',name:'Kwame Asante',email:'kwame.asante@email.com',title:'Managing Partner, Asante Capital Partners',segment:'Investor',segClass:'badge-gold',loc:'London, UK',sector:'Fintech',conf:96,wealth:'HNW',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)',origin:'Kumasi, Ashanti Region',range:'$500K – $5M',sources:'LinkedIn, Crunchbase, Companies House, Bloomberg',query:''},
+  {id:2,initials:'AM',name:'Abena Mensah',email:'abena@globalfund.com',title:'Director, Global Health Fund',segment:'Leader',segClass:'badge-blue',loc:'New York, USA',sector:'Finance',conf:91,wealth:'',avatarBg:'var(--blue-light)',avatarColor:'var(--blue)',origin:'Accra, Greater Accra',range:'',sources:'LinkedIn, SEC, Bloomberg, WHO database',query:''},
+  {id:3,initials:'YO',name:'Yaw Ofori',email:'yaw@techventures.io',title:'Founder & CEO, Nsoromma Tech',segment:'Entrepreneur',segClass:'badge-green',loc:'Berlin, Germany',sector:'Tech',conf:88,wealth:'',avatarBg:'var(--green-light)',avatarColor:'var(--green)',origin:'Cape Coast, Central Region',range:'',sources:'Crunchbase, LinkedIn, Companies House, TechCrunch',query:''},
+  {id:4,initials:'NA',name:'Nana Addo-Boateng',email:'nana@ghanainvest.com',title:'Principal, Sankofa Capital',segment:'Investor',segClass:'badge-gold',loc:'Dubai, UAE',sector:'Real Estate',conf:93,wealth:'UHNW',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)',origin:'Accra, Greater Accra',range:'$2M – $20M',sources:'Bloomberg, Companies House, Wealth-X, LinkedIn',query:''},
+  {id:5,initials:'KA2',name:'Kofi Amoako',email:'k.amoako@bankofghana.gov',title:'Deputy Governor, Bank of Ghana',segment:'Leader',segClass:'badge-blue',loc:'Accra, Ghana',sector:'Finance',conf:90,wealth:'',avatarBg:'var(--blue-light)',avatarColor:'var(--blue)',origin:'Koforidua, Eastern Region',range:'',sources:'IMF directory, Central Bank registers, media, academic',query:''},
+  {id:6,initials:'AK',name:'Akua Asare',email:'akua@medtech.io',title:'CEO, MedTech Ghana Ltd',segment:'Entrepreneur',segClass:'badge-green',loc:'Amsterdam, NL',sector:'Healthcare',conf:85,wealth:'',avatarBg:'var(--green-light)',avatarColor:'var(--green)',origin:'Kumasi, Ashanti Region',range:'',sources:'LinkedIn, Crunchbase, WHO, EU startup registry',query:''},
+  {id:7,initials:'DO',name:'David Ocloo',email:'david.ocloo@outlook.com',title:'Senior Engineer, Shell',segment:'Regular',segClass:'badge-orange',loc:'Houston, USA',sector:'Energy',conf:67,wealth:'',avatarBg:'var(--orange-light)',avatarColor:'var(--orange)',origin:'Takoradi, Western Region',range:'',sources:'LinkedIn, professional directories',query:''},
+  {id:8,initials:'EA',name:'Efua Acquah',email:'efua.acquah@law.ox.ac.uk',title:'Professor of Law, Oxford University',segment:'Leader',segClass:'badge-blue',loc:'Oxford, UK',sector:'Education',conf:89,wealth:'',avatarBg:'var(--purple-light)',avatarColor:'var(--purple)',origin:'Cape Coast, Central Region',range:'',sources:'ORCID, Google Scholar, Oxford directory, news media',query:''},
+  {id:9,initials:'GN',name:'Grace Nyarko',email:'grace@greenfield.ag',title:'Founder, GreenField Agritech',segment:'Entrepreneur',segClass:'badge-green',loc:'Toronto, Canada',sector:'Agriculture',conf:82,wealth:'',avatarBg:'var(--green-light)',avatarColor:'var(--green)',origin:'Sunyani, Bono Region',range:'',sources:'Crunchbase, LinkedIn, Canada business registry',query:''},
+  {id:10,initials:'ST',name:'Samuel Tetteh',email:'samuel.t@finleverage.com',title:'Managing Director, FinLeverage',segment:'Investor',segClass:'badge-gold',loc:'Zurich, Switzerland',sector:'Fintech',conf:94,wealth:'HNW',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)',origin:'Accra, Greater Accra',range:'$1M – $8M',sources:'Bloomberg, LinkedIn, Swiss company registry, Wealth-X',query:''},
+];
+
+const ORGS = [
+  {id:101,name:'Ghanaian Professionals London',type:'Association',typeClass:'badge-blue',loc:'London, UK',members:'3,200',desc:'Professional network for Ghanaian diaspora in Greater London. Finance, tech, law, medicine.',icon:'ti ti-users-group',iconBg:'var(--blue-light)',iconColor:'var(--blue)'},
+  {id:102,name:'Ghana Diaspora Investment Syndicate',type:'Investment',typeClass:'badge-gold',loc:'Global',members:'840',desc:'Angel syndicate connecting diaspora investors to early-stage Ghanaian and African startups.',icon:'ti ti-coins',iconBg:'var(--gold-light)',iconColor:'var(--gold-dark)'},
+  {id:103,name:'Ghana Medical Association USA',type:'Professional',typeClass:'badge-green',loc:'USA (National)',members:'1,200',desc:'Professional body for Ghanaian medical professionals. Advocacy, networking, knowledge exchange.',icon:'ti ti-school',iconBg:'var(--green-light)',iconColor:'var(--green)'},
+  {id:104,name:'Ghana Union Toronto',type:'Community',typeClass:'badge-purple',loc:'Toronto, Canada',members:'4,500',desc:'Community organisation serving Ghanaians in the GTA. Culture, business networking, support.',icon:'ti ti-building',iconBg:'var(--purple-light)',iconColor:'var(--purple)'},
+  {id:105,name:'Ghana Diaspora Policy Forum',type:'Think Tank',typeClass:'badge-teal',loc:'Washington, D.C.',members:'65',desc:'Think tank on diaspora engagement policy, remittance economics, investment frameworks.',icon:'ti ti-globe',iconBg:'var(--teal-light)',iconColor:'var(--teal)'},
+  {id:106,name:'Ghanaian Entrepreneurs Network Berlin',type:'Network',typeClass:'badge-orange',loc:'Berlin, Germany',members:'340',desc:'Network for Ghanaian founders in Berlin. Monthly meetups, pitch sessions, support.',icon:'ti ti-affiliate',iconBg:'var(--orange-light)',iconColor:'var(--orange)'},
+];
+
+// ===== STATE =====
+let savedProfiles = new Set();
+let currentView = 'search';
+
+// ===== LOGIN =====
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('demoLoginBtn').addEventListener('click', e => { e.preventDefault(); document.getElementById('loginEmail').value='user@sporafind.com'; document.getElementById('loginPassword').value='demo123'; doLogin(); });
+
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value.trim();
+  const err = document.getElementById('loginError');
+  const result = DF.login(email, pass);
+  if(result) {
+    err.classList.remove('show');
+    enterWorkspace();
+  } else {
+    err.classList.add('show');
+    document.getElementById('loginBtn').disabled = true;
+    setTimeout(() => document.getElementById('loginBtn').disabled = false, 1500);
+  }
+}
+
+function enterWorkspace() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('workspaceLayout').classList.add('active');
+  const u = DF.getUser();
+  if(u) {
+    document.querySelector('.ws-user-avatar').textContent = u.initials;
+    document.querySelector('.ws-user-name').textContent = u.name;
+    document.querySelector('.ws-user-role').textContent = u.role;
+  }
+  if(window.maybeShowOnboarding) setTimeout(window.maybeShowOnboarding, 300);
+}
+
+(function checkSession() {
+  if(DF.isLoggedIn()) enterWorkspace();
+})();
+
+document.getElementById('wsLogout').addEventListener('click', DF.logout);
+
+// ===== NAVIGATION =====
+document.querySelectorAll('.ws-link').forEach(link => {
+  link.addEventListener('click', () => {
+    const view = link.dataset.view;
+    navigateTo(view);
+  });
+});
+
+function navigateTo(view) {
+  currentView = view;
+  document.querySelectorAll('.ws-link').forEach(l => l.classList.remove('active'));
+  const link = document.querySelector(`.ws-link[data-view="${view}"]`);
+  if(link) link.classList.add('active');
+  document.querySelectorAll('.ws-view').forEach(v => v.classList.remove('active'));
+  const page = document.getElementById(`view-${view}`);
+  if(page) page.classList.add('active');
+  document.getElementById('wsBreadcrumb').textContent = view.charAt(0).toUpperCase() + view.slice(1);
+  document.getElementById('wsSidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.getElementById('slideOver').classList.remove('open');
+  document.getElementById('slideOverBackdrop').classList.remove('open');
+}
+
+// ===== MOBILE =====
+document.getElementById('mobileToggle').addEventListener('click', () => {
+  document.getElementById('wsSidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+});
+document.getElementById('sidebarOverlay').addEventListener('click', () => {
+  document.getElementById('wsSidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+});
+
+// ===== NOTIFICATIONS =====
+document.getElementById('notifBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('notifDropdown').classList.toggle('open');
+});
+document.addEventListener('click', () => document.getElementById('notifDropdown').classList.remove('open'));
+document.getElementById('clearNotifs').addEventListener('click', () => {
+  document.querySelector('.dot').style.display = 'none';
+  document.getElementById('notifDropdown').querySelectorAll('.notif-item').forEach(n => n.remove());
+  document.getElementById('notifDropdown').innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px">No new notifications</div>';
+});
+
+// ===== SEARCH =====
+const exampleQueries = [
+  'Ghanaian fintech founders in London with healthcare exits',
+  'HNW Ghanaian investors in New York healthcare sector',
+  'Diaspora associations in Canada with membership over 1,000',
+  'Ghanaian professors at US universities doing AI research',
+  'Ghanaian real estate investors in Dubai with $5M+ portfolio',
+];
+let exampleIndex = 0;
+const searchInput = document.getElementById('searchInput');
+
+setInterval(() => {
+  if(document.activeElement === searchInput) return;
+  exampleIndex = (exampleIndex + 1) % exampleQueries.length;
+  searchInput.placeholder = 'Try: "' + exampleQueries[exampleIndex] + '"';
+}, 4000);
+
+// Example click handlers
+document.querySelectorAll('.search-example').forEach(el => {
+  el.addEventListener('click', () => {
+    searchInput.value = el.dataset.q;
+    performSearch();
+  });
+});
+
+// Search on enter
+searchInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter') performSearch();
+});
+
+// Filter changes trigger re-search
+document.querySelectorAll('.filter-seg, #filterCountry, #filterSector, #filterWealth').forEach(el => {
+  el.addEventListener('change', () => { if(searchInput.value.trim()) performSearch(); });
+});
+document.getElementById('confSlider').addEventListener('input', function() {
+  document.getElementById('confLabel').textContent = this.value + '%';
+  if(searchInput.value.trim()) performSearch();
+});
+
+// Tab switching
+document.querySelectorAll('.search-results-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.search-results-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    if(searchInput.value.trim()) performSearch();
+  });
+});
+
+function performSearch() {
+  const query = searchInput.value.trim();
+  if(!query) return;
+
+  // Show parse info
+  const parseInfo = document.getElementById('searchParseInfo');
+  const tokens = document.getElementById('searchParseTokens');
+  const words = query.split(' ');
+  const keyTerms = words.filter(w => w.length > 2).slice(0, 5);
+  tokens.innerHTML = keyTerms.map(t => `<span class="search-parse-token">${t}</span>`).join('');
+  parseInfo.classList.add('show');
+
+  // Get active tab
+  const activeTab = document.querySelector('.search-results-tab.active')?.dataset.tab || 'people';
+
+  // Get filters
+  const segs = [];
+  document.querySelectorAll('.filter-seg:checked').forEach(cb => segs.push(cb.value));
+  const country = document.getElementById('filterCountry').value;
+  const sector = document.getElementById('filterSector').value;
+  const wealth = document.getElementById('filterWealth').value;
+  const minConf = parseInt(document.getElementById('confSlider').value);
+
+  // Simulate search delay
+  document.getElementById('resultList').innerHTML = '<div class="search-loading"><div class="spinner"></div><div style="color:var(--text-muted);font-size:13px">Searching diaspora signals...</div></div>';
+
+  setTimeout(() => {
+    let peopleResults = PEOPLE.filter(p => {
+      const matchSeg = segs.length === 0 || segs.includes(p.segment);
+      const matchCountry = !country || p.loc.includes(country);
+      const matchSector = !sector || p.sector === sector;
+      const matchWealth = !wealth || p.wealth === wealth.split(' ')[0];
+      const matchConf = p.conf >= minConf;
+      const matchQuery = !query || p.name.toLowerCase().includes(query.toLowerCase()) || p.sector.toLowerCase().includes(query.toLowerCase()) || p.loc.toLowerCase().includes(query.toLowerCase()) || p.segment.toLowerCase().includes(query.toLowerCase());
+      return matchSeg && matchCountry && matchSector && matchWealth && matchConf && matchQuery;
+    });
+
+    let orgResults = ORGS.filter(o => {
+      const matchCountry = !country || o.loc.includes(country);
+      const matchQuery = !query || o.name.toLowerCase().includes(query.toLowerCase()) || o.desc.toLowerCase().includes(query.toLowerCase());
+      return matchCountry && matchQuery;
+    });
+
+    // Filter by segments for orgs too
+    const resultsList = document.getElementById('resultList');
+    const countEl = document.getElementById('resultCount');
+
+    let totalCount = 0;
+    let html = '';
+
+    if(activeTab === 'people' || activeTab === 'all') {
+      if(activeTab === 'all') {
+        const segDist = {};
+        peopleResults.forEach(p => { segDist[p.segment] = (segDist[p.segment] || 0) + 1; });
+        const distHtml = Object.entries(segDist).map(([k,v]) => `<span style="font-size:11px;color:var(--text-muted)">${k}: ${v}</span>`).join(' · ');
+        if(distHtml) html += `<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;font-weight:500">Segment distribution: ${distHtml}</div>`;
+      }
+      peopleResults.forEach((p,i) => {
+        const confColor = p.conf >= 85 ? 'high' : p.conf >= 60 ? 'med' : 'low';
+        const confHex = p.conf >= 85 ? 'var(--green)' : p.conf >= 60 ? 'var(--gold)' : 'var(--slate3)';
+        const saved = savedProfiles.has(p.id) ? 'saved' : '';
+        totalCount++;
+        html += `<div class="profile-card fade-in" style="animation-delay:${i*0.05}s" onclick="openProfile(${p.id})">
+          <div class="profile-card-avatar" style="background:${p.avatarBg};color:${p.avatarColor}">${p.initials}</div>
+          <div class="profile-card-info">
+            <div class="profile-card-name">${p.name}</div>
+            <div class="profile-card-title">${p.title}</div>
+            <div class="profile-card-meta">
+              <span class="profile-card-meta-item"><i class="ti ti-map-pin"></i> ${p.loc}</span>
+              <span class="profile-card-meta-item"><i class="ti ti-building"></i> ${p.sector}</span>
+              ${p.wealth ? `<span class="profile-card-meta-item"><i class="ti ti-coins"></i> ${p.wealth}</span>` : ''}
+            </div>
+            <div class="profile-card-tags">
+              <span class="badge ${p.segClass}">${p.segment}</span>
+              <span class="profile-card-conf"><span class="profile-card-conf-bar"><span class="profile-card-conf-fill ${confColor}" style="width:${p.conf}%"></span></span><span class="profile-card-conf-val" style="color:${confHex}">${p.conf}%</span></span>
+            </div>
+          </div>
+          <div class="profile-card-actions" onclick="event.stopPropagation()">
+            <button class="profile-card-action ${saved}" onclick="toggleSave(${p.id},this)"><i class="ti ti-${saved ? 'heart-filled' : 'heart'}"></i></button>
+            <button class="profile-card-action"><i class="ti ti-mail"></i></button>
+            <button class="profile-card-action"><i class="ti ti-dots-vertical"></i></button>
+          </div>
+        </div>`;
+      });
+    }
+
+    if(activeTab === 'orgs' || activeTab === 'all') {
+      orgResults.forEach((o,i) => {
+        totalCount++;
+        html += `<div class="org-card fade-in" style="animation-delay:${i*0.05}s" onclick="showToast('Org details coming soon')">
+          <div class="org-card-icon" style="background:${o.iconBg};color:${o.iconColor}"><i class="${o.icon}"></i></div>
+          <div class="org-card-info">
+            <div class="org-card-name">${o.name}</div>
+            <div class="org-card-desc">${o.desc}</div>
+            <div class="org-card-meta">
+              <span class="org-card-meta-item"><i class="ti ti-map-pin"></i> ${o.loc}</span>
+              <span class="org-card-meta-item"><i class="ti ti-users"></i> ${o.members} members</span>
+              <span class="badge ${o.typeClass}">${o.type}</span>
+            </div>
+          </div>
+        </div>`;
+      });
+    }
+
+    if(totalCount === 0) {
+      html = `<div class="search-empty"><div class="search-empty-icon"><i class="ti ti-search-off"></i></div><div class="search-empty-title">No results found</div><div class="search-empty-sub">Try broadening your filters or using different search terms. The diaspora is out there — we just need the right query.</div></div>`;
+    }
+
+    countEl.innerHTML = `<strong>${totalCount}</strong> result${totalCount !== 1 ? 's' : ''} found for "${query}" <span style="font-weight:400;color:var(--text-muted)">in 0.4s</span>`;
+    resultsList.innerHTML = html;
+
+    // Update active filters display
+    updateActiveFilters();
+  }, 600);
+}
+
+function updateActiveFilters() {
+  const container = document.getElementById('activeFilters');
+  const tags = [];
+  document.querySelectorAll('.filter-seg:not(:checked)').forEach(cb => tags.push(`<span class="filter-tag">✕ ${cb.value}</span>`));
+  container.innerHTML = tags.join('');
+}
+
+// ===== SAVE/LIST TOGGLE =====
+function toggleSave(id, btn) {
+  const icon = btn.querySelector('i');
+  if(savedProfiles.has(id)) {
+    savedProfiles.delete(id);
+    icon.className = 'ti ti-heart';
+    btn.classList.remove('saved');
+    showToast('Removed from saved');
+  } else {
+    savedProfiles.add(id);
+    icon.className = 'ti ti-heart-filled';
+    btn.classList.add('saved');
+    showToast('Saved to list');
+  }
+}
+
+// ===== PROFILE DETAIL (SLIDE-OVER) =====
+function openProfile(id) {
+  const p = PEOPLE.find(x => x.id === id);
+  if(!p) return;
+
+  document.getElementById('soAvatar').style.background = p.avatarBg;
+  document.getElementById('soAvatar').style.color = p.avatarColor;
+  document.getElementById('soAvatar').textContent = p.initials;
+  document.getElementById('soName').textContent = p.name;
+  document.getElementById('soTitle').textContent = p.title;
+  document.getElementById('soSegment').textContent = p.segment;
+  document.getElementById('soSegment').className = 'badge ' + p.segClass;
+  document.getElementById('soLocation').textContent = p.loc;
+
+  // Set meta fields
+  const body = document.getElementById('slideOverBody');
+  const confColor = p.conf >= 85 ? 'var(--green)' : p.conf >= 60 ? 'var(--gold)' : 'var(--slate3)';
+  body.innerHTML = `
+    <div class="so-profile-header">
+      <div class="so-profile-avatar" style="background:${p.avatarBg};color:${p.avatarColor}">${p.initials}</div>
+      <div>
+        <div class="so-profile-name">${p.name}</div>
+        <div class="so-profile-title">${p.title}</div>
+        <div style="margin-top:6px"><span class="badge ${p.segClass}">${p.segment}</span> <span class="badge badge-gray">${p.loc}</span></div>
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">Signal intelligence</div>
+      <div class="so-meta-grid">
+        <div class="so-meta-item"><div class="so-meta-label">Confidence score</div><div style="display:flex;align-items:center;gap:10px;margin-top:4px"><span style="font-size:18px;font-weight:700;color:${confColor}">${p.conf}%</span><div style="flex:1;max-width:100px;height:5px;background:var(--cream2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;width:${p.conf}%;${p.conf >= 85 ? 'background:var(--green)' : p.conf >= 60 ? 'background:var(--gold)' : 'background:var(--slate3)'}"></div></div></div></div>
+        ${p.wealth ? `<div class="so-meta-item"><div class="so-meta-label">Wealth tier</div><div class="so-meta-value">${p.wealth}</div></div>` : ''}
+        <div class="so-meta-item"><div class="so-meta-label">Data sources</div><div class="so-meta-value">${p.sources}</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Segment</div><div class="so-meta-value">${p.segment}</div></div>
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">Location & origin</div>
+      <div class="so-meta-grid">
+        <div class="so-meta-item"><div class="so-meta-label">Current location</div><div class="so-meta-value">${p.loc}</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Ghana origin</div><div class="so-meta-value">${p.origin}</div></div>
+        <div class="so-meta-item"><div class="so-meta-label">Primary sector</div><div class="so-meta-value">${p.sector}</div></div>
+        ${p.range ? `<div class="so-meta-item"><div class="so-meta-label">Investment range</div><div class="so-meta-value">${p.range}</div></div>` : ''}
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">AI outreach draft</div>
+      <div class="so-outreach-box">
+        <button class="copy-btn" onclick="copyOutreach()"><i class="ti ti-copy"></i> Copy</button>
+        <strong style="color:var(--text-dark)">Subject:</strong> Connecting around ${p.sector.toLowerCase()} opportunities<br><br>
+        Hi ${p.name.split(' ')[0]},<br><br>
+        I came across your profile on Sporafind and was impressed by your work${p.title ? ' as ' + p.title : ''}. With the growing ${p.sector.toLowerCase()} ecosystem across Ghana and the diaspora, there are some exciting developments I believe would align with your expertise.<br><br>
+        Would you be open to a brief conversation? I'd love to share what we're seeing.<br><br>
+        Best,<br>
+        Esi Kwarteng · Sporafind
+      </div>
+    </div>
+
+    <div class="slide-over-section">
+      <div class="slide-over-section-title">Similar profiles</div>
+      <div class="so-similar" id="soSimilar">
+        ${PEOPLE.filter(x => x.id !== id && x.segment === p.segment).slice(0, 4).map(s => `
+          <div class="so-similar-item" onclick="openProfile(${s.id})">
+            <div class="ss-avatar" style="background:${s.avatarBg};color:${s.avatarColor}">${s.initials}</div>
+            <div class="ss-name">${s.name}</div>
+            <div class="ss-meta">${s.loc} · ${s.conf}%</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  document.getElementById('slideOver').classList.add('open');
+  document.getElementById('slideOverBackdrop').classList.add('open');
+}
+
+function copyOutreach() {
+  const el = document.querySelector('.so-outreach-box');
+  const text = el.textContent.replace('Copy', '').trim();
+  navigator.clipboard.writeText(text).then(() => showToast('Outreach draft copied')).catch(() => {});
+}
+
+// Close slide-over
+document.getElementById('slideOverClose').addEventListener('click', closeSlideOver);
+document.getElementById('slideOverBackdrop').addEventListener('click', closeSlideOver);
+function closeSlideOver() {
+  document.getElementById('slideOver').classList.remove('open');
+  document.getElementById('slideOverBackdrop').classList.remove('open');
+}
+
+// ===== TOAST =====
+function showToast(msg, isError) {
+  const toast = document.getElementById('toast');
+  const icon = toast.querySelector('i');
+  const text = document.getElementById('toastMsg');
+  icon.className = isError ? 'ti ti-alert-circle' : 'ti ti-check-circle';
+  toast.className = isError ? 'toast error' : 'toast';
+  text.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+// ===== ACTIVITY RE-RUN =====
+document.querySelectorAll('.activity-replay').forEach(el => {
+  el.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const text = this.parentElement.querySelector('.activity-text')?.textContent || '';
+    if(text.includes('Searched')) {
+      const match = text.match(/"([^"]+)"/);
+      if(match) {
+        navigateTo('search');
+        searchInput.value = match[1];
+        performSearch();
+      }
+    }
+  });
+});
+
+// ===== ONBOARDING =====
+(function(){
+  var OKEY = 'df_onboarded';
+  if(window.location.search.includes('onboard=1')) localStorage.removeItem(OKEY);
+  if(localStorage.getItem(OKEY) === '1') return;
+
+  var welcome = document.getElementById('obWelcome');
+  var tour = document.getElementById('obTour');
+  var tourArrow = document.getElementById('obTourArrow');
+  var tourStep = document.getElementById('obTourStep');
+  var tourTitle = document.getElementById('obTourTitle');
+  var tourDesc = document.getElementById('obTourDesc');
+  var tourDots = document.getElementById('obTourDots');
+  var tourNext = document.getElementById('obTourNext');
+  var tourSkip = document.getElementById('obTourSkip');
+  var tourStepIdx = 0;
+
+  var steps = [
+    {
+      target: '.search-bar',
+      title: 'AI Search Bar',
+      desc: 'Describe your ideal prospect in natural language. The AI parses your intent and surfaces precision-ranked results instantly. Try one of the example queries below.',
+      placement: 'bottom'
+    },
+    {
+      target: '.search-filters',
+      title: 'Smart Filters',
+      desc: 'Refine results by segment, country, sector, and wealth tier. Adjust the confidence slider to control how strictly the AI matches your criteria.',
+      placement: 'right'
+    },
+    {
+      target: '.search-examples',
+      title: 'Example Queries',
+      desc: 'Click any example to instantly search. Use them as inspiration or jump-start your workflow with a single click.',
+      placement: 'bottom'
+    },
+    {
+      target: '.ws-link[data-view="lists"]',
+      title: 'Saved Lists',
+      desc: 'Save promising profiles to lists as you search. Come back here to manage, compare, and export your curated prospect lists.',
+      placement: 'right'
+    }
+  ];
+
+  function showWelcome() {
+    welcome.classList.add('show');
+  }
+
+  function hideWelcome() {
+    welcome.classList.remove('show');
+  }
+
+  function done() {
+    localStorage.setItem(OKEY, '1');
+    hideWelcome();
+    endTour();
+  }
+
+  document.getElementById('obDismiss').addEventListener('click', done);
+  document.getElementById('obStartTour').addEventListener('click', function(){
+    hideWelcome();
+    setTimeout(function(){ showTour(0); }, 400);
+  });
+  document.getElementById('obNever').addEventListener('click', function(){
+    if(this.checked) localStorage.setItem(OKEY, '1');
+    else localStorage.removeItem(OKEY);
+  });
+
+  function endTour() {
+    tour.classList.remove('show');
+    document.querySelectorAll('.ob-highlight').forEach(function(el){ el.classList.remove('ob-highlight'); });
+  }
+
+  function showTour(idx) {
+    tourStepIdx = idx;
+    var s = steps[idx];
+    var el = document.querySelector(s.target);
+    if(!el) { endTour(); return; }
+    endTour();
+    el.classList.add('ob-highlight');
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    tourStep.textContent = 'STEP ' + (idx + 1) + ' OF ' + steps.length;
+    tourTitle.textContent = s.title;
+    tourDesc.textContent = s.desc;
+    var dots = tourDots.querySelectorAll('.ob-tour-dot');
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === idx); });
+    tourNext.textContent = idx === steps.length - 1 ? 'Done' : 'Next';
+    tour.classList.add('show');
+    positionTour(el, s.placement);
+  }
+
+  function positionTour(el, placement) {
+    var rect = el.getBoundingClientRect();
+    var tw = tour.offsetWidth || 380;
+    var th = tour.offsetHeight || 200;
+    var x, y, arrowPlacement;
+    var gap = 14;
+    if(placement === 'bottom') {
+      x = rect.left + rect.width / 2 - tw / 2;
+      y = rect.bottom + gap;
+      arrowPlacement = 'top';
+    } else if(placement === 'right') {
+      x = rect.right + gap;
+      y = rect.top + rect.height / 2 - th / 2;
+      arrowPlacement = 'left';
+    } else if(placement === 'top') {
+      x = rect.left + rect.width / 2 - tw / 2;
+      y = rect.top - th - gap;
+      arrowPlacement = 'bottom';
+    } else {
+      x = rect.left - tw - gap;
+      y = rect.top + rect.height / 2 - th / 2;
+      arrowPlacement = 'right';
+    }
+    // Clamp to viewport
+    if(x < 12) x = 12;
+    if(x + tw > window.innerWidth - 12) x = window.innerWidth - tw - 12;
+    if(y < 12) y = 12;
+    if(y + th > window.innerHeight - 12) y = window.innerHeight - th - 12;
+    tour.style.left = x + 'px';
+    tour.style.top = y + 'px';
+    tourArrow.className = 'ob-tour-arrow ' + arrowPlacement;
+  }
+
+  tourNext.addEventListener('click', function(){
+    if(tourStepIdx === steps.length - 1) {
+      done();
+      return;
+    }
+    showTour(tourStepIdx + 1);
+  });
+
+  tourSkip.addEventListener('click', done);
+
+  // Expose for manual login trigger
+  window.maybeShowOnboarding = showWelcome;
+  // Only show welcome if authenticated
+  if(DF.isLoggedIn()) showWelcome();
+})();
+</script>
+</body>
+</html>

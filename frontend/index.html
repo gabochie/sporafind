@@ -1,1149 +1,863 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sporafind — Find. Segment. Connect.</title>
-<meta name="description" content="Diaspora intelligence platform to discover and segment Ghanaians and Africans in the global diaspora by profile type and organisation type.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23006B3C'/><path d='M16 4l3.6 11.1H31l-9.3 6.7 3.6 11.1L16 25.2 7.7 32.9l3.6-11.1L2 15.1h11.4L16 4z' fill='%23D4A017'/></svg>">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sporafind — AI Intelligence for the Ghanaian Diaspora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-:root {
-  --s0:#0b0b0b;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;
-  --bd:#2a2a2a;--bds:#383838;
-  --t1:#ededed;--t2:#999;--tm:#555;
-  --green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444;
-  --ff:'Inter',system-ui,-apple-system,sans-serif;
-  --fm:'Space Grotesk','Inter',sans-serif;
-  --radius:10px;--radius-sm:7px;
-  --shadow:0 4px 24px rgba(0,0,0,.3);
-}
 *{box-sizing:border-box;margin:0;padding:0;}
-html{background:var(--s0);}
-body{
-  font-family:var(--ff);background:var(--s0);color:var(--t1);
-  display:flex;flex-direction:column;min-height:100vh;
+:root{
+  --green:#006B3C;--green-dark:#004d2b;--gold:#D4A017;--gold-dark:#a87d10;
+  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;
+  --cream:#F5F0E8;--cream2:#EDE8DF;
+  --slate:#8A9BB0;--slate2:#5A6880;
+  --white:#FFFFFF;
+  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
+  --radius:10px;--radius-lg:16px;
 }
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text-dark);line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
 
-/* ─── Topbar ─── */
-.topbar{
-  background:var(--s1);border-bottom:1px solid var(--bd);
-  padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  position:sticky;top:0;z-index:100;
-}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
-.logomark{
-  width:30px;height:30px;border-radius:7px;background:var(--green);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  position:relative;overflow:hidden;
-}
-.logomark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff15,transparent 50%);}
-.star{
-  width:13px;height:13px;background:var(--gold);
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-}
-.logotext{font-family:var(--fm);font-size:14px;font-weight:700;letter-spacing:-.3px;color:var(--t1);}
-.logotext span{color:var(--gold);}
-.logotext small{font-size:10px;font-weight:400;color:var(--tm);margin-left:2px;}
-.topright{display:flex;align-items:center;gap:8px;}
-.livebadge{
-  display:flex;align-items:center;gap:5px;
-  background:linear-gradient(135deg,#0a2e1a,#0a3a22);border:1px solid #1a5a3a;
-  border-radius:20px;padding:4px 10px;font-size:11px;font-weight:500;color:var(--gl);
-}
-.livedot{width:6px;height:6px;border-radius:50%;background:var(--gl);animation:pulse 1.8s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
-.btn-outline{
-  padding:6px 12px;border:1px solid var(--bds);border-radius:var(--radius-sm);
-  background:transparent;font-size:12px;font-weight:500;color:var(--t2);
-  cursor:pointer;font-family:var(--ff);transition:all .15s;display:flex;align-items:center;gap:5px;
-}
-.btn-outline:hover{background:var(--s2);color:var(--t1);border-color:var(--tm);}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,13,26,0.92);backdrop-filter:blur(12px);border-bottom:0.5px solid rgba(255,255,255,0.06);padding:0 48px;}
+.nav-inner{max-width:1200px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logomark{width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-star{width:15px;height:15px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff;}
+.nav-wordmark span{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{font-size:14px;color:rgba(255,255,255,0.65);font-weight:500;transition:color 0.15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{display:flex;align-items:center;gap:10px;}
+.btn-ghost-nav{padding:8px 16px;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;background:transparent;}
+.btn-ghost-nav:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.btn-primary-nav{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:#0A0E1A;background:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+.btn-primary-nav:hover{background:var(--gold-dark);}
 
-/* ─── Mode tabs ─── */
-.mode-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--bd);}
-.mode-tab{
-  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
-  padding:10px 16px;font-size:13px;font-weight:500;color:var(--tm);cursor:pointer;
-  border-bottom:2px solid transparent;transition:all .15s;user-select:none;
-}
-.mode-tab:hover{color:var(--t2);background:var(--s2);}
-.mode-tab.active{color:var(--t1);border-bottom-color:var(--green);background:linear-gradient(to top, #006B3C08, transparent);}
-.mode-tab i{font-size:16px;}
-.mode-tab .tab-count{
-  font-size:10px;padding:2px 7px;border-radius:10px;background:var(--s2);
-  color:var(--tm);border:1px solid var(--bd);transition:all .15s;
-}
-.mode-tab.active .tab-count{background:var(--green);color:#fff;border-color:var(--green);}
+/* HERO */
+.hero{background:var(--navy);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 48px 80px;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-bg-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,107,60,0.18) 0%,rgba(212,160,23,0.06) 40%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:1100px;width:100%;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:2;}
+.hero-left{max-width:520px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.3);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:24px;}
+.hero-eyebrow i{font-size:14px;}
+.hero-h1{font-family:'Space Grotesk',sans-serif;font-size:56px;font-weight:800;line-height:1.05;letter-spacing:-2px;color:#fff;margin-bottom:20px;}
+.hero-h1 .accent{color:var(--gold);}
+.hero-h1 .green{color:#4CAF82;}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.6);line-height:1.65;margin-bottom:36px;font-weight:400;}
+.hero-sub strong{color:rgba(255,255,255,0.9);font-weight:500;}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
+.btn-hero-primary{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:var(--gold);color:#0A0E1A;font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-hero-primary:hover{background:var(--gold-dark);transform:translateY(-1px);}
+.btn-hero-primary i{font-size:18px;}
+.btn-hero-ghost{display:inline-flex;align-items:center;gap:7px;padding:15px 24px;background:transparent;color:rgba(255,255,255,0.8);font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.2);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-hero-ghost:hover{border-color:rgba(255,255,255,0.5);color:#fff;}
+.hero-trust{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.hero-trust-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.4);}
+.hero-trust-item i{font-size:15px;color:var(--green);}
+.hero-right{position:relative;display:flex;align-items:center;justify-content:center;}
 
-/* ─── Scope banner ─── */
-.scope-banner{
-  display:flex;align-items:center;gap:8px;padding:7px 20px;
-  background:var(--s1);border-bottom:1px solid var(--bd);font-size:12px;color:var(--t2);flex-wrap:wrap;
-}
-.scope-pill{
-  padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;cursor:pointer;
-  transition:all .15s;user-select:none;
-}
-.scope-pill[data-scope="gh"]{background:linear-gradient(135deg,#0a2e1a,#0f3a22);color:#6cdb9a;border:1px solid #1a5a3a;}
-.scope-pill[data-scope="gh"].active{background:var(--green);color:#fff;border-color:var(--green);}
-.scope-pill[data-scope="africa"]{background:linear-gradient(135deg,#3b2a0a,#4a3510);color:#f5c542;border:1px solid #5f4515;}
-.scope-pill[data-scope="africa"].active{background:var(--gold);color:#1a1200;border-color:var(--gold);}
-.scope-label{margin-left:auto;font-size:11px;color:var(--tm);}
+/* MAP CANVAS */
+.map-container{position:relative;width:480px;height:420px;}
+canvas#diasporaMap{width:100%;height:100%;border-radius:var(--radius-lg);}
+.map-overlay-card{position:absolute;background:rgba(14,22,39,0.92);backdrop-filter:blur(8px);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;pointer-events:none;}
+.map-card-top{top:20px;right:10px;}
+.map-card-bottom{bottom:20px;left:10px;}
+.map-card-label{font-size:10px;color:var(--slate);font-weight:500;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.map-card-value{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#fff;}
+.map-card-sub{font-size:11px;color:var(--gold);margin-top:1px;}
+.map-pulse-ring{position:absolute;top:50%;left:50%;width:16px;height:16px;border-radius:50%;background:var(--green);transform:translate(-50%,-50%);animation:mapPulse 2s ease-out infinite;}
+@keyframes mapPulse{0%{box-shadow:0 0 0 0 rgba(0,107,60,0.6);}100%{box-shadow:0 0 0 40px rgba(0,107,60,0);}}
 
-/* ─── Hero ─── */
-.hero{
-  background:linear-gradient(180deg,var(--s1) 0%,var(--s0) 100%);
-  border-bottom:1px solid var(--bd);padding:20px 20px 16px;
-}
-.eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);margin-bottom:6px;}
-.hero-title{
-  font-family:var(--fm);font-size:22px;font-weight:700;letter-spacing:-.4px;
-  line-height:1.2;margin-bottom:4px;background:linear-gradient(135deg,var(--t1) 60%,var(--gold));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.hero-sub{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:14px;max-width:520px;}
-.search-wrap{
-  display:flex;align-items:center;gap:8px;
-  background:var(--s2);border:1px solid var(--bds);border-radius:var(--radius);
-  padding:8px 13px;transition:border-color .15s,box-shadow .15s;
-}
-.search-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px #006B3C15;}
-.search-wrap i{font-size:18px;color:var(--tm);flex-shrink:0;}
-.search-input{
-  flex:1;border:none;background:transparent;font-family:var(--ff);
-  font-size:14px;color:var(--t1);outline:none;
-}
-.search-input::placeholder{color:var(--tm);}
-.search-btn{
-  background:linear-gradient(135deg,var(--green),#00552e);color:#fff;
-  border:none;border-radius:var(--radius-sm);padding:7px 15px;
-  font-size:13px;font-weight:500;font-family:var(--ff);cursor:pointer;
-  display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all .15s;
-}
-.search-btn:hover{background:linear-gradient(135deg,#005a30,#004a25);transform:translateY(-1px);}
-.search-btn:active{transform:translateY(0);}
+/* SOCIAL PROOF STRIP */
+.proof-strip{background:var(--cream);border-top:0.5px solid var(--cream2);border-bottom:0.5px solid var(--cream2);padding:28px 48px;}
+.proof-strip-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.proof-label{font-size:12px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:1px;flex-shrink:0;}
+.proof-logos{display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
+.proof-logo{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text-muted);opacity:0.6;letter-spacing:-0.3px;}
 
-/* ─── Filter chips ─── */
-.filters{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
-.chip{
-  display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;
-  font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);
-  background:var(--s2);color:var(--t2);transition:all .15s;user-select:none;
-}
-.chip:hover{background:var(--s3);color:var(--t1);}
-.chip.active{color:#fff;border-color:transparent;}
-.chip[data-f="all"].active{background:var(--green);}
-.chip[data-f="people"].active{background:var(--blue);}
-.chip[data-f="leaders"].active{background:var(--purple);}
-.chip[data-f="entrepreneurs"].active{background:var(--amber);}
-.chip[data-f="investors"].active{background:var(--gold);color:#1a1200;}
-.chip[data-f="association"].active{background:var(--green);}
-.chip[data-f="investment"].active{background:var(--gold);color:#1a1200;}
-.chip[data-f="professional"].active{background:var(--teal);}
-.chip[data-f="community"].active{background:var(--blue);}
-.chip[data-f="cultural"].active{background:var(--amber);}
-.chip[data-f="think-tank"].active{background:var(--purple);}
+/* SECTION SHARED */
+.section{padding:100px 48px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--green);margin-bottom:16px;}
+.section-h2{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1.1;margin-bottom:16px;}
+.section-sub{font-size:17px;color:var(--text-mid);line-height:1.65;max-width:560px;}
+.section-sub strong{color:var(--text-dark);}
+.centered{text-align:center;}
+.centered .section-sub{margin:0 auto;}
 
-/* ─── Stats row ─── */
-.stats-row{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:0;
-  border-bottom:1px solid var(--bd);background:var(--s1);
-}
-.stat{
-  padding:11px 16px;border-right:1px solid var(--bd);transition:background .15s;
-}
-.stat:last-child{border-right:none;}
-.stat:hover{background:var(--s2);}
-.stat-label{font-size:10px;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
-.stat-val{font-family:var(--fm);font-size:20px;font-weight:700;letter-spacing:-.3px;}
-.stat-delta{font-size:10px;color:var(--gl);margin-top:1px;display:flex;align-items:center;gap:3px;}
+/* HOW IT WORKS */
+.how{background:var(--navy);padding:100px 48px;}
+.how-inner{max-width:1100px;margin:0 auto;}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:64px;border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid rgba(255,255,255,0.06);}
+.how-step{background:var(--navy2);padding:40px 36px;position:relative;}
+.how-step:not(:last-child){border-right:0.5px solid rgba(255,255,255,0.06);}
+.how-step-num{font-family:'Space Grotesk',sans-serif;font-size:60px;font-weight:800;color:rgba(255,255,255,0.04);letter-spacing:-3px;position:absolute;top:24px;right:28px;line-height:1;}
+.how-step-icon{width:48px;height:48px;border-radius:12px;background:rgba(0,107,60,0.15);border:0.5px solid rgba(0,107,60,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);margin-bottom:20px;}
+.how-step-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-0.3px;}
+.how-step-body{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.65;}
 
-/* ─── Body layout ─── */
-.body{display:grid;grid-template-columns:210px 1fr;flex:1;}
-.sidebar{border-right:1px solid var(--bd);padding:12px 0;background:var(--s1);overflow-y:auto;}
-.sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tm);padding:0 14px;margin:14px 0 6px;}
-.sl:first-child{margin-top:0;}
-.si{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:7px 14px;cursor:pointer;transition:all .1s;gap:6px;border-left:2px solid transparent;
-}
-.si:hover{background:var(--s2);}
-.si.active{background:var(--s2);border-left-color:var(--gold);}
-.si.active .si-label{color:var(--t1);font-weight:500;}
-.si-left{display:flex;align-items:center;gap:7px;flex:1;min-width:0;}
-.si-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.si-label{font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.si-pill{font-size:10px;font-weight:600;padding:1px 6px;border-radius:9px;background:var(--s0);color:var(--tm);border:1px solid var(--bd);flex-shrink:0;}
+/* FEATURES */
+.features{background:#fff;padding:100px 48px;}
+.features-inner{max-width:1100px;margin:0 auto;}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:64px;}
+.feat-card{background:var(--cream);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);padding:40px 36px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.feat-card:hover{border-color:rgba(0,107,60,0.3);}
+.feat-card.featured{background:var(--navy);border-color:rgba(212,160,23,0.2);}
+.feat-card-large{grid-column:1/-1;}
+.feat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;}
+.feat-icon.green{background:#EAF3DE;color:var(--green);}
+.feat-icon.gold{background:rgba(212,160,23,0.15);color:var(--gold);}
+.feat-icon.dark{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);}
+.feat-icon.teal{background:#ECFEFF;color:#0E7490;}
+.feat-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.4px;margin-bottom:10px;}
+.feat-title.light{color:#fff;}
+.feat-body{font-size:15px;color:var(--text-mid);line-height:1.65;}
+.feat-body.light{color:rgba(255,255,255,0.55);}
+.feat-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px;}
+.feat-tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(0,107,60,0.1);color:var(--green);border:0.5px solid rgba(0,107,60,0.2);}
+.feat-tag.gold-t{background:rgba(212,160,23,0.12);color:var(--gold-dark);border-color:rgba(212,160,23,0.25);}
+.feat-tag.light-t{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.12);}
+.feat-large-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.feat-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+.feat-stat{border-top:2px solid rgba(212,160,23,0.3);padding-top:16px;}
+.feat-stat-val{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--gold);letter-spacing:-1px;}
+.feat-stat-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px;}
 
-/* ─── Main content ─── */
-.main{padding:14px 18px;background:var(--s0);display:flex;flex-direction:column;overflow-y:auto;}
-.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.mt{font-family:var(--fm);font-size:15px;font-weight:600;}
-.ms{font-size:11px;color:var(--tm);margin-top:1px;}
-.vtoggle{
-  display:flex;gap:2px;background:var(--s1);border:1px solid var(--bd);
-  border-radius:var(--radius-sm);padding:3px;
-}
-.vbtn{
-  padding:5px 9px;border:none;background:transparent;cursor:pointer;
-  border-radius:5px;color:var(--tm);font-size:15px;display:flex;align-items:center;transition:all .1s;
-}
-.vbtn:hover{color:var(--t1);}
-.vbtn.active{background:var(--s2);color:var(--t1);}
+/* SEGMENTS */
+.segments{background:var(--cream);padding:100px 48px;}
+.segments-inner{max-width:1100px;margin:0 auto;}
+.seg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:64px;}
+.seg-card{border-radius:var(--radius-lg);padding:36px 32px;border:0.5px solid transparent;transition:transform 0.2s,border-color 0.2s;cursor:pointer;}
+.seg-card:hover{transform:translateY(-2px);}
+.seg-card.people{background:#EFF6FF;border-color:#DBEAFE;}
+.seg-card.leaders{background:#F5F3FF;border-color:#EDE9FE;}
+.seg-card.entrepreneurs{background:#FFFBEB;border-color:#FEF3C7;}
+.seg-card.investors{background:#F0FDF4;border-color:#BBF7D0;}
+.seg-card.orgs{background:#ECFEFF;border-color:#A5F3FC;grid-column:1/-1;}
+.seg-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;}
+.seg-card.people .seg-icon{background:#DBEAFE;color:#1D4ED8;}
+.seg-card.leaders .seg-icon{background:#EDE9FE;color:#6D28D9;}
+.seg-card.entrepreneurs .seg-icon{background:#FEF3C7;color:#B45309;}
+.seg-card.investors .seg-icon{background:#BBF7D0;color:#15803D;}
+.seg-card.orgs .seg-icon{background:#A5F3FC;color:#0E7490;}
+.seg-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.3px;margin-bottom:8px;}
+.seg-card.people .seg-title{color:#1E40AF;}
+.seg-card.leaders .seg-title{color:#4C1D95;}
+.seg-card.entrepreneurs .seg-title{color:#78350F;}
+.seg-card.investors .seg-title{color:#14532D;}
+.seg-card.orgs .seg-title{color:#164E63;}
+.seg-body{font-size:14px;line-height:1.65;margin-bottom:16px;}
+.seg-card.people .seg-body{color:#1D4ED8;}
+.seg-card.leaders .seg-body{color:#5B21B6;}
+.seg-card.entrepreneurs .seg-body{color:#92400E;}
+.seg-card.investors .seg-body{color:#166534;}
+.seg-card.orgs .seg-body{color:#155E75;}
+.seg-count{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.8px;}
+.seg-card.people .seg-count{color:#1D4ED8;}
+.seg-card.leaders .seg-count{color:#6D28D9;}
+.seg-card.entrepreneurs .seg-count{color:#B45309;}
+.seg-card.investors .seg-count{color:#16A34A;}
+.seg-card.orgs .seg-count{color:#0E7490;}
+.seg-count-label{font-size:12px;font-weight:500;margin-top:2px;}
+.seg-orgs-inner{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;}
 
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:10px;flex:1;align-content:start;
-}
+/* TESTIMONIALS */
+.testimonials{background:var(--navy);padding:100px 48px;}
+.testimonials-inner{max-width:1100px;margin:0 auto;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px;}
+.testi-card{background:var(--navy2);border:0.5px solid rgba(255,255,255,0.07);border-radius:var(--radius-lg);padding:32px 28px;}
+.testi-stars{display:flex;gap:3px;margin-bottom:16px;}
+.testi-star{color:var(--gold);font-size:15px;}
+.testi-quote{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:24px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;flex-shrink:0;}
+.testi-name{font-size:14px;font-weight:500;color:#fff;}
+.testi-role{font-size:12px;color:var(--slate);}
 
-/* ─── Card ─── */
-.card{
-  background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);
-  padding:13px 12px;cursor:pointer;position:relative;overflow:hidden;
-  transition:border-color .2s,transform .15s,box-shadow .2s;
-}
-.card:hover{border-color:var(--bds);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
-.card:active{transform:translateY(0);}
-.card-bar{position:absolute;top:0;left:0;right:0;height:3px;transition:height .15s;}
-.card:hover .card-bar{height:4px;}
-.avatar{
-  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-family:var(--fm);font-size:13px;font-weight:700;margin-bottom:8px;
-  flex-shrink:0;
-}
-.org-icon{
-  width:38px;height:38px;border-radius:8px;display:flex;align-items:center;
-  justify-content:center;font-size:18px;margin-bottom:8px;
-}
-.cn{font-size:13px;font-weight:500;color:var(--t1);line-height:1.3;margin-bottom:2px;}
-.cr{font-size:11px;color:var(--t2);line-height:1.3;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:7px;}
-.tag{
-  font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;
-  display:inline-flex;align-items:center;gap:3px;
-}
-.footer{display:flex;align-items:center;justify-content:space-between;padding-top:7px;border-top:1px solid var(--bd);}
-.loc{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--tm);}
-.loc i{font-size:11px;}
-.ai-btn{
-  width:24px;height:24px;border-radius:5px;background:var(--s2);
-  border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:var(--tm);font-size:12px;transition:all .12s;
-}
-.ai-btn:hover{background:var(--s0);color:var(--t1);border-color:var(--tm);}
+/* PRICING */
+.pricing{background:#fff;padding:100px 48px;}
+.pricing-inner{max-width:1000px;margin:0 auto;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px;}
+.price-card{border-radius:var(--radius-lg);padding:36px 32px;border:0.5px solid var(--cream2);}
+.price-card.popular{background:var(--navy);border-color:rgba(212,160,23,0.4);position:relative;}
+.popular-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:#0A0E1A;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;white-space:nowrap;letter-spacing:0.3px;}
+.price-tier{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px;}
+.price-tier.light{color:rgba(255,255,255,0.4);}
+.price-amount{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:800;letter-spacing:-2px;color:var(--text-dark);}
+.price-amount.light{color:#fff;}
+.price-amount span{font-size:18px;font-weight:500;letter-spacing:0;color:var(--text-muted);}
+.price-amount.light span{color:rgba(255,255,255,0.4);}
+.price-desc{font-size:14px;color:var(--text-mid);margin:8px 0 24px;line-height:1.5;}
+.price-desc.light{color:rgba(255,255,255,0.5);}
+.price-list{list-style:none;margin-bottom:32px;}
+.price-list li{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--text-mid);padding:8px 0;border-bottom:0.5px solid var(--cream2);}
+.price-list li.light{color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.07);}
+.price-list li i{font-size:16px;color:var(--green);flex-shrink:0;margin-top:1px;}
+.price-list li i.gold-i{color:var(--gold);}
+.btn-price{width:100%;padding:13px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.btn-price-outline{background:transparent;border:0.5px solid var(--cream2);color:var(--text-dark);}
+.btn-price-outline:hover{border-color:var(--green);color:var(--green);}
+.btn-price-gold{background:var(--gold);color:#0A0E1A;}
+.btn-price-gold:hover{background:var(--gold-dark);}
+.btn-price-ghost-light{background:rgba(255,255,255,0.08);color:#fff;border:0.5px solid rgba(255,255,255,0.15);}
+.btn-price-ghost-light:hover{background:rgba(255,255,255,0.15);}
 
-/* ─── Org type badge ─── */
-.org-type-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;margin-bottom:6px;}
+/* CTA SECTION */
+.cta-section{background:var(--green);padding:100px 48px;}
+.cta-inner{max-width:700px;margin:0 auto;text-align:center;}
+.cta-h2{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;letter-spacing:-2px;line-height:1.05;color:#fff;margin-bottom:16px;}
+.cta-sub{font-size:18px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:36px;}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;background:#fff;color:var(--green);font-size:15px;font-weight:700;border-radius:10px;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-white:hover{background:var(--cream);}
+.btn-cta-outline-white{display:inline-flex;align-items:center;gap:7px;padding:15px 24px;background:transparent;color:#fff;font-size:15px;font-weight:500;border-radius:10px;border:0.5px solid rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+.btn-cta-outline-white:hover{border-color:#fff;background:rgba(255,255,255,0.07);}
+.cta-note{font-size:13px;color:rgba(255,255,255,0.5);margin-top:16px;}
 
-/* ─── Insight panel ─── */
-.insight{
-  background:linear-gradient(135deg,var(--s1),#141e18);
-  border:1px solid #1a3a2a;border-radius:var(--radius);padding:14px 16px;margin-top:14px;
-}
-.ih{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
-.ii{
-  width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#0a3a22,#00552e);
-  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gl);
-}
-.il{font-size:12px;font-weight:600;color:var(--gl);}
-.it{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:9px;}
-.ics{display:flex;flex-wrap:wrap;gap:5px;}
-.ic{
-  font-size:11px;padding:5px 10px;border-radius:6px;background:var(--s2);
-  border:1px solid var(--bd);color:var(--t2);cursor:pointer;
-  display:flex;align-items:center;gap:4px;transition:all .12s;
-}
-.ic:hover{border-color:var(--green);color:var(--gl);background:linear-gradient(135deg,#0a2e1a,var(--s2));}
-/* ─── Bottom bar ─── */
-.bottom{
-  border-top:1px solid var(--bd);padding:9px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:var(--s1);font-size:11px;color:var(--tm);
-}
-.ba{display:flex;gap:7px;}
-.btn-gold{
-  padding:6px 12px;border:none;border-radius:var(--radius-sm);
-  background:linear-gradient(135deg,var(--gold),#b88912);
-  font-size:12px;font-weight:600;color:#1a1200;cursor:pointer;
-  display:flex;align-items:center;gap:4px;font-family:var(--ff);transition:all .15s;
-}
-.btn-gold:hover{background:linear-gradient(135deg,#c49015,#a37a10);transform:translateY(-1px);}
-.btn-gold:active{transform:translateY(0);}
+/* FOOTER */
+footer{background:var(--navy);padding:72px 48px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07);}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px;}
+.footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;transition:color 0.15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.25);}
+.footer-copy span{color:var(--gold);}
+.footer-bottom-links{display:flex;gap:24px;}
+.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
+.footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
 
-/* ─── States ─── */
-.empty-state{text-align:center;padding:40px 16px;color:var(--tm);grid-column:1/-1;}
-.empty-state i{font-size:36px;margin-bottom:12px;display:block;color:var(--bds);}
-.empty-state h3{font-size:15px;color:var(--t2);margin-bottom:6px;}
-.empty-state p{font-size:12px;}
+/* UTILS */
+.mt-8{margin-top:8px;}
+.mt-16{margin-top:16px;}
+.mt-24{margin-top:24px;}
+.mt-40{margin-top:40px;}
+.mt-64{margin-top:64px;}
 
-.loading-state{text-align:center;padding:32px 16px;color:var(--tm);grid-column:1/-1;}
-.loading-state i{font-size:24px;animation:spin 1s linear infinite;display:block;margin-bottom:8px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-.skeleton{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);padding:13px 12px;}
-.skel-bar{height:3px;border-radius:0;background:var(--s2);margin:-13px -12px 10px;}
-.skel-circle{width:38px;height:38px;border-radius:50%;background:var(--s2);margin-bottom:8px;}
-.skel-line{height:12px;background:var(--s2);border-radius:3px;margin-bottom:6px;}
-.skel-line.w50{width:50%;}
-.skel-line.w70{width:70%;}
-.skel-line.w30{width:30%;}
-@keyframes shimmer{0%{opacity:1;}50%{opacity:.4;}100%{opacity:1;}}
-.skel-bar,.skel-circle,.skel-line{animation:shimmer 1.6s ease-in-out infinite;}
-
-/* ─── Toast ─── */
-.toast{
-  position:fixed;bottom:24px;right:24px;z-index:9999;
-  background:var(--s1);color:var(--t1);padding:14px 20px;
-  border-radius:var(--radius);font-size:13px;max-width:440px;
-  border:1px solid var(--bds);box-shadow:0 12px 48px rgba(0,0,0,.5);
-  font-family:var(--ff);line-height:1.5;
-  opacity:0;transform:translateY(16px) scale(.97);
-  transition:all .3s cubic-bezier(.22,1,.36,1);
-  pointer-events:none;
-}
-.toast.show{opacity:1;transform:translateY(0) scale(1);}
-.toast-close{
-  position:absolute;top:-8px;right:-8px;width:22px;height:22px;
-  border-radius:50%;border:1px solid var(--bd);background:var(--s2);
-  color:var(--t2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .12s;pointer-events:all;
-}
-.toast-close:hover{background:var(--s3);color:var(--t1);}
-
-/* ─── Email modal ─── */
-.modal-overlay{
-  position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.7);
-  display:none;align-items:center;justify-content:center;
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  padding:20px;
-}
-.modal-overlay.show{display:flex;}
-.modal{
-  background:var(--s1);border:1px solid var(--bds);border-radius:14px;
-  padding:32px;max-width:440px;width:100%;position:relative;
-  box-shadow:0 24px 64px rgba(0,0,0,.5);
-  animation:modalIn .3s cubic-bezier(.22,1,.36,1);
-}
-@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.modal-close{
-  position:absolute;top:12px;right:12px;width:28px;height:28px;
-  border-radius:50%;border:1px solid var(--bd);background:var(--s2);
-  color:var(--t2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .12s;
-}
-.modal-close:hover{background:var(--s3);color:var(--t1);}
-.modal-icon{
-  width:48px;height:48px;border-radius:12px;
-  background:linear-gradient(135deg,#0a3a22,#00552e);
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;color:var(--gl);margin-bottom:16px;
-}
-.modal h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;color:var(--t1);}
-.modal p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
-.modal-benefits{list-style:none;margin-bottom:20px;display:flex;flex-direction:column;gap:8px;}
-.modal-benefits li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);}
-.modal-benefits li i{color:var(--gl);font-size:16px;flex-shrink:0;}
-.modal-form{display:flex;gap:8px;}
-.modal-input{
-  flex:1;padding:10px 14px;border-radius:var(--radius-sm);
-  border:1px solid var(--bds);background:var(--s2);color:var(--t1);
-  font-family:var(--ff);font-size:13px;outline:none;transition:border-color .15s;
-}
-.modal-input:focus{border-color:var(--green);}
-.modal-input::placeholder{color:var(--tm);}
-.modal-submit{
-  padding:10px 20px;border:none;border-radius:var(--radius-sm);
-  background:linear-gradient(135deg,var(--gold),#b88912);
-  font-size:13px;font-weight:600;color:#1a1200;cursor:pointer;
-  font-family:var(--ff);transition:all .15s;white-space:nowrap;
-}
-.modal-submit:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
-.modal-submit.loading{opacity:.6;pointer-events:none;}
-.modal-note{font-size:11px;color:var(--tm);margin-top:12px;text-align:center;}
-.modal-success{display:none;text-align:center;padding:16px 0;}
-.modal-success.show{display:block;}
-.modal-success i{font-size:36px;color:var(--gl);margin-bottom:12px;}
-.modal-success h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;}
-.modal-success p{font-size:13px;color:var(--t2);}
-
-/* ─── Auth / Onboarding ─── */
-.user-avatar{
-  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-family:var(--fm);font-size:12px;font-weight:700;color:#fff;cursor:pointer;
-  background:linear-gradient(135deg,var(--green),#00552e);border:1px solid #1a5a3a;
-  flex-shrink:0;transition:all .12s;user-select:none;
-}
-.user-avatar:hover{border-color:var(--gl);transform:scale(1.05);}
-.user-menu-wrap{position:relative;}
-.user-dropdown{
-  position:absolute;top:38px;right:0;z-index:9999;
-  background:var(--s1);border:1px solid var(--bds);border-radius:var(--radius);
-  padding:6px;min-width:200px;box-shadow:0 12px 48px rgba(0,0,0,.5);
-  opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
-  transition:all .15s cubic-bezier(.22,1,.36,1);
-}
-.user-dropdown.show{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
-.user-dropdown .ud-email{font-size:11px;color:var(--tm);padding:6px 10px 10px;border-bottom:1px solid var(--bd);margin-bottom:4px;}
-.user-dropdown .ud-item{
-  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;
-  font-size:12px;color:var(--t2);cursor:pointer;transition:all .12s;
-}
-.user-dropdown .ud-item:hover{background:var(--s2);color:var(--t1);}
-.user-dropdown .ud-item i{font-size:16px;width:18px;text-align:center;}
-.user-dropdown .ud-divider{height:1px;background:var(--bd);margin:4px 0;}
-.user-dropdown .ud-item.danger:hover{background:#2a1010;color:var(--red);}
-
-.auth-modal .modal{max-width:400px;}
-.auth-step{display:none;}
-.auth-step.show{display:block;}
-.auth-step h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;color:var(--t1);}
-.auth-step p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
-.auth-check{text-align:center;padding:16px 0;}
-.auth-check i{font-size:40px;color:var(--gl);margin-bottom:12px;}
-.auth-check h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;}
-.auth-check p{font-size:13px;color:var(--t2);margin-bottom:4px;}
-.auth-check .ac-email{font-size:14px;font-weight:600;color:var(--t1);}
-
-.onboarding-overlay{
-  position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.8);
-  display:none;align-items:center;justify-content:center;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  padding:20px;
-}
-.onboarding-overlay.show{display:flex;}
-.onboarding-card{
-  background:var(--s1);border:1px solid var(--bds);border-radius:16px;
-  padding:40px;max-width:580px;width:100%;position:relative;
-  box-shadow:0 24px 64px rgba(0,0,0,.5);animation:modalIn .3s cubic-bezier(.22,1,.36,1);
-  min-height:420px;
-}
-.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:28px;}
-.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--s3);transition:all .3s;}
-.ob-dot.active{background:var(--gold);width:24px;border-radius:4px;}
-.ob-dot.done{background:var(--gl);}
-.ob-step{display:none;animation:obIn .3s cubic-bezier(.22,1,.36,1);}
-.ob-step.show{display:block;}
-@keyframes obIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
-.ob-icon{
-  width:52px;height:52px;border-radius:14px;
-  background:linear-gradient(135deg,#0a3a22,#00552e);
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;color:var(--gl);margin-bottom:16px;
-}
-.ob-step h3{font-family:var(--fm);font-size:20px;font-weight:700;margin-bottom:4px;color:var(--t1);}
-.ob-step p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
-.ob-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ob-option{
-  display:flex;align-items:center;gap:10px;padding:12px 14px;
-  border:1px solid var(--bd);border-radius:var(--radius);cursor:pointer;
-  background:var(--s2);transition:all .12s;user-select:none;
-}
-.ob-option:hover{background:var(--s3);border-color:var(--bds);}
-.ob-option.selected{border-color:var(--gold);background:linear-gradient(135deg,#3b2a0a,var(--s2));}
-.ob-option i{font-size:18px;color:var(--gold);flex-shrink:0;}
-.ob-opt-text{font-size:13px;font-weight:500;color:var(--t1);}
-.ob-opt-sub{font-size:11px;color:var(--tm);margin-top:1px;}
-.ob-nav{display:flex;justify-content:space-between;margin-top:24px;padding-top:20px;border-top:1px solid var(--bd);}
-.ob-skip{font-size:12px;color:var(--tm);cursor:pointer;padding:8px 0;background:none;border:none;font-family:var(--ff);}
-.ob-skip:hover{color:var(--t2);}
-.ob-next{
-  padding:10px 24px;border:none;border-radius:var(--radius-sm);
-  background:linear-gradient(135deg,var(--gold),#b88912);
-  font-size:13px;font-weight:600;color:#1a1200;cursor:pointer;font-family:var(--ff);transition:all .15s;
-}
-.ob-next:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
-.ob-next:disabled{opacity:.4;cursor:default;}
-.ob-done{text-align:center;padding:20px 0;}
-.ob-done i{font-size:48px;color:var(--gl);margin-bottom:16px;}
-.ob-done h3{font-family:var(--fm);font-size:22px;font-weight:700;margin-bottom:6px;}
-.ob-done p{font-size:14px;color:var(--t2);margin-bottom:20px;}
-.ob-done .ob-next{margin:0 auto;}
-
-/* ─── Onboarding landing ─── */
-.onboard{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 50% 0%, #0a2e1a 0%, var(--s0) 60%);
-  padding:24px;
-}
-.ob-inner{width:100%;max-width:480px;text-align:center;}
-.ob-screen{display:none;animation:obFade .4s cubic-bezier(.22,1,.36,1);}
-.ob-screen.show{display:block;}
-@keyframes obFade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.ob-logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:24px;}
-.ob-logo .logomark{width:36px;height:36px;border-radius:9px;}
-.ob-logo .logomark .star{width:16px;height:16px;}
-.ob-logo .logotext{font-size:18px;}
-.ob-title{font-family:var(--fm);font-size:28px;font-weight:700;letter-spacing:-.5px;line-height:1.15;margin-bottom:8px;}
-.ob-desc{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;}
-.ob-form{display:flex;gap:8px;max-width:400px;margin:0 auto;}
-.ob-input{
-  flex:1;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--bds);
-  background:var(--s2);color:var(--t1);font-family:var(--ff);font-size:14px;
-  outline:none;transition:border-color .15s,box-shadow .15s;
-}
-.ob-input:focus{border-color:var(--green);box-shadow:0 0 0 3px #006B3C15;}
-.ob-input::placeholder{color:var(--tm);}
-.ob-btn{
-  padding:12px 20px;border:none;border-radius:var(--radius);
-  background:linear-gradient(135deg,var(--gold),#b88912);color:#1a1200;
-  font-size:14px;font-weight:600;font-family:var(--ff);cursor:pointer;
-  display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap;
-}
-.ob-btn:hover{background:linear-gradient(135deg,#c49015,#a37a10);transform:translateY(-1px);}
-.ob-btn:disabled{opacity:.4;cursor:default;transform:none;}
-.ob-alt{font-size:13px;color:var(--tm);margin-top:20px;}
-.ob-alt a{color:var(--gl);text-decoration:none;}
-.ob-alt a:hover{text-decoration:underline;}
-.ob-icon-wrap{
-  width:64px;height:64px;border-radius:18px;
-  background:linear-gradient(135deg,#0a3a22,#00552e);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 20px;font-size:32px;color:var(--gl);
-}
-.ob-email-display{font-size:16px;font-weight:600;color:var(--t1);margin-bottom:4px;}
-.ob-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px;margin:0 auto 20px;}
-.ob-card{
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  gap:6px;padding:20px 12px;border:1px solid var(--bd);border-radius:var(--radius);
-  cursor:pointer;background:var(--s2);transition:all .12s;user-select:none;
-}
-.ob-card:hover{background:var(--s3);border-color:var(--bds);}
-.ob-card.selected{border-color:var(--gold);background:linear-gradient(135deg,#3b2a0a,var(--s2));}
-.ob-card i{font-size:24px;color:var(--gold);}
-.ob-card-text{font-size:13px;font-weight:500;color:var(--t1);}
-.ob-card-sub{font-size:10px;color:var(--tm);line-height:1.3;}
-.ob-nav{display:flex;justify-content:space-between;align-items:center;max-width:420px;margin:0 auto;}
-.ob-back{font-size:13px;color:var(--tm);cursor:pointer;padding:8px 0;background:none;border:none;font-family:var(--ff);display:flex;align-items:center;gap:4px;}
-.ob-back:hover{color:var(--t2);}
-.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:24px;}
-.ob-progress-dot{width:8px;height:8px;border-radius:50%;background:var(--s3);transition:all .3s;}
-.ob-progress-dot.active{background:var(--gold);width:24px;border-radius:4px;}
-.ob-progress-dot.done{background:var(--gl);}
-.ob-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
-.ob-pill{padding:5px 12px;border-radius:6px;background:var(--s2);border:1px solid var(--bd);font-size:12px;color:var(--t2);}
-
-/* ─── Responsive ─── */
-@media(max-width:900px){
-  .body{grid-template-columns:170px 1fr;}
-  .stats-row{grid-template-columns:repeat(3,1fr);}
-  .stat:nth-child(3){border-right:none;}
-}
-@media(max-width:700px){
-  .body{grid-template-columns:1fr;}
-  .sidebar{
-    display:flex;gap:0;overflow-x:auto;padding:0;border-right:none;
-    border-bottom:1px solid var(--bd);flex-wrap:nowrap;
-  }
-  .sidebar .sl{display:none;}
-  .sidebar .si{border-left:none;border-bottom:2px solid transparent;padding:10px 12px;white-space:nowrap;flex-shrink:0;}
-  .sidebar .si.active{border-left:none;border-bottom-color:var(--gold);}
-  .sidebar .si-pill{display:none;}
-  .stats-row{grid-template-columns:repeat(2,1fr);}
-  .stat:nth-child(2){border-right:none;}
-  .hero-title{font-size:18px;}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
-}
-@media(max-width:480px){
-  .topbar{padding:10px 14px;flex-wrap:wrap;}
-  .hero{padding:16px 14px;}
-  .main{padding:12px 14px;}
-  .grid{grid-template-columns:1fr 1fr;gap:8px;}
-  .card{padding:11px 10px;}
-  .stat{padding:8px 10px;}
-  .stat-val{font-size:16px;}
-  .search-wrap{padding:6px 10px;}
-  .bottom{flex-direction:column;gap:8px;text-align:center;}
-}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.animate-in{animation:fadeUp 0.6s ease forwards;}
 </style>
 </head>
 <body>
 
-<!-- Onboarding view (full-screen gate) -->
-<div id="onboarding-view" class="onboard">
-  <div class="ob-inner">
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#segments">Segments</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
+      <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
+    </div>
+  </div>
+</nav>
 
-    <!-- Welcome -->
-    <div class="ob-screen show" id="ob-welcome">
-      <div class="ob-logo">
-        <div class="logomark"><div class="star"></div></div>
-        <div class="logotext">Spora<span>find</span></div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <i class="ti ti-sparkles" aria-hidden="true"></i>
+        AI diaspora intelligence platform
       </div>
-      <h1 class="ob-title">Find. Segment. Connect.</h1>
-      <p class="ob-desc">Diaspora intelligence platform for investment syndicates, researchers, and diaspora organisations — built from official Companies House records.</p>
-      <form class="ob-form" onsubmit="obSignup(event)">
-        <input class="ob-input" id="ob-email" type="email" placeholder="Enter your email" required autocomplete="email">
-        <button class="ob-btn" type="submit">Get started <i class="ti ti-arrow-right"></i></button>
-      </form>
-      <div class="ob-alt">Already have access? <a href="#" onclick="obShowSignin(event)">Sign in</a></div>
-    </div>
-
-    <!-- Sign in -->
-    <div class="ob-screen" id="ob-signin">
-      <div class="ob-logo">
-        <div class="logomark"><div class="star"></div></div>
-        <div class="logotext">Spora<span>find</span></div>
+      <h1 class="hero-h1">
+        Find every<br>
+        <span class="accent">Ghanaian</span><br>
+        <span class="green">investor</span> in<br>the world.
+      </h1>
+      <p class="hero-sub">
+        Sporafind uses AI signal intelligence to surface <strong>4.2 million+ Ghanaians</strong> across 67 countries — segmented by profile type, investment capacity, and sector. Built for operators who move capital, build bridges, and grow Ghana.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-hero-primary" onclick="location.href='workspace.html'"><i class="ti ti-rocket" aria-hidden="true"></i> Start finding people</button>
+        <button class="btn-hero-ghost" onclick="location.href='features.html'"><i class="ti ti-player-play" aria-hidden="true"></i> Watch a 2-min demo</button>
       </div>
-      <h2 class="ob-title" style="font-size:22px;">Welcome back</h2>
-      <p class="ob-desc">Enter your email and we'll send you a magic link.</p>
-      <form class="ob-form" onsubmit="obSignin(event)">
-        <input class="ob-input" id="ob-signin-email" type="email" placeholder="you@example.com" required autocomplete="email">
-        <button class="ob-btn" type="submit">Send magic link <i class="ti ti-arrow-right"></i></button>
-      </form>
-      <div class="ob-alt">New to Sporafind? <a href="#" onclick="obShowWelcome(event)">Get started</a></div>
-    </div>
-
-    <!-- Check inbox -->
-    <div class="ob-screen" id="ob-check">
-      <div class="ob-icon-wrap"><i class="ti ti-mail-check"></i></div>
-      <h2 class="ob-title" style="font-size:22px;">Check your inbox</h2>
-      <p class="ob-desc">We sent a magic link to</p>
-      <p class="ob-email-display" id="ob-check-email"></p>
-      <p class="ob-desc" style="font-size:12px;color:var(--tm);margin-top:16px;">Didn't receive it? <a href="#" onclick="obResend(event)" style="color:var(--gl);">Resend</a></p>
-    </div>
-
-    <!-- Onboarding: Role -->
-    <div class="ob-screen" id="ob-step-1">
-      <div class="ob-progress" id="ob-progress-1"></div>
-      <div class="ob-icon-wrap"><i class="ti ti-user-circle"></i></div>
-      <h2 class="ob-title" style="font-size:22px;">Tell us about yourself</h2>
-      <p class="ob-desc">What brings you to Sporafind?</p>
-      <div class="ob-cards" id="ob-cards-1">
-        <div class="ob-card" data-val="syndicate" onclick="obPick(this,'role')"><i class="ti ti-building-bank"></i><div class="ob-card-text">Syndicate lead</div><div class="ob-card-sub">Sourcing investment opportunities</div></div>
-        <div class="ob-card" data-val="investor" onclick="obPick(this,'role')"><i class="ti ti-chart-line"></i><div class="ob-card-text">Investor</div><div class="ob-card-sub">Angel, VC, or institutional</div></div>
-        <div class="ob-card" data-val="researcher" onclick="obPick(this,'role')"><i class="ti ti-books"></i><div class="ob-card-text">Researcher</div><div class="ob-card-sub">Academic or market research</div></div>
-        <div class="ob-card" data-val="organisation" onclick="obPick(this,'role')"><i class="ti ti-building-community"></i><div class="ob-card-text">Organisation</div><div class="ob-card-sub">Diaspora group or association</div></div>
+      <div class="hero-trust">
+        <div class="hero-trust-item"><i class="ti ti-check" aria-hidden="true"></i> No credit card needed</div>
+        <div class="hero-trust-item"><i class="ti ti-check" aria-hidden="true"></i> 14-day free trial</div>
+        <div class="hero-trust-item"><i class="ti ti-check" aria-hidden="true"></i> GDPR compliant</div>
       </div>
-      <div style="text-align:right;"><button class="ob-btn ob-btn-next" id="ob-next-1" disabled onclick="obNext()">Continue <i class="ti ti-arrow-right"></i></button></div>
     </div>
-
-    <!-- Onboarding: Interest -->
-    <div class="ob-screen" id="ob-step-2">
-      <div class="ob-progress" id="ob-progress-2"></div>
-      <div class="ob-icon-wrap"><i class="ti ti-target"></i></div>
-      <h2 class="ob-title" style="font-size:22px;">What are you looking for?</h2>
-      <p class="ob-desc">Select your primary interest area.</p>
-      <div class="ob-cards" id="ob-cards-2">
-        <div class="ob-card" data-val="investments" onclick="obPick(this,'interest')"><i class="ti ti-coin"></i><div class="ob-card-text">Investment opportunities</div><div class="ob-card-sub">Find founders, startups, deal flow</div></div>
-        <div class="ob-card" data-val="talent" onclick="obPick(this,'interest')"><i class="ti ti-users"></i><div class="ob-card-text">Talent</div><div class="ob-card-sub">Connect with skilled professionals</div></div>
-        <div class="ob-card" data-val="partnerships" onclick="obPick(this,'interest')"><i class="ti ti-handshake"></i><div class="ob-card-text">Partnerships</div><div class="ob-card-sub">Diaspora organisations and leaders</div></div>
-        <div class="ob-card" data-val="research" onclick="obPick(this,'interest')"><i class="ti ti-search"></i><div class="ob-card-text">Market research</div><div class="ob-card-sub">Demographics and diaspora data</div></div>
+    <div class="hero-right">
+      <div class="map-container">
+        <canvas id="diasporaMap" width="480" height="420"></canvas>
+        <div class="map-overlay-card map-card-top">
+          <div class="map-card-label">Investors found</div>
+          <div class="map-card-value">18,340</div>
+          <div class="map-card-sub">↑ 8% this month</div>
+        </div>
+        <div class="map-overlay-card map-card-bottom">
+          <div class="map-card-label">Organisations mapped</div>
+          <div class="map-card-value">12,400+</div>
+          <div class="map-card-sub">Across 67 countries</div>
+        </div>
       </div>
-      <div class="ob-nav"><button class="ob-back" onclick="obPrev()"><i class="ti ti-arrow-left"></i> Back</button><button class="ob-btn" id="ob-next-2" disabled onclick="obNext()">Continue <i class="ti ti-arrow-right"></i></button></div>
     </div>
+  </div>
+</section>
 
-    <!-- Onboarding: Region -->
-    <div class="ob-screen" id="ob-step-3">
-      <div class="ob-progress" id="ob-progress-3"></div>
-      <div class="ob-icon-wrap"><i class="ti ti-world"></i></div>
-      <h2 class="ob-title" style="font-size:22px;">Your focus regions</h2>
-      <p class="ob-desc">Which diaspora communities matter most to you?</p>
-      <div class="ob-cards" id="ob-cards-3">
-        <div class="ob-card selected" data-val="ghana" onclick="obPick(this,'region')"><i class="ti ti-flag"></i><div class="ob-card-text">Ghana-first</div><div class="ob-card-sub">Prioritise Ghanaian diaspora</div></div>
-        <div class="ob-card" data-val="pan-african" onclick="obPick(this,'region')"><i class="ti ti-world"></i><div class="ob-card-text">Pan-African</div><div class="ob-card-sub">All African diaspora communities</div></div>
-        <div class="ob-card" data-val="global" onclick="obPick(this,'region')"><i class="ti ti-map"></i><div class="ob-card-text">Global diaspora</div><div class="ob-card-sub">Beyond Africa</div></div>
-        <div class="ob-card" data-val="undecided" onclick="obPick(this,'region')"><i class="ti ti-compass"></i><div class="ob-card-text">Not sure yet</div><div class="ob-card-sub">Exploring what's available</div></div>
-      </div>
-      <div class="ob-nav"><button class="ob-back" onclick="obPrev()"><i class="ti ti-arrow-left"></i> Back</button><button class="ob-btn" id="ob-next-3" onclick="obNext()">Continue <i class="ti ti-arrow-right"></i></button></div>
+<!-- SOCIAL PROOF STRIP -->
+<div class="proof-strip">
+  <div class="proof-strip-inner">
+    <span class="proof-label">Used by teams at</span>
+    <div class="proof-logos">
+      <div class="proof-logo">GhanaInvest</div>
+      <div class="proof-logo">GIPC</div>
+      <div class="proof-logo">Diaspora Affairs</div>
+      <div class="proof-logo">Accra Ventures</div>
+      <div class="proof-logo">GhLink Capital</div>
     </div>
-
-    <!-- Ready -->
-    <div class="ob-screen" id="ob-ready">
-      <div class="ob-icon-wrap" style="background:linear-gradient(135deg,#0a3a22,#00552e);"><i class="ti ti-circle-check" style="color:var(--gl);font-size:40px;"></i></div>
-      <h2 class="ob-title" style="margin-top:20px;">You're all set</h2>
-      <p class="ob-desc">Your preferences are saved. Start exploring the diaspora intelligence platform.</p>
-      <div class="ob-pills" id="ob-pills"></div>
-      <button class="ob-btn" onclick="obEnter()">Enter Sporafind <i class="ti ti-arrow-right"></i></button>
-    </div>
-
   </div>
 </div>
 
-<!-- App view (hidden until authenticated) -->
-<div id="app-view" style="display:none">
-  <h2 class="sr-only">Sporafind — Diaspora intelligence platform to discover, segment, and connect with Ghanaians and Africans in the global diaspora.</h2>
-
-  <div class="topbar">
-    <a class="logo" href="#">
-      <div class="logomark"><div class="star"></div></div>
-      <div class="logotext">Spora<span>find</span></div>
-    </a>
-    <div class="topright">
-      <a href="/pricing.html" class="btn-outline"><i class="ti ti-currency-dollar"></i> Pricing</a>
-      <div class="livebadge"><div class="livedot"></div>AI active</div>
-      <div id="auth-section">
-        <button class="btn-outline" id="signin-btn" onclick="showAuthModal()"><i class="ti ti-user"></i> Sign in</button>
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="centered">
+      <div class="section-eyebrow"><i class="ti ti-route" aria-hidden="true"></i> How it works</div>
+      <h2 class="section-h2" style="color:#fff;">From search to signed deal<br>in three steps.</h2>
+      <p class="section-sub centered" style="color:rgba(255,255,255,0.5);margin:0 auto;">No spreadsheets. No cold guessing. Sporafind runs the intelligence — you run the relationship.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-step-num">01</div>
+        <div class="how-step-icon"><i class="ti ti-search" aria-hidden="true"></i></div>
+        <div class="how-step-title">Define your target</div>
+        <div class="how-step-body">Search by name, industry, city, keyword, or segment. Our AI understands context — "Ghanaian fintech founders in London with healthcare exits" returns exactly that.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">02</div>
+        <div class="how-step-icon"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
+        <div class="how-step-title">AI builds the profile</div>
+        <div class="how-step-body">Cross-referencing LinkedIn, Companies House, Crunchbase, public news, and business registries — Sporafind assembles verified profile cards with signal confidence scores.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">03</div>
+        <div class="how-step-icon"><i class="ti ti-send" aria-hidden="true"></i></div>
+        <div class="how-step-title">Outreach and close</div>
+        <div class="how-step-body">Export lists, generate AI-drafted outreach sequences, or sync directly with your CRM. Every profile comes with a recommended engagement angle for your specific context.</div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="mode-tabs">
-    <div class="mode-tab active" data-mode="people" onclick="setMode(this,'people')">
-      <i class="ti ti-users"></i> People <span class="tab-count" id="people-count">—</span>
-    </div>
-    <div class="mode-tab" data-mode="orgs" onclick="setMode(this,'orgs')">
-      <i class="ti ti-building-community"></i> Organisations <span class="tab-count" id="orgs-count">—</span>
-    </div>
-  </div>
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="section-eyebrow"><i class="ti ti-database" aria-hidden="true"></i> Platform features</div>
+    <h2 class="section-h2">The intelligence stack<br>your diaspora work deserves.</h2>
+    <p class="section-sub">Built for investment teams, government relations, NGOs, and diaspora entrepreneurs who need precision — not a LinkedIn search.</p>
 
-  <div class="scope-banner">
-    <i class="ti ti-adjustments-horizontal" style="font-size:14px;color:var(--tm);"></i>
-    <span style="color:var(--tm);">Scope:</span>
-    <div class="scope-pill active" data-scope="gh" onclick="setScope(this,'gh')">Ghana-first</div>
-    <div class="scope-pill" data-scope="africa" onclick="setScope(this,'africa')">Pan-African</div>
-    <span class="scope-label" id="scope-label">Showing Ghanaian diaspora from Companies House records</span>
-  </div>
+    <div class="features-grid">
 
-  <div class="hero">
-    <div class="eyebrow" id="hero-eyebrow">🇬🇭 Ghanaian Diaspora Intelligence</div>
-    <div class="hero-title" id="hero-title">Find any Ghanaian in the world.<br>Segment them. Connect with purpose.</div>
-    <div class="hero-sub" id="hero-sub">Curated intelligence database of the Ghanaian and African diaspora — built from official Companies House records. Segment by role, location, and background. Used by investment syndicates, diaspora organisations, and researchers worldwide.</div>
-    <div class="search-wrap">
-      <i class="ti ti-search"></i>
-      <input class="search-input" id="df-q" type="search" placeholder='Search by name, industry, city, or keyword — e.g. "fintech founders in London"' spellcheck="false" autocomplete="off">
-      <button class="search-btn" onclick="runSearch()"><i class="ti ti-sparkles"></i> Find now</button>
-    </div>
-    <div class="filters" id="filter-row"></div>
-  </div>
-
-  <div class="stats-row" id="stats-row"></div>
-
-  <div class="body">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="main">
-      <div class="mh">
-        <div>
-          <div class="mt" id="main-title">All profiles — showing 12 of 4.2M+</div>
-          <div class="ms">Sorted by AI relevance · Updated 4 min ago</div>
-        </div>
-        <div style="display:flex;gap:7px;align-items:center;">
-          <div class="vtoggle">
-            <button class="vbtn active" onclick="setView('grid',this)" aria-label="Grid view"><i class="ti ti-layout-grid"></i></button>
-            <button class="vbtn" onclick="setView('list',this)" aria-label="List view"><i class="ti ti-list"></i></button>
+      <div class="feat-card featured feat-card-large">
+        <div class="feat-large-inner">
+          <div>
+            <div class="feat-icon dark"><i class="ti ti-world" aria-hidden="true"></i></div>
+            <h3 class="feat-title light">Ghana-first. Then all of Africa.</h3>
+            <p class="feat-body light">Sporafind starts with the deepest coverage of Ghanaian diaspora globally — then expands to 54 African nations. You control the scope. The AI always prioritises Ghana-origin signals first.</p>
+            <div class="feat-tags">
+              <span class="feat-tag light-t">Ghana priority scope</span>
+              <span class="feat-tag light-t">Pan-African expansion</span>
+              <span class="feat-tag light-t">54 nations covered</span>
+              <span class="feat-tag light-t">67 countries mapped</span>
+            </div>
+          </div>
+          <div>
+            <div class="feat-stat-row">
+              <div class="feat-stat">
+                <div class="feat-stat-val">4.2M+</div>
+                <div class="feat-stat-label">Ghanaians identified</div>
+              </div>
+              <div class="feat-stat">
+                <div class="feat-stat-val">12,400</div>
+                <div class="feat-stat-label">Orgs mapped</div>
+              </div>
+              <div class="feat-stat">
+                <div class="feat-stat-val">94%</div>
+                <div class="feat-stat-label">AI signal accuracy</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="grid" id="main-grid"></div>
-      <div id="load-more-wrap" style="text-align:center;padding:20px 0;display:none">
-        <button class="btn-outline" id="load-more-btn" onclick="loadMore()" style="padding:10px 32px;font-size:13px;">
-          <i class="ti ti-loader"></i> Load more
-        </button>
-      </div>
-      <div class="insight">
-        <div class="ih">
-          <div class="ii"><i class="ti ti-sparkles"></i></div>
-          <div class="il" id="insight-label">AI insight</div>
-        </div>
-        <div class="it" id="insight-text">Detected strong cluster of Ghanaian fintech founders in London. 34% have active angel activity. Cross-referencing Companies House, Crunchbase, and LinkedIn. Recommend targeting for Series A co-investment outreach.</div>
-        <div class="ics" id="insight-chips"></div>
-      </div>
-    </div>
-  </div>
 
-  <div class="bottom">
-    <span>Sporafind · v0.1 · Built from official Companies House data</span>
-    <div class="ba">
-      <button class="btn-outline" onclick="if(authUser){sendPrompt('Export current results as CSV');}else{showAuthModal();}"><i class="ti ti-download"></i> Export</button>
-      <button class="btn-gold" onclick="if(authUser){sendPrompt('Running a deep AI scan for new diaspora profiles...');}else{showAuthModal();}"><i class="ti ti-sparkles"></i> Deep scan</button>
+      <div class="feat-card">
+        <div class="feat-icon green"><i class="ti ti-users-group" aria-hidden="true"></i></div>
+        <h3 class="feat-title">People segmentation engine</h3>
+        <p class="feat-body">Every profile is automatically classified into four types — regular diaspora members, leaders, entrepreneurs, and investors — with sub-signals like wealth tier (HNW/UHNW) and industry cluster.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">4 segment types</span>
+          <span class="feat-tag">Wealth signals</span>
+          <span class="feat-tag">Industry tagging</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon gold"><i class="ti ti-building-community" aria-hidden="true"></i></div>
+        <h3 class="feat-title">Organisation discovery</h3>
+        <p class="feat-body">Find diaspora associations, investment syndicates, professional bodies, community orgs, cultural groups, and think tanks — with membership estimates, leadership signals, and engagement history.</p>
+        <div class="feat-tags">
+          <span class="feat-tag gold-t">6 org types</span>
+          <span class="feat-tag gold-t">Membership data</span>
+          <span class="feat-tag gold-t">Leadership intel</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon teal"><i class="ti ti-mail-forward" aria-hidden="true"></i></div>
+        <h3 class="feat-title">AI outreach generation</h3>
+        <p class="feat-body">One click generates a personalised outreach draft for any profile — factoring in their segment, sector, location, and investment history. DR-optimised copy, not generic templates.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">DR-optimised</span>
+          <span class="feat-tag">Personalised per profile</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon green"><i class="ti ti-download" aria-hidden="true"></i></div>
+        <h3 class="feat-title">Export and CRM sync</h3>
+        <p class="feat-body">Export filtered lists as CSV or push directly to HubSpot, Salesforce, Notion, or Airtable. Every export includes segment label, country, industry tag, and AI confidence score.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">CSV export</span>
+          <span class="feat-tag">CRM integrations</span>
+          <span class="feat-tag">API access</span>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
+</section>
+
+<!-- SEGMENTS -->
+<section class="segments" id="segments">
+  <div class="segments-inner">
+    <div class="centered">
+      <div class="section-eyebrow"><i class="ti ti-layout-grid" aria-hidden="true"></i> Segmentation model</div>
+      <h2 class="section-h2">Five categories.<br>One complete picture.</h2>
+      <p class="section-sub centered" style="margin:0 auto;">Sporafind classifies every profile and organisation using AI signal analysis across 14 data sources. Here's what we surface.</p>
+    </div>
+    <div class="seg-grid mt-64">
+
+      <div class="seg-card people">
+        <div class="seg-icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <div class="seg-title">Regular people</div>
+        <p class="seg-body">Diaspora community members — professionals, creatives, workers, and students living abroad. The foundation of every diaspora network and the future generation of investors.</p>
+        <div class="seg-count">3.9M+</div>
+        <div class="seg-count-label">identified globally</div>
+      </div>
+
+      <div class="seg-card leaders">
+        <div class="seg-icon"><i class="ti ti-crown" aria-hidden="true"></i></div>
+        <div class="seg-title">Leaders</div>
+        <p class="seg-body">Politicians, diplomats, executives, academics, and public figures with influence. The connectors who open doors and shape narratives across borders.</p>
+        <div class="seg-count">24,800</div>
+        <div class="seg-count-label">profiles with public influence</div>
+      </div>
+
+      <div class="seg-card entrepreneurs">
+        <div class="seg-icon"><i class="ti ti-rocket" aria-hidden="true"></i></div>
+        <div class="seg-title">Entrepreneurs</div>
+        <p class="seg-body">Founders, operators, and business owners running ventures in the diaspora and back home. Identified by company registrations, media mentions, and business filings.</p>
+        <div class="seg-count">94,200</div>
+        <div class="seg-count-label">active founders tracked</div>
+      </div>
+
+      <div class="seg-card investors">
+        <div class="seg-icon"><i class="ti ti-chart-line" aria-hidden="true"></i></div>
+        <div class="seg-title">Investors</div>
+        <p class="seg-body">Angel investors, VC partners, PE professionals, fund managers, and HNW individuals with deployable capital. Wealth tier signals (HNW, UHNW) included on every profile.</p>
+        <div class="seg-count">18,340</div>
+        <div class="seg-count-label">investors with deployable capital</div>
+      </div>
+
+      <div class="seg-card orgs">
+        <div class="seg-icon"><i class="ti ti-building-community" aria-hidden="true"></i></div>
+        <div class="seg-title">Organisations</div>
+        <div class="seg-orgs-inner">
+          <div>
+            <p class="seg-body">Diaspora associations, investment syndicates, professional bodies, community and cultural organisations, and think tanks — all with membership size, leadership, and engagement data.</p>
+            <div class="seg-count">12,400+</div>
+            <div class="seg-count-label">organisations across 67 countries</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:#A5F3FC;border-radius:8px;padding:14px 16px;">
+              <div style="font-size:10px;font-weight:600;color:#155E75;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Investment groups</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#0E7490;">1,840</div>
+            </div>
+            <div style="background:#A5F3FC;border-radius:8px;padding:14px 16px;">
+              <div style="font-size:10px;font-weight:600;color:#155E75;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Professional bodies</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#0E7490;">2,300</div>
+            </div>
+            <div style="background:#A5F3FC;border-radius:8px;padding:14px 16px;">
+              <div style="font-size:10px;font-weight:600;color:#155E75;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Associations</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#0E7490;">4,100</div>
+            </div>
+            <div style="background:#A5F3FC;border-radius:8px;padding:14px 16px;">
+              <div style="font-size:10px;font-weight:600;color:#155E75;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Community orgs</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#0E7490;">2,900</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="color:var(--gold);justify-content:center;"><i class="ti ti-quote" aria-hidden="true"></i> What users say</div>
+      <h2 class="section-h2" style="color:#fff;">The diaspora intelligence<br>we didn't know we needed.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">
+          <i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i>
+        </div>
+        <p class="testi-quote">"We found 14 Ghanaian angel investors in Toronto we had no idea existed. Three are now in our deal room. Sporafind paid for itself in the first week."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(0,107,60,0.2);color:#4CAF82;">KO</div>
+          <div>
+            <div class="testi-name">Kofi Owusu-Ansah</div>
+            <div class="testi-role">Founder, Accra Ventures · Accra, Ghana</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i>
+        </div>
+        <p class="testi-quote">"Our entire diaspora engagement strategy changed after Sporafind. The segmentation is exactly what government relations work needs — not raw data, but ranked, actionable profiles."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(212,160,23,0.15);color:var(--gold);">AA</div>
+          <div>
+            <div class="testi-name">Abena Agyemang</div>
+            <div class="testi-role">Director, Diaspora Affairs Bureau · Accra</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">
+          <i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i><i class="ti ti-star-filled testi-star" aria-hidden="true"></i>
+        </div>
+        <p class="testi-quote">"I've tried five other tools. Nothing comes close for African diaspora intelligence. The org discovery feature alone mapped 40 associations in London I'd spent months trying to find manually."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:rgba(14,116,144,0.2);color:#0E7490;">YB</div>
+          <div>
+            <div class="testi-name">Yaw Boateng</div>
+            <div class="testi-role">Investment Lead, GhLink Capital · London</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <div class="centered">
+      <div class="section-eyebrow" style="justify-content:center;"><i class="ti ti-receipt" aria-hidden="true"></i> Pricing</div>
+      <h2 class="section-h2">Straightforward plans.<br>Real diaspora intelligence.</h2>
+      <p class="section-sub centered" style="margin:0 auto;">Start free. Scale when you're ready. All plans include Ghana-first scope and full AI segmentation.</p>
+    </div>
+    <div class="pricing-grid mt-64">
+
+      <div class="price-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">$49<span>/mo</span></div>
+        <p class="price-desc">For individuals and small teams exploring diaspora connections.</p>
+        <ul class="price-list">
+          <li><i class="ti ti-check" aria-hidden="true"></i> 500 profile views/month</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> People segmentation</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Organisation discovery</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Ghana scope only</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> CSV export (100 records)</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Email support</li>
+        </ul>
+        <button class="btn-price btn-price-outline" onclick="location.href='workspace.html'">Get started free</button>
+      </div>
+
+      <div class="price-card popular">
+        <div class="popular-badge">Most popular</div>
+        <div class="price-tier light">Growth</div>
+        <div class="price-amount light">$199<span>/mo</span></div>
+        <p class="price-desc light">For operators, investment teams, and agencies running active diaspora programmes.</p>
+        <ul class="price-list">
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> Unlimited profile views</li>
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> Full 5-segment model</li>
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> Pan-African scope unlock</li>
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> AI outreach generation</li>
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> Unlimited CSV export</li>
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> CRM integrations</li>
+          <li class="light"><i class="ti ti-check gold-i" aria-hidden="true"></i> Priority support</li>
+        </ul>
+        <button class="btn-price btn-price-gold" onclick="location.href='workspace.html'"><i class="ti ti-rocket" aria-hidden="true"></i> Start 14-day free trial</button>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amount">Custom</div>
+        <p class="price-desc">For governments, development banks, and institutions operating at scale.</p>
+        <ul class="price-list">
+          <li><i class="ti ti-check" aria-hidden="true"></i> Everything in Growth</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Dedicated AI scan runs</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> White-label option</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Custom data integrations</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> SLA + compliance support</li>
+          <li><i class="ti ti-check" aria-hidden="true"></i> Onboarding & training</li>
+        </ul>
+        <button class="btn-price btn-price-ghost-light" onclick="location.href='contact.html'">Talk to the team →</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Your next diaspora investor is already out there.</h2>
+    <p class="cta-sub">Sporafind will find them in seconds. Stop guessing. Start closing.</p>
+    <div class="cta-actions">
+      <button class="btn-cta-white" onclick="location.href='workspace.html'"><i class="ti ti-rocket" aria-hidden="true"></i> Start your free trial</button>
+      <button class="btn-cta-outline-white" onclick="location.href='contact.html'"><i class="ti ti-calendar" aria-hidden="true"></i> Book a live demo</button>
+    </div>
+    <div class="cta-note">No credit card · 14-day trial · Cancel anytime</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </div>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="features.html">Features</a>
+        <a href="segments.html">Segments</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="api-docs.html">API docs</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="careers.html">Careers</a>
+        <a href="press.html">Press</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of use</a>
+        <a href="gdpr.html">GDPR</a>
+        <a href="sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script>
+// Animated diaspora map canvas
+(function(){
+  const canvas = document.getElementById('diasporaMap');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
 
+  // Ghana origin node position (center-left, roughly Africa)
+  const origin = {x: W*0.38, y: H*0.52};
 
-const PEOPLE_FILTERS = [
-  {f:"all",label:"All segments",icon:"ti-world"},
-  {f:"people",label:"Regular people",icon:"ti-users"},
-  {f:"leaders",label:"Leaders",icon:"ti-crown"},
-  {f:"entrepreneurs",label:"Entrepreneurs",icon:"ti-rocket"},
-  {f:"investors",label:"Investors",icon:"ti-chart-line"},
-];
-const ORG_FILTERS = [
-  {f:"all",label:"All types",icon:"ti-world"},
-  {f:"association",label:"Associations",icon:"ti-briefcase"},
-  {f:"investment",label:"Investment groups",icon:"ti-chart-line"},
-  {f:"professional",label:"Professional bodies",icon:"ti-certificate"},
-  {f:"community",label:"Community orgs",icon:"ti-users"},
-  {f:"cultural",label:"Cultural orgs",icon:"ti-palette"},
-  {f:"think-tank",label:"Think tanks",icon:"ti-bulb"},
-];
+  // Diaspora destination nodes
+  const destinations = [
+    {x:W*0.28,y:H*0.22,label:"London",size:8,color:"#D4A017"},
+    {x:W*0.20,y:H*0.30,label:"New York",size:7,color:"#D4A017"},
+    {x:W*0.17,y:H*0.28,label:"Toronto",size:6,color:"#4CAF82"},
+    {x:W*0.48,y:H*0.18,label:"Berlin",size:5,color:"#4CAF82"},
+    {x:W*0.44,y:H*0.20,label:"Amsterdam",size:5,color:"#4CAF82"},
+    {x:W*0.60,y:H*0.25,label:"Dubai",size:6,color:"#D4A017"},
+    {x:W*0.82,y:H*0.58,label:"Sydney",size:5,color:"#4CAF82"},
+    {x:W*0.52,y:H*0.22,label:"Zurich",size:4,color:"#4CAF82"},
+    {x:W*0.22,y:H*0.38,label:"Houston",size:5,color:"#4CAF82"},
+    {x:W*0.30,y:H*0.18,label:"Manchester",size:4,color:"#4CAF82"},
+  ];
 
-const SEG_COLORS = {
-  people:{bg:"#0a1a3b",text:"#93c5fd",bar:"#2563EB",tag:"#0a1a3b",tagT:"#93c5fd",label:"Community"},
-  leaders:{bg:"#1f0f3b",text:"#b794f4",bar:"#7C3AED",tag:"#1f0f3b",tagT:"#b794f4",label:"Leader"},
-  entrepreneurs:{bg:"#3b1f0a",text:"#f5a542",bar:"#B45309",tag:"#3b1f0a",tagT:"#f5a542",label:"Founder"},
-  investors:{bg:"#3b2a0a",text:"#f5c542",bar:"#D4A017",tag:"#3b2a0a",tagT:"#f5c542",label:"Investor"},
-};
-const ORG_TYPE_LABEL = {association:"Association",investment:"Investment group","think-tank":"Think tank",professional:"Professional body",community:"Community org",cultural:"Cultural org"};
+  // Particles for animated signals
+  let particles = [];
+  const maxParticles = 18;
 
-let curMode = "people";
-let curFilter = "all";
-let curScope = "gh";
-let curSidebar = "all";
-let curPage = 1;
-let allItems = [];
-let totalItems = 0;
-let cachedStats = null;
-let interactionCount = 0;
-const EMAIL_STORAGE_KEY = "sf-email-captured";
-const AUTH_KEY = "sf-user";
-let authUser = JSON.parse(localStorage.getItem(AUTH_KEY) || "null");
-let obData = {role:null, interest:null, region:"ghana"};
-const OB_KEY = "sf-onboarding";
-let onboardingDone = localStorage.getItem(OB_KEY) === "1";
-const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "http://localhost:8000" : "https://api.sporafind.com";
-
-async function apiGet(path) {
-  const res = await fetch(`${API_BASE}${path}`);
-  if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
-  return res.json();
-}
-async function apiPost(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
-  return res.json();
-}
-
-function getInitials(name) {
-  return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
-}
-
-async function setMode(el, mode) {
-  document.querySelectorAll(".mode-tab").forEach(t=>t.classList.remove("active"));
-  el.classList.add("active");
-  curMode = mode; curFilter = "all"; curSidebar = "all"; cachedStats = null;
-  curPage = 1; allItems = [];
-  await renderAll();
-}
-
-function setScope(el, scope) {
-  document.querySelectorAll(".scope-pill").forEach(p=>p.classList.remove("active"));
-  el.classList.add("active"); curScope = scope;
-  curPage = 1; allItems = [];
-  renderAll();
-}
-
-async function setFilter(el, f) {
-  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
-  el.classList.add("active"); curFilter = f;
-  curPage = 1; allItems = [];
-  await renderGrid(); updateMainTitle(); trackInteraction();
-}
-
-async function renderAll() {
-  renderFilters();
-  await Promise.all([renderStats(), renderGrid()]);
-  updateMainTitle(); updateModeCounts();
-}
-
-async function updateModeCounts() {
-  try {
-    cachedStats = cachedStats || await apiGet("/stats");
-    const s = cachedStats;
-    document.getElementById("people-count").textContent = s.total_profiles?.toLocaleString() || "—";
-    document.getElementById("orgs-count").textContent = s.total_orgs?.toLocaleString() || "—";
-  } catch {
-    document.getElementById("people-count").textContent = "—";
-    document.getElementById("orgs-count").textContent = "—";
+  function createParticle(dest) {
+    return {
+      dest,
+      t: 0,
+      speed: 0.003 + Math.random()*0.004,
+      alpha: 1
+    };
   }
-}
 
-function renderFilters() {
-  const arr = curMode === "people" ? PEOPLE_FILTERS : ORG_FILTERS;
-  document.getElementById("filter-row").innerHTML = arr.map((f,i)=>
-    `<div class="chip${i===0?' active':''}" data-f="${f.f}" onclick="setFilter(this,'${f.f}')"><i class="ti ${f.icon}"></i>${f.label}</div>`
-  ).join("");
-}
-
-async function renderStats() {
-  try { cachedStats = await apiGet("/stats"); }
-  catch { cachedStats = { total_profiles:0, total_orgs:0, total_countries:0, sources:{} }; }
-  const s = cachedStats;
-  const arr = curMode === "people"
-    ? [{label:"Total profiles",val:(s.total_profiles||0).toLocaleString(),color:"var(--t1)",delta:"Companies House"},{label:"Countries",val:(s.total_countries||"—").toString(),color:"var(--t1)",delta:"From CH data"},{label:"Data source",val:"Companies House",color:"var(--gl)",delta:"Official UK register"},{label:"Status",val:"Ingesting",color:"var(--gold)",delta:"More data loading"},{label:"Segment enrichment",val:"Pending",color:"var(--t2)",delta:"AI phase 2"}]
-    : [{label:"Organisations",val:(s.total_orgs||0).toLocaleString(),color:"var(--t1)",delta:"Companies House"},{label:"Active companies",val:"—",color:"var(--gold)",delta:"Awaiting enrichment"},{label:"Data source",val:"Companies House",color:"var(--gl)",delta:"Official UK register"},{label:"Countries",val:"UK",color:"var(--t1)",delta:"CH registered"},{label:"Segments",val:"Pending",color:"var(--t2)",delta:"AI phase 2"}];
-  document.getElementById("stats-row").innerHTML = arr.map(s=>
-    `<div class="stat"><div class="stat-label">${s.label}</div><div class="stat-val" style="color:${s.color}">${s.val}</div><div class="stat-delta"><i class="ti ti-trending-up"></i> ${s.delta}</div></div>`
-  ).join("");
-}
-
-async function renderGrid(append = false) {
-  const grid = document.getElementById("main-grid");
-  const lw = document.getElementById("load-more-wrap");
-  if (!append) { curPage = 1; allItems = []; lw.style.display = "none"; grid.innerHTML = `<div class="loading-state"><i class="ti ti-loader"></i><p>Loading…</p></div>`; }
-  else { document.getElementById("load-more-btn").innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite"></i> Loading...'; document.getElementById("load-more-btn").disabled = true; }
-  try {
-    const params = new URLSearchParams({page: String(curPage), page_size:"50"});
-    if (curFilter !== "all") params.set(curMode==="people"?"segment":"org_type", curFilter);
-    if (curScope === "gh") params.set("origin","gh");
-    const endpoint = curMode === "people" ? `/profiles?${params}` : `/orgs?${params}`;
-    const data = await apiGet(endpoint);
-    const items = data.items || [];
-    totalItems = data.total || 0;
-    if (!append) allItems = [];
-    allItems.push(...items);
-    if (!allItems.length) {
-      grid.innerHTML = `<div class="empty-state"><i class="ti ti-search-off"></i><h3>No results found</h3><p>Data ingestion is still running. Check back soon.</p></div>`;
-      lw.style.display = "none";
-      return;
+  function spawnParticles() {
+    if(particles.length < maxParticles) {
+      const d = destinations[Math.floor(Math.random()*destinations.length)];
+      particles.push(createParticle(d));
     }
-    if (curMode === "people") {
-      grid.innerHTML = allItems.map(p=>{
-        const c = SEG_COLORS[p.seg] || SEG_COLORS.people;
-        const loc = [p.locality, p.country].filter(Boolean).join(", ") || p.country_of_residence || "—";
-        const role = p.role || p.occupation || p.company_name || "—";
-        return `<div class="card"><div class="card-bar" style="background:${c.bar}"></div><div class="avatar" style="background:${c.tag};color:${c.tagT}">${getInitials(p.name)}</div><div class="cn">${p.name}</div><div class="cr">${role.length>40?role.slice(0,40)+"…":role}</div><div class="tags"><span class="tag" style="background:${c.tag};color:${c.tagT}">${c.label}</span>${(p.tags||[]).map(t=>`<span class="tag" style="background:var(--s2);color:var(--t2);border:1px solid var(--bd)">${t}</span>`).join("")}</div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
-      }).join("");
-    } else {
-      grid.innerHTML = allItems.map(o=>{
-        const loc = [o.locality, o.country].filter(Boolean).join(", ") || "—";
-        return `<div class="card"><div class="card-bar" style="background:var(--green)"></div><div class="org-icon" style="background:var(--s2);color:var(--gl)"><i class="ti ti-building-community"></i></div><div class="cn">${o.name}</div><div class="cr">${o.status||"Active"}</div><div class="tags"><span class="tag" style="background:var(--s2);color:var(--t2);border:1px solid var(--bd)">${ORG_TYPE_LABEL[o.org_type]||o.company_type||"Org"}</span></div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
-      }).join("");
-    }
-    if (allItems.length < totalItems) {
-      lw.style.display = "";
-      document.getElementById("load-more-btn").innerHTML = `<i class="ti ti-arrow-down"></i> Load more (${allItems.length} of ${totalItems})`;
-      document.getElementById("load-more-btn").disabled = false;
-    } else {
-      lw.style.display = "none";
-    }
-  } catch {
-    if (!append) grid.innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load data</h3><p>Make sure the API server is running</p></div>`;
-    lw.style.display = "none";
   }
-}
 
-async function loadMore() {
-  curPage++;
-  await renderGrid(true);
-}
+  function lerp(a,b,t){ return a + (b-a)*t; }
 
-function renderInsights() {
-  document.getElementById("insight-text").textContent = curMode === "people"
-    ? "Browse real Companies House records of Ghanaian diaspora officers and directors. AI-powered insights and semantic search coming in the next update."
-    : "Organisations from Companies House where Ghanaian diaspora members hold officer or director positions. Filter and export to build your target list.";
-  document.getElementById("insight-chips").innerHTML = `<div class="ic" onclick="showAuthModal()"><i class="ti ti-mail"></i> Get early access to AI insights</div><div class="ic" onclick="document.getElementById('df-q').focus()"><i class="ti ti-search"></i> Try searching for a name or city</div>`;
-  document.getElementById("insight-label").textContent = "About this data";
-}
+  let frame = 0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
 
-function updateMainTitle() {
-  const label = curFilter === "all" ? "All" : curFilter.charAt(0).toUpperCase()+curFilter.slice(1);
-  document.getElementById("main-title").textContent = `${label} ${curMode} — Companies House records`;
-  document.getElementById("main-title").nextElementSibling.textContent = "Data from the official UK Companies House register";
-}
+    // Dark navy background
+    ctx.fillStyle = '#0E1627';
+    ctx.beginPath();
+    ctx.roundRect(0,0,W,H,16);
+    ctx.fill();
 
-function setView(v, btn) {
-  document.querySelectorAll(".vbtn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  document.getElementById("main-grid").style.gridTemplateColumns = v==="list" ? "1fr" : "repeat(auto-fill,minmax(160px,1fr))";
-}
+    // Grid lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+    ctx.lineWidth = 0.5;
+    for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-async function runSearch() {
-  const q = document.getElementById("df-q").value.trim();
-  if (!q) { await renderGrid(); updateMainTitle(); return; }
-  const grid = document.getElementById("main-grid");
-  grid.innerHTML = `<div class="loading-state"><i class="ti ti-loader"></i><p>Searching…</p></div>`;
-  try {
-    const data = await apiGet(`/search?q=${encodeURIComponent(q)}&page_size=50`);
-    const items = data.items || [];
-    if (!items.length) {
-      grid.innerHTML = `<div class="empty-state"><i class="ti ti-search-off"></i><h3>No results for "${q}"</h3><p>Try a different name, city, or company</p></div>`;
-    } else {
-      grid.innerHTML = items.map(p=>{
-        const c = SEG_COLORS[p.seg] || SEG_COLORS.people;
-        const loc = [p.locality, p.country].filter(Boolean).join(", ") || p.country_of_residence || "—";
-        return `<div class="card"><div class="card-bar" style="background:${c.bar}"></div><div class="avatar" style="background:${c.tag};color:${c.tagT}">${getInitials(p.name)}</div><div class="cn">${p.name}</div><div class="cr">${p.role||p.company_name||"—"}</div><div class="tags"><span class="tag" style="background:${c.tag};color:${c.tagT}">${c.label}</span></div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
-      }).join("");
-    }
-    trackInteraction();
-  } catch {
-    grid.innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Search failed</h3><p>API server may be unavailable</p></div>`;
+    // Connection lines (static, faint)
+    destinations.forEach(d=>{
+      ctx.beginPath();
+      ctx.moveTo(origin.x, origin.y);
+      // Bezier curve
+      const cx = (origin.x + d.x)/2 + (Math.random()-0.5)*0;
+      const cy = Math.min(origin.y, d.y) - 30;
+      ctx.strokeStyle = 'rgba(212,160,23,0.10)';
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([4,6]);
+      ctx.bezierCurveTo(origin.x, origin.y-20, d.x, d.y-20, d.x, d.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    // Animated particles
+    particles.forEach((p,i)=>{
+      p.t += p.speed;
+      if(p.t > 1){ particles.splice(i,1); return; }
+      // Bezier position
+      const t = p.t;
+      const x1=origin.x, y1=origin.y-20, x2=p.dest.x, y2=p.dest.y-20;
+      const bx = (1-t)*(1-t)*origin.x + 2*(1-t)*t*x1 + t*t*x2;
+      const by = (1-t)*(1-t)*origin.y + 2*(1-t)*t*y1 + t*t*y2;
+      const alpha = t < 0.1 ? t*10 : t > 0.8 ? (1-t)*5 : 1;
+      ctx.beginPath();
+      ctx.arc(bx,by,2.5,0,Math.PI*2);
+      ctx.fillStyle = `rgba(212,160,23,${alpha*0.9})`;
+      ctx.fill();
+      // Glow
+      ctx.beginPath();
+      ctx.arc(bx,by,5,0,Math.PI*2);
+      ctx.fillStyle = `rgba(212,160,23,${alpha*0.2})`;
+      ctx.fill();
+    });
+
+    // Destination nodes
+    destinations.forEach(d=>{
+      // Outer glow
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,d.size+4,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${d.color==='#D4A017'?'212,160,23':'76,175,130'},0.12)`;
+      ctx.fill();
+      // Node
+      ctx.beginPath();
+      ctx.arc(d.x,d.y,d.size,0,Math.PI*2);
+      ctx.fillStyle = d.color;
+      ctx.fill();
+    });
+
+    // Origin node — Ghana
+    const pulse = Math.sin(frame*0.04)*3;
+    // Outer rings
+    [28+pulse, 20+pulse/2, 13].forEach((r,i)=>{
+      ctx.beginPath();
+      ctx.arc(origin.x,origin.y,r,0,Math.PI*2);
+      ctx.strokeStyle = `rgba(0,107,60,${0.15 - i*0.04})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+    // Core
+    ctx.beginPath();
+    ctx.arc(origin.x,origin.y,10,0,Math.PI*2);
+    ctx.fillStyle = '#006B3C';
+    ctx.fill();
+    // Ghana star
+    ctx.beginPath();
+    ctx.arc(origin.x,origin.y,5,0,Math.PI*2);
+    ctx.fillStyle = '#D4A017';
+    ctx.fill();
+
+    // Labels for large nodes
+    ctx.font = '500 10px Inter, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textAlign = 'center';
+    destinations.filter(d=>d.size>=6).forEach(d=>{
+      ctx.fillText(d.label, d.x, d.y - d.size - 5);
+    });
+    // Ghana label
+    ctx.fillStyle = '#4CAF82';
+    ctx.font = '600 11px Inter, sans-serif';
+    ctx.fillText('Ghana', origin.x, origin.y + 22);
+
+    frame++;
+    if(frame % 40 === 0) spawnParticles();
+    requestAnimationFrame(draw);
   }
-  updateMainTitle();
-}
 
-document.getElementById("df-q").addEventListener("keydown", e => {
-  if (e.key === "Enter") runSearch();
-  if (e.key === "Escape") { document.getElementById("df-q").value = ""; runSearch(); }
-});
-
-function sendPrompt(msg) {
-  console.log("[Sporafind]", msg);
-  const existing = document.querySelector(".toast");
-  if (existing) existing.remove();
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.innerHTML = `<strong style="font-size:12px;font-weight:600;color:var(--gl);display:block;margin-bottom:4px;">Sporafind</strong><div style="font-size:13px;line-height:1.5;">${msg.length > 120 ? msg.slice(0, 120) + "…" : msg}</div>`;
-  const close = document.createElement("button");
-  close.className = "toast-close";
-  close.innerHTML = '<i class="ti ti-x"></i>';
-  close.onclick = () => { toast.classList.remove("show"); setTimeout(()=>toast.remove(),300); };
-  toast.appendChild(close);
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add("show")));
-  setTimeout(() => { toast.classList.remove("show"); setTimeout(() => toast.remove(), 300); }, 4000);
-}
-
-/* ─── Onboarding (full-page gate) ─── */
-let obStep = 1;
-function obShowScreen(id) {
-  document.querySelectorAll(".ob-screen").forEach(s => s.classList.remove("show"));
-  const el = document.getElementById(id);
-  if (el) el.classList.add("show");
-}
-function obSignup(e) {
-  e.preventDefault();
-  const input = document.getElementById("ob-email");
-  const email = input.value.trim();
-  if (!email) return;
-  document.getElementById("ob-check-email").textContent = email;
-  obShowScreen("ob-check");
-  setTimeout(() => {
-    authUser = {email, name:email.split("@")[0], initials:email[0].toUpperCase()};
-    localStorage.setItem(AUTH_KEY, JSON.stringify(authUser));
-    if (!onboardingDone) { obStep = 1; obShowScreen("ob-step-1"); renderObProgress("ob-progress-1", 1); }
-    else { showApp(); }
-  }, 1500);
-}
-function obShowSignin(e) { e.preventDefault(); obShowScreen("ob-signin"); }
-function obShowWelcome(e) { e.preventDefault(); obShowScreen("ob-welcome"); }
-function obSignin(e) {
-  e.preventDefault();
-  const input = document.getElementById("ob-signin-email");
-  const email = input.value.trim();
-  if (!email) return;
-  document.getElementById("ob-check-email").textContent = email;
-  obShowScreen("ob-check");
-  setTimeout(() => {
-    authUser = {email, name:email.split("@")[0], initials:email[0].toUpperCase()};
-    localStorage.setItem(AUTH_KEY, JSON.stringify(authUser));
-    obShowScreen("ob-welcome");
-    if (onboardingDone) showApp();
-    else { obStep = 1; obShowScreen("ob-step-1"); renderObProgress("ob-progress-1", 1); }
-  }, 1000);
-}
-function obResend(e) { e.preventDefault(); obShowScreen("ob-welcome"); }
-function obPick(el, field) {
-  el.parentElement.querySelectorAll(".ob-card").forEach(c => c.classList.remove("selected"));
-  el.classList.add("selected");
-  obData[field] = el.dataset.val;
-  const nxt = document.getElementById(`ob-next-${obStep}`);
-  if (nxt) nxt.disabled = false;
-}
-function obNext() {
-  if (obStep < 3) { obStep++; renderObProgress(`ob-progress-${obStep}`, obStep); document.getElementById(`ob-step-${obStep}`).classList.add("show"); document.getElementById(`ob-step-${obStep-1}`).classList.remove("show"); }
-  else if (obStep === 3) { renderObPills(); obShowScreen("ob-ready"); }
-}
-function obPrev() {
-  if (obStep > 1) { document.getElementById(`ob-step-${obStep}`).classList.remove("show"); obStep--; document.getElementById(`ob-step-${obStep}`).classList.add("show"); }
-}
-function renderObProgress(id, step) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.innerHTML = [1,2,3].map(d => `<div class="ob-progress-dot${d===step?" active":""}${d<step?" done":""}"></div>`).join("");
-}
-function renderObPills() {
-  const labels = {syndicate:"Syndicate lead", investor:"Investor", researcher:"Researcher", organisation:"Organisation", investments:"Investment opportunities", talent:"Talent", partnerships:"Partnerships", research:"Market research", ghana:"Ghana-first", "pan-african":"Pan-African", global:"Global diaspora", undecided:"Exploring"};
-  const picks = [];
-  if (obData.role && labels[obData.role]) picks.push(labels[obData.role]);
-  if (obData.interest && labels[obData.interest]) picks.push(labels[obData.interest]);
-  if (obData.region && labels[obData.region]) picks.push(labels[obData.region]);
-  document.getElementById("ob-pills").innerHTML = picks.map(p => `<span class="ob-pill">${p}</span>`).join("");
-}
-function obEnter() {
-  onboardingDone = true;
-  localStorage.setItem(OB_KEY, "1");
-  localStorage.setItem("sf-ob-data", JSON.stringify(obData));
-  showApp();
-}
-
-/* ─── App view ─── */
-function showApp() {
-  document.getElementById("onboarding-view").style.display = "none";
-  document.getElementById("app-view").style.display = "";
-  updateAuthUI();
-  renderAll();
-}
-function escHandler(e) { if (e.key === "Escape") closeAuthModal(); }
-function showAuthModal() {
-  const m = document.getElementById("auth-modal");
-  if (m) {
-    m.classList.add("show");
-    m.onclick = closeAuthModal;
-    document.addEventListener("keydown", escHandler);
-    return;
+  // Seed initial particles
+  for(let i=0;i<6;i++){
+    const d = destinations[i % destinations.length];
+    const p = createParticle(d);
+    p.t = i * 0.12;
+    particles.push(p);
   }
-  /* No modal in DOM — redirect to onboarding sign-in */
-  document.getElementById("app-view").style.display = "none";
-  document.getElementById("onboarding-view").style.display = "";
-  document.querySelectorAll(".ob-screen").forEach(s => s.classList.remove("show"));
-  document.getElementById("ob-signin").classList.add("show");
-}
-function closeAuthModal() {
-  const m = document.getElementById("auth-modal");
-  if (!m) return;
-  m.classList.remove("show");
-  m.onclick = null;
-  document.removeEventListener("keydown", escHandler);
-}
-async function authSubmitEmail(e) {
-  e.preventDefault();
-  const input = document.getElementById("auth-email");
-  const btn = document.getElementById("auth-submit");
-  if (!input || !btn) return;
-  const email = input.value.trim();
-  if (!email) return;
-  btn.classList.add("loading"); btn.textContent = "Sending…";
-  try { await apiPost("/auth/signup", { email }); } catch {}
-  localStorage.setItem(EMAIL_STORAGE_KEY, email);
-  document.getElementById("auth-check-email").textContent = email;
-  document.getElementById("auth-step-email").classList.remove("show");
-  document.getElementById("auth-step-check").classList.add("show");
-  btn.classList.remove("loading");
-  setTimeout(() => { closeAuthModal(); authUser = {email, name:email.split("@")[0], initials:email[0].toUpperCase()}; localStorage.setItem(AUTH_KEY, JSON.stringify(authUser)); updateAuthUI(); }, 1500);
-}
-function authResend(e) { e.preventDefault(); document.getElementById("auth-step-check").classList.remove("show"); document.getElementById("auth-step-email").classList.add("show"); }
-function updateAuthUI() {
-  const section = document.getElementById("auth-section");
-  if (!section) return;
-  if (authUser) {
-    section.innerHTML = `<div class="user-menu-wrap"><div class="user-avatar" onclick="toggleDropdown(event)">${authUser.initials}</div><div class="user-dropdown" id="user-dropdown"><div class="ud-email">${authUser.email}</div><div class="ud-item" onclick="closeDropdown();sendPrompt('Open my profile and saved searches')"><i class="ti ti-user"></i> My profile</div><div class="ud-item" onclick="closeDropdown();sendPrompt('Open my saved searches and export history')"><i class="ti ti-folder"></i> Saved searches</div><div class="ud-item" onclick="closeDropdown();sendPrompt('Open account settings and notification preferences')"><i class="ti ti-settings"></i> Account settings</div><div class="ud-divider"></div><div class="ud-item danger" onclick="signOut()"><i class="ti ti-logout"></i> Sign out</div></div></div>`;
-  } else {
-    section.innerHTML = `<button class="btn-outline" onclick="showAuthModal()"><i class="ti ti-user"></i> Sign in</button>`;
-  }
-}
-function toggleDropdown(e) { e.stopPropagation(); const dd = document.getElementById("user-dropdown"); if (!dd) return; dd.classList.toggle("show"); if (dd.classList.contains("show")) setTimeout(() => document.addEventListener("click", closeDropdown), 0); }
-function closeDropdown() { const dd = document.getElementById("user-dropdown"); if (dd) dd.classList.remove("show"); document.removeEventListener("click", closeDropdown); }
-function signOut() {
-  localStorage.removeItem(AUTH_KEY); localStorage.removeItem(EMAIL_STORAGE_KEY); localStorage.removeItem(OB_KEY);
-  authUser = null; onboardingDone = false; obData = {role:null, interest:null, region:"ghana"};
-  document.getElementById("app-view").style.display = "none";
-  document.getElementById("onboarding-view").style.display = "";
-  document.querySelectorAll(".ob-screen").forEach(s => s.classList.remove("show"));
-  document.getElementById("ob-welcome").classList.add("show");
-}
 
-function trackInteraction() {
-  if (authUser) return;
-  interactionCount++;
-  if (interactionCount >= 3) setTimeout(showAuthModal, 800);
-}
-
-/* ─── Init ─── */
-if (authUser && onboardingDone) {
-  showApp();
-} else if (authUser && !onboardingDone) {
-  obStep = 1;
-  document.getElementById("ob-welcome").classList.remove("show");
-  document.getElementById("ob-step-1").classList.add("show");
-  renderObProgress("ob-progress-1", 1);
-}
+  draw();
+})();
 </script>
 </body>
 </html>
