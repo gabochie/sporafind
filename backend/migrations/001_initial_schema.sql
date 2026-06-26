@@ -1,8 +1,9 @@
 -- 001_initial_schema.sql
 -- Run this in Supabase SQL Editor to set up the database
 
--- Enable pgvector extension
+-- Enable extensions
 CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- Users table (auth) — must be created before profiles due to FK
 CREATE TABLE IF NOT EXISTS users (
