@@ -18,7 +18,7 @@ def get_engine():
         _engine = create_async_engine(
             url,
             echo=settings.environment == "development",
-            connect_args={"ssl": "require"},
+            connect_args={"ssl": "require", "statement_cache_size": 0},
         )
     return _engine
 
