@@ -10,12 +10,15 @@ _async_session = None
 def get_engine():
     global _engine
     if _engine is None:
-        if not settings.database_url:
+        url = settings.database_url
+        if not url:
             raise RuntimeError("DATABASE_URL is not set. Configure it in .env")
+        if url.startswith("postgresql://") and "+asyncpg" not in url:
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
         _engine = create_async_engine(
-            settings.database_url,
+            url,
             echo=settings.environment == "development",
-            connect_args={"timeout": 15, "ssl": "require"},
+            connect_args={"ssl": "require"},
         )
     return _engine
 
@@ -36,5 +39,8 @@ async def get_db():
     async with session() as s:
         try:
             yield s
+        except Exception as e:
+            print(f"[DB] Connection error: {e}", flush=True)
+            raise
         finally:
             await s.close()
