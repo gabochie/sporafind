@@ -10,6 +10,7 @@
     { "src": "/blog(/.*)?", "dest": "api/server.js" },
     { "src": "/api(/.*)?", "dest": "api/server.js" },
     { "src": "/sitemap\\.xml", "dest": "api/server.js" },
-    { "src": "/rss\\.xml", "dest": "api/server.js" }
+    { "src": "/rss\\.xml", "dest": "api/server.js" },
+    { "src": "/investors(/.*)?", "dest": "api/server.js" }
   ]
 }
