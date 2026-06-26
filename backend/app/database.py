@@ -12,7 +12,11 @@ def get_engine():
     if _engine is None:
         if not settings.database_url:
             raise RuntimeError("DATABASE_URL is not set. Configure it in .env")
-        _engine = create_async_engine(settings.database_url, echo=settings.environment == "development")
+        _engine = create_async_engine(
+            settings.database_url,
+            echo=settings.environment == "development",
+            connect_args={"timeout": 15},
+        )
     return _engine
 
 

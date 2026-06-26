@@ -41,6 +41,11 @@ app.include_router(stats.router)
 app.include_router(auth.router)
 
 
+@app.get("/")
+async def root():
+    return {"app": "Sporafind API", "version": "0.1.0", "status": "running"}
+
+
 @app.get("/health")
 async def health():
     return {"status": "healthy", "version": "0.1.0"}

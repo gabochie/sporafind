@@ -9,7 +9,7 @@ from app.schemas.profile import ProfileResponse, ProfileList
 router = APIRouter(prefix="/search", tags=["search"])
 
 
-@router.post("", response_model=ProfileList)
+@router.get("", response_model=ProfileList)
 async def search_profiles(
     q: str = Query("", min_length=0, max_length=200),
     page: int = Query(1, ge=1),
