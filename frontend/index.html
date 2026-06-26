@@ -795,7 +795,7 @@ let obData = {role:null, interest:null, region:"ghana"};
 const OB_KEY = "sf-onboarding";
 let onboardingDone = localStorage.getItem(OB_KEY) === "1";
 const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "http://localhost:8000" : "https://api.sporafind.com";
+  ? "http://localhost:8000" : "https://backend-psi-nine-34.vercel.app";
 
 async function apiGet(path) {
   const res = await fetch(`${API_BASE}${path}`);
