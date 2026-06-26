@@ -1,11 +1,3 @@
-from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/")
-async def root():
-    return {"status": "ok"}
-
-@app.get("/health")
-async def health():
-    return {"status": "healthy"}
+def handler(environ, start_response):
+    start_response("200 OK", [("Content-Type", "application/json")])
+    return [b'{"status":"ok"}']
