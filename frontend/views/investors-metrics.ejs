@@ -37,6 +37,8 @@ h2 span{color:var(--gold)}
 .status-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 10px;border-radius:10px}
 .status-ok{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a}
 .status-warn{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a}
+.scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroll-wrap table{min-width:400px}
 .note{background:#1a1a0a;border:1px solid #3f3f0a;border-radius:8px;padding:12px 16px;font-size:12px;color:var(--t2);line-height:1.6}
 .note strong{color:var(--t1)}
 .back-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);text-decoration:none;margin-bottom:16px;padding:6px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:6px}
@@ -73,7 +75,7 @@ h2 span{color:var(--gold)}
   <div class="chart-box">
     <h3><i class="ti ti-chart-pie"></i> Platform Status</h3>
     <div style="padding:8px 0">
-      <table class="status-table">
+      <div class="scroll-wrap"><table class="status-table">
         <tr><td>Backend API</td><td><span class="status-badge status-ok" id="status-api">✓ Online</span></td></tr>
         <tr><td>Database</td><td><span class="status-badge status-ok" id="status-db">✓ Connected</span></td></tr>
         <tr><td>CI/CD Pipeline</td><td><span class="status-badge status-ok">✓ GitHub Actions</span></td></tr>
@@ -81,7 +83,7 @@ h2 span{color:var(--gold)}
         <tr><td>Custom Domain</td><td><span class="status-badge status-ok">✓ sporafind.com</span></td></tr>
         <tr><td>API Domain</td><td><span class="status-badge status-ok">✓ api.sporafind.com</span></td></tr>
         <tr><td>Test Suite</td><td><span class="status-badge status-ok">35 tests passing</span></td></tr>
-      </table>
+      </table></div>
     </div>
   </div>
 </div>
@@ -90,7 +92,7 @@ h2 span{color:var(--gold)}
   <div class="chart-box">
     <h3><i class="ti ti-map-pin"></i> Feature Maturity</h3>
     <div style="padding:8px 0">
-      <table class="status-table">
+      <div class="scroll-wrap"><table class="status-table">
         <tr><td>Profile search & filters</td><td><span class="status-badge status-ok">✓ Live</span></td></tr>
         <tr><td>Organisation data</td><td><span class="status-badge status-ok">✓ Live</span></td></tr>
         <tr><td>Pricing & billing</td><td><span class="status-badge status-ok">✓ Configured</span></td></tr>
@@ -99,7 +101,7 @@ h2 span{color:var(--gold)}
         <tr><td>Auth & signup</td><td><span class="status-badge status-ok">✓ Ready</span></td></tr>
         <tr><td>Claim + Verify (Phase B)</td><td><span class="status-badge status-warn">In development</span></td></tr>
         <tr><td>Connections (Phase C)</td><td><span class="status-badge status-warn">Planned</span></td></tr>
-      </table>
+      </table></div>
     </div>
   </div>
   <div class="chart-box">

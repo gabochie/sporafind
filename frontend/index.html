@@ -245,9 +245,53 @@ footer{background:var(--navy);padding:72px 48px 40px;}
 .mt-40{margin-top:40px;}
 .mt-64{margin-top:64px;}
 
+.nav-mobile-toggle{display:none;background:transparent;border:none;color:#fff;font-size:24px;cursor:pointer;padding:4px}
+
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 .animate-in{animation:fadeUp 0.6s ease forwards;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nav-mobile-toggle{display:flex}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(8,13,26,0.98);flex-direction:column;padding:16px 20px;gap:16px;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+  .nav-links.open{display:flex}
+  .nav-cta .btn-ghost-nav{display:none}
+  .nav-cta .btn-primary-nav{padding:6px 14px;font-size:12px}
+  .hero{padding:100px 20px 60px;min-height:auto}
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .hero-h1{font-size:36px;letter-spacing:-1px}
+  .hero-sub{font-size:15px}.hero-right{order:-1}
+  .map-container{width:100%;height:auto;aspect-ratio:480/420}
+  canvas#diasporaMap{width:100%;height:auto}
+  .map-card-top{top:10px;right:5px;padding:6px 10px}
+  .map-card-bottom{bottom:10px;left:5px;padding:6px 10px}
+  .map-card-value{font-size:16px}.map-card-label{font-size:9px}
+  .proof-strip{padding:20px}
+  .proof-logos{gap:16px;justify-content:center}
+  .proof-logo{font-size:13px}
+  .section,.how,.features,.segments,.testimonials,.pricing,.cta-section{padding:60px 20px}
+  .section-h2{font-size:32px;letter-spacing:-1px}
+  .section-sub{font-size:15px}
+  .how-grid{grid-template-columns:1fr;margin-top:40px}
+  .how-step{padding:28px 24px}
+  .features-grid{grid-template-columns:1fr;margin-top:40px}
+  .feat-card{padding:28px 24px}
+  .feat-large-inner{grid-template-columns:1fr;gap:24px}
+  .feat-stat-row{gap:12px}
+  .feat-stat-val{font-size:24px}
+  .seg-grid{grid-template-columns:1fr;margin-top:40px}
+  .seg-card{padding:28px 24px}
+  .seg-orgs-inner{grid-template-columns:1fr;gap:20px}
+  .testi-grid{grid-template-columns:1fr;margin-top:40px}
+  .pricing-grid{grid-template-columns:1fr;margin-top:40px}
+  .price-amount{font-size:36px}
+  .cta-h2{font-size:32px}.cta-sub{font-size:16px}
+  footer{padding:48px 20px 32px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -269,6 +313,7 @@ footer{background:var(--navy);padding:72px 48px 40px;}
       <button class="btn-ghost-nav" onclick="location.href='workspace.html'">Sign in</button>
       <button class="btn-primary-nav" onclick="location.href='pricing.html'">Get early access →</button>
     </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu"><i class="ti ti-menu-2"></i></button>
   </div>
 </nav>
 
@@ -699,6 +744,11 @@ footer{background:var(--navy);padding:72px 48px 40px;}
 </footer>
 
 <script>
+document.getElementById('navToggle')?.addEventListener('click', function(){
+  document.querySelector('.nav-links').classList.toggle('open');
+  this.querySelector('i').className = document.querySelector('.nav-links').classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+});
+
 // Animated diaspora map canvas
 (function(){
   const canvas = document.getElementById('diasporaMap');

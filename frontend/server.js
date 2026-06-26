@@ -217,7 +217,7 @@ app.get('/rss.xml', async (req, res) => {
 app.use(express.static(DIR));
 
 app.use((req, res) => {
-  res.status(404).type('html').send('<h1>404 — Page not found</h1><p>Go back to <a href="/">sporafind.com</a></p>');
+  res.status(404).type('html').send('<!DOCTYPE html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>404 — Sporafind</title><style>body{font-family:Inter,sans-serif;background:#0f0f0f;color:#e8e8e8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;text-align:center}h1{font-size:clamp(24px,5vw,48px)}a{color:#00a85a}</style></head><body><div><h1>404</h1><p>Page not found</p><p><a href="/">← Back to sporafind.com</a></p></div></body></html>');
 });
 
 if (require.main === module) {

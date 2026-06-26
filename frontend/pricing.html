@@ -138,6 +138,9 @@ footer{background:var(--navy);padding:72px 48px 40px}
 .billing-toggle span{padding:8px 20px;border-radius:24px;font-size:14px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all 0.15s}
 .billing-toggle span.active{background:var(--white);color:var(--text-dark);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .save-badge{font-size:11px;font-weight:600;color:var(--green);background:var(--green-light);padding:2px 8px;border-radius:4px;margin-left:4px;vertical-align:middle}
+.nav-mobile-toggle{display:none;background:transparent;border:none;color:#fff;font-size:24px;cursor:pointer;padding:4px}
+.scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroll-wrap table{min-width:600px}
 
 @media(max-width:1000px){
   .pricing-grid{grid-template-columns:1fr;max-width:480px;margin:0 auto}
@@ -145,7 +148,10 @@ footer{background:var(--navy);padding:72px 48px 40px}
 }
 @media(max-width:900px){
   nav{padding:0 20px}
-  .nav-links{display:none}
+  .nav-mobile-toggle{display:flex}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(8,13,26,0.98);flex-direction:column;padding:16px 20px;gap:16px;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+  .nav-links.open{display:flex}
+  .nav-cta .btn-ghost-nav{display:none}
   .page-hero,.pricing-section,.faq-section,.compare-section,.guarantee-strip{padding-left:20px;padding-right:20px}
   .page-hero-h1{font-size:36px}
   footer{padding:48px 20px 32px}
@@ -178,6 +184,7 @@ footer{background:var(--navy);padding:72px 48px 40px}
       <a href="admin.html" class="btn-ghost-nav">Sign in</a>
       <a href="#plans" class="btn-primary-nav">Get early access →</a>
     </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu"><i class="ti ti-menu-2"></i></button>
   </div>
 </nav>
 
@@ -225,7 +232,7 @@ footer{background:var(--navy);padding:72px 48px 40px}
       <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;letter-spacing:-1px;margin-bottom:8px">See exactly what's included</h2>
       <p style="font-size:15px;color:var(--text-mid)">Every plan builds on the one before it. Full transparency on what you get.</p>
     </div>
-    <table class="compare-table">
+    <div class="scroll-wrap"><table class="compare-table">
       <thead>
         <tr><th>Feature</th><th>Starter</th><th>Growth</th><th>Enterprise</th></tr>
       </thead>
@@ -247,7 +254,7 @@ footer{background:var(--navy);padding:72px 48px 40px}
         <tr><td>SLA + compliance support</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
         <tr><td>Onboarding & training</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td><span class="check">✓</span></td></tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 </section>
 
@@ -346,6 +353,10 @@ footer{background:var(--navy);padding:72px 48px 40px}
 </footer>
 
 <script>
+document.getElementById('navToggle')?.addEventListener('click', function(){
+  document.querySelector('.nav-links').classList.toggle('open');
+  this.querySelector('i').className = document.querySelector('.nav-links').classList.contains('open') ? 'ti ti-x' : 'ti ti-menu-2';
+});
 async function loadPricing() {
   const grid = document.getElementById('pricingGrid');
   const loading = document.getElementById('pricingLoading');

@@ -39,6 +39,8 @@ td:first-child{font-weight:500;color:var(--t1)}
 .tag-yellow{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a}
 .tag-red{background:#2e1a1a;color:var(--red);border:1px solid #4f2a2a}
 .tag-blue{background:#0a1a2e;color:var(--blue);border:1px solid #1a2a4f}
+.scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scroll-wrap table{min-width:500px}
 .milestone{display:flex;align-items:start;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px}
 .milestone:last-child{border-bottom:none}
 .milestone .date{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tm);width:70px;flex-shrink:0;padding-top:1px}
@@ -81,12 +83,12 @@ td:first-child{font-weight:500;color:var(--t1)}
   </div>
   <div class="body">
     <p><strong>Pre-Seed Round Structure:</strong> SporaFind is pre-incorporation. The founder holds 100% equity. The pre-seed round will be structured as a <strong>Standard SAFE (YC SAFE)</strong> with a valuation cap and no discount, or priced round at the investor's preference. Allocations will be finalised post-incorporation.</p>
-    <table>
+    <div class="scroll-wrap"><table>
       <tr><th>Shareholder</th><th>Class</th><th>Ownership</th><th>Status</th></tr>
       <tr><td>Gabochie (Founder)</td><td>Ordinary</td><td>100%</td><td><span class="tag tag-green">Current</span></td></tr>
       <tr><td>Pre-Seed Investors</td><td>SAFE / Convertible</td><td>TBD</td><td><span class="tag tag-yellow">This Round</span></td></tr>
       <tr><td>ESOP Pool</td><td>Options</td><td>10% (post-round)</td><td><span class="tag tag-blue">Planned</span></td></tr>
-    </table>
+    </table></div>
     <p style="margin-top:8px;font-size:11px;color:var(--tm)"><strong>Note:</strong> ESOP pool will be created as part of the pre-seed round to attract key hires. Founder is open to standard vesting terms (4-year, 1-year cliff).</p>
   </div>
 </div>
@@ -126,7 +128,7 @@ td:first-child{font-weight:500;color:var(--t1)}
     <h2><span>◆</span> Competition Analysis</h2><i class="ti ti-chevron-down"></i>
   </div>
   <div class="body">
-    <table>
+    <div class="scroll-wrap"><table>
       <tr><th>Platform</th><th>Type</th><th>Diaspora Focus</th><th>Org Data</th><th>Revenue Model</th><th>Threat Level</th></tr>
       <tr><td>LinkedIn</td><td>General professional</td><td>✕</td><td>Partial</td><td>Premium + Recruiter</td><td><span class="tag tag-yellow">Indirect</span></td></tr>
       <tr><td>Afropolitan</td><td>Diaspora social</td><td>✓</td><td>✕</td><td>Community + Events</td><td><span class="tag tag-yellow">Indirect</span></td></tr>
@@ -134,7 +136,7 @@ td:first-child{font-weight:500;color:var(--t1)}
       <tr><td>Meetup / Eventbrite</td><td>Event platforms</td><td>✕</td><td>✕</td><td>Fees per ticket</td><td><span class="tag tag-green">Low</span></td></tr>
       <tr><td>Angellist / Wellfound</td><td>Startup jobs</td><td>✕</td><td>✕</td><td>Recruiter SaaS</td><td><span class="tag tag-green">Low</span></td></tr>
       <tr><td><strong>SporaFind</strong></td><td><strong>Diaspora professional</strong></td><td><strong>✓</strong></td><td><strong>✓</strong></td><td><strong>$0/$29/$99 + Fees</strong></td><td><span class="tag tag-green">—</span></td></tr>
-    </table>
+    </table></div>
     <p style="margin-top:8px"><strong>Key moat:</strong> Companies House integration providing real-time organisation data linked to diaspora professionals. No competitor has this data layer.</p>
   </div>
 </div>
@@ -164,14 +166,14 @@ td:first-child{font-weight:500;color:var(--t1)}
     <h2><span>◆</span> Risk Analysis</h2><i class="ti ti-chevron-down"></i>
   </div>
   <div class="body">
-    <table>
+    <div class="scroll-wrap"><table>
       <tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr>
       <tr><td>Low initial adoption / network effect cold start</td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-red">High</span></td><td>Seed with diaspora organisations, targeted outreach, content marketing. Phase A does not require network effects — value exists in searchable database.</td></tr>
       <tr><td>Companies House data limitations</td><td><span class="tag tag-green">Low</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Multiple registry integrations planned (US, Canada, EU). Manual diaspora profile tagging as fallback.</td></tr>
       <tr><td>Competition from larger platforms</td><td><span class="tag tag-green">Low</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Niche focus + data moat. LinkedIn is too generic to serve diaspora-specific needs effectively.</td></tr>
       <tr><td>Regulatory / compliance (GDPR, data)</td><td><span class="tag tag-green">Low</span></td><td><span class="tag tag-green">Low</span></td><td>Data sourced from public registries. Privacy-first architecture. UK-based with GDPR compliance built in.</td></tr>
       <tr><td>Revenue slower than projected</td><td><span class="tag tag-yellow">Medium</span></td><td><span class="tag tag-yellow">Medium</span></td><td>Lean operations. Pre-seed provides 12–18 month runway. Freemium model drives user acquisition first.</td></tr>
-    </table>
+    </table></div>
   </div>
 </div>
 
@@ -198,13 +200,13 @@ td:first-child{font-weight:500;color:var(--t1)}
     <h2><span>◆</span> Use of Funds — Detail</h2><i class="ti ti-chevron-down"></i>
   </div>
   <div class="body">
-    <table>
+    <div class="scroll-wrap"><table>
       <tr><th>Category</th><th>Allocation</th><th>Amount ($150K)</th><th>Details</th></tr>
       <tr><td>Engineering</td><td>40%</td><td>$60,000</td><td>Phase B (Claim + Verify), Phase C (Connections), search improvements, data pipeline expansion</td></tr>
       <tr><td>Marketing & Growth</td><td>25%</td><td>$37,500</td><td>Diaspora community outreach, content marketing, targeted ads, diaspora org partnerships</td></tr>
       <tr><td>Operations</td><td>20%</td><td>$30,000</td><td>Hosting (Vercel + Supabase), data pipeline costs, tooling, contractor support</td></tr>
       <tr><td>Legal & Admin</td><td>15%</td><td>$22,500</td><td>Incorporation, legal docs, trademark, accounting, compliance</td></tr>
-    </table>
+    </table></div>
     <p style="margin-top:8px;font-size:11px;color:var(--tm)">Allocations are estimates. Founder has discretion to reallocate up to 10% between categories based on actual needs.</p>
   </div>
 </div>
