@@ -1,0 +1,3 @@
+# DEPRECATED — Fly.io free allowance exhausted.
+# Deploying to Koyeb (free tier: 1 app, 1 vCPU, 512MB, always-on).
+# See deploy-koyeb.sh and koyeb.yaml for instructions.

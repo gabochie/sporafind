@@ -1,0 +1,306 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;
+  --bd:#2a2a2a;--bds:#383838;
+  --t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;
+  --green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444;
+}
+body{
+  font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);
+  padding:32px 24px;max-width:960px;margin:0 auto;line-height:1.5;
+}
+h1{
+  font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.5px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+h1 span{color:var(--gold);}
+.meta{color:var(--t2);font-size:13px;margin-bottom:12px;border-left:3px solid var(--green);padding-left:14px;}
+.vision-box{
+  background:linear-gradient(135deg,#0a2e1a,#1a3a22);border:1px solid var(--green);border-radius:10px;
+  padding:16px 20px;margin-bottom:20px;
+}
+.vision-box h3{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--gl);margin-bottom:6px;}
+.vision-box p{font-size:13px;color:var(--t2);line-height:1.6;}
+.vision-box strong{color:var(--t1);}
+.decisions{
+  background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:20px;
+}
+.decisions h3{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.decisions h3 span{color:var(--gold);}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ditem{font-size:12px;color:var(--t2);padding:6px 10px;background:var(--s2);border-radius:6px;display:flex;align-items:center;gap:7px;}
+.ditem strong{color:var(--t1);font-weight:500;white-space:nowrap;}
+.ditem i{color:var(--gl);font-size:14px;flex-shrink:0;}
+.phase{
+  background:var(--s1);border:1px solid var(--bd);border-radius:10px;
+  margin-bottom:14px;overflow:hidden;
+}
+.ph{
+  padding:14px 16px;display:flex;align-items:center;gap:12px;user-select:none;
+  border-bottom:1px solid var(--bd);
+}
+.ph-letter{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ph-letter.A{background:var(--green);color:#fff;}
+.ph-letter.B{background:var(--blue);color:#fff;}
+.ph-letter.C{background:var(--gold);color:#1a1200;}
+.ph-letter.D{background:var(--purple);color:#fff;}
+.ph-title{flex:1;font-size:15px;font-weight:600;}
+.ph-week{font-size:11px;color:var(--tm);padding:2px 8px;border-radius:6px;background:var(--s0);border:1px solid var(--bd);flex-shrink:0;}
+.ph-desc{font-size:11px;color:var(--t2);}
+.ph-body{padding:4px 0;}
+.task{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:9px 16px;border-bottom:1px solid var(--bd);transition:background .1s;
+}
+.task:last-child{border-bottom:none;}
+.task:hover{background:var(--s2);}
+.task-cb{
+  width:16px;height:16px;margin-top:2px;flex-shrink:0;
+  border-radius:4px;border:1.5px solid var(--tm);
+  appearance:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.task-cb:checked{background:var(--green);border-color:var(--green);}
+.task-cb:checked::after{content:"✓";color:#fff;font-size:11px;font-weight:700;}
+.task-cb:checked+.task-body .tn{text-decoration:line-through;color:var(--tm);}
+.task-body{flex:1;min-width:0;}
+.tn{font-size:13px;font-weight:500;transition:color .15s;}
+.td{font-size:11px;color:var(--t2);margin-top:2px;}
+.td code{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--s2);padding:1px 5px;border-radius:3px;border:1px solid var(--bd);}
+.tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;flex-shrink:0;margin-top:2px;}
+.tag-backend{background:#0a1a3b;color:var(--blue);border:1px solid #1a2f5f;}
+.tag-ai{background:#1a0a2e;color:var(--purple);border:1px solid #2a1a4f;}
+.tag-data{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a;}
+.tag-frontend{background:#2e1a0a;color:var(--gold);border:1px solid #4f2a1a;}
+.tag-infra{background:#2e0a0a;color:var(--red);border:1px solid #4f1a1a;}
+.tag-biz{background:#1a2e2e;color:var(--teal);border:1px solid #1a4f4f;}
+.architecture-box{
+  background:var(--s1);border:1px solid var(--bd);border-radius:10px;
+  padding:18px;margin-bottom:20px;
+}
+.architecture-box h3{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.architecture-box h3 span{color:var(--gold);}
+.arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.arch-card{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;}
+.arch-card h4{font-size:12px;font-weight:600;margin-bottom:4px;}
+.arch-card p{font-size:11px;color:var(--t2);line-height:1.5;}
+.arch-badge{
+  display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;
+  margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;
+}
+.arch-badge.current{background:var(--green);color:#fff;}
+.arch-badge.future{background:var(--s3);color:var(--tm);border:1px solid var(--bd);}
+.note{background:#1a1a0a;border:1px solid #3f3f0a;border-radius:8px;padding:12px 16px;font-size:12px;color:var(--t2);line-height:1.6;margin-top:14px;}
+.note strong{color:var(--t1);}
+.note code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gl);}
+@media(max-width:640px){
+  body{padding:16px 12px;}
+  .dgrid,.arch-grid{grid-template-columns:1fr;}
+  h1{font-size:20px;}
+}
+</style>
+
+<h1>Spora<span>find</span> <span style="font-size:14px;color:var(--t2);font-weight:400;font-family:'Inter',sans-serif;">Build Roadmap</span></h1>
+<div class="meta">From intelligence database to diaspora social platform. A phased build where each phase funds the next.</div>
+
+<div class="vision-box">
+  <h3>🌍 The Vision</h3>
+  <p><strong>Phase A (now):</strong> Read-only diaspora intelligence from Companies House data. Syndicates, recruiters, and researchers pay to search, filter, and export.<br>
+  <strong>Phase B-D (future):</strong> Diaspora members claim their scraped profile, verify, and opt into paid connections. The platform becomes a two-sided marketplace: intelligence data on one side, social networking with tiered pricing on the other. Each phase is unlocked by revenue from the previous.</p>
+</div>
+
+<div class="architecture-box">
+  <h3><span>◆</span> Data Architecture</h3>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-badge current">CURRENT</div>
+      <h4>profiles (scraped)</h4>
+      <p>Companies House officer records. Read-only, never modified by users. Has <code>claimed_by</code> FK to <code>users</code> as a nullable column — ready for Phase B.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-badge future">PHASE B</div>
+      <h4>user_profiles (new table)</h4>
+      <p>Diaspora members who claim their scraped profile. Stores bio, photo, interests, verified status, and connection price tiers. Linked to <code>profiles</code> via FK.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-badge future">PHASE C</div>
+      <h4>pricing_tiers + connections (new tables)</h4>
+      <p><code>pricing_tiers</code>: per-user pricing for Chat, Intro, Meeting. <code>connections</code>: tracks who paid to connect, status, Stripe payment intents.</p>
+    </div>
+    <div class="arch-card">
+      <div class="arch-badge future">PHASE D</div>
+      <h4>direct sign-ups</h4>
+      <p>Diaspora members create profiles without a scraped record. Feeds, groups, events tables added. Full community platform.</p>
+    </div>
+  </div>
+</div>
+
+<div class="decisions">
+  <h3><span>◆</span> Strategic Decisions <span style="font-size:10px;color:var(--gl);font-weight:400;font-family:'Inter',sans-serif;">— zero-cost until revenue</span></h3>
+  <div class="dgrid">
+    <div class="ditem"><i class="ti ti-building-bank"></i> <strong>Phase A buyer:</strong> Investment syndicates, recruiters, researchers</div>
+    <div class="ditem"><i class="ti ti-users"></i> <strong>Phase B-C buyer:</strong> Same + diaspora members seeking visibility</div>
+    <div class="ditem"><i class="ti ti-coin"></i> <strong>Phase A pricing:</strong> Free + $19/mo paid + Enterprise (per-seat)</div>
+    <div class="ditem"><i class="ti ti-currency-dollar"></i> <strong>Phase C pricing:</strong> Platform takes 15% cut on connection fees</div>
+    <div class="ditem"><i class="ti ti-code"></i> <strong>Backend:</strong> FastAPI (Python)</div>
+    <div class="ditem"><i class="ti ti-database"></i> <strong>Database:</strong> Supabase Free tier (pgvector included)</div>
+    <div class="ditem"><i class="ti ti-key"></i> <strong>Auth:</strong> Better Auth (self-hosted, $0)</div>
+    <div class="ditem"><i class="ti ti-settings"></i> <strong>Workers:</strong> Modal.com ($30/mo free credit)</div>
+    <div class="ditem"><i class="ti ti-cloud"></i> <strong>Deploy:</strong> Koyeb (free: 1 app, 1 vCPU, 512MB, always-on)</div>
+    <div class="ditem"><i class="ti ti-cloud"></i> <strong>Frontend:</strong> Vercel Hobby (free static hosting)</div>
+    <div class="ditem"><i class="ti ti-currency-dollar-off"></i> <strong>LLM:</strong> Gemini free tier + open-source on Modal</div>
+    <div class="ditem"><i class="ti ti-building"></i> <strong>Data (scraped):</strong> Companies House free API → Bright Data post-validation</div>
+    <div class="ditem"><i class="ti ti-user-plus"></i> <strong>Data (user):</strong> Opt-in claimed profiles + direct sign-ups</div>
+  </div>
+</div>
+
+<div id="app"></div>
+
+<script>
+const PHASES = [
+  {
+    letter:"A", label:"Intelligence Database", weeks:"Weeks 1-4", icon:"🔍", color:"var(--green)",
+    desc:"Read-only Companies House search. Syndicates and recruiters pay to find and export diaspora profiles.",
+    tasks:[
+      {name:"Supabase project + DB schema",desc:"Create Free tier project. Enable pgvector. Run migration with <code>profiles</code>, <code>orgs</code>, <code>users</code>, <code>community_submissions</code>, <code>exports</code>, <code>search_history</code>. Profile has <code>claimed_by</code> FK ready for Phase B.",tag:"infra"},
+      {name:"FastAPI scaffold + auth",desc:"<code>routers/</code>, <code>models/</code>, <code>schemas/</code>, <code>services/</code>. Better Auth with magic link. CORS, health check, lifespan.",tag:"backend"},
+      {name:"Profiles & orgs REST API",desc:"<code>GET /profiles</code>, <code>GET /orgs</code> — paginated, filterable by segment/country/origin. Stats endpoint.",tag:"backend"},
+      {name:"Search endpoint",desc:"<code>POST /search</code> with keyword matching (<code>ilike</code>), facet counts, pagination.",tag:"backend"},
+      {name:"Export endpoint",desc:"<code>POST /export</code> — CSV generation, tracked per user for usage metering.",tag:"backend"},
+      {name:"Companies House ingestion",desc:"Fetch all Ghanaian officers from CH API. Paginate, parse, load into <code>profiles</code>. Enrich with company details.",tag:"data"},
+      {name:"Frontend — onboarding gate",desc:"Full-screen sign-up → magic link → 3-step wizard (role, interest, region) → app view. Tool is hidden until authenticated.",tag:"frontend"},
+      {name:"Frontend — async API wiring",desc:"Replace all mock data with <code>fetch()</code> to live API. Grid, stats, sidebar, search, filters all driven by API calls.",tag:"frontend"},
+      {name:"Auth UI",desc:"Sign-in button in topbar. Magic link modal (or redirects to onboarding sign-in). Avatar with dropdown (profile, saved searches, settings, sign out).",tag:"frontend"},
+      {name:"Email capture → upsell",desc:"3-interaction trigger opens sign-in. Bottom-bar buttons (Export, Deep Scan) prompt auth if not signed in.",tag:"frontend"},
+      {name:"Docker + Koyeb deploy",desc:"Koyeb free tier: 1 app, 1 vCPU, 512MB RAM, always-on, no cold starts. Deploy via CLI or koyeb.yaml.",tag:"infra"},
+      {name:"Vercel deploy + e2e test",desc:"Deploy frontend to Vercel Hobby. Full flow: sign-up → search → filter → export. Fix integration bugs.",tag:"infra"},
+    ]
+  },
+  {
+    letter:"B", label:"Claim + Verify", weeks:"Weeks 5-8", icon:"🆔", color:"var(--blue)",
+    desc:"Diaspora members claim their scraped profile, verify themselves, and opt into being discoverable. Scraped data stays read-only; user data lives in a separate table.",
+    tasks:[
+      {name:"Create user_profiles table",desc:"New table: bio, photo, interests, verified status, linked to <code>profiles</code> via FK. Claimed profiles get a verified badge in search results.",tag:"backend"},
+      {name:"Claim profile endpoint",desc:"<code>POST /profiles/:id/claim</code> — authenticated user claims a scraped profile. Sets <code>claimed_by</code> FK. Creates <code>user_profile</code> record.",tag:"backend"},
+      {name:"Verification flow",desc:"Email verification + optional LinkedIn/ID check. Verified badge shown on profile cards. Free tool access as incentive for claiming.",tag:"backend"},
+      {name:"'Is this you?' UI on profiles",desc:"Unclaimed scraped profiles show a 'Is this you? Claim your profile' button. CTA leads to sign-in + claim flow.",tag:"frontend"},
+      {name:"Verified badge in grid + detail",desc:"Green checkmark badge on claimed profiles. Subtle differentiation from unclaimed scraped records.",tag:"frontend"},
+      {name:"Notification: profile claimed",desc:"Email notification to the user when someone views or saves their profile. Optional opt-in.",tag:"backend"},
+      {name:"Admin: claim moderation queue",desc:"Dashboard to review claim requests. Flag potential impersonation. Approve/reject with reason.",tag:"frontend"},
+    ]
+  },
+  {
+    letter:"C", label:"Social + Pricing Tiers", weeks:"Weeks 9-12", icon:"💰", color:"var(--gold)",
+    desc:"Diaspora members set their own connection prices. Paying users connect with leaders, entrepreneurs, and orgs. Platform takes a cut.",
+    tasks:[
+      {name:"Create pricing_tiers + connections tables",desc:"<code>pricing_tiers</code>: per-profile pricing for Chat ($0), Intro ($19), Meeting ($99). <code>connections</code>: requester, target, tier, status, Stripe payment intent.",tag:"backend"},
+      {name:"Stripe integration",desc:"Payment intents for one-time connection fees. Webhook to update connection status. Platform fee (15%) deducted automatically.",tag:"biz"},
+      {name:"Connect button on claimed profiles",desc:"'Connect' button → tier selection modal (Chat / Intro / Meeting) → Stripe payment → messaging opens. Button hidden on unclaimed profiles.",tag:"frontend"},
+      {name:"Messaging system",desc:"Simple thread-based messaging between connector and connectee. Only accessible after payment. Read-only for compliance.",tag:"backend"},
+      {name:"Dashboard — connections",desc:"List of connections made, pending, received. Status tracking. Export connection history.",tag:"frontend"},
+      {name:"Stripe onboarding for claimed users",desc:"Claimed users set up Stripe Connect to receive payouts. Platform handles disputes, refunds.",tag:"biz"},
+      {name:"Usage metering + plan enforcement",desc:"Free tier: view profiles only. Paid tier ($19/mo): unlimited search + 10 connections/mo. Enterprise: API access.",tag:"backend"},
+    ]
+  },
+  {
+    letter:"D", label:"Open Network", weeks:"Weeks 13+", icon:"🌍", color:"var(--purple)",
+    desc:"Direct sign-ups for diaspora members without a scraped profile. Full community features: feeds, groups, events, multi-region expansion.",
+    tasks:[
+      {name:"Direct sign-up for diaspora members",desc:"Anyone can create a profile without a scraped record. Linked to <code>user_profiles</code>. Onboarding tailored for new members.",tag:"backend"},
+      {name:"Community feed",desc:"Posts, updates, and announcements from diaspora members. Algorithmic feed sorted by relevance and recency.",tag:"backend"},
+      {name:"Groups & organisations",desc:"Private and public groups. Organisation pages with membership management, event hosting.",tag:"backend"},
+      {name:"Events",desc:"Virtual and in-person events. RSVP, calendar sync, reminders. Monetised: promoted events.",tag:"backend"},
+      {name:"Pan-African expansion",desc:"Multi-country support. Region-specific landing pages. Localised data sources (Nigeria, Kenya, South Africa etc).",tag:"data"},
+      {name:"Mobile app (React Native)",desc:"iOS + Android apps. Core features: search, connect, message, feed. Push notifications for connection requests.",tag:"frontend"},
+      {name:"Bright Data enrichment",desc:"Scrape LinkedIn, Crunchbase, AngelList for enriched profiles (AI phase 2 data). $250 minimum approved post-validation.",tag:"data"},
+      {name:"Enterprise API + white-label",desc:"API keys for programmatic access. White-label dashboards for diaspora organisations. Custom SLAs.",tag:"biz"},
+    ]
+  },
+];
+
+const TAG_CLASS = {backend:"tag-backend",ai:"tag-ai",data:"tag-data",frontend:"tag-frontend",infra:"tag-infra",biz:"tag-biz"};
+const TAG_ICON = {backend:"ti-code",ai:"ti-sparkles",data:"ti-database",frontend:"ti-device-desktop",infra:"ti-server",biz:"ti-coin"};
+const STORAGE_KEY = "sf-roadmap-v1";
+
+function loadState(){
+  try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):{};}catch{return{};}
+}
+function saveState(s){localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
+
+function render(){
+  const state=loadState();
+  const allTasks=PHASES.flatMap(p=>p.tasks);
+  const total=allTasks.length;
+  const done=new Set(Object.entries(state).filter(([,v])=>v).map(([k])=>k)).size;
+  const pct=Math.round(done/total*100);
+
+  let html=`
+<div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;flex-wrap:wrap;">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:${pct===100?'var(--gl)':'var(--gold)'}">${pct}%</div>
+  <div style="flex:1;min-width:120px;">
+    <div style="height:8px;background:var(--s2);border-radius:4px;border:1px solid var(--bd);overflow:hidden;">
+      <div style="height:100%;border-radius:4px;background:var(--green);transition:width .4s ease;width:${pct}%"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tm);margin-top:4px;">
+      <span>${done} / ${total} tasks</span>
+      <span>${100-pct}% remaining</span>
+    </div>
+  </div>
+  <div style="font-size:12px;color:var(--t2);">${pct===100?'🎉 All complete!':done===0?'🔴 Not started':done<10?'🟡 Just started':done<20?'🟢 In progress':'✅ Final stretch'}</div>
+</div>`;
+
+  for(const p of PHASES){
+    const pDone=p.tasks.filter(t=>state[t.name]).length;
+    const pTot=p.tasks.length;
+    const pPct=Math.round(pDone/pTot*100);
+    const allDone=pDone>=pTot;
+
+    html+=`<div class="phase">
+      <div class="ph">
+        <div class="ph-letter ${p.letter}">${p.letter}</div>
+        <span style="font-size:18px">${p.icon}</span>
+        <div style="flex:1;">
+          <div class="ph-title">${p.label}</div>
+          <div class="ph-desc">${p.desc}</div>
+        </div>
+        <span class="ph-week">${p.weeks}</span>
+        <div style="font-size:11px;font-weight:600;color:${allDone?'var(--gl)':'var(--t2)'};flex-shrink:0;">${pDone}/${pTot}</div>
+      </div>
+      <div class="ph-body">`;
+    for(const t of p.tasks){
+      const ch=state[t.name]?"checked":"";
+      html+=`<div class="task">
+        <input class="task-cb" type="checkbox" id="${t.name}" ${ch}>
+        <label class="task-body" for="${t.name}">
+          <div class="tn">${t.name}</div>
+          <div class="td">${t.desc}</div>
+        </label>
+        <span class="tag ${TAG_CLASS[t.tag]}"><i class="ti ${TAG_ICON[t.tag]}" style="margin-right:2px;font-size:9px"></i>${t.tag}</span>
+      </div>`;
+    }
+    html+=`</div></div>`;
+  }
+
+  html+=`<div class="note">
+    <strong>■ Key design rule:</strong> Scraped data (<code>profiles</code>) and user data (<code>user_profiles</code>) live in separate tables.
+    Only the <code>claimed_by</code> FK links them. This keeps you legally safe and lets you build the social layer without touching the intelligence product.
+    &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Gate:</strong> Each phase starts <em>only</em> when the previous phase generates enough revenue to fund the build time.
+    &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Zero-cost until Phase A ships:</strong> Everything on free tiers — Supabase Free, Koyeb free tier, Modal $30 credit, Vercel Hobby, Gemini free API.
+    &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Phase A is the wedge:</strong> Prove demand, build a user base, generate revenue. Then expand to the network.
+  </div>`;
+
+  document.getElementById("app").innerHTML=html;
+  document.querySelectorAll(".task-cb").forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const st=loadState();st[cb.id]=cb.checked;saveState(st);render();
+    });
+  });
+}
+render();
+</script>

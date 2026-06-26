@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sporafind — Find. Segment. Connect.</title>
+<meta name="description" content="Diaspora intelligence platform to discover and segment Ghanaians and Africans in the global diaspora by profile type and organisation type.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23006B3C'/><path d='M16 4l3.6 11.1H31l-9.3 6.7 3.6 11.1L16 25.2 7.7 32.9l3.6-11.1L2 15.1h11.4L16 4z' fill='%23D4A017'/></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --s0:#0b0b0b;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;
+  --bd:#2a2a2a;--bds:#383838;
+  --t1:#ededed;--t2:#999;--tm:#555;
+  --green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444;
+  --ff:'Inter',system-ui,-apple-system,sans-serif;
+  --fm:'Space Grotesk','Inter',sans-serif;
+  --radius:10px;--radius-sm:7px;
+  --shadow:0 4px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{background:var(--s0);}
+body{
+  font-family:var(--ff);background:var(--s0);color:var(--t1);
+  display:flex;flex-direction:column;min-height:100vh;
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* ─── Topbar ─── */
+.topbar{
+  background:var(--s1);border-bottom:1px solid var(--bd);
+  padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;z-index:100;
+}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.logomark{
+  width:30px;height:30px;border-radius:7px;background:var(--green);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.logomark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff15,transparent 50%);}
+.star{
+  width:13px;height:13px;background:var(--gold);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.logotext{font-family:var(--fm);font-size:14px;font-weight:700;letter-spacing:-.3px;color:var(--t1);}
+.logotext span{color:var(--gold);}
+.logotext small{font-size:10px;font-weight:400;color:var(--tm);margin-left:2px;}
+.topright{display:flex;align-items:center;gap:8px;}
+.livebadge{
+  display:flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,#0a2e1a,#0a3a22);border:1px solid #1a5a3a;
+  border-radius:20px;padding:4px 10px;font-size:11px;font-weight:500;color:var(--gl);
+}
+.livedot{width:6px;height:6px;border-radius:50%;background:var(--gl);animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.btn-outline{
+  padding:6px 12px;border:1px solid var(--bds);border-radius:var(--radius-sm);
+  background:transparent;font-size:12px;font-weight:500;color:var(--t2);
+  cursor:pointer;font-family:var(--ff);transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.btn-outline:hover{background:var(--s2);color:var(--t1);border-color:var(--tm);}
+
+/* ─── Mode tabs ─── */
+.mode-tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--bd);}
+.mode-tab{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 16px;font-size:13px;font-weight:500;color:var(--tm);cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .15s;user-select:none;
+}
+.mode-tab:hover{color:var(--t2);background:var(--s2);}
+.mode-tab.active{color:var(--t1);border-bottom-color:var(--green);background:linear-gradient(to top, #006B3C08, transparent);}
+.mode-tab i{font-size:16px;}
+.mode-tab .tab-count{
+  font-size:10px;padding:2px 7px;border-radius:10px;background:var(--s2);
+  color:var(--tm);border:1px solid var(--bd);transition:all .15s;
+}
+.mode-tab.active .tab-count{background:var(--green);color:#fff;border-color:var(--green);}
+
+/* ─── Scope banner ─── */
+.scope-banner{
+  display:flex;align-items:center;gap:8px;padding:7px 20px;
+  background:var(--s1);border-bottom:1px solid var(--bd);font-size:12px;color:var(--t2);flex-wrap:wrap;
+}
+.scope-pill{
+  padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;cursor:pointer;
+  transition:all .15s;user-select:none;
+}
+.scope-pill[data-scope="gh"]{background:linear-gradient(135deg,#0a2e1a,#0f3a22);color:#6cdb9a;border:1px solid #1a5a3a;}
+.scope-pill[data-scope="gh"].active{background:var(--green);color:#fff;border-color:var(--green);}
+.scope-pill[data-scope="africa"]{background:linear-gradient(135deg,#3b2a0a,#4a3510);color:#f5c542;border:1px solid #5f4515;}
+.scope-pill[data-scope="africa"].active{background:var(--gold);color:#1a1200;border-color:var(--gold);}
+.scope-label{margin-left:auto;font-size:11px;color:var(--tm);}
+
+/* ─── Hero ─── */
+.hero{
+  background:linear-gradient(180deg,var(--s1) 0%,var(--s0) 100%);
+  border-bottom:1px solid var(--bd);padding:20px 20px 16px;
+}
+.eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold);margin-bottom:6px;}
+.hero-title{
+  font-family:var(--fm);font-size:22px;font-weight:700;letter-spacing:-.4px;
+  line-height:1.2;margin-bottom:4px;background:linear-gradient(135deg,var(--t1) 60%,var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:14px;max-width:520px;}
+.search-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--s2);border:1px solid var(--bds);border-radius:var(--radius);
+  padding:8px 13px;transition:border-color .15s,box-shadow .15s;
+}
+.search-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px #006B3C15;}
+.search-wrap i{font-size:18px;color:var(--tm);flex-shrink:0;}
+.search-input{
+  flex:1;border:none;background:transparent;font-family:var(--ff);
+  font-size:14px;color:var(--t1);outline:none;
+}
+.search-input::placeholder{color:var(--tm);}
+.search-btn{
+  background:linear-gradient(135deg,var(--green),#00552e);color:#fff;
+  border:none;border-radius:var(--radius-sm);padding:7px 15px;
+  font-size:13px;font-weight:500;font-family:var(--ff);cursor:pointer;
+  display:flex;align-items:center;gap:6px;flex-shrink:0;transition:all .15s;
+}
+.search-btn:hover{background:linear-gradient(135deg,#005a30,#004a25);transform:translateY(-1px);}
+.search-btn:active{transform:translateY(0);}
+
+/* ─── Filter chips ─── */
+.filters{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
+.chip{
+  display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;
+  font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--bd);
+  background:var(--s2);color:var(--t2);transition:all .15s;user-select:none;
+}
+.chip:hover{background:var(--s3);color:var(--t1);}
+.chip.active{color:#fff;border-color:transparent;}
+.chip[data-f="all"].active{background:var(--green);}
+.chip[data-f="people"].active{background:var(--blue);}
+.chip[data-f="leaders"].active{background:var(--purple);}
+.chip[data-f="entrepreneurs"].active{background:var(--amber);}
+.chip[data-f="investors"].active{background:var(--gold);color:#1a1200;}
+.chip[data-f="association"].active{background:var(--green);}
+.chip[data-f="investment"].active{background:var(--gold);color:#1a1200;}
+.chip[data-f="professional"].active{background:var(--teal);}
+.chip[data-f="community"].active{background:var(--blue);}
+.chip[data-f="cultural"].active{background:var(--amber);}
+.chip[data-f="think-tank"].active{background:var(--purple);}
+
+/* ─── Stats row ─── */
+.stats-row{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+  border-bottom:1px solid var(--bd);background:var(--s1);
+}
+.stat{
+  padding:11px 16px;border-right:1px solid var(--bd);transition:background .15s;
+}
+.stat:last-child{border-right:none;}
+.stat:hover{background:var(--s2);}
+.stat-label{font-size:10px;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
+.stat-val{font-family:var(--fm);font-size:20px;font-weight:700;letter-spacing:-.3px;}
+.stat-delta{font-size:10px;color:var(--gl);margin-top:1px;display:flex;align-items:center;gap:3px;}
+
+/* ─── Body layout ─── */
+.body{display:grid;grid-template-columns:210px 1fr;flex:1;}
+.sidebar{border-right:1px solid var(--bd);padding:12px 0;background:var(--s1);overflow-y:auto;}
+.sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tm);padding:0 14px;margin:14px 0 6px;}
+.sl:first-child{margin-top:0;}
+.si{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 14px;cursor:pointer;transition:all .1s;gap:6px;border-left:2px solid transparent;
+}
+.si:hover{background:var(--s2);}
+.si.active{background:var(--s2);border-left-color:var(--gold);}
+.si.active .si-label{color:var(--t1);font-weight:500;}
+.si-left{display:flex;align-items:center;gap:7px;flex:1;min-width:0;}
+.si-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.si-label{font-size:12px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.si-pill{font-size:10px;font-weight:600;padding:1px 6px;border-radius:9px;background:var(--s0);color:var(--tm);border:1px solid var(--bd);flex-shrink:0;}
+
+/* ─── Main content ─── */
+.main{padding:14px 18px;background:var(--s0);display:flex;flex-direction:column;overflow-y:auto;}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.mt{font-family:var(--fm);font-size:15px;font-weight:600;}
+.ms{font-size:11px;color:var(--tm);margin-top:1px;}
+.vtoggle{
+  display:flex;gap:2px;background:var(--s1);border:1px solid var(--bd);
+  border-radius:var(--radius-sm);padding:3px;
+}
+.vbtn{
+  padding:5px 9px;border:none;background:transparent;cursor:pointer;
+  border-radius:5px;color:var(--tm);font-size:15px;display:flex;align-items:center;transition:all .1s;
+}
+.vbtn:hover{color:var(--t1);}
+.vbtn.active{background:var(--s2);color:var(--t1);}
+
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:10px;flex:1;align-content:start;
+}
+
+/* ─── Card ─── */
+.card{
+  background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);
+  padding:13px 12px;cursor:pointer;position:relative;overflow:hidden;
+  transition:border-color .2s,transform .15s,box-shadow .2s;
+}
+.card:hover{border-color:var(--bds);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.card:active{transform:translateY(0);}
+.card-bar{position:absolute;top:0;left:0;right:0;height:3px;transition:height .15s;}
+.card:hover .card-bar{height:4px;}
+.avatar{
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-family:var(--fm);font-size:13px;font-weight:700;margin-bottom:8px;
+  flex-shrink:0;
+}
+.org-icon{
+  width:38px;height:38px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;margin-bottom:8px;
+}
+.cn{font-size:13px;font-weight:500;color:var(--t1);line-height:1.3;margin-bottom:2px;}
+.cr{font-size:11px;color:var(--t2);line-height:1.3;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:7px;}
+.tag{
+  font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;
+  display:inline-flex;align-items:center;gap:3px;
+}
+.footer{display:flex;align-items:center;justify-content:space-between;padding-top:7px;border-top:1px solid var(--bd);}
+.loc{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--tm);}
+.loc i{font-size:11px;}
+.ai-btn{
+  width:24px;height:24px;border-radius:5px;background:var(--s2);
+  border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--tm);font-size:12px;transition:all .12s;
+}
+.ai-btn:hover{background:var(--s0);color:var(--t1);border-color:var(--tm);}
+
+/* ─── Org type badge ─── */
+.org-type-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;margin-bottom:6px;}
+
+/* ─── Insight panel ─── */
+.insight{
+  background:linear-gradient(135deg,var(--s1),#141e18);
+  border:1px solid #1a3a2a;border-radius:var(--radius);padding:14px 16px;margin-top:14px;
+}
+.ih{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.ii{
+  width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,#0a3a22,#00552e);
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gl);
+}
+.il{font-size:12px;font-weight:600;color:var(--gl);}
+.it{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:9px;}
+.ics{display:flex;flex-wrap:wrap;gap:5px;}
+.ic{
+  font-size:11px;padding:5px 10px;border-radius:6px;background:var(--s2);
+  border:1px solid var(--bd);color:var(--t2);cursor:pointer;
+  display:flex;align-items:center;gap:4px;transition:all .12s;
+}
+.ic:hover{border-color:var(--green);color:var(--gl);background:linear-gradient(135deg,#0a2e1a,var(--s2));}
+/* ─── Bottom bar ─── */
+.bottom{
+  border-top:1px solid var(--bd);padding:9px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--s1);font-size:11px;color:var(--tm);
+}
+.ba{display:flex;gap:7px;}
+.btn-gold{
+  padding:6px 12px;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#b88912);
+  font-size:12px;font-weight:600;color:#1a1200;cursor:pointer;
+  display:flex;align-items:center;gap:4px;font-family:var(--ff);transition:all .15s;
+}
+.btn-gold:hover{background:linear-gradient(135deg,#c49015,#a37a10);transform:translateY(-1px);}
+.btn-gold:active{transform:translateY(0);}
+
+/* ─── States ─── */
+.empty-state{text-align:center;padding:40px 16px;color:var(--tm);grid-column:1/-1;}
+.empty-state i{font-size:36px;margin-bottom:12px;display:block;color:var(--bds);}
+.empty-state h3{font-size:15px;color:var(--t2);margin-bottom:6px;}
+.empty-state p{font-size:12px;}
+
+.loading-state{text-align:center;padding:32px 16px;color:var(--tm);grid-column:1/-1;}
+.loading-state i{font-size:24px;animation:spin 1s linear infinite;display:block;margin-bottom:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.skeleton{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);padding:13px 12px;}
+.skel-bar{height:3px;border-radius:0;background:var(--s2);margin:-13px -12px 10px;}
+.skel-circle{width:38px;height:38px;border-radius:50%;background:var(--s2);margin-bottom:8px;}
+.skel-line{height:12px;background:var(--s2);border-radius:3px;margin-bottom:6px;}
+.skel-line.w50{width:50%;}
+.skel-line.w70{width:70%;}
+.skel-line.w30{width:30%;}
+@keyframes shimmer{0%{opacity:1;}50%{opacity:.4;}100%{opacity:1;}}
+.skel-bar,.skel-circle,.skel-line{animation:shimmer 1.6s ease-in-out infinite;}
+
+/* ─── Toast ─── */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:var(--s1);color:var(--t1);padding:14px 20px;
+  border-radius:var(--radius);font-size:13px;max-width:440px;
+  border:1px solid var(--bds);box-shadow:0 12px 48px rgba(0,0,0,.5);
+  font-family:var(--ff);line-height:1.5;
+  opacity:0;transform:translateY(16px) scale(.97);
+  transition:all .3s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0) scale(1);}
+.toast-close{
+  position:absolute;top:-8px;right:-8px;width:22px;height:22px;
+  border-radius:50%;border:1px solid var(--bd);background:var(--s2);
+  color:var(--t2);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .12s;pointer-events:all;
+}
+.toast-close:hover{background:var(--s3);color:var(--t1);}
+
+/* ─── Email modal ─── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.7);
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  padding:20px;
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:var(--s1);border:1px solid var(--bds);border-radius:14px;
+  padding:32px;max-width:440px;width:100%;position:relative;
+  box-shadow:0 24px 64px rgba(0,0,0,.5);
+  animation:modalIn .3s cubic-bezier(.22,1,.36,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-close{
+  position:absolute;top:12px;right:12px;width:28px;height:28px;
+  border-radius:50%;border:1px solid var(--bd);background:var(--s2);
+  color:var(--t2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .12s;
+}
+.modal-close:hover{background:var(--s3);color:var(--t1);}
+.modal-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:linear-gradient(135deg,#0a3a22,#00552e);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:var(--gl);margin-bottom:16px;
+}
+.modal h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;color:var(--t1);}
+.modal p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
+.modal-benefits{list-style:none;margin-bottom:20px;display:flex;flex-direction:column;gap:8px;}
+.modal-benefits li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);}
+.modal-benefits li i{color:var(--gl);font-size:16px;flex-shrink:0;}
+.modal-form{display:flex;gap:8px;}
+.modal-input{
+  flex:1;padding:10px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--bds);background:var(--s2);color:var(--t1);
+  font-family:var(--ff);font-size:13px;outline:none;transition:border-color .15s;
+}
+.modal-input:focus{border-color:var(--green);}
+.modal-input::placeholder{color:var(--tm);}
+.modal-submit{
+  padding:10px 20px;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#b88912);
+  font-size:13px;font-weight:600;color:#1a1200;cursor:pointer;
+  font-family:var(--ff);transition:all .15s;white-space:nowrap;
+}
+.modal-submit:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
+.modal-submit.loading{opacity:.6;pointer-events:none;}
+.modal-note{font-size:11px;color:var(--tm);margin-top:12px;text-align:center;}
+.modal-success{display:none;text-align:center;padding:16px 0;}
+.modal-success.show{display:block;}
+.modal-success i{font-size:36px;color:var(--gl);margin-bottom:12px;}
+.modal-success h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;}
+.modal-success p{font-size:13px;color:var(--t2);}
+
+/* ─── Auth / Onboarding ─── */
+.user-avatar{
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fm);font-size:12px;font-weight:700;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,var(--green),#00552e);border:1px solid #1a5a3a;
+  flex-shrink:0;transition:all .12s;user-select:none;
+}
+.user-avatar:hover{border-color:var(--gl);transform:scale(1.05);}
+.user-menu-wrap{position:relative;}
+.user-dropdown{
+  position:absolute;top:38px;right:0;z-index:9999;
+  background:var(--s1);border:1px solid var(--bds);border-radius:var(--radius);
+  padding:6px;min-width:200px;box-shadow:0 12px 48px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
+  transition:all .15s cubic-bezier(.22,1,.36,1);
+}
+.user-dropdown.show{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
+.user-dropdown .ud-email{font-size:11px;color:var(--tm);padding:6px 10px 10px;border-bottom:1px solid var(--bd);margin-bottom:4px;}
+.user-dropdown .ud-item{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;
+  font-size:12px;color:var(--t2);cursor:pointer;transition:all .12s;
+}
+.user-dropdown .ud-item:hover{background:var(--s2);color:var(--t1);}
+.user-dropdown .ud-item i{font-size:16px;width:18px;text-align:center;}
+.user-dropdown .ud-divider{height:1px;background:var(--bd);margin:4px 0;}
+.user-dropdown .ud-item.danger:hover{background:#2a1010;color:var(--red);}
+
+.auth-modal .modal{max-width:400px;}
+.auth-step{display:none;}
+.auth-step.show{display:block;}
+.auth-step h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;color:var(--t1);}
+.auth-step p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
+.auth-check{text-align:center;padding:16px 0;}
+.auth-check i{font-size:40px;color:var(--gl);margin-bottom:12px;}
+.auth-check h3{font-family:var(--fm);font-size:18px;font-weight:700;margin-bottom:6px;}
+.auth-check p{font-size:13px;color:var(--t2);margin-bottom:4px;}
+.auth-check .ac-email{font-size:14px;font-weight:600;color:var(--t1);}
+
+.onboarding-overlay{
+  position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.8);
+  display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  padding:20px;
+}
+.onboarding-overlay.show{display:flex;}
+.onboarding-card{
+  background:var(--s1);border:1px solid var(--bds);border-radius:16px;
+  padding:40px;max-width:580px;width:100%;position:relative;
+  box-shadow:0 24px 64px rgba(0,0,0,.5);animation:modalIn .3s cubic-bezier(.22,1,.36,1);
+  min-height:420px;
+}
+.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:28px;}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--s3);transition:all .3s;}
+.ob-dot.active{background:var(--gold);width:24px;border-radius:4px;}
+.ob-dot.done{background:var(--gl);}
+.ob-step{display:none;animation:obIn .3s cubic-bezier(.22,1,.36,1);}
+.ob-step.show{display:block;}
+@keyframes obIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+.ob-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,#0a3a22,#00552e);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:var(--gl);margin-bottom:16px;
+}
+.ob-step h3{font-family:var(--fm);font-size:20px;font-weight:700;margin-bottom:4px;color:var(--t1);}
+.ob-step p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px;}
+.ob-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ob-option{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border:1px solid var(--bd);border-radius:var(--radius);cursor:pointer;
+  background:var(--s2);transition:all .12s;user-select:none;
+}
+.ob-option:hover{background:var(--s3);border-color:var(--bds);}
+.ob-option.selected{border-color:var(--gold);background:linear-gradient(135deg,#3b2a0a,var(--s2));}
+.ob-option i{font-size:18px;color:var(--gold);flex-shrink:0;}
+.ob-opt-text{font-size:13px;font-weight:500;color:var(--t1);}
+.ob-opt-sub{font-size:11px;color:var(--tm);margin-top:1px;}
+.ob-nav{display:flex;justify-content:space-between;margin-top:24px;padding-top:20px;border-top:1px solid var(--bd);}
+.ob-skip{font-size:12px;color:var(--tm);cursor:pointer;padding:8px 0;background:none;border:none;font-family:var(--ff);}
+.ob-skip:hover{color:var(--t2);}
+.ob-next{
+  padding:10px 24px;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--gold),#b88912);
+  font-size:13px;font-weight:600;color:#1a1200;cursor:pointer;font-family:var(--ff);transition:all .15s;
+}
+.ob-next:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
+.ob-next:disabled{opacity:.4;cursor:default;}
+.ob-done{text-align:center;padding:20px 0;}
+.ob-done i{font-size:48px;color:var(--gl);margin-bottom:16px;}
+.ob-done h3{font-family:var(--fm);font-size:22px;font-weight:700;margin-bottom:6px;}
+.ob-done p{font-size:14px;color:var(--t2);margin-bottom:20px;}
+.ob-done .ob-next{margin:0 auto;}
+
+/* ─── Onboarding landing ─── */
+.onboard{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 0%, #0a2e1a 0%, var(--s0) 60%);
+  padding:24px;
+}
+.ob-inner{width:100%;max-width:480px;text-align:center;}
+.ob-screen{display:none;animation:obFade .4s cubic-bezier(.22,1,.36,1);}
+.ob-screen.show{display:block;}
+@keyframes obFade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.ob-logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:24px;}
+.ob-logo .logomark{width:36px;height:36px;border-radius:9px;}
+.ob-logo .logomark .star{width:16px;height:16px;}
+.ob-logo .logotext{font-size:18px;}
+.ob-title{font-family:var(--fm);font-size:28px;font-weight:700;letter-spacing:-.5px;line-height:1.15;margin-bottom:8px;}
+.ob-desc{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto;}
+.ob-form{display:flex;gap:8px;max-width:400px;margin:0 auto;}
+.ob-input{
+  flex:1;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--bds);
+  background:var(--s2);color:var(--t1);font-family:var(--ff);font-size:14px;
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.ob-input:focus{border-color:var(--green);box-shadow:0 0 0 3px #006B3C15;}
+.ob-input::placeholder{color:var(--tm);}
+.ob-btn{
+  padding:12px 20px;border:none;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--gold),#b88912);color:#1a1200;
+  font-size:14px;font-weight:600;font-family:var(--ff);cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap;
+}
+.ob-btn:hover{background:linear-gradient(135deg,#c49015,#a37a10);transform:translateY(-1px);}
+.ob-btn:disabled{opacity:.4;cursor:default;transform:none;}
+.ob-alt{font-size:13px;color:var(--tm);margin-top:20px;}
+.ob-alt a{color:var(--gl);text-decoration:none;}
+.ob-alt a:hover{text-decoration:underline;}
+.ob-icon-wrap{
+  width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,#0a3a22,#00552e);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;font-size:32px;color:var(--gl);
+}
+.ob-email-display{font-size:16px;font-weight:600;color:var(--t1);margin-bottom:4px;}
+.ob-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:420px;margin:0 auto 20px;}
+.ob-card{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:6px;padding:20px 12px;border:1px solid var(--bd);border-radius:var(--radius);
+  cursor:pointer;background:var(--s2);transition:all .12s;user-select:none;
+}
+.ob-card:hover{background:var(--s3);border-color:var(--bds);}
+.ob-card.selected{border-color:var(--gold);background:linear-gradient(135deg,#3b2a0a,var(--s2));}
+.ob-card i{font-size:24px;color:var(--gold);}
+.ob-card-text{font-size:13px;font-weight:500;color:var(--t1);}
+.ob-card-sub{font-size:10px;color:var(--tm);line-height:1.3;}
+.ob-nav{display:flex;justify-content:space-between;align-items:center;max-width:420px;margin:0 auto;}
+.ob-back{font-size:13px;color:var(--tm);cursor:pointer;padding:8px 0;background:none;border:none;font-family:var(--ff);display:flex;align-items:center;gap:4px;}
+.ob-back:hover{color:var(--t2);}
+.ob-progress{display:flex;gap:6px;justify-content:center;margin-bottom:24px;}
+.ob-progress-dot{width:8px;height:8px;border-radius:50%;background:var(--s3);transition:all .3s;}
+.ob-progress-dot.active{background:var(--gold);width:24px;border-radius:4px;}
+.ob-progress-dot.done{background:var(--gl);}
+.ob-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px;}
+.ob-pill{padding:5px 12px;border-radius:6px;background:var(--s2);border:1px solid var(--bd);font-size:12px;color:var(--t2);}
+
+/* ─── Responsive ─── */
+@media(max-width:900px){
+  .body{grid-template-columns:170px 1fr;}
+  .stats-row{grid-template-columns:repeat(3,1fr);}
+  .stat:nth-child(3){border-right:none;}
+}
+@media(max-width:700px){
+  .body{grid-template-columns:1fr;}
+  .sidebar{
+    display:flex;gap:0;overflow-x:auto;padding:0;border-right:none;
+    border-bottom:1px solid var(--bd);flex-wrap:nowrap;
+  }
+  .sidebar .sl{display:none;}
+  .sidebar .si{border-left:none;border-bottom:2px solid transparent;padding:10px 12px;white-space:nowrap;flex-shrink:0;}
+  .sidebar .si.active{border-left:none;border-bottom-color:var(--gold);}
+  .sidebar .si-pill{display:none;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .stat:nth-child(2){border-right:none;}
+  .hero-title{font-size:18px;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+}
+@media(max-width:480px){
+  .topbar{padding:10px 14px;flex-wrap:wrap;}
+  .hero{padding:16px 14px;}
+  .main{padding:12px 14px;}
+  .grid{grid-template-columns:1fr 1fr;gap:8px;}
+  .card{padding:11px 10px;}
+  .stat{padding:8px 10px;}
+  .stat-val{font-size:16px;}
+  .search-wrap{padding:6px 10px;}
+  .bottom{flex-direction:column;gap:8px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- Onboarding view (full-screen gate) -->
+<div id="onboarding-view" class="onboard">
+  <div class="ob-inner">
+
+    <!-- Welcome -->
+    <div class="ob-screen show" id="ob-welcome">
+      <div class="ob-logo">
+        <div class="logomark"><div class="star"></div></div>
+        <div class="logotext">Spora<span>find</span></div>
+      </div>
+      <h1 class="ob-title">Find. Segment. Connect.</h1>
+      <p class="ob-desc">Diaspora intelligence platform for investment syndicates, researchers, and diaspora organisations — built from official Companies House records.</p>
+      <form class="ob-form" onsubmit="obSignup(event)">
+        <input class="ob-input" id="ob-email" type="email" placeholder="Enter your email" required autocomplete="email">
+        <button class="ob-btn" type="submit">Get started <i class="ti ti-arrow-right"></i></button>
+      </form>
+      <div class="ob-alt">Already have access? <a href="#" onclick="obShowSignin(event)">Sign in</a></div>
+    </div>
+
+    <!-- Sign in -->
+    <div class="ob-screen" id="ob-signin">
+      <div class="ob-logo">
+        <div class="logomark"><div class="star"></div></div>
+        <div class="logotext">Spora<span>find</span></div>
+      </div>
+      <h2 class="ob-title" style="font-size:22px;">Welcome back</h2>
+      <p class="ob-desc">Enter your email and we'll send you a magic link.</p>
+      <form class="ob-form" onsubmit="obSignin(event)">
+        <input class="ob-input" id="ob-signin-email" type="email" placeholder="you@example.com" required autocomplete="email">
+        <button class="ob-btn" type="submit">Send magic link <i class="ti ti-arrow-right"></i></button>
+      </form>
+      <div class="ob-alt">New to Sporafind? <a href="#" onclick="obShowWelcome(event)">Get started</a></div>
+    </div>
+
+    <!-- Check inbox -->
+    <div class="ob-screen" id="ob-check">
+      <div class="ob-icon-wrap"><i class="ti ti-mail-check"></i></div>
+      <h2 class="ob-title" style="font-size:22px;">Check your inbox</h2>
+      <p class="ob-desc">We sent a magic link to</p>
+      <p class="ob-email-display" id="ob-check-email"></p>
+      <p class="ob-desc" style="font-size:12px;color:var(--tm);margin-top:16px;">Didn't receive it? <a href="#" onclick="obResend(event)" style="color:var(--gl);">Resend</a></p>
+    </div>
+
+    <!-- Onboarding: Role -->
+    <div class="ob-screen" id="ob-step-1">
+      <div class="ob-progress" id="ob-progress-1"></div>
+      <div class="ob-icon-wrap"><i class="ti ti-user-circle"></i></div>
+      <h2 class="ob-title" style="font-size:22px;">Tell us about yourself</h2>
+      <p class="ob-desc">What brings you to Sporafind?</p>
+      <div class="ob-cards" id="ob-cards-1">
+        <div class="ob-card" data-val="syndicate" onclick="obPick(this,'role')"><i class="ti ti-building-bank"></i><div class="ob-card-text">Syndicate lead</div><div class="ob-card-sub">Sourcing investment opportunities</div></div>
+        <div class="ob-card" data-val="investor" onclick="obPick(this,'role')"><i class="ti ti-chart-line"></i><div class="ob-card-text">Investor</div><div class="ob-card-sub">Angel, VC, or institutional</div></div>
+        <div class="ob-card" data-val="researcher" onclick="obPick(this,'role')"><i class="ti ti-books"></i><div class="ob-card-text">Researcher</div><div class="ob-card-sub">Academic or market research</div></div>
+        <div class="ob-card" data-val="organisation" onclick="obPick(this,'role')"><i class="ti ti-building-community"></i><div class="ob-card-text">Organisation</div><div class="ob-card-sub">Diaspora group or association</div></div>
+      </div>
+      <div style="text-align:right;"><button class="ob-btn ob-btn-next" id="ob-next-1" disabled onclick="obNext()">Continue <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+
+    <!-- Onboarding: Interest -->
+    <div class="ob-screen" id="ob-step-2">
+      <div class="ob-progress" id="ob-progress-2"></div>
+      <div class="ob-icon-wrap"><i class="ti ti-target"></i></div>
+      <h2 class="ob-title" style="font-size:22px;">What are you looking for?</h2>
+      <p class="ob-desc">Select your primary interest area.</p>
+      <div class="ob-cards" id="ob-cards-2">
+        <div class="ob-card" data-val="investments" onclick="obPick(this,'interest')"><i class="ti ti-coin"></i><div class="ob-card-text">Investment opportunities</div><div class="ob-card-sub">Find founders, startups, deal flow</div></div>
+        <div class="ob-card" data-val="talent" onclick="obPick(this,'interest')"><i class="ti ti-users"></i><div class="ob-card-text">Talent</div><div class="ob-card-sub">Connect with skilled professionals</div></div>
+        <div class="ob-card" data-val="partnerships" onclick="obPick(this,'interest')"><i class="ti ti-handshake"></i><div class="ob-card-text">Partnerships</div><div class="ob-card-sub">Diaspora organisations and leaders</div></div>
+        <div class="ob-card" data-val="research" onclick="obPick(this,'interest')"><i class="ti ti-search"></i><div class="ob-card-text">Market research</div><div class="ob-card-sub">Demographics and diaspora data</div></div>
+      </div>
+      <div class="ob-nav"><button class="ob-back" onclick="obPrev()"><i class="ti ti-arrow-left"></i> Back</button><button class="ob-btn" id="ob-next-2" disabled onclick="obNext()">Continue <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+
+    <!-- Onboarding: Region -->
+    <div class="ob-screen" id="ob-step-3">
+      <div class="ob-progress" id="ob-progress-3"></div>
+      <div class="ob-icon-wrap"><i class="ti ti-world"></i></div>
+      <h2 class="ob-title" style="font-size:22px;">Your focus regions</h2>
+      <p class="ob-desc">Which diaspora communities matter most to you?</p>
+      <div class="ob-cards" id="ob-cards-3">
+        <div class="ob-card selected" data-val="ghana" onclick="obPick(this,'region')"><i class="ti ti-flag"></i><div class="ob-card-text">Ghana-first</div><div class="ob-card-sub">Prioritise Ghanaian diaspora</div></div>
+        <div class="ob-card" data-val="pan-african" onclick="obPick(this,'region')"><i class="ti ti-world"></i><div class="ob-card-text">Pan-African</div><div class="ob-card-sub">All African diaspora communities</div></div>
+        <div class="ob-card" data-val="global" onclick="obPick(this,'region')"><i class="ti ti-map"></i><div class="ob-card-text">Global diaspora</div><div class="ob-card-sub">Beyond Africa</div></div>
+        <div class="ob-card" data-val="undecided" onclick="obPick(this,'region')"><i class="ti ti-compass"></i><div class="ob-card-text">Not sure yet</div><div class="ob-card-sub">Exploring what's available</div></div>
+      </div>
+      <div class="ob-nav"><button class="ob-back" onclick="obPrev()"><i class="ti ti-arrow-left"></i> Back</button><button class="ob-btn" id="ob-next-3" onclick="obNext()">Continue <i class="ti ti-arrow-right"></i></button></div>
+    </div>
+
+    <!-- Ready -->
+    <div class="ob-screen" id="ob-ready">
+      <div class="ob-icon-wrap" style="background:linear-gradient(135deg,#0a3a22,#00552e);"><i class="ti ti-circle-check" style="color:var(--gl);font-size:40px;"></i></div>
+      <h2 class="ob-title" style="margin-top:20px;">You're all set</h2>
+      <p class="ob-desc">Your preferences are saved. Start exploring the diaspora intelligence platform.</p>
+      <div class="ob-pills" id="ob-pills"></div>
+      <button class="ob-btn" onclick="obEnter()">Enter Sporafind <i class="ti ti-arrow-right"></i></button>
+    </div>
+
+  </div>
+</div>
+
+<!-- App view (hidden until authenticated) -->
+<div id="app-view" style="display:none">
+  <h2 class="sr-only">Sporafind — Diaspora intelligence platform to discover, segment, and connect with Ghanaians and Africans in the global diaspora.</h2>
+
+  <div class="topbar">
+    <a class="logo" href="#">
+      <div class="logomark"><div class="star"></div></div>
+      <div class="logotext">Spora<span>find</span></div>
+    </a>
+    <div class="topright">
+      <div class="livebadge"><div class="livedot"></div>AI active</div>
+      <div id="auth-section">
+        <button class="btn-outline" id="signin-btn" onclick="showAuthModal()"><i class="ti ti-user"></i> Sign in</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mode-tabs">
+    <div class="mode-tab active" data-mode="people" onclick="setMode(this,'people')">
+      <i class="ti ti-users"></i> People <span class="tab-count" id="people-count">—</span>
+    </div>
+    <div class="mode-tab" data-mode="orgs" onclick="setMode(this,'orgs')">
+      <i class="ti ti-building-community"></i> Organisations <span class="tab-count" id="orgs-count">—</span>
+    </div>
+  </div>
+
+  <div class="scope-banner">
+    <i class="ti ti-adjustments-horizontal" style="font-size:14px;color:var(--tm);"></i>
+    <span style="color:var(--tm);">Scope:</span>
+    <div class="scope-pill active" data-scope="gh" onclick="setScope(this,'gh')">Ghana-first</div>
+    <div class="scope-pill" data-scope="africa" onclick="setScope(this,'africa')">Pan-African</div>
+    <span class="scope-label" id="scope-label">Showing Ghanaian diaspora from Companies House records</span>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow" id="hero-eyebrow">🇬🇭 Ghanaian Diaspora Intelligence</div>
+    <div class="hero-title" id="hero-title">Find any Ghanaian in the world.<br>Segment them. Connect with purpose.</div>
+    <div class="hero-sub" id="hero-sub">Curated intelligence database of the Ghanaian and African diaspora — built from official Companies House records. Segment by role, location, and background. Used by investment syndicates, diaspora organisations, and researchers worldwide.</div>
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input class="search-input" id="df-q" type="search" placeholder='Search by name, industry, city, or keyword — e.g. "fintech founders in London"' spellcheck="false" autocomplete="off">
+      <button class="search-btn" onclick="runSearch()"><i class="ti ti-sparkles"></i> Find now</button>
+    </div>
+    <div class="filters" id="filter-row"></div>
+  </div>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div class="body">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="main">
+      <div class="mh">
+        <div>
+          <div class="mt" id="main-title">All profiles — showing 12 of 4.2M+</div>
+          <div class="ms">Sorted by AI relevance · Updated 4 min ago</div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center;">
+          <div class="vtoggle">
+            <button class="vbtn active" onclick="setView('grid',this)" aria-label="Grid view"><i class="ti ti-layout-grid"></i></button>
+            <button class="vbtn" onclick="setView('list',this)" aria-label="List view"><i class="ti ti-list"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="grid" id="main-grid"></div>
+      <div class="insight">
+        <div class="ih">
+          <div class="ii"><i class="ti ti-sparkles"></i></div>
+          <div class="il" id="insight-label">AI insight</div>
+        </div>
+        <div class="it" id="insight-text">Detected strong cluster of Ghanaian fintech founders in London. 34% have active angel activity. Cross-referencing Companies House, Crunchbase, and LinkedIn. Recommend targeting for Series A co-investment outreach.</div>
+        <div class="ics" id="insight-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <span>Sporafind · v0.1 · Built from official Companies House data</span>
+    <div class="ba">
+      <button class="btn-outline" onclick="if(authUser){sendPrompt('Export current results as CSV');}else{showAuthModal();}"><i class="ti ti-download"></i> Export</button>
+      <button class="btn-gold" onclick="if(authUser){sendPrompt('Running a deep AI scan for new diaspora profiles...');}else{showAuthModal();}"><i class="ti ti-sparkles"></i> Deep scan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+const PEOPLE_FILTERS = [
+  {f:"all",label:"All segments",icon:"ti-world"},
+  {f:"people",label:"Regular people",icon:"ti-users"},
+  {f:"leaders",label:"Leaders",icon:"ti-crown"},
+  {f:"entrepreneurs",label:"Entrepreneurs",icon:"ti-rocket"},
+  {f:"investors",label:"Investors",icon:"ti-chart-line"},
+];
+const ORG_FILTERS = [
+  {f:"all",label:"All types",icon:"ti-world"},
+  {f:"association",label:"Associations",icon:"ti-briefcase"},
+  {f:"investment",label:"Investment groups",icon:"ti-chart-line"},
+  {f:"professional",label:"Professional bodies",icon:"ti-certificate"},
+  {f:"community",label:"Community orgs",icon:"ti-users"},
+  {f:"cultural",label:"Cultural orgs",icon:"ti-palette"},
+  {f:"think-tank",label:"Think tanks",icon:"ti-bulb"},
+];
+
+const SEG_COLORS = {
+  people:{bg:"#0a1a3b",text:"#93c5fd",bar:"#2563EB",tag:"#0a1a3b",tagT:"#93c5fd",label:"Community"},
+  leaders:{bg:"#1f0f3b",text:"#b794f4",bar:"#7C3AED",tag:"#1f0f3b",tagT:"#b794f4",label:"Leader"},
+  entrepreneurs:{bg:"#3b1f0a",text:"#f5a542",bar:"#B45309",tag:"#3b1f0a",tagT:"#f5a542",label:"Founder"},
+  investors:{bg:"#3b2a0a",text:"#f5c542",bar:"#D4A017",tag:"#3b2a0a",tagT:"#f5c542",label:"Investor"},
+};
+const ORG_TYPE_LABEL = {association:"Association",investment:"Investment group","think-tank":"Think tank",professional:"Professional body",community:"Community org",cultural:"Cultural org"};
+
+let curMode = "people";
+let curFilter = "all";
+let curScope = "gh";
+let curSidebar = "all";
+let cachedStats = null;
+let interactionCount = 0;
+const EMAIL_STORAGE_KEY = "sf-email-captured";
+const AUTH_KEY = "sf-user";
+let authUser = JSON.parse(localStorage.getItem(AUTH_KEY) || "null");
+let obData = {role:null, interest:null, region:"ghana"};
+const OB_KEY = "sf-onboarding";
+let onboardingDone = localStorage.getItem(OB_KEY) === "1";
+const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+  ? "http://localhost:8000" : "";
+
+async function apiGet(path) {
+  const res = await fetch(`${API_BASE}${path}`);
+  if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
+  return res.json();
+}
+async function apiPost(path, body) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
+  return res.json();
+}
+
+function getInitials(name) {
+  return name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+}
+
+async function setMode(el, mode) {
+  document.querySelectorAll(".mode-tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  curMode = mode; curFilter = "all"; curSidebar = "all"; cachedStats = null;
+  await renderAll();
+}
+
+function setScope(el, scope) {
+  document.querySelectorAll(".scope-pill").forEach(p=>p.classList.remove("active"));
+  el.classList.add("active"); curScope = scope;
+  renderAll();
+}
+
+async function setFilter(el, f) {
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+  el.classList.add("active"); curFilter = f;
+  await renderGrid(); updateMainTitle(); trackInteraction();
+}
+
+async function renderAll() {
+  renderFilters();
+  await Promise.all([renderStats(), renderGrid()]);
+  updateMainTitle(); updateModeCounts();
+}
+
+async function updateModeCounts() {
+  try {
+    cachedStats = cachedStats || await apiGet("/stats");
+    const s = cachedStats;
+    document.getElementById("people-count").textContent = s.total_profiles?.toLocaleString() || "—";
+    document.getElementById("orgs-count").textContent = s.total_orgs?.toLocaleString() || "—";
+  } catch {
+    document.getElementById("people-count").textContent = "—";
+    document.getElementById("orgs-count").textContent = "—";
+  }
+}
+
+function renderFilters() {
+  const arr = curMode === "people" ? PEOPLE_FILTERS : ORG_FILTERS;
+  document.getElementById("filter-row").innerHTML = arr.map((f,i)=>
+    `<div class="chip${i===0?' active':''}" data-f="${f.f}" onclick="setFilter(this,'${f.f}')"><i class="ti ${f.icon}"></i>${f.label}</div>`
+  ).join("");
+}
+
+async function renderStats() {
+  try { cachedStats = await apiGet("/stats"); }
+  catch { cachedStats = { total_profiles:0, total_orgs:0, total_countries:0, sources:{} }; }
+  const s = cachedStats;
+  const arr = curMode === "people"
+    ? [{label:"Total profiles",val:(s.total_profiles||0).toLocaleString(),color:"var(--t1)",delta:"Companies House"},{label:"Countries",val:(s.total_countries||"—").toString(),color:"var(--t1)",delta:"From CH data"},{label:"Data source",val:"Companies House",color:"var(--gl)",delta:"Official UK register"},{label:"Status",val:"Ingesting",color:"var(--gold)",delta:"More data loading"},{label:"Segment enrichment",val:"Pending",color:"var(--t2)",delta:"AI phase 2"}]
+    : [{label:"Organisations",val:(s.total_orgs||0).toLocaleString(),color:"var(--t1)",delta:"Companies House"},{label:"Active companies",val:"—",color:"var(--gold)",delta:"Awaiting enrichment"},{label:"Data source",val:"Companies House",color:"var(--gl)",delta:"Official UK register"},{label:"Countries",val:"UK",color:"var(--t1)",delta:"CH registered"},{label:"Segments",val:"Pending",color:"var(--t2)",delta:"AI phase 2"}];
+  document.getElementById("stats-row").innerHTML = arr.map(s=>
+    `<div class="stat"><div class="stat-label">${s.label}</div><div class="stat-val" style="color:${s.color}">${s.val}</div><div class="stat-delta"><i class="ti ti-trending-up"></i> ${s.delta}</div></div>`
+  ).join("");
+}
+
+async function renderGrid() {
+  const grid = document.getElementById("main-grid");
+  grid.innerHTML = `<div class="loading-state"><i class="ti ti-loader"></i><p>Loading…</p></div>`;
+  try {
+    const params = new URLSearchParams({page:"1", page_size:"50"});
+    if (curFilter !== "all") params.set(curMode==="people"?"segment":"org_type", curFilter);
+    if (curScope === "gh") params.set("origin","gh");
+    const endpoint = curMode === "people" ? `/profiles?${params}` : `/orgs?${params}`;
+    const data = await apiGet(endpoint);
+    const items = data.items || [];
+    if (!items.length) {
+      grid.innerHTML = `<div class="empty-state"><i class="ti ti-search-off"></i><h3>No results found</h3><p>Data ingestion is still running. Check back soon.</p></div>`;
+      return;
+    }
+    if (curMode === "people") {
+      grid.innerHTML = items.map(p=>{
+        const c = SEG_COLORS[p.seg] || SEG_COLORS.people;
+        const loc = [p.locality, p.country].filter(Boolean).join(", ") || p.country_of_residence || "—";
+        const role = p.role || p.occupation || p.company_name || "—";
+        return `<div class="card"><div class="card-bar" style="background:${c.bar}"></div><div class="avatar" style="background:${c.tag};color:${c.tagT}">${getInitials(p.name)}</div><div class="cn">${p.name}</div><div class="cr">${role.length>40?role.slice(0,40)+"…":role}</div><div class="tags"><span class="tag" style="background:${c.tag};color:${c.tagT}">${c.label}</span>${(p.tags||[]).map(t=>`<span class="tag" style="background:var(--s2);color:var(--t2);border:1px solid var(--bd)">${t}</span>`).join("")}</div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
+      }).join("");
+    } else {
+      grid.innerHTML = items.map(o=>{
+        const loc = [o.locality, o.country].filter(Boolean).join(", ") || "—";
+        return `<div class="card"><div class="card-bar" style="background:var(--green)"></div><div class="org-icon" style="background:var(--s2);color:var(--gl)"><i class="ti ti-building-community"></i></div><div class="cn">${o.name}</div><div class="cr">${o.status||"Active"}</div><div class="tags"><span class="tag" style="background:var(--s2);color:var(--t2);border:1px solid var(--bd)">${ORG_TYPE_LABEL[o.org_type]||o.company_type||"Org"}</span></div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
+      }).join("");
+    }
+  } catch {
+    grid.innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load data</h3><p>Make sure the API server is running</p></div>`;
+  }
+}
+
+function renderInsights() {
+  document.getElementById("insight-text").textContent = curMode === "people"
+    ? "Browse real Companies House records of Ghanaian diaspora officers and directors. AI-powered insights and semantic search coming in the next update."
+    : "Organisations from Companies House where Ghanaian diaspora members hold officer or director positions. Filter and export to build your target list.";
+  document.getElementById("insight-chips").innerHTML = `<div class="ic" onclick="showAuthModal()"><i class="ti ti-mail"></i> Get early access to AI insights</div><div class="ic" onclick="document.getElementById('df-q').focus()"><i class="ti ti-search"></i> Try searching for a name or city</div>`;
+  document.getElementById("insight-label").textContent = "About this data";
+}
+
+function updateMainTitle() {
+  const label = curFilter === "all" ? "All" : curFilter.charAt(0).toUpperCase()+curFilter.slice(1);
+  document.getElementById("main-title").textContent = `${label} ${curMode} — Companies House records`;
+  document.getElementById("main-title").nextElementSibling.textContent = "Data from the official UK Companies House register";
+}
+
+function setView(v, btn) {
+  document.querySelectorAll(".vbtn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("main-grid").style.gridTemplateColumns = v==="list" ? "1fr" : "repeat(auto-fill,minmax(160px,1fr))";
+}
+
+async function runSearch() {
+  const q = document.getElementById("df-q").value.trim();
+  if (!q) { await renderGrid(); updateMainTitle(); return; }
+  const grid = document.getElementById("main-grid");
+  grid.innerHTML = `<div class="loading-state"><i class="ti ti-loader"></i><p>Searching…</p></div>`;
+  try {
+    const data = await apiGet(`/search?q=${encodeURIComponent(q)}&page_size=50`);
+    const items = data.items || [];
+    if (!items.length) {
+      grid.innerHTML = `<div class="empty-state"><i class="ti ti-search-off"></i><h3>No results for "${q}"</h3><p>Try a different name, city, or company</p></div>`;
+    } else {
+      grid.innerHTML = items.map(p=>{
+        const c = SEG_COLORS[p.seg] || SEG_COLORS.people;
+        const loc = [p.locality, p.country].filter(Boolean).join(", ") || p.country_of_residence || "—";
+        return `<div class="card"><div class="card-bar" style="background:${c.bar}"></div><div class="avatar" style="background:${c.tag};color:${c.tagT}">${getInitials(p.name)}</div><div class="cn">${p.name}</div><div class="cr">${p.role||p.company_name||"—"}</div><div class="tags"><span class="tag" style="background:${c.tag};color:${c.tagT}">${c.label}</span></div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
+      }).join("");
+    }
+    trackInteraction();
+  } catch {
+    grid.innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Search failed</h3><p>API server may be unavailable</p></div>`;
+  }
+  updateMainTitle();
+}
+
+document.getElementById("df-q").addEventListener("keydown", e => {
+  if (e.key === "Enter") runSearch();
+  if (e.key === "Escape") { document.getElementById("df-q").value = ""; runSearch(); }
+});
+
+function sendPrompt(msg) {
+  console.log("[Sporafind]", msg);
+  const existing = document.querySelector(".toast");
+  if (existing) existing.remove();
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = `<strong style="font-size:12px;font-weight:600;color:var(--gl);display:block;margin-bottom:4px;">Sporafind</strong><div style="font-size:13px;line-height:1.5;">${msg.length > 120 ? msg.slice(0, 120) + "…" : msg}</div>`;
+  const close = document.createElement("button");
+  close.className = "toast-close";
+  close.innerHTML = '<i class="ti ti-x"></i>';
+  close.onclick = () => { toast.classList.remove("show"); setTimeout(()=>toast.remove(),300); };
+  toast.appendChild(close);
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add("show")));
+  setTimeout(() => { toast.classList.remove("show"); setTimeout(() => toast.remove(), 300); }, 4000);
+}
+
+/* ─── Onboarding (full-page gate) ─── */
+let obStep = 1;
+function obShowScreen(id) {
+  document.querySelectorAll(".ob-screen").forEach(s => s.classList.remove("show"));
+  const el = document.getElementById(id);
+  if (el) el.classList.add("show");
+}
+function obSignup(e) {
+  e.preventDefault();
+  const input = document.getElementById("ob-email");
+  const email = input.value.trim();
+  if (!email) return;
+  document.getElementById("ob-check-email").textContent = email;
+  obShowScreen("ob-check");
+  setTimeout(() => {
+    authUser = {email, name:email.split("@")[0], initials:email[0].toUpperCase()};
+    localStorage.setItem(AUTH_KEY, JSON.stringify(authUser));
+    if (!onboardingDone) { obStep = 1; obShowScreen("ob-step-1"); renderObProgress("ob-progress-1", 1); }
+    else { showApp(); }
+  }, 1500);
+}
+function obShowSignin(e) { e.preventDefault(); obShowScreen("ob-signin"); }
+function obShowWelcome(e) { e.preventDefault(); obShowScreen("ob-welcome"); }
+function obSignin(e) {
+  e.preventDefault();
+  const input = document.getElementById("ob-signin-email");
+  const email = input.value.trim();
+  if (!email) return;
+  document.getElementById("ob-check-email").textContent = email;
+  obShowScreen("ob-check");
+  setTimeout(() => {
+    authUser = {email, name:email.split("@")[0], initials:email[0].toUpperCase()};
+    localStorage.setItem(AUTH_KEY, JSON.stringify(authUser));
+    obShowScreen("ob-welcome");
+    if (onboardingDone) showApp();
+    else { obStep = 1; obShowScreen("ob-step-1"); renderObProgress("ob-progress-1", 1); }
+  }, 1000);
+}
+function obResend(e) { e.preventDefault(); obShowScreen("ob-welcome"); }
+function obPick(el, field) {
+  el.parentElement.querySelectorAll(".ob-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected");
+  obData[field] = el.dataset.val;
+  const nxt = document.getElementById(`ob-next-${obStep}`);
+  if (nxt) nxt.disabled = false;
+}
+function obNext() {
+  if (obStep < 3) { obStep++; renderObProgress(`ob-progress-${obStep}`, obStep); document.getElementById(`ob-step-${obStep}`).classList.add("show"); document.getElementById(`ob-step-${obStep-1}`).classList.remove("show"); }
+  else if (obStep === 3) { renderObPills(); obShowScreen("ob-ready"); }
+}
+function obPrev() {
+  if (obStep > 1) { document.getElementById(`ob-step-${obStep}`).classList.remove("show"); obStep--; document.getElementById(`ob-step-${obStep}`).classList.add("show"); }
+}
+function renderObProgress(id, step) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = [1,2,3].map(d => `<div class="ob-progress-dot${d===step?" active":""}${d<step?" done":""}"></div>`).join("");
+}
+function renderObPills() {
+  const labels = {syndicate:"Syndicate lead", investor:"Investor", researcher:"Researcher", organisation:"Organisation", investments:"Investment opportunities", talent:"Talent", partnerships:"Partnerships", research:"Market research", ghana:"Ghana-first", "pan-african":"Pan-African", global:"Global diaspora", undecided:"Exploring"};
+  const picks = [];
+  if (obData.role && labels[obData.role]) picks.push(labels[obData.role]);
+  if (obData.interest && labels[obData.interest]) picks.push(labels[obData.interest]);
+  if (obData.region && labels[obData.region]) picks.push(labels[obData.region]);
+  document.getElementById("ob-pills").innerHTML = picks.map(p => `<span class="ob-pill">${p}</span>`).join("");
+}
+function obEnter() {
+  onboardingDone = true;
+  localStorage.setItem(OB_KEY, "1");
+  localStorage.setItem("sf-ob-data", JSON.stringify(obData));
+  showApp();
+}
+
+/* ─── App view ─── */
+function showApp() {
+  document.getElementById("onboarding-view").style.display = "none";
+  document.getElementById("app-view").style.display = "";
+  updateAuthUI();
+  renderAll();
+}
+function escHandler(e) { if (e.key === "Escape") closeAuthModal(); }
+function showAuthModal() {
+  const m = document.getElementById("auth-modal");
+  if (m) {
+    m.classList.add("show");
+    m.onclick = closeAuthModal;
+    document.addEventListener("keydown", escHandler);
+    return;
+  }
+  /* No modal in DOM — redirect to onboarding sign-in */
+  document.getElementById("app-view").style.display = "none";
+  document.getElementById("onboarding-view").style.display = "";
+  document.querySelectorAll(".ob-screen").forEach(s => s.classList.remove("show"));
+  document.getElementById("ob-signin").classList.add("show");
+}
+function closeAuthModal() {
+  const m = document.getElementById("auth-modal");
+  if (!m) return;
+  m.classList.remove("show");
+  m.onclick = null;
+  document.removeEventListener("keydown", escHandler);
+}
+async function authSubmitEmail(e) {
+  e.preventDefault();
+  const input = document.getElementById("auth-email");
+  const btn = document.getElementById("auth-submit");
+  if (!input || !btn) return;
+  const email = input.value.trim();
+  if (!email) return;
+  btn.classList.add("loading"); btn.textContent = "Sending…";
+  try { await apiPost("/auth/signup", { email }); } catch {}
+  localStorage.setItem(EMAIL_STORAGE_KEY, email);
+  document.getElementById("auth-check-email").textContent = email;
+  document.getElementById("auth-step-email").classList.remove("show");
+  document.getElementById("auth-step-check").classList.add("show");
+  btn.classList.remove("loading");
+  setTimeout(() => { closeAuthModal(); authUser = {email, name:email.split("@")[0], initials:email[0].toUpperCase()}; localStorage.setItem(AUTH_KEY, JSON.stringify(authUser)); updateAuthUI(); }, 1500);
+}
+function authResend(e) { e.preventDefault(); document.getElementById("auth-step-check").classList.remove("show"); document.getElementById("auth-step-email").classList.add("show"); }
+function updateAuthUI() {
+  const section = document.getElementById("auth-section");
+  if (!section) return;
+  if (authUser) {
+    section.innerHTML = `<div class="user-menu-wrap"><div class="user-avatar" onclick="toggleDropdown(event)">${authUser.initials}</div><div class="user-dropdown" id="user-dropdown"><div class="ud-email">${authUser.email}</div><div class="ud-item" onclick="closeDropdown();sendPrompt('Open my profile and saved searches')"><i class="ti ti-user"></i> My profile</div><div class="ud-item" onclick="closeDropdown();sendPrompt('Open my saved searches and export history')"><i class="ti ti-folder"></i> Saved searches</div><div class="ud-item" onclick="closeDropdown();sendPrompt('Open account settings and notification preferences')"><i class="ti ti-settings"></i> Account settings</div><div class="ud-divider"></div><div class="ud-item danger" onclick="signOut()"><i class="ti ti-logout"></i> Sign out</div></div></div>`;
+  } else {
+    section.innerHTML = `<button class="btn-outline" onclick="showAuthModal()"><i class="ti ti-user"></i> Sign in</button>`;
+  }
+}
+function toggleDropdown(e) { e.stopPropagation(); const dd = document.getElementById("user-dropdown"); if (!dd) return; dd.classList.toggle("show"); if (dd.classList.contains("show")) setTimeout(() => document.addEventListener("click", closeDropdown), 0); }
+function closeDropdown() { const dd = document.getElementById("user-dropdown"); if (dd) dd.classList.remove("show"); document.removeEventListener("click", closeDropdown); }
+function signOut() {
+  localStorage.removeItem(AUTH_KEY); localStorage.removeItem(EMAIL_STORAGE_KEY); localStorage.removeItem(OB_KEY);
+  authUser = null; onboardingDone = false; obData = {role:null, interest:null, region:"ghana"};
+  document.getElementById("app-view").style.display = "none";
+  document.getElementById("onboarding-view").style.display = "";
+  document.querySelectorAll(".ob-screen").forEach(s => s.classList.remove("show"));
+  document.getElementById("ob-welcome").classList.add("show");
+}
+
+function trackInteraction() {
+  if (authUser) return;
+  interactionCount++;
+  if (interactionCount >= 3) setTimeout(showAuthModal, 800);
+}
+
+/* ─── Init ─── */
+if (authUser && onboardingDone) {
+  showApp();
+} else if (authUser && !onboardingDone) {
+  obStep = 1;
+  document.getElementById("ob-welcome").classList.remove("show");
+  document.getElementById("ob-step-1").classList.add("show");
+  renderObProgress("ob-progress-1", 1);
+}
+</script>
+</body>
+</html>

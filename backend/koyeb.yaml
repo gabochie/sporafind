@@ -1,0 +1,26 @@
+name: sporafind-api
+type: web
+
+docker:
+  dockerfile: Dockerfile
+  port: 8080
+
+regions:
+  - fra
+
+scalings:
+  min: 1
+  max: 1
+
+health:
+  path: /health
+
+env:
+  - key: ENVIRONMENT
+    value: production
+  - key: DATABASE_URL
+    value: ""
+  - key: COMPANIES_HOUSE_API_KEY
+    value: ""
+  - key: SECRET_KEY
+    value: ""
