@@ -13,7 +13,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 async def verify_admin(x_admin_key: str = Header(...)):
-    if x_admin_key != settings.admin_secret:
+    if x_admin_key != settings.admin_key:
         raise HTTPException(status_code=401, detail="Invalid admin key")
     return True
 
