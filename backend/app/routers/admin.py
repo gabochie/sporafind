@@ -1,6 +1,9 @@
+from datetime import datetime, timezone
+from typing import Any
+
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel
-from sqlalchemy import select, func, text
+from sqlalchemy import select, func, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -10,6 +13,19 @@ from app.models.profile import Profile
 from app.models.org import Org
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+_activity_log: list[dict[str, Any]] = []
+
+
+def log_action(action: str, detail: str, user_id: str | None = None):
+    _activity_log.insert(0, {
+        "action": action,
+        "detail": detail,
+        "user_id": user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    })
+    if len(_activity_log) > 200:
+        _activity_log.pop()
 
 
 async def verify_admin(x_admin_key: str = Header(...)):
@@ -40,17 +56,33 @@ async def admin_verify(admin: bool = Depends(verify_admin)):
     return {"status": "ok", "role": "admin"}
 
 
+@router.get("/activity")
+async def get_activity(
+    limit: int = Query(50, ge=1, le=200),
+    admin: bool = Depends(verify_admin),
+):
+    return {"items": _activity_log[:limit]}
+
+
 @router.get("/users")
 async def list_users(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
+    q: str = Query("", max_length=200),
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    total = await db.execute(select(func.count(User.id)))
+    query = select(User)
+    count_query = select(func.count(User.id))
+    if q:
+        like = f"%{q}%"
+        filters = [User.email.ilike(like), User.name.ilike(like)]
+        query = query.where(or_(*filters))
+        count_query = count_query.where(or_(*filters))
+    total = await db.execute(count_query)
     offset = (page - 1) * page_size
     rows = await db.execute(
-        select(User).offset(offset).limit(page_size).order_by(User.created_at.desc())
+        query.offset(offset).limit(page_size).order_by(User.created_at.desc())
     )
     users = rows.scalars().all()
     return {
@@ -72,11 +104,15 @@ async def update_user(
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    changes = []
     if body.is_active is not None:
         user.is_active = body.is_active
+        changes.append(f"active={body.is_active}")
     if body.plan_tier is not None:
         user.plan_tier = body.plan_tier
+        changes.append(f"plan={body.plan_tier}")
     await db.commit()
+    log_action("user_updated", f"User {user.email}: {', '.join(changes)}")
     return {"status": "updated", "user_id": user_id}
 
 
@@ -130,6 +166,7 @@ async def admin_health(
         "database": "connected" if db_ok else "disconnected",
         "version": "0.1.0",
         "environment": settings.environment,
+        "uptime": "0.1.0",
     }
 
 
@@ -137,17 +174,33 @@ async def admin_health(
 async def list_all_profiles(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
+    q: str = Query("", max_length=200),
+    segment: str | None = None,
+    origin: str | None = None,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    total = await db.execute(select(func.count(Profile.id)))
+    query = select(Profile)
+    count_query = select(func.count(Profile.id))
+    if q:
+        like = f"%{q}%"
+        filters = [Profile.name.ilike(like), Profile.company_name.ilike(like), Profile.locality.ilike(like)]
+        query = query.where(or_(*filters))
+        count_query = count_query.where(or_(*filters))
+    if segment:
+        query = query.where(Profile.segment == segment)
+        count_query = count_query.where(Profile.segment == segment)
+    if origin:
+        query = query.where(Profile.origin == origin)
+        count_query = count_query.where(Profile.origin == origin)
+    total = await db.execute(count_query)
     offset = (page - 1) * page_size
     rows = await db.execute(
-        select(Profile).offset(offset).limit(page_size).order_by(Profile.created_at.desc())
+        query.offset(offset).limit(page_size).order_by(Profile.created_at.desc())
     )
     items = rows.scalars().all()
     return {
-        "items": [{"id": p.id, "name": p.name, "source": p.source, "segment": p.segment, "origin": p.origin, "country_of_residence": p.country_of_residence, "is_active": p.is_active, "created_at": str(p.created_at)} for p in items],
+        "items": [{"id": p.id, "name": p.name, "source": p.source, "segment": p.segment, "origin": p.origin, "country_of_residence": p.country_of_residence, "locality": p.locality, "is_active": p.is_active, "created_at": str(p.created_at)} for p in items],
         "total": total.scalar() or 0,
         "page": page,
         "page_size": page_size,
@@ -174,6 +227,7 @@ async def update_profile(
     if body.origin is not None:
         profile.origin = body.origin
     await db.commit()
+    log_action("profile_updated", f"Profile {profile.name}: segment={body.segment}, active={body.is_active}")
     return {"status": "updated", "profile_id": profile_id}
 
 
@@ -189,24 +243,64 @@ async def delete_profile(
         raise HTTPException(status_code=404, detail="Profile not found")
     profile.is_active = False
     await db.commit()
+    log_action("profile_deleted", f"Profile {profile.name} deactivated")
     return {"status": "deleted", "profile_id": profile_id}
+
+
+class BatchProfileAction(BaseModel):
+    ids: list[str]
+    action: str
+    value: str | None = None
+
+
+@router.post("/profiles/batch")
+async def batch_profile_action(
+    body: BatchProfileAction,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Profile).where(Profile.id.in_(body.ids)))
+    profiles = result.scalars().all()
+    count = 0
+    for p in profiles:
+        if body.action == "activate":
+            p.is_active = True
+        elif body.action == "deactivate":
+            p.is_active = False
+        elif body.action == "set_segment" and body.value:
+            p.segment = body.value
+        count += 1
+    await db.commit()
+    log_action("batch_profiles", f"{count} profiles: {body.action}")
+    return {"status": "ok", "affected": count}
 
 
 @router.get("/orgs")
 async def list_all_orgs(
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
+    q: str = Query("", max_length=200),
+    org_type: str | None = None,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
 ):
-    total = await db.execute(select(func.count(Org.id)))
+    query = select(Org)
+    count_query = select(func.count(Org.id))
+    if q:
+        like = f"%{q}%"
+        query = query.where(Org.name.ilike(like))
+        count_query = count_query.where(Org.name.ilike(like))
+    if org_type:
+        query = query.where(Org.org_type == org_type)
+        count_query = count_query.where(Org.org_type == org_type)
+    total = await db.execute(count_query)
     offset = (page - 1) * page_size
     rows = await db.execute(
-        select(Org).offset(offset).limit(page_size).order_by(Org.created_at.desc())
+        query.offset(offset).limit(page_size).order_by(Org.created_at.desc())
     )
     items = rows.scalars().all()
     return {
-        "items": [{"id": o.id, "name": o.name, "org_type": o.org_type, "status": o.status, "country": o.country, "profile_count": o.profile_count, "created_at": str(o.created_at)} for o in items],
+        "items": [{"id": o.id, "name": o.name, "org_type": o.org_type, "status": o.status, "country": o.country, "locality": o.locality, "profile_count": o.profile_count, "created_at": str(o.created_at)} for o in items],
         "total": total.scalar() or 0,
         "page": page,
         "page_size": page_size,
@@ -229,6 +323,7 @@ async def update_org(
     if body.tags is not None:
         org.tags = body.tags
     await db.commit()
+    log_action("org_updated", f"Org {org.name}: type={body.org_type}")
     return {"status": "updated", "org_id": org_id}
 
 
@@ -244,7 +339,32 @@ async def delete_org(
         raise HTTPException(status_code=404, detail="Org not found")
     await db.delete(org)
     await db.commit()
+    log_action("org_deleted", f"Org {org.name} deleted")
     return {"status": "deleted", "org_id": org_id}
+
+
+class BatchOrgAction(BaseModel):
+    ids: list[str]
+    action: str
+    value: str | None = None
+
+
+@router.post("/orgs/batch")
+async def batch_org_action(
+    body: BatchOrgAction,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Org).where(Org.id.in_(body.ids)))
+    orgs = result.scalars().all()
+    count = 0
+    for o in orgs:
+        if body.action == "set_type" and body.value:
+            o.org_type = body.value
+        count += 1
+    await db.commit()
+    log_action("batch_orgs", f"{count} orgs: {body.action}")
+    return {"status": "ok", "affected": count}
 
 
 @router.post("/import/trigger")

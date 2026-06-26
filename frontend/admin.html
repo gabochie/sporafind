@@ -5,207 +5,377 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sporafind Admin</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --s0:#0b0b0b;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --s0:#0b0b0b;--s1:#141414;--s2:#1e1e1e;--s3:#2a2a2a;--s4:#333;
   --bd:#2a2a2a;--bds:#383838;
-  --t1:#ededed;--t2:#999;--tm:#555;
-  --green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--red:#ef4444;
+  --t0:#fff;--t1:#ededed;--t2:#999;--t3:#555;
+  --gr:#006B3C;--gl:#00a85a;--gd:#D4A017;--bl:#2563EB;--pu:#7C3AED;--re:#ef4444;--am:#B45309;--te:#0E7490;
+  --gr-dim:rgba(0,107,60,.15);--gl-dim:rgba(0,168,90,.12);--gd-dim:rgba(212,160,23,.12);
+  --bl-dim:rgba(37,99,235,.12);--re-dim:rgba(239,68,68,.12);
   --ff:'Inter',system-ui,-apple-system,sans-serif;
-  --radius:10px;--radius-sm:7px;
-  --shadow:0 4px 24px rgba(0,0,0,.3);
+  --radius:10px;--radius-sm:7px;--radius-xs:5px;--radius-full:999px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow:0 4px 24px rgba(0,0,0,.4);--shadow-lg:0 12px 48px rgba(0,0,0,.5);
+  --nav-w:230px;--top-h:53px;
+  --transition:.15s cubic-bezier(.22,1,.36,1);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-html{background:var(--s0);}
-body{font-family:var(--ff);background:var(--s0);color:var(--t1);min-height:100vh;}
+html{background:var(--s0);color-scheme:dark}
+body{font-family:var(--ff);background:var(--s0);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--ff)}
+input,select,textarea{font-family:var(--ff)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes shimmer{0%{background-position:-200px 0}100%{background-position:calc(200px + 100%) 0}}
+.anim-fade{animation:fadeIn .3s var(--transition)}
+.anim-slide{animation:slideIn .35s var(--transition)}
+.anim-scale{animation:scaleIn .25s var(--transition)}
 
 /* Login */
 .login-page{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 50% 0%,#0a2e1a 0%,var(--s0) 60%);padding:24px;
+  background:radial-gradient(ellipse at 50% 0%,#0a2e1a 0%,var(--s0) 70%);padding:20px;
 }
 .login-card{
-  background:var(--s1);border:1px solid var(--bds);border-radius:16px;
-  padding:40px;max-width:400px;width:100%;text-align:center;
+  background:var(--s1);border:1px solid var(--bds);border-radius:16px;padding:44px 40px 36px;
+  max-width:400px;width:100%;text-align:center;animation:scaleIn .4s var(--transition);
+  box-shadow:var(--shadow-lg);
 }
-.login-card .logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:20px;text-decoration:none;}
-.login-card .logomark{width:36px;height:36px;border-radius:9px;background:var(--green);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.login-card .logomark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff15,transparent 50%);}
-.login-card .star{width:16px;height:16px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
-.login-card .logotext{font-family:var(--ff);font-size:18px;font-weight:700;letter-spacing:-.3px;color:var(--t1);}
-.login-card .logotext span{color:var(--gold);}
-.login-card h2{font-size:20px;font-weight:700;margin-bottom:4px;}
-.login-card p{font-size:13px;color:var(--t2);margin-bottom:20px;}
-.login-card input{
-  width:100%;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--bds);
-  background:var(--s2);color:var(--t1);font-family:var(--ff);font-size:14px;
-  outline:none;transition:border-color .15s;margin-bottom:12px;
+.login-logo{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:22px;}
+.login-logo .lm{width:38px;height:38px;border-radius:9px;background:var(--gr);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.login-logo .lm::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#ffffff15,transparent 50%);}
+.login-logo .star{width:15px;height:15px;background:var(--gd);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.login-logo .lt{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--t1);}
+.login-logo .lt span{color:var(--gd);}
+.login-card h2{font-size:20px;font-weight:700;margin-bottom:3px;}
+.login-card .login-sub{font-size:13px;color:var(--t2);margin-bottom:24px;}
+.login-input{
+  width:100%;padding:11px 14px;border-radius:var(--radius);border:1px solid var(--bds);
+  background:var(--s2);color:var(--t1);font-size:14px;outline:none;transition:border-color var(--transition),box-shadow var(--transition);
 }
-.login-card input:focus{border-color:var(--green);}
-.login-card button{
-  width:100%;padding:12px;border:none;border-radius:var(--radius);
-  background:linear-gradient(135deg,var(--gold),#b88912);color:#1a1200;
-  font-size:14px;font-weight:600;font-family:var(--ff);cursor:pointer;transition:all .15s;
+.login-input:focus{border-color:var(--gd);box-shadow:0 0 0 3px rgba(212,160,23,.12);}
+.login-input::placeholder{color:var(--t3);}
+.login-btn{
+  width:100%;padding:11px;border:none;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--gd),#b88912);color:#1a1200;
+  font-size:14px;font-weight:600;cursor:pointer;transition:opacity var(--transition),transform var(--transition);
+  display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;
 }
-.login-card button:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
-.login-card .error{color:var(--red);font-size:12px;margin-top:8px;display:none;}
+.login-btn:hover{opacity:.92;transform:translateY(-1px);}
+.login-btn:active{transform:translateY(0);}
+.login-btn:disabled{opacity:.5;cursor:default;transform:none;}
+.login-error{color:var(--re);font-size:12px;margin-top:10px;display:none;align-items:center;gap:5px;justify-content:center;}
 
-/* App layout */
+/* App shell */
 .admin-app{display:none;min-height:100vh;}
+
+/* Topbar */
 .topbar{
+  position:sticky;top:0;z-index:100;
   background:var(--s1);border-bottom:1px solid var(--bd);
-  padding:11px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;
+  padding:0 18px;height:var(--top-h);display:flex;align-items:center;justify-content:space-between;gap:12px;
 }
-.topbar .logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
-.topbar .logomark{width:28px;height:28px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;}
-.topbar .star{width:13px;height:13px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
-.topbar .logotext{font-size:14px;font-weight:700;color:var(--t1);}
-.topbar .logotext span{color:var(--gold);}
-.topbar .admin-badge{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--gold);background:rgba(212,160,23,.1);padding:4px 10px;border-radius:20px;border:1px solid rgba(212,160,23,.2);}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.topbar .logo{display:flex;align-items:center;gap:8px;}
+.topbar .lm{width:26px;height:26px;border-radius:6px;background:var(--gr);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.topbar .star{width:12px;height:12px;background:var(--gd);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.topbar .lt{font-size:13px;font-weight:700;letter-spacing:-.2px;color:var(--t1);}
+.topbar .lt span{color:var(--gd);}
+.topbar .badge{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--gd);background:var(--gd-dim);padding:3px 9px;border-radius:var(--radius-full);border:1px solid rgba(212,160,23,.15);}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.topbar .t-right-info{font-size:10px;color:var(--t3);letter-spacing:.3px;}
 .topbar .logout-btn{
-  padding:6px 12px;border:1px solid var(--bds);border-radius:var(--radius-sm);
-  background:transparent;font-size:12px;color:var(--t2);cursor:pointer;font-family:var(--ff);transition:all .15s;
+  padding:5px 10px;border:1px solid var(--bds);border-radius:var(--radius-sm);
+  background:transparent;font-size:11px;color:var(--t2);cursor:pointer;transition:all var(--transition);
+  display:flex;align-items:center;gap:4px;
 }
-.topbar .logout-btn:hover{background:var(--s2);color:var(--t1);}
+.topbar .logout-btn:hover{background:var(--s2);color:var(--t1);border-color:var(--t3);}
 
-.body{display:grid;grid-template-columns:200px 1fr;flex:1;min-height:calc(100vh - 53px);}
-.sidebar{border-right:1px solid var(--bd);padding:10px 0;background:var(--s1);}
-.si{
-  display:flex;align-items:center;gap:8px;padding:9px 16px;cursor:pointer;
-  font-size:12px;color:var(--t2);transition:all .1s;border-left:2px solid transparent;
+/* Sidebar + body */
+.body{display:flex;min-height:calc(100vh - var(--top-h));}
+.sidebar{
+  width:var(--nav-w);flex-shrink:0;border-right:1px solid var(--bd);
+  padding:12px 0;background:var(--s1);display:flex;flex-direction:column;overflow-y:auto;
 }
-.si:hover{background:var(--s2);color:var(--t1);}
-.si.active{background:var(--s2);border-left-color:var(--gold);color:var(--t1);font-weight:500;}
-.si i{font-size:16px;width:18px;text-align:center;}
+.sidebar-group{margin-bottom:4px;}
+.sidebar-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3);padding:8px 18px 4px;}
+.sidebar-item{
+  display:flex;align-items:center;gap:9px;padding:8px 18px;cursor:pointer;
+  font-size:12px;color:var(--t2);transition:all .12s;border-left:2px solid transparent;user-select:none;
+}
+.sidebar-item:hover{background:var(--s2);color:var(--t1);}
+.sidebar-item.active{background:var(--s2);border-left-color:var(--gd);color:var(--t1);font-weight:500;}
+.sidebar-item i{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.sidebar-item .si-pill{margin-left:auto;font-size:9px;font-weight:600;padding:1px 6px;border-radius:var(--radius-full);background:var(--gr-dim);color:var(--gl);}
+.sidebar-spacer{flex:1;}
+.sidebar-footer{padding:10px 18px;border-top:1px solid var(--bd);font-size:10px;color:var(--t3);display:flex;align-items:center;gap:6px;}
 
-.main{padding:18px 22px;overflow-y:auto;}
-.page-title{font-size:18px;font-weight:700;margin-bottom:2px;}
-.page-desc{font-size:12px;color:var(--tm);margin-bottom:18px;}
+/* Hamburger */
+.hamburger{display:none;background:none;border:none;color:var(--t2);font-size:20px;padding:4px;border-radius:var(--radius-xs);}
 
-/* Cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:20px;}
+/* Main */
+.main{flex:1;padding:22px 26px;overflow-y:auto;max-width:100%;}
+.page-hdr{margin-bottom:20px;animation:fadeIn .3s var(--transition);}
+.page-hdr h1{font-size:19px;font-weight:700;letter-spacing:-.3px;}
+.page-hdr p{font-size:12px;color:var(--t3);margin-top:2px;}
+.page-hdr-actions{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;}
+
+/* Search */
+.search-box{
+  display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--bds);
+  border-radius:var(--radius-sm);padding:6px 10px;transition:border-color var(--transition),box-shadow var(--transition);width:240px;
+}
+.search-box:focus-within{border-color:var(--gd);box-shadow:0 0 0 2px rgba(212,160,23,.08);}
+.search-box i{font-size:15px;color:var(--t3);flex-shrink:0;}
+.search-box input{border:none;background:transparent;outline:none;color:var(--t1);font-size:12px;width:100%;}
+.search-box input::placeholder{color:var(--t3);}
+
+/* Filter chips */
+.filter-chips{display:flex;gap:4px;flex-wrap:wrap;}
+.filter-chip{
+  padding:3px 10px;border-radius:var(--radius-full);font-size:11px;font-weight:500;
+  border:1px solid var(--bd);background:var(--s2);color:var(--t2);cursor:pointer;transition:all var(--transition);user-select:none;
+}
+.filter-chip:hover{background:var(--s3);color:var(--t1);}
+.filter-chip.active{background:var(--gr);color:#fff;border-color:var(--gr);}
+
+/* Stat cards */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;margin-bottom:22px;}
 .stat-card{
   background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);
-  padding:14px 16px;position:relative;overflow:hidden;
+  padding:16px 18px;position:relative;overflow:hidden;transition:border-color var(--transition),transform var(--transition);
 }
-.stat-card .sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.stat-card .sc-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.stat-card .sc-label{font-size:10px;color:var(--tm);font-weight:500;text-transform:uppercase;letter-spacing:.6px;}
-.stat-card .sc-val{font-size:22px;font-weight:700;letter-spacing:-.3px;}
-.stat-card .sc-sub{font-size:10px;color:var(--tm);margin-top:2px;}
-.card-green .sc-icon{background:rgba(0,107,60,.2);color:var(--gl);}
-.card-gold .sc-icon{background:rgba(212,160,23,.15);color:var(--gold);}
-.card-blue .sc-icon{background:rgba(37,99,235,.15);color:var(--blue);}
+.stat-card:hover{border-color:var(--bds);transform:translateY(-1px);}
+.stat-card .sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.stat-card .sc-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.stat-card.sc-gr .sc-icon{background:var(--gr-dim);color:var(--gl);}
+.stat-card.sc-gd .sc-icon{background:var(--gd-dim);color:var(--gd);}
+.stat-card.sc-bl .sc-icon{background:var(--bl-dim);color:var(--bl);}
+.stat-card.sc-re .sc-icon{background:var(--re-dim);color:var(--re);}
+.stat-card .sc-trend{font-size:11px;display:flex;align-items:center;gap:3px;}
+.stat-card .sc-trend.up{color:var(--gl);}
+.stat-card .sc-trend.down{color:var(--re);}
+.stat-card .sc-label{font-size:10px;color:var(--t3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;}
+.stat-card .sc-val{font-size:24px;font-weight:700;letter-spacing:-.4px;line-height:1.1;}
+.stat-card .sc-sub{font-size:10px;color:var(--t3);margin-top:3px;display:flex;align-items:center;gap:3px;}
+
+/* Analytics sub-grid */
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
 
 /* Tables */
-.table-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);overflow-x:auto;margin-bottom:20px;}
-.table-wrap .tw-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bd);}
-.table-wrap .tw-h h3{font-size:13px;font-weight:600;}
-.tw-actions{display:flex;gap:6px;align-items:center;}
-.tw-actions select,.tw-actions input{
-  padding:6px 10px;border-radius:var(--radius-sm);border:1px solid var(--bds);
-  background:var(--s2);color:var(--t1);font-family:var(--ff);font-size:12px;outline:none;
+.table-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;animation:fadeIn .3s var(--transition);}
+.table-card .tc-h{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 16px;border-bottom:1px solid var(--bd);gap:10px;flex-wrap:wrap;
 }
-.tw-actions select:focus,.tw-actions input:focus{border-color:var(--green);}
+.table-card .tc-h h3{font-size:13px;font-weight:600;}
+.table-card .tc-h .tc-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tc-bulk-bar{
+  display:none;align-items:center;gap:8px;padding:8px 16px;background:var(--gr-dim);
+  border-bottom:1px solid rgba(0,168,90,.15);font-size:11px;color:var(--gl);
+}
+.tc-bulk-bar.show{display:flex;}
+.tc-bulk-bar button{
+  padding:3px 8px;border-radius:var(--radius-xs);border:1px solid rgba(0,168,90,.2);
+  background:var(--gr-dim);color:var(--gl);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--ff);
+}
+.tc-bulk-bar button:hover{background:rgba(0,168,90,.2);}
+.tc-table{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
-th{padding:10px 14px;text-align:left;font-weight:600;color:var(--tm);font-size:10px;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--bd);white-space:nowrap;}
-td{padding:9px 14px;border-bottom:1px solid var(--bd);color:var(--t2);}
-tr:hover td{background:var(--s2);}
+thead{position:sticky;top:0;z-index:2;}
+th{
+  padding:8px 14px;text-align:left;font-weight:600;color:var(--t3);font-size:10px;
+  text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--bd);
+  background:var(--s2);white-space:nowrap;user-select:none;
+}
+th.sortable{cursor:pointer;transition:color var(--transition);}
+th.sortable:hover{color:var(--t1);}
+th.sortable i{font-size:11px;margin-left:3px;opacity:.5;}
+td{padding:9px 14px;border-bottom:1px solid var(--bd);color:var(--t2);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
-.badge{
-  display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;
-}
-.badge-green{background:rgba(0,107,60,.15);color:var(--gl);}
-.badge-red{background:rgba(239,68,68,.15);color:var(--red);}
-.badge-gold{background:rgba(212,160,23,.15);color:var(--gold);}
-.badge-blue{background:rgba(37,99,235,.15);color:var(--blue);}
-.empty{text-align:center;padding:32px 16px;color:var(--tm);grid-column:1/-1;}
-.empty i{font-size:28px;margin-bottom:8px;display:block;color:var(--bds);}
-.loading{text-align:center;padding:24px;color:var(--tm);}
-.loading i{animation:spin 1s linear infinite;display:block;margin-bottom:6px;font-size:20px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;}
-.pagination button{
-  padding:5px 12px;border:1px solid var(--bd);border-radius:var(--radius-sm);
-  background:var(--s2);color:var(--t2);font-size:12px;cursor:pointer;font-family:var(--ff);
-}
-.pagination button:hover{background:var(--s3);color:var(--t1);}
-.pagination button:disabled{opacity:.4;cursor:default;}
-.pagination span{font-size:11px;color:var(--tm);}
+tr:hover td{background:rgba(255,255,255,.015);}
+tr.selected td{background:var(--gr-dim);}
 
-/* Action buttons in table */
-.btn-sm{
-  padding:4px 8px;border:1px solid var(--bd);border-radius:5px;background:var(--s2);
-  color:var(--t2);font-size:10px;cursor:pointer;font-family:var(--ff);transition:all .12s;
+/* Badges */
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--radius-full);font-size:10px;font-weight:600;}
+.bdg-gr{background:var(--gr-dim);color:var(--gl);}
+.bdg-gd{background:var(--gd-dim);color:var(--gd);}
+.bdg-bl{background:var(--bl-dim);color:var(--bl);}
+.bdg-re{background:var(--re-dim);color:var(--re);}
+.bdg-s4{background:var(--s3);color:var(--t2);}
+
+/* Checkbox */
+.cb{width:15px;height:15px;accent-color:var(--gd);cursor:pointer;}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  padding:6px 12px;border-radius:var(--radius-sm);font-size:11px;font-weight:500;
+  font-family:var(--ff);cursor:pointer;transition:all var(--transition);border:1px solid var(--bds);background:var(--s2);color:var(--t2);
 }
-.btn-sm:hover{background:var(--s3);color:var(--t1);}
-.btn-sm.danger{border-color:rgba(239,68,68,.2);color:var(--red);}
-.btn-sm.danger:hover{background:rgba(239,68,68,.1);}
-.btn-sm.gold{background:linear-gradient(135deg,var(--gold),#b88912);color:#1a1200;border:none;padding:5px 10px;font-size:11px;font-weight:600;}
-.btn-sm.gold:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
+.btn:hover{background:var(--s3);color:var(--t1);border-color:var(--t3);}
+.btn-primary{background:linear-gradient(135deg,var(--gd),#b88912);border:none;color:#1a1200;font-weight:600;}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.4;cursor:default;transform:none;}
+.btn-sm{padding:4px 8px;font-size:10px;}
+.btn-danger{color:var(--re);border-color:rgba(239,68,68,.2);}
+.btn-danger:hover{background:var(--re-dim);color:var(--re);}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--t2);}
+.btn-ghost:hover{background:var(--s2);color:var(--t1);border-color:var(--bd);}
+.btn-icon{width:28px;height:28px;padding:0;justify-content:center;}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-top:1px solid var(--bd);}
+.pagination .p-info{font-size:10px;color:var(--t3);margin:0 8px;}
+.pagination button{width:28px;height:28px;border-radius:var(--radius-xs);border:1px solid var(--bd);background:var(--s2);color:var(--t2);font-size:11px;cursor:pointer;transition:all var(--transition);font-family:var(--ff);display:flex;align-items:center;justify-content:center;}
+.pagination button:hover{background:var(--s3);color:var(--t1);}
+.pagination button:disabled{opacity:.3;cursor:default;background:var(--s1);}
+.pagination button.active{background:var(--gr);color:#fff;border-color:var(--gr);}
+
+/* Loading skeleton */
+.skeleton{background:linear-gradient(90deg,var(--s2) 25%,var(--s3) 50%,var(--s2) 75%);background-size:200px 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-xs);}
+.skel-h{height:16px;width:60%;margin-bottom:10px;}
+.skel-p{height:10px;width:40%;margin-bottom:16px;}
+.skel-card{height:80px;border-radius:var(--radius);}
+.skel-row{height:32px;margin-bottom:6px;width:100%;}
+
+/* Empty state */
+.empty-state{text-align:center;padding:40px 20px;color:var(--t3);}
+.empty-state i{font-size:32px;margin-bottom:10px;display:block;color:var(--bds);}
+.empty-state h3{font-size:14px;color:var(--t2);margin-bottom:4px;font-weight:600;}
+.empty-state p{font-size:11px;}
 
 /* Modal */
 .modal-overlay{
-  position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);
+  position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.7);
   display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
 }
 .modal-overlay.show{display:flex;}
 .modal{
   background:var(--s1);border:1px solid var(--bds);border-radius:14px;
-  padding:28px;max-width:480px;width:100%;position:relative;
-  animation:modalIn .25s cubic-bezier(.22,1,.36,1);
+  padding:28px;max-width:460px;width:100%;position:relative;box-shadow:var(--shadow-lg);
+  animation:scaleIn .25s var(--transition);
 }
-@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.modal h3{font-size:16px;font-weight:700;margin-bottom:4px;}
-.modal p{font-size:12px;color:var(--t2);margin-bottom:16px;}
-.modal label{font-size:12px;font-weight:500;color:var(--t2);display:block;margin-bottom:4px;margin-top:12px;}
-.modal label:first-of-type{margin-top:0;}
-.modal input,.modal select{
-  width:100%;padding:9px 12px;border-radius:var(--radius-sm);border:1px solid var(--bds);
-  background:var(--s2);color:var(--t1);font-family:var(--ff);font-size:13px;outline:none;
+.modal h3{font-size:16px;font-weight:700;margin-bottom:2px;}
+.modal .m-desc{font-size:12px;color:var(--t3);margin-bottom:18px;}
+.modal .m-field{margin-bottom:14px;}
+.modal .m-field label{display:block;font-size:11px;font-weight:500;color:var(--t2);margin-bottom:4px;}
+.modal .m-field input,.modal .m-field select{
+  width:100%;padding:9px 11px;border-radius:var(--radius-sm);border:1px solid var(--bds);
+  background:var(--s2);color:var(--t1);font-size:13px;outline:none;transition:border-color var(--transition);
 }
-.modal input:focus,.modal select:focus{border-color:var(--green);}
-.modal .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
-.modal .modal-actions button{padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--ff);}
-.modal .modal-actions .btn-cancel{background:var(--s2);border:1px solid var(--bd);color:var(--t2);}
-.modal .modal-actions .btn-cancel:hover{background:var(--s3);}
-.modal .modal-actions .btn-save{background:linear-gradient(135deg,var(--gold),#b88912);border:none;color:#1a1200;font-weight:600;}
-.modal .modal-actions .btn-save:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
-.modal .modal-close{
+.modal .m-field input:focus,.modal .m-field select:focus{border-color:var(--gd);box-shadow:0 0 0 2px rgba(212,160,23,.08);}
+.modal-close-btn{
   position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;
-  border:1px solid var(--bd);background:var(--s2);color:var(--t2);font-size:12px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--bd);background:var(--s2);color:var(--t2);font-size:11px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition);
 }
+.modal-close-btn:hover{background:var(--s3);color:var(--t1);border-color:var(--t3);}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+.modal-actions .btn{padding:8px 18px;font-size:12px;}
 
-/* Health */
-.health-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;}
-.health-item{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);padding:16px;}
-.health-item .hi-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;}
-.health-item .hi-val{font-size:16px;font-weight:600;}
-.health-item .hi-val.ok{color:var(--gl);}
-.health-item .hi-val.fail{color:var(--red);}
+/* Toast */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column-reverse;gap:8px;pointer-events:none;}
+.toast{
+  pointer-events:all;padding:12px 16px;border-radius:var(--radius);font-size:12px;line-height:1.4;
+  max-width:380px;box-shadow:var(--shadow-lg);display:flex;align-items:flex-start;gap:8px;
+  animation:scaleIn .25s var(--transition);border:1px solid var(--bds);
+}
+.toast.toast-success{background:linear-gradient(135deg,#0a2e1a,#0f3a22);border-color:rgba(0,168,90,.2);color:var(--gl);}
+.toast.toast-error{background:linear-gradient(135deg,#2e0a0a,#3a0f0f);border-color:rgba(239,68,68,.2);color:var(--re);}
+.toast.toast-info{background:var(--s1);border-color:var(--bds);color:var(--t1);}
+.toast i{font-size:16px;flex-shrink:0;margin-top:1px;}
+.toast .t-close{
+  margin-left:auto;background:none;border:none;color:inherit;font-size:12px;cursor:pointer;opacity:.5;padding:2px;flex-shrink:0;
+}
+.toast .t-close:hover{opacity:1;}
+
+/* Confirm dialog */
+.confirm-overlay{
+  position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.7);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.confirm-overlay.show{display:flex;}
+.confirm-box{background:var(--s1);border:1px solid var(--bds);border-radius:14px;padding:28px;max-width:380px;width:100%;text-align:center;animation:scaleIn .25s var(--transition);}
+.confirm-box .c-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px;}
+.confirm-box .c-icon.danger{background:var(--re-dim);color:var(--re);}
+.confirm-box .c-icon.info{background:var(--bl-dim);color:var(--bl);}
+.confirm-box h3{font-size:15px;font-weight:700;margin-bottom:4px;}
+.confirm-box p{font-size:12px;color:var(--t3);margin-bottom:18px;}
+.confirm-box .c-actions{display:flex;gap:8px;justify-content:center;}
+.confirm-box .c-actions .btn{padding:8px 20px;font-size:12px;}
+
+/* Activity log */
+.activity-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bd);font-size:11px;}
+.activity-item:last-child{border-bottom:none;}
+.activity-item .a-dot{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.activity-item .a-dot.created{background:var(--gl);}
+.activity-item .a-dot.updated{background:var(--gd);}
+.activity-item .a-dot.deleted{background:var(--re);}
+.activity-item .a-content{flex:1;}
+.activity-item .a-content .a-action{font-weight:500;color:var(--t1);}
+.activity-item .a-content .a-detail{color:var(--t2);margin-top:1px;}
+.activity-item .a-time{font-size:10px;color:var(--t3);white-space:nowrap;}
 
 /* Import */
-.import-box{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:20px;}
-.import-box .ib-icon{width:48px;height:48px;border-radius:12px;background:rgba(212,160,23,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px;color:var(--gold);}
-.import-box h3{font-size:15px;font-weight:600;margin-bottom:4px;}
-.import-box p{font-size:12px;color:var(--t2);margin-bottom:16px;}
-.import-box button{
-  padding:10px 24px;border:none;border-radius:var(--radius-sm);
-  background:linear-gradient(135deg,var(--gold),#b88912);color:#1a1200;
-  font-size:13px;font-weight:600;cursor:pointer;font-family:var(--ff);
-}
-.import-box button:hover{background:linear-gradient(135deg,#c49015,#a37a10);}
-.import-box button:disabled{opacity:.4;cursor:default;}
+.import-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.import-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);padding:24px;text-align:center;}
+.import-card .ic-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;}
+.import-card .ic-icon.primary{background:var(--gd-dim);color:var(--gd);}
+.import-card h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+.import-card p{font-size:11px;color:var(--t3);margin-bottom:16px;line-height:1.5;}
+.import-card .btn{padding:9px 22px;font-size:12px;}
 
-@media(max-width:800px){
-  .body{grid-template-columns:1fr;}
-  .sidebar{display:flex;gap:0;overflow-x:auto;padding:0;border-right:none;border-bottom:1px solid var(--bd);}
-  .sidebar .si{border-left:none;border-bottom:2px solid transparent;white-space:nowrap;padding:10px 14px;}
-  .sidebar .si.active{border-left:none;border-bottom-color:var(--gold);}
-  .cards{grid-template-columns:repeat(2,1fr);}
+/* Health */
+.health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.health-item{background:var(--s1);border:1px solid var(--bd);border-radius:var(--radius);padding:18px;}
+.health-item .hi-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.health-item .hi-val{font-size:17px;font-weight:600;display:flex;align-items:center;gap:6px;}
+.health-item .hi-val.ok{color:var(--gl);}
+.health-item .hi-val.fail{color:var(--re);}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--s4);}
+
+/* Overlay on mobile */
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:98;background:rgba(0,0,0,.5);}
+
+/* Responsive */
+@media(max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .analytics-grid{grid-template-columns:1fr;}
   .health-grid{grid-template-columns:1fr;}
+  .import-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  :root{--nav-w:0px}
+  .sidebar{position:fixed;top:var(--top-h);left:0;bottom:0;z-index:99;transform:translateX(-100%);transition:transform .25s var(--transition);width:240px;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .hamburger{display:flex;align-items:center;justify-content:center;}
+  .main{padding:16px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .search-box{width:100%;max-width:280px;}
+  .table-card .tc-h{flex-direction:column;align-items:flex-start;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr;}
+  .main{padding:12px;}
+  .topbar{padding:0 12px;}
+  .modal{padding:20px;}
+  .login-card{padding:32px 24px;}
 }
 </style>
 </head>
@@ -213,410 +383,520 @@ tr:last-child td{border-bottom:none;}
 
 <div id="login-page" class="login-page">
   <div class="login-card">
-    <div class="logo">
-      <div class="logomark"><div class="star"></div></div>
-      <div class="logotext">Spora<span>find</span></div>
+    <div class="login-logo">
+      <div class="lm"><div class="star"></div></div>
+      <div class="lt">Spora<span>find</span></div>
     </div>
     <h2>Admin Dashboard</h2>
-    <p>Enter your admin key to continue</p>
+    <p class="login-sub">Enter your admin key to access the control panel</p>
     <form onsubmit="adminLogin(event)">
-      <input id="admin-key-input" type="password" placeholder="Admin key" required autocomplete="off">
-      <button type="submit">Sign in <i class="ti ti-arrow-right"></i></button>
+      <input id="admin-key-input" class="login-input" type="password" placeholder="Admin key" required autocomplete="off">
+      <button id="login-btn" class="login-btn" type="submit">Sign in <i class="ti ti-arrow-right"></i></button>
     </form>
-    <div class="error" id="login-error">Invalid admin key</div>
+    <div class="login-error" id="login-error"><i class="ti ti-alert-circle"></i> Invalid admin key</div>
   </div>
 </div>
 
 <div id="admin-app" class="admin-app">
   <div class="topbar">
-    <a class="logo" href="#">
-      <div class="logomark"><div class="star"></div></div>
-      <div class="logotext">Spora<span>find</span> <span class="admin-badge">Admin</span></div>
-    </a>
-    <button class="logout-btn" onclick="adminLogout()"><i class="ti ti-logout"></i> Sign out</button>
-  </div>
-  <div class="body">
-    <div class="sidebar" id="admin-sidebar">
-      <div class="si active" data-tab="overview" onclick="switchTab('overview',this)"><i class="ti ti-dashboard"></i> Overview</div>
-      <div class="si" data-tab="users" onclick="switchTab('users',this)"><i class="ti ti-users"></i> Users</div>
-      <div class="si" data-tab="profiles" onclick="switchTab('profiles',this)"><i class="ti ti-id"></i> Profiles</div>
-      <div class="si" data-tab="orgs" onclick="switchTab('orgs',this)"><i class="ti ti-building-community"></i> Orgs</div>
-      <div class="si" data-tab="import" onclick="switchTab('import',this)"><i class="ti ti-database-import"></i> Data Import</div>
-      <div class="si" data-tab="health" onclick="switchTab('health',this)"><i class="ti ti-heartbeat"></i> Health</div>
+    <div class="topbar-left">
+      <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle sidebar"><i class="ti ti-menu-2"></i></button>
+      <a class="logo" href="#">
+        <div class="lm"><div class="star"></div></div>
+        <div class="lt">Spora<span>find</span> <span class="badge">Admin</span></div>
+      </a>
     </div>
-    <div class="main" id="admin-main"></div>
+    <div class="topbar-right">
+      <span class="t-right-info" id="top-info"></span>
+      <button class="logout-btn" onclick="adminLogout()"><i class="ti ti-logout"></i> Sign out</button>
+    </div>
+  </div>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <div class="body">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-label">Main</div>
+        <div class="sidebar-item active" data-tab="overview" onclick="switchTab('overview')"><i class="ti ti-dashboard"></i>Overview <span class="si-pill" id="ov-pill">Live</span></div>
+        <div class="sidebar-item" data-tab="users" onclick="switchTab('users')"><i class="ti ti-users"></i>Users <span class="si-pill" id="us-pill"></span></div>
+        <div class="sidebar-item" data-tab="profiles" onclick="switchTab('profiles')"><i class="ti ti-id"></i>Profiles <span class="si-pill" id="pr-pill"></span></div>
+        <div class="sidebar-item" data-tab="orgs" onclick="switchTab('orgs')"><i class="ti ti-building-community"></i>Organisations <span class="si-pill" id="or-pill"></span></div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-label">Operations</div>
+        <div class="sidebar-item" data-tab="import" onclick="switchTab('import')"><i class="ti ti-database-import"></i>Data Import</div>
+        <div class="sidebar-item" data-tab="activity" onclick="switchTab('activity')"><i class="ti ti-activity"></i>Activity Log</div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-label">System</div>
+        <div class="sidebar-item" data-tab="health" onclick="switchTab('health')"><i class="ti ti-heartbeat"></i>Health</div>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-footer"><i class="ti ti-shield-check" style="color:var(--gl);"></i> v0.1.0</div>
+    </div>
+    <div class="main" id="main-content"></div>
   </div>
 </div>
+
+<div class="toast-container" id="toast-container"></div>
+<div class="confirm-overlay" id="confirm-overlay"></div>
 
 <script>
 const API_BASE = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
   ? "http://localhost:8000" : "https://sporafind-api.vercel.app";
-const ADMIN_KEY = "sf-admin-key";
+const STORAGE_KEY = "sf-admin-key";
 
-let adminKey = localStorage.getItem(ADMIN_KEY) || "";
+let adminKey = localStorage.getItem(STORAGE_KEY) || "";
 let curTab = "overview";
+let sidebarOpen = false;
 
-async function apiGet(path) {
+/* ─── API ─── */
+async function api(path, opts = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "X-Admin-Key": adminKey }
+    headers: { "X-Admin-Key": adminKey, ...(opts.body ? {"Content-Type":"application/json"} : {}) },
+    ...opts,
   });
   if (res.status === 401) { adminLogout(); throw new Error("Unauthorized"); }
-  if (!res.ok) throw new Error(`GET ${path} failed: ${res.status}`);
+  if (!res.ok) throw new Error(`${opts.method||"GET"} ${path} → ${res.status}`);
   return res.json();
 }
+const apiGet = (p) => api(p);
+const apiPatch = (p, b) => api(p, {method:"PATCH", body:JSON.stringify(b)});
+const apiPost = (p, b) => api(p, {method:"POST", body:JSON.stringify(b || {})});
+const apiDelete = (p) => api(p, {method:"DELETE"});
 
-async function apiPatch(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json", "X-Admin-Key": adminKey },
-    body: JSON.stringify(body),
+/* ─── Toast ─── */
+function toast(msg, type = "info") {
+  const c = document.getElementById("toast-container");
+  const el = document.createElement("div");
+  el.className = `toast toast-${type}`;
+  const icon = type === "success" ? "ti-circle-check" : type === "error" ? "ti-alert-circle" : "ti-info-circle";
+  el.innerHTML = `<i class="ti ${icon}"></i><span>${msg}</span><button class="t-close" onclick="this.parentElement.remove()"><i class="ti ti-x"></i></button>`;
+  c.appendChild(el);
+  setTimeout(() => { el.style.opacity = "0"; el.style.transform = "translateY(8px) scale(.97)"; el.style.transition = "all .2s"; setTimeout(() => el.remove(), 250); }, 3500);
+}
+
+/* ─── Confirm dialog ─── */
+function confirmDialog(msg, detail, type = "danger") {
+  return new Promise(resolve => {
+    const o = document.getElementById("confirm-overlay");
+    o.innerHTML = `
+      <div class="confirm-box anim-scale">
+        <div class="c-icon ${type}"><i class="ti ti-${type==='danger'?'alert-triangle':'info-circle'}"></i></div>
+        <h3>${msg}</h3>
+        <p>${detail}</p>
+        <div class="c-actions">
+          <button class="btn" onclick="document.getElementById('confirm-overlay').classList.remove('show');resolve(false)">Cancel</button>
+          <button class="btn btn-primary" onclick="document.getElementById('confirm-overlay').classList.remove('show');resolve(true)">Confirm</button>
+        </div>
+      </div>`;
+    o.classList.add("show");
+    o.querySelector(".confirm-box .c-actions .btn-primary").focus();
+    const escHandler = (e) => { if (e.key === "Escape") { o.classList.remove("show"); resolve(false); document.removeEventListener("keydown", escHandler); }};
+    document.addEventListener("keydown", escHandler);
   });
-  if (res.status === 401) { adminLogout(); return null; }
-  if (!res.ok) throw new Error(`PATCH ${path} failed: ${res.status}`);
-  return res.json();
 }
 
-async function apiDelete(path) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "DELETE",
-    headers: { "X-Admin-Key": adminKey }
-  });
-  if (res.status === 401) { adminLogout(); return null; }
-  if (!res.ok) throw new Error(`DELETE ${path} failed: ${res.status}`);
-  return res.json();
-}
-
-async function apiPost(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Admin-Key": adminKey },
-    body: JSON.stringify(body || {}),
-  });
-  if (res.status === 401) { adminLogout(); return null; }
-  if (!res.ok) throw new Error(`POST ${path} failed: ${res.status}`);
-  return res.json();
-}
-
-/* Auth */
+/* ─── Auth ─── */
 async function adminLogin(e) {
   e.preventDefault();
-  const key = document.getElementById("admin-key-input").value.trim();
-  if (!key) return;
-  adminKey = key;
+  const k = document.getElementById("admin-key-input").value.trim();
+  if (!k) return;
+  const btn = document.getElementById("login-btn");
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite"></i> Verifying...';
+  adminKey = k;
   try {
-    const data = await apiGet("/admin/verify");
-    if (data.status === "ok") {
-      localStorage.setItem(ADMIN_KEY, key);
+    const d = await apiGet("/admin/verify");
+    if (d.status === "ok") {
+      localStorage.setItem(STORAGE_KEY, k);
       document.getElementById("login-page").style.display = "none";
       document.getElementById("admin-app").style.display = "";
-      switchTab("overview");
+      document.getElementById("top-info").textContent = "Connected";
+      renderTab("overview");
     }
   } catch {
-    document.getElementById("login-error").style.display = "block";
+    document.getElementById("login-error").style.display = "flex";
     adminKey = "";
+    btn.disabled = false; btn.innerHTML = 'Sign in <i class="ti ti-arrow-right"></i>';
   }
 }
 
 function adminLogout() {
-  localStorage.removeItem(ADMIN_KEY);
-  adminKey = "";
+  localStorage.removeItem(STORAGE_KEY); adminKey = "";
   document.getElementById("admin-app").style.display = "none";
   document.getElementById("login-page").style.display = "";
-  document.getElementById("admin-key-input").value = "";
+  document.getElementById("login-btn").disabled = false; document.getElementById("login-btn").innerHTML = 'Sign in <i class="ti ti-arrow-right"></i>';
   document.getElementById("login-error").style.display = "none";
+  document.getElementById("admin-key-input").value = "";
 }
 
-/* Tab switching */
-function switchTab(tab, el) {
-  curTab = tab;
-  document.querySelectorAll(".sidebar .si").forEach(s => s.classList.remove("active"));
-  if (el) el.classList.add("active");
+/* ─── Sidebar ─── */
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  document.getElementById("sidebar").classList.toggle("open", sidebarOpen);
+  document.getElementById("sidebar-overlay").classList.toggle("open", sidebarOpen);
+}
+
+/* ─── Tab switching ─── */
+function switchTab(tab) {
+  curTab = tab; sidebarOpen = false;
+  document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("sidebar-overlay").classList.remove("open");
+  document.querySelectorAll(".sidebar-item").forEach(s => s.classList.toggle("active", s.dataset.tab === tab));
   renderTab(tab);
 }
 
 function renderTab(tab) {
-  const main = document.getElementById("admin-main");
-  if (tab === "overview") renderOverview(main);
-  else if (tab === "users") renderUsers(main);
-  else if (tab === "profiles") renderProfiles(main);
-  else if (tab === "orgs") renderOrgs(main);
-  else if (tab === "import") renderImport(main);
-  else if (tab === "health") renderHealth(main);
+  const m = document.getElementById("main-content");
+  m.innerHTML = `<div class="page-hdr"><h1>${tab.charAt(0).toUpperCase()+tab.slice(1)}</h1></div><div class="loading" style="text-align:center;padding:40px;color:var(--t3);"><i class="ti ti-loader" style="font-size:22px;animation:spin 1s linear infinite;display:block;margin-bottom:8px;"></i><p style="font-size:12px;">Loading...</p></div>`;
+  if (tab === "overview") renderOverview(m);
+  else if (tab === "users") renderUsers(m);
+  else if (tab === "profiles") renderProfiles(m);
+  else if (tab === "orgs") renderOrgs(m);
+  else if (tab === "import") renderImport(m);
+  else if (tab === "activity") renderActivity(m);
+  else if (tab === "health") renderHealth(m);
 }
 
-/* Overview */
-async function renderOverview(main) {
-  main.innerHTML = `<div class="page-title">Dashboard Overview</div><div class="page-desc">High-level metrics across the platform</div><div class="loading"><i class="ti ti-loader"></i><p>Loading...</p></div>`;
+/* ─── Overview ─── */
+async function renderOverview(m) {
   try {
     const d = await apiGet("/admin/analytics");
-    main.innerHTML = `
-      <div class="page-title">Dashboard Overview</div>
-      <div class="page-desc">High-level metrics across the platform</div>
-      <div class="cards">
-        <div class="stat-card card-green"><div class="sc-top"><div class="sc-icon"><i class="ti ti-users"></i></div><i class="ti ti-arrow-up" style="color:var(--gl);font-size:14px;"></i></div><div class="sc-label">Total Profiles</div><div class="sc-val">${(d.total_profiles||0).toLocaleString()}</div><div class="sc-sub">${(d.active_profiles||0).toLocaleString()} active</div></div>
-        <div class="stat-card card-gold"><div class="sc-top"><div class="sc-icon"><i class="ti ti-building-community"></i></div></div><div class="sc-label">Organisations</div><div class="sc-val">${(d.total_orgs||0).toLocaleString()}</div><div class="sc-sub">Companies House</div></div>
-        <div class="stat-card card-blue"><div class="sc-top"><div class="sc-icon"><i class="ti ti-users"></i></div></div><div class="sc-label">Users</div><div class="sc-val">${(d.total_users||0).toLocaleString()}</div><div class="sc-sub">Registered accounts</div></div>
-        <div class="stat-card card-green"><div class="sc-top"><div class="sc-icon"><i class="ti ti-world"></i></div></div><div class="sc-label">Countries</div><div class="sc-val">${(d.total_countries||0).toLocaleString()}</div><div class="sc-sub">Diaspora coverage</div></div>
+    m.innerHTML = `
+      <div class="page-hdr anim-fade"><h1>Dashboard Overview</h1><p>Real-time metrics across the platform</p></div>
+      <div class="stats-grid">
+        <div class="stat-card sc-gr anim-fade" style="animation-delay:.05s"><div class="sc-top"><div class="sc-icon"><i class="ti ti-users"></i></div><span class="sc-trend up"><i class="ti ti-trending-up"></i> Active</span></div><div class="sc-label">Total Profiles</div><div class="sc-val">${(d.total_profiles||0).toLocaleString()}</div><div class="sc-sub"><span style="color:var(--gl)">${(d.active_profiles||0).toLocaleString()} active</span> · ${((d.total_profiles ? (d.active_profiles||0)/d.total_profiles*100 : 0)).toFixed(1)}% engagement</div></div>
+        <div class="stat-card sc-gd anim-fade" style="animation-delay:.1s"><div class="sc-top"><div class="sc-icon"><i class="ti ti-building-community"></i></div></div><div class="sc-label">Organisations</div><div class="sc-val">${(d.total_orgs||0).toLocaleString()}</div><div class="sc-sub">Registered Companies House entities</div></div>
+        <div class="stat-card sc-bl anim-fade" style="animation-delay:.15s"><div class="sc-top"><div class="sc-icon"><i class="ti ti-users"></i></div></div><div class="sc-label">Users</div><div class="sc-val">${(d.total_users||0).toLocaleString()}</div><div class="sc-sub">Registered accounts on platform</div></div>
+        <div class="stat-card sc-gr anim-fade" style="animation-delay:.2s"><div class="sc-top"><div class="sc-icon"><i class="ti ti-world"></i></div></div><div class="sc-label">Diaspora Countries</div><div class="sc-val">${(d.total_countries||0).toLocaleString()}</div><div class="sc-sub">Countries of residence covered</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="table-wrap"><div class="tw-h"><h3>Segments</h3></div>${renderSegmentsTable(d.segments||{})}</div>
-        <div class="table-wrap"><div class="tw-h"><h3>Origins</h3></div>${renderOriginsTable(d.origins||{})}</div>
+      <div class="analytics-grid">
+        <div class="table-card anim-fade"><div class="tc-h"><h3><i class="ti ti-tags" style="color:var(--gd)"></i> Segment Distribution</h3></div>${renderKeyValueTable(d.segments||{}, "Segment", "Count")}</div>
+        <div class="table-card anim-fade"><div class="tc-h"><h3><i class="ti ti-flag" style="color:var(--gl)"></i> Origin Breakdown</h3></div>${renderKeyValueTable(d.origins||{}, "Origin", "Count")}</div>
       </div>`;
-  } catch { main.innerHTML = `<div class="page-title">Dashboard Overview</div><div class="page-desc">High-level metrics</div><div class="empty"><i class="ti ti-cloud-off"></i><p>Could not load analytics</p></div>`; }
+  } catch { m.innerHTML = `<div class="page-hdr"><h1>Dashboard Overview</h1></div><div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load analytics</h3><p>Check that the API server is running</p></div>`; }
 }
 
-function renderSegmentsTable(seg) {
-  const entries = Object.entries(seg);
-  if (!entries.length) return `<div class="empty"><p>No segment data</p></div>`;
-  return `<table><thead><tr><th>Segment</th><th>Count</th></tr></thead><tbody>${entries.map(([k,v])=>`<tr><td>${k||"Unsegmented"}</td><td>${v.toLocaleString()}</td></tr>`).join("")}</tbody></table>`;
+function renderKeyValueTable(data, kLabel, vLabel) {
+  const entries = Object.entries(data);
+  if (!entries.length) return `<div class="empty-state"><p>No data available</p></div>`;
+  const max = Math.max(...entries.map(([,v]) => v), 1);
+  return `<div style="padding:8px 14px;">${entries.map(([k,v]) => `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px;"><div style="width:100px;flex-shrink:0;color:var(--t2)">${k||"Unsegmented"}</div><div style="flex:1;height:6px;background:var(--s2);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${(v/max*100).toFixed(1)}%;background:linear-gradient(90deg,var(--gd),var(--gl));border-radius:3px;transition:width .6s ease;"></div></div><div style="width:40px;text-align:right;font-weight:600;color:var(--t1)">${v.toLocaleString()}</div></div>`).join("")}</div>`;
 }
 
-function renderOriginsTable(orig) {
-  const entries = Object.entries(orig);
-  if (!entries.length) return `<div class="empty"><p>No origin data</p></div>`;
-  return `<table><thead><tr><th>Origin</th><th>Count</th></tr></thead><tbody>${entries.map(([k,v])=>`<tr><td>${k||"Unknown"}</td><td>${v.toLocaleString()}</td></tr>`).join("")}</tbody></table>`;
-}
+/* ─── Users ─── */
+let userState = {page:1, q:"", loading:false};
 
-/* Users */
-let usersPage = 1;
-async function renderUsers(main) {
-  main.innerHTML = `<div class="page-title">Users</div><div class="page-desc">Manage registered users and their access</div><div class="loading"><i class="ti ti-loader"></i><p>Loading...</p></div>`;
+async function renderUsers(m) {
+  m.innerHTML = `
+    <div class="page-hdr anim-fade"><h1>Users</h1><p>Manage registered users, roles, and access</p>
+      <div class="page-hdr-actions">
+        <div class="search-box"><i class="ti ti-search"></i><input id="us-search" type="text" placeholder="Search by email or name..." value="${userState.q}" onkeydown="if(event.key==='Enter'){userState.q=this.value;userState.page=1;renderUsers(document.getElementById('main-content'))}"></div>
+      </div>
+    </div>
+    <div class="table-card"><div class="tc-h"><h3>All users</h3></div><div id="us-body"><div class="loading" style="text-align:center;padding:32px;color:var(--t3);"><i class="ti ti-loader" style="animation:spin 1s linear infinite;display:block;margin-bottom:6px;font-size:18px;"></i><p>Loading...</p></div></div></div>`;
   try {
-    const d = await apiGet(`/admin/users?page=${usersPage}&page_size=50`);
-    main.innerHTML = `
-      <div class="page-title">Users</div><div class="page-desc">Manage registered users and their access</div>
-      <div class="table-wrap">
-        <div class="tw-h"><h3>All users (${d.total})</h3></div>
-        <table><thead><tr><th>Email</th><th>Name</th><th>Plan</th><th>Status</th><th>Exports</th><th>Created</th><th>Actions</th></tr></thead><tbody>
-          ${d.items.map(u => `<tr>
-            <td>${u.email}</td>
-            <td>${u.name||"—"}</td>
-            <td><span class="badge ${u.plan_tier==='free'?'badge-blue':'badge-gold'}">${u.plan_tier}</span></td>
-            <td><span class="badge ${u.is_active?'badge-green':'badge-red'}">${u.is_active?'Active':'Inactive'}</span></td>
-            <td>${u.export_count||0}</td>
-            <td>${u.created_at?.slice(0,10)||"—"}</td>
-            <td><button class="btn-sm" onclick="editUser('${u.id}','${u.plan_tier}',${u.is_active})"><i class="ti ti-edit"></i></button></td>
-          </tr>`).join("")}
-        </tbody></table>
-        <div class="pagination"><button onclick="usersPage--;renderUsers(document.getElementById('admin-main'))" ${usersPage<=1?'disabled':''}>Prev</button><span>Page ${d.page} of ${Math.ceil(d.total/d.page_size)}</span><button onclick="usersPage++;renderUsers(document.getElementById('admin-main'))" ${d.page*d.page_size>=d.total?'disabled':''}>Next</button></div>
-      </div>`;
-  } catch { main.innerHTML = `<div class="page-title">Users</div><div class="page-desc">Manage registered users</div><div class="empty"><i class="ti ti-cloud-off"></i><p>Could not load users</p></div>`; }
+    const d = await apiGet(`/admin/users?page=${userState.page}&page_size=50&q=${encodeURIComponent(userState.q)}`);
+    const el = document.getElementById("us-body");
+    if (!d.items || !d.items.length) {
+      el.innerHTML = `<div class="empty-state"><i class="ti ti-users"></i><h3>No users found</h3><p>${userState.q ? 'Try a different search term' : 'No users have registered yet'}</p></div>`;
+      document.getElementById("us-pill").textContent = "0";
+      return;
+    }
+    document.getElementById("us-pill").textContent = d.total;
+    const totalPages = Math.ceil(d.total / d.page_size) || 1;
+    el.innerHTML = `<div class="tc-table"><table><thead><tr><th style="width:28px"></th><th class="sortable" onclick="sortTable('us-body','email')">Email <i class="ti ti-arrows-sort"></i></th><th class="sortable" onclick="sortTable('us-body','name')">Name</th><th>Plan</th><th>Status</th><th>Exports</th><th class="sortable" onclick="sortTable('us-body','created')">Created</th><th style="width:50px"></th></tr></thead><tbody>${d.items.map(u => `<tr id="usr-${u.id}"><td><input type="checkbox" class="cb" onchange="toggleUserSelect('${u.id}',this.checked)"></td><td>${u.email}</td><td>${u.name||'<span style="color:var(--t3)">—</span>'}</td><td><span class="bdg ${u.plan_tier==='free'?'bdg-bl':u.plan_tier==='pro'?'bdg-gd':'bdg-gr'}">${u.plan_tier}</span></td><td><span class="bdg ${u.is_active?'bdg-gr':'bdg-re'}">${u.is_active?'Active':'Inactive'}</span></td><td>${u.export_count||0}</td><td style="color:var(--t3)">${(u.created_at||"").slice(0,10)}</td><td><button class="btn btn-ghost btn-icon btn-sm" onclick="editUser('${u.id}','${u.plan_tier}',${u.is_active})" title="Edit"><i class="ti ti-edit"></i></button></td></tr>`).join("")}</tbody></table></div>
+    <div class="pagination"><button onclick="userState.page--;renderUsers(document.getElementById('main-content'))" ${userState.page<=1?'disabled':''}><i class="ti ti-chevron-left"></i></button><span class="p-info">Page ${d.page} of ${totalPages}</span><button onclick="userState.page++;renderUsers(document.getElementById('main-content'))" ${userState.page>=totalPages?'disabled':''}><i class="ti ti-chevron-right"></i></button></div>`;
+  } catch { document.getElementById("us-body").innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load users</h3></div>`; }
 }
 
-async function editUser(id, plan, isActive) {
+function toggleUserSelect(id, checked) {
+  const row = document.getElementById(`usr-${id}`);
+  if (row) row.classList.toggle("selected", checked);
+}
+
+async function editUser(id, plan, active) {
   const overlay = document.getElementById("modal-overlay") || createModal();
   overlay.innerHTML = `
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    <div class="modal anim-scale">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="ti ti-x"></i></button>
       <h3>Edit User</h3>
-      <p>Update user permissions and status</p>
-      <label>Plan tier</label>
-      <select id="edit-plan"><option value="free" ${plan==='free'?'selected':''}>Free</option><option value="pro" ${plan==='pro'?'selected':''}>Pro</option><option value="enterprise" ${plan==='enterprise'?'selected':''}>Enterprise</option></select>
-      <label>Status</label>
-      <select id="edit-active"><option value="true" ${isActive?'selected':''}>Active</option><option value="false" ${!isActive?'selected':''}>Inactive</option></select>
-      <div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-save" onclick="saveUser('${id}')">Save</button></div>
+      <p class="m-desc">Update plan tier and account status</p>
+      <div class="m-field"><label>Plan tier</label><select id="eu-plan"><option value="free" ${plan==='free'?'selected':''}>Free</option><option value="pro" ${plan==='pro'?'selected':''}>Pro</option><option value="enterprise" ${plan==='enterprise'?'selected':''}>Enterprise</option></select></div>
+      <div class="m-field"><label>Account status</label><select id="eu-active"><option value="true" ${active?'selected':''}>Active</option><option value="false" ${!active?'selected':''}>Inactive</option></select></div>
+      <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveUser('${id}')">Save changes</button></div>
     </div>`;
   overlay.classList.add("show");
 }
 
 async function saveUser(id) {
-  const plan = document.getElementById("edit-plan").value;
-  const active = document.getElementById("edit-active").value === "true";
-  await apiPatch(`/admin/users/${id}`, { plan_tier: plan, is_active: active });
-  closeModal();
-  renderTab(curTab);
-}
-
-function createModal() {
-  const el = document.createElement("div");
-  el.id = "modal-overlay";
-  el.className = "modal-overlay";
-  el.onclick = (e) => { if (e.target === el) closeModal(); };
-  document.body.appendChild(el);
-  return el;
-}
-
-function closeModal() {
-  const el = document.getElementById("modal-overlay");
-  if (el) el.classList.remove("show");
-}
-
-/* Profiles */
-let profilesPage = 1;
-async function renderProfiles(main) {
-  main.innerHTML = `<div class="page-title">Profiles</div><div class="page-desc">View and manage all diaspora profiles</div><div class="loading"><i class="ti ti-loader"></i><p>Loading...</p></div>`;
   try {
-    const d = await apiGet(`/admin/profiles?page=${profilesPage}&page_size=50`);
-    main.innerHTML = `
-      <div class="page-title">Profiles</div><div class="page-desc">View and manage all diaspora profiles</div>
-      <div class="table-wrap">
-        <div class="tw-h"><h3>All profiles (${d.total})</h3></div>
-        <table><thead><tr><th>Name</th><th>Segment</th><th>Origin</th><th>Country</th><th>Source</th><th>Active</th><th>Created</th><th>Actions</th></tr></thead><tbody>
-          ${d.items.map(p => `<tr>
-            <td>${p.name}</td>
-            <td>${p.segment||"—"}</td>
-            <td>${p.origin||"—"}</td>
-            <td>${p.country_of_residence||"—"}</td>
-            <td>${p.source}</td>
-            <td><span class="badge ${p.is_active?'badge-green':'badge-red'}">${p.is_active?'Active':'Inactive'}</span></td>
-            <td>${p.created_at?.slice(0,10)||"—"}</td>
-            <td><button class="btn-sm" onclick="editProfile('${p.id}','${p.segment||''}','${p.origin||''}',${p.is_active})"><i class="ti ti-edit"></i></button> <button class="btn-sm danger" onclick="deleteProfile('${p.id}')"><i class="ti ti-trash"></i></button></td>
-          </tr>`).join("")}
-        </tbody></table>
-        <div class="pagination"><button onclick="profilesPage--;renderProfiles(document.getElementById('admin-main'))" ${profilesPage<=1?'disabled':''}>Prev</button><span>Page ${d.page} of ${Math.ceil(d.total/d.page_size)}</span><button onclick="profilesPage++;renderProfiles(document.getElementById('admin-main'))" ${d.page*d.page_size>=d.total?'disabled':''}>Next</button></div>
-      </div>`;
-  } catch { main.innerHTML = `<div class="page-title">Profiles</div><div class="page-desc">View and manage profiles</div><div class="empty"><i class="ti ti-cloud-off"></i><p>Could not load profiles</p></div>`; }
+    const plan = document.getElementById("eu-plan").value;
+    const active = document.getElementById("eu-active").value === "true";
+    await apiPatch(`/admin/users/${id}`, { plan_tier: plan, is_active: active });
+    closeModal(); toast("User updated", "success"); renderTab(curTab);
+  } catch { toast("Failed to update user", "error"); }
 }
 
-async function editProfile(id, segment, origin, isActive) {
+/* ─── Profiles ─── */
+let profileState = {page:1, q:"", segment:"", loading:false};
+
+async function renderProfiles(m) {
+  m.innerHTML = `
+    <div class="page-hdr anim-fade"><h1>Profiles</h1><p>View and manage diaspora profiles</p>
+      <div class="page-hdr-actions">
+        <div class="search-box"><i class="ti ti-search"></i><input id="pr-search" type="text" placeholder="Search by name, company, city..." value="${profileState.q}" onkeydown="if(event.key==='Enter'){profileState.q=this.value;profileState.page=1;renderProfiles(document.getElementById('main-content'))}"></div>
+        <div class="filter-chips">${["all","people","leaders","entrepreneurs","investors"].map(s => `<span class="filter-chip ${(profileState.segment===s)||(!profileState.segment&&s==='all')?'active':''}" onclick="profileState.segment=${s==='all'?'':`'${s}'`};profileState.page=1;renderProfiles(document.getElementById('main-content'))">${s}</span>`).join("")}</div>
+      </div>
+    </div>
+    <div class="table-card"><div class="tc-h"><h3>All profiles</h3></div><div id="pr-body"><div class="loading" style="text-align:center;padding:32px;color:var(--t3);"><i class="ti ti-loader" style="animation:spin 1s linear infinite;display:block;margin-bottom:6px;font-size:18px;"></i><p>Loading...</p></div></div></div>`;
+  try {
+    const params = new URLSearchParams({page: profileState.page, page_size: 50});
+    if (profileState.q) params.set("q", profileState.q);
+    if (profileState.segment) params.set("segment", profileState.segment);
+    const d = await apiGet(`/admin/profiles?${params}`);
+    const el = document.getElementById("pr-body");
+    if (!d.items || !d.items.length) {
+      el.innerHTML = `<div class="empty-state"><i class="ti ti-search-off"></i><h3>No profiles found</h3><p>${profileState.q||profileState.segment?'Try different filters':'No profiles ingested yet'}</p></div>`;
+      document.getElementById("pr-pill").textContent = "0"; return;
+    }
+    document.getElementById("pr-pill").textContent = d.total;
+    const totalPages = Math.ceil(d.total / d.page_size) || 1;
+    el.innerHTML = `<div class="tc-bulk-bar" id="pr-bulk"><i class="ti ti-stack"></i><span id="pr-bulk-count">0 selected</span><button onclick="batchProfile('activate')">Activate</button><button onclick="batchProfile('deactivate')">Deactivate</button><button onclick="batchProfile('set_segment','leaders')">Set leaders</button><button onclick="batchProfile('set_segment','entrepreneurs')">Set entrepreneurs</button></div>
+    <div class="tc-table"><table><thead><tr><th style="width:28px"><input type="checkbox" class="cb" onchange="toggleAllProfiles(this.checked)"></th><th class="sortable">Name</th><th>Segment</th><th>Origin</th><th>Country</th><th>Locality</th><th>Source</th><th class="sortable">Status</th><th class="sortable">Created</th><th style="width:80px"></th></tr></thead><tbody>${d.items.map(p => `<tr id="pro-${p.id}"><td><input type="checkbox" class="cb pr-cb" data-id="${p.id}" onchange="updateProfileBulkBar()"></td><td style="font-weight:500;color:var(--t1)">${p.name}</td><td>${p.segment?`<span class="bdg bdg-gd">${p.segment}</span>`:'<span style="color:var(--t3)">—</span>'}</td><td>${p.origin?`<span class="bdg ${p.origin==='gh'?'bdg-gr':'bdg-bl'}">${p.origin}</span>`:'<span style="color:var(--t3)">—</span>'}</td><td>${p.country_of_residence||'<span style="color:var(--t3)">—</span>'}</td><td>${p.locality||'<span style="color:var(--t3)">—</span>'}</td><td>${p.source}</td><td><span class="bdg ${p.is_active?'bdg-gr':'bdg-re'}">${p.is_active?'Active':'Inactive'}</span></td><td style="color:var(--t3)">${(p.created_at||"").slice(0,10)}</td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-icon btn-sm" onclick="editProfile('${p.id}','${p.segment||''}','${p.origin||''}',${p.is_active})" title="Edit"><i class="ti ti-edit"></i></button><button class="btn btn-ghost btn-icon btn-sm btn-danger" onclick="deleteProfile('${p.id}')" title="Deactivate"><i class="ti ti-trash"></i></button></div></td></tr>`).join("")}</tbody></table></div>
+    <div class="pagination"><button onclick="profileState.page--;renderProfiles(document.getElementById('main-content'))" ${profileState.page<=1?'disabled':''}><i class="ti ti-chevron-left"></i></button><span class="p-info">Page ${d.page} of ${totalPages}</span><button onclick="profileState.page++;renderProfiles(document.getElementById('main-content'))" ${profileState.page>=totalPages?'disabled':''}><i class="ti ti-chevron-right"></i></button></div>`;
+  } catch { document.getElementById("pr-body").innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load profiles</h3></div>`; }
+}
+
+function updateProfileBulkBar() {
+  const cbs = document.querySelectorAll(".pr-cb:checked");
+  const bar = document.getElementById("pr-bulk");
+  if (!bar) return;
+  const count = cbs.length;
+  document.getElementById("pr-bulk-count").textContent = `${count} selected`;
+  bar.classList.toggle("show", count > 0);
+}
+
+function toggleAllProfiles(checked) {
+  document.querySelectorAll(".pr-cb").forEach(cb => cb.checked = checked);
+  updateProfileBulkBar();
+}
+
+function getSelectedProfileIds() {
+  return Array.from(document.querySelectorAll(".pr-cb:checked")).map(cb => cb.dataset.id);
+}
+
+async function batchProfile(action, value) {
+  const ids = getSelectedProfileIds();
+  if (!ids.length) return;
+  const confirmed = await confirmDialog("Batch action", `Apply "${action}" to ${ids.length} profiles?`, "info");
+  if (!confirmed) return;
+  try {
+    await apiPost("/admin/profiles/batch", { ids, action, value });
+    toast(`Updated ${ids.length} profiles`, "success");
+    renderTab(curTab);
+  } catch { toast("Batch action failed", "error"); }
+}
+
+async function editProfile(id, segment, origin, active) {
   const overlay = createModal();
   overlay.innerHTML = `
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    <div class="modal anim-scale">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="ti ti-x"></i></button>
       <h3>Edit Profile</h3>
-      <p>Update profile metadata</p>
-      <label>Segment</label>
-      <select id="ep-segment"><option value="">None</option><option value="people" ${segment==='people'?'selected':''}>People</option><option value="leaders" ${segment==='leaders'?'selected':''}>Leaders</option><option value="entrepreneurs" ${segment==='entrepreneurs'?'selected':''}>Entrepreneurs</option><option value="investors" ${segment==='investors'?'selected':''}>Investors</option></select>
-      <label>Origin</label>
-      <select id="ep-origin"><option value="">None</option><option value="gh" ${origin==='gh'?'selected':''}>Ghana</option><option value="africa" ${origin==='africa'?'selected':''}>Africa</option></select>
-      <label>Status</label>
-      <select id="ep-active"><option value="true" ${isActive?'selected':''}>Active</option><option value="false" ${!isActive?'selected':''}>Inactive</option></select>
-      <div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-save" onclick="saveProfile('${id}')">Save</button></div>
+      <p class="m-desc">Update profile classification and status</p>
+      <div class="m-field"><label>Segment</label><select id="ep-segment"><option value="">None</option><option value="people" ${segment==='people'?'selected':''}>People</option><option value="leaders" ${segment==='leaders'?'selected':''}>Leaders</option><option value="entrepreneurs" ${segment==='entrepreneurs'?'selected':''}>Entrepreneurs</option><option value="investors" ${segment==='investors'?'selected':''}>Investors</option></select></div>
+      <div class="m-field"><label>Origin</label><select id="ep-origin"><option value="">None</option><option value="gh" ${origin==='gh'?'selected':''}>Ghana</option><option value="africa" ${origin==='africa'?'selected':''}>Pan-Africa</option></select></div>
+      <div class="m-field"><label>Status</label><select id="ep-active"><option value="true" ${active?'selected':''}>Active</option><option value="false" ${!active?'selected':''}>Inactive</option></select></div>
+      <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveProfile('${id}')">Save changes</button></div>
     </div>`;
   overlay.classList.add("show");
 }
 
 async function saveProfile(id) {
-  const segment = document.getElementById("ep-segment").value || null;
-  const origin = document.getElementById("ep-origin").value || null;
-  const isActive = document.getElementById("ep-active").value === "true";
-  await apiPatch(`/admin/profiles/${id}`, { segment, origin, is_active: isActive });
-  closeModal();
-  renderTab(curTab);
+  try {
+    const segment = document.getElementById("ep-segment").value || null;
+    const origin = document.getElementById("ep-origin").value || null;
+    const active = document.getElementById("ep-active").value === "true";
+    await apiPatch(`/admin/profiles/${id}`, { segment, origin, is_active: active });
+    closeModal(); toast("Profile updated", "success"); renderTab(curTab);
+  } catch { toast("Failed to update profile", "error"); }
 }
 
 async function deleteProfile(id) {
-  if (!confirm("Deactivate this profile?")) return;
-  await apiDelete(`/admin/profiles/${id}`);
-  renderTab(curTab);
+  const confirmed = await confirmDialog("Deactivate Profile", "This will soft-delete the profile. It can be reactivated later.");
+  if (!confirmed) return;
+  try { await apiDelete(`/admin/profiles/${id}`); toast("Profile deactivated", "success"); renderTab(curTab); }
+  catch { toast("Failed to deactivate profile", "error"); }
 }
 
-/* Orgs */
-let orgsPage = 1;
-async function renderOrgs(main) {
-  main.innerHTML = `<div class="page-title">Organisations</div><div class="page-desc">View and manage all organisations</div><div class="loading"><i class="ti ti-loader"></i><p>Loading...</p></div>`;
+/* ─── Orgs ─── */
+let orgState = {page:1, q:"", type:""};
+
+async function renderOrgs(m) {
+  m.innerHTML = `
+    <div class="page-hdr anim-fade"><h1>Organisations</h1><p>Manage Companies House organisations</p>
+      <div class="page-hdr-actions">
+        <div class="search-box"><i class="ti ti-search"></i><input id="or-search" type="text" placeholder="Search by name..." value="${orgState.q}" onkeydown="if(event.key==='Enter'){orgState.q=this.value;orgState.page=1;renderOrgs(document.getElementById('main-content'))}"></div>
+        <div class="filter-chips">${["all","association","investment","professional","community","cultural","think-tank"].map(s => `<span class="filter-chip ${(!orgState.type&&s==='all')||orgState.type===s?'active':''}" onclick="orgState.type=${s==='all'?'':`'${s}'`};orgState.page=1;renderOrgs(document.getElementById('main-content'))">${s}</span>`).join("")}</div>
+      </div>
+    </div>
+    <div class="table-card"><div class="tc-h"><h3>All organisations</h3></div><div id="or-body"><div class="loading" style="text-align:center;padding:32px;color:var(--t3);"><i class="ti ti-loader" style="animation:spin 1s linear infinite;display:block;margin-bottom:6px;font-size:18px;"></i><p>Loading...</p></div></div></div>`;
   try {
-    const d = await apiGet(`/admin/orgs?page=${orgsPage}&page_size=50`);
-    main.innerHTML = `
-      <div class="page-title">Organisations</div><div class="page-desc">View and manage all organisations</div>
-      <div class="table-wrap">
-        <div class="tw-h"><h3>All orgs (${d.total})</h3></div>
-        <table><thead><tr><th>Name</th><th>Type</th><th>Status</th><th>Country</th><th>Profiles</th><th>Created</th><th>Actions</th></tr></thead><tbody>
-          ${d.items.map(o => `<tr>
-            <td>${o.name}</td>
-            <td>${o.org_type||"—"}</td>
-            <td><span class="badge ${o.status==='active'?'badge-green':'badge-gold'}">${o.status||"—"}</span></td>
-            <td>${o.country||"—"}</td>
-            <td>${o.profile_count||0}</td>
-            <td>${o.created_at?.slice(0,10)||"—"}</td>
-            <td><button class="btn-sm" onclick="editOrg('${o.id}','${o.org_type||''}')"><i class="ti ti-edit"></i></button> <button class="btn-sm danger" onclick="deleteOrg('${o.id}')"><i class="ti ti-trash"></i></button></td>
-          </tr>`).join("")}
-        </tbody></table>
-        <div class="pagination"><button onclick="orgsPage--;renderOrgs(document.getElementById('admin-main'))" ${orgsPage<=1?'disabled':''}>Prev</button><span>Page ${d.page} of ${Math.ceil(d.total/d.page_size)}</span><button onclick="orgsPage++;renderOrgs(document.getElementById('admin-main'))" ${d.page*d.page_size>=d.total?'disabled':''}>Next</button></div>
-      </div>`;
-  } catch { main.innerHTML = `<div class="page-title">Organisations</div><div class="page-desc">View and manage orgs</div><div class="empty"><i class="ti ti-cloud-off"></i><p>Could not load orgs</p></div>`; }
+    const params = new URLSearchParams({page: orgState.page, page_size: 50});
+    if (orgState.q) params.set("q", orgState.q);
+    if (orgState.type) params.set("org_type", orgState.type);
+    const d = await apiGet(`/admin/orgs?${params}`);
+    const el = document.getElementById("or-body");
+    if (!d.items || !d.items.length) {
+      el.innerHTML = `<div class="empty-state"><i class="ti ti-building-community"></i><h3>No organisations found</h3></div>`;
+      document.getElementById("or-pill").textContent = "0"; return;
+    }
+    document.getElementById("or-pill").textContent = d.total;
+    const totalPages = Math.ceil(d.total / d.page_size) || 1;
+    el.innerHTML = `<div class="tc-table"><table><thead><tr><th style="width:28px"><input type="checkbox" class="cb" onchange="toggleAllOrgs(this.checked)"></th><th class="sortable">Name</th><th>Type</th><th>Status</th><th>Country</th><th>Profiles</th><th class="sortable">Created</th><th style="width:80px"></th></tr></thead><tbody>${d.items.map(o => `<tr id="org-${o.id}"><td><input type="checkbox" class="cb or-cb" data-id="${o.id}"></td><td style="font-weight:500;color:var(--t1)">${o.name}</td><td>${o.org_type?`<span class="bdg bdg-bl">${o.org_type}</span>`:'<span style="color:var(--t3)">—</span>'}</td><td><span class="bdg ${o.status==='active'?'bdg-gr':'bdg-gd'}">${o.status||"—"}</span></td><td>${o.country||'<span style="color:var(--t3)">—</span>'}</td><td>${o.profile_count||0}</td><td style="color:var(--t3)">${(o.created_at||"").slice(0,10)}</td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-icon btn-sm" onclick="editOrg('${o.id}','${o.org_type||''}')" title="Edit"><i class="ti ti-edit"></i></button><button class="btn btn-ghost btn-icon btn-sm btn-danger" onclick="deleteOrg('${o.id}')" title="Delete"><i class="ti ti-trash"></i></button></div></td></tr>`).join("")}</tbody></table></div>
+    <div class="pagination"><button onclick="orgState.page--;renderOrgs(document.getElementById('main-content'))" ${orgState.page<=1?'disabled':''}><i class="ti ti-chevron-left"></i></button><span class="p-info">Page ${d.page} of ${totalPages}</span><button onclick="orgState.page++;renderOrgs(document.getElementById('main-content'))" ${orgState.page>=totalPages?'disabled':''}><i class="ti ti-chevron-right"></i></button></div>`;
+  } catch { document.getElementById("or-body").innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load organisations</h3></div>`; }
 }
 
-async function editOrg(id, orgType) {
+function toggleAllOrgs(checked) { document.querySelectorAll(".or-cb").forEach(cb => cb.checked = checked); }
+
+async function editOrg(id, type) {
   const overlay = createModal();
   overlay.innerHTML = `
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    <div class="modal anim-scale">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="ti ti-x"></i></button>
       <h3>Edit Organisation</h3>
-      <p>Update org metadata</p>
-      <label>Org type</label>
-      <select id="eo-type"><option value="">None</option><option value="association" ${orgType==='association'?'selected':''}>Association</option><option value="investment" ${orgType==='investment'?'selected':''}>Investment</option><option value="professional" ${orgType==='professional'?'selected':''}>Professional</option><option value="community" ${orgType==='community'?'selected':''}>Community</option><option value="cultural" ${orgType==='cultural'?'selected':''}>Cultural</option><option value="think-tank" ${orgType==='think-tank'?'selected':''}>Think Tank</option></select>
-      <div class="modal-actions"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-save" onclick="saveOrg('${id}')">Save</button></div>
+      <p class="m-desc">Update organisation classification</p>
+      <div class="m-field"><label>Type</label><select id="eo-type"><option value="">None</option><option value="association" ${type==='association'?'selected':''}>Association</option><option value="investment" ${type==='investment'?'selected':''}>Investment</option><option value="professional" ${type==='professional'?'selected':''}>Professional</option><option value="community" ${type==='community'?'selected':''}>Community</option><option value="cultural" ${type==='cultural'?'selected':''}>Cultural</option><option value="think-tank" ${type==='think-tank'?'selected':''}>Think Tank</option></select></div>
+      <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveOrg('${id}')">Save changes</button></div>
     </div>`;
   overlay.classList.add("show");
 }
 
 async function saveOrg(id) {
-  const orgType = document.getElementById("eo-type").value || null;
-  await apiPatch(`/admin/orgs/${id}`, { org_type: orgType });
-  closeModal();
-  renderTab(curTab);
+  try {
+    const t = document.getElementById("eo-type").value || null;
+    await apiPatch(`/admin/orgs/${id}`, { org_type: t });
+    closeModal(); toast("Organisation updated", "success"); renderTab(curTab);
+  } catch { toast("Failed to update organisation", "error"); }
 }
 
 async function deleteOrg(id) {
-  if (!confirm("Permanently delete this org?")) return;
-  await apiDelete(`/admin/orgs/${id}`);
-  renderTab(curTab);
+  const confirmed = await confirmDialog("Delete Organisation", "This permanently removes the organisation from the database.");
+  if (!confirmed) return;
+  try { await apiDelete(`/admin/orgs/${id}`); toast("Organisation deleted", "success"); renderTab(curTab); }
+  catch { toast("Failed to delete organisation", "error"); }
 }
 
-/* Import */
-async function renderImport(main) {
-  main.innerHTML = `
-    <div class="page-title">Data Import</div>
-    <div class="page-desc">Trigger and monitor Companies House data ingestion</div>
-    <div class="import-box">
-      <div class="ib-icon"><i class="ti ti-database-import"></i></div>
-      <h3>Companies House Import</h3>
-      <p>Fetch diaspora officer and company records from the official UK register. Import runs asynchronously and may take several minutes depending on data volume.</p>
-      <button id="import-btn" onclick="triggerImport()"><i class="ti ti-sparkles"></i> Trigger import</button>
-    </div>
-    <div class="table-wrap">
-      <div class="tw-h"><h3>Import history</h3></div>
-      <div class="empty" id="import-status"><i class="ti ti-clock"></i><p>No import history yet</p></div>
+/* ─── Import ─── */
+function renderImport(m) {
+  m.innerHTML = `
+    <div class="page-hdr anim-fade"><h1>Data Import</h1><p>Trigger and monitor Companies House data ingestion</p></div>
+    <div class="import-grid">
+      <div class="import-card anim-fade">
+        <div class="ic-icon primary"><i class="ti ti-database-import"></i></div>
+        <h3>Companies House Import</h3>
+        <p>Fetch diaspora officer and company records from the official UK register. The import runs asynchronously and may take several minutes depending on data volume.</p>
+        <button class="btn btn-primary" id="import-btn" onclick="triggerImport()"><i class="ti ti-sparkles"></i> Trigger import</button>
+      </div>
+      <div class="table-card anim-fade">
+        <div class="tc-h"><h3>Import status</h3></div>
+        <div id="import-status"><div class="empty-state" style="padding:24px"><i class="ti ti-clock"></i><h3>No imports yet</h3><p>Trigger your first import to populate the database</p></div></div>
+      </div>
     </div>`;
 }
 
 async function triggerImport() {
   const btn = document.getElementById("import-btn");
-  btn.disabled = true; btn.textContent = "Triggering...";
+  btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite"></i> Triggering...';
   try {
     const r = await apiPost("/admin/import/trigger");
-    document.getElementById("import-status").innerHTML = `<i class="ti ti-check" style="color:var(--gl);"></i><p style="color:var(--gl);">${r.message}</p>`;
-  } catch { document.getElementById("import-status").innerHTML = `<i class="ti ti-x" style="color:var(--red);"></i><p style="color:var(--red);">Import failed</p>`; }
+    document.getElementById("import-status").innerHTML = `<div style="padding:16px;text-align:center"><i class="ti ti-check" style="font-size:28px;color:var(--gl);display:block;margin-bottom:8px;"></i><p style="color:var(--gl);font-weight:500;">${r.message}</p></div>`;
+    toast("Import triggered successfully", "success");
+  } catch {
+    document.getElementById("import-status").innerHTML = `<div style="padding:16px;text-align:center"><i class="ti ti-x" style="font-size:28px;color:var(--re);display:block;margin-bottom:8px;"></i><p style="color:var(--re);">Import failed</p></div>`;
+    toast("Import trigger failed", "error");
+  }
   btn.disabled = false; btn.innerHTML = '<i class="ti ti-sparkles"></i> Trigger import';
 }
 
-/* Health */
-async function renderHealth(main) {
-  main.innerHTML = `<div class="page-title">System Health</div><div class="page-desc">Monitor API and database status</div><div class="loading"><i class="ti ti-loader"></i><p>Checking...</p></div>`;
+/* ─── Activity ─── */
+async function renderActivity(m) {
+  m.innerHTML = `
+    <div class="page-hdr anim-fade"><h1>Activity Log</h1><p>Recent admin actions across the platform</p></div>
+    <div class="table-card"><div class="tc-h"><h3>Recent activity</h3></div><div id="act-body"><div class="loading" style="text-align:center;padding:32px;color:var(--t3);"><i class="ti ti-loader" style="animation:spin 1s linear infinite;display:block;margin-bottom:6px;font-size:18px;"></i><p>Loading...</p></div></div></div>`;
+  try {
+    const d = await apiGet("/admin/activity?limit=100");
+    const el = document.getElementById("act-body");
+    if (!d.items || !d.items.length) {
+      el.innerHTML = `<div class="empty-state"><i class="ti ti-activity"></i><h3>No activity yet</h3><p>Actions performed in the admin panel will appear here</p></div>`; return;
+    }
+    el.innerHTML = d.items.map(a => {
+      const dotClass = a.action.includes("deleted") ? "deleted" : a.action.includes("updated") || a.action.includes("batch") ? "updated" : "created";
+      return `<div class="activity-item"><div class="a-dot ${dotClass}"></div><div class="a-content"><div class="a-action">${a.action.replace(/_/g," ")}</div><div class="a-detail">${a.detail}</div></div><div class="a-time">${timeAgo(a.timestamp)}</div></div>`;
+    }).join("");
+  } catch { document.getElementById("act-body").innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load activity</h3></div>`; }
+}
+
+function timeAgo(iso) {
+  if (!iso) return "";
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
+
+/* ─── Health ─── */
+async function renderHealth(m) {
+  m.innerHTML = `
+    <div class="page-hdr anim-fade"><h1>System Health</h1><p>Monitor API and database infrastructure</p></div>
+    <div class="health-grid" id="health-grid">
+      <div class="health-item"><div class="hi-label">API Status</div><div class="hi-val"><i class="ti ti-loader" style="animation:spin 1s linear infinite;font-size:14px;"></i> Checking...</div></div>
+      <div class="health-item"><div class="hi-label">Database</div><div class="hi-val"><i class="ti ti-loader" style="animation:spin 1s linear infinite;font-size:14px;"></i> Checking...</div></div>
+      <div class="health-item"><div class="hi-label">Version</div><div class="hi-val">0.1.0</div></div>
+    </div>
+    <div class="table-card anim-fade"><div class="tc-h"><h3>Environment</h3></div><div id="health-env"><div class="loading" style="text-align:center;padding:24px;color:var(--t3);"><i class="ti ti-loader" style="animation:spin 1s linear infinite;display:block;margin-bottom:6px;font-size:16px;"></i></div></div></div>`;
   try {
     const d = await apiGet("/admin/health");
-    main.innerHTML = `
-      <div class="page-title">System Health</div>
-      <div class="page-desc">Monitor API and database status</div>
-      <div class="health-grid">
-        <div class="health-item"><div class="hi-label">API Status</div><div class="hi-val ok"><i class="ti ti-circle-check"></i> ${d.api}</div></div>
-        <div class="health-item"><div class="hi-label">Database</div><div class="hi-val ${d.database==='connected'?'ok':'fail'}"><i class="ti ti-${d.database==='connected'?'circle-check':'circle-x'}"></i> ${d.database}</div></div>
-        <div class="health-item"><div class="hi-label">Version</div><div class="hi-val">${d.version}</div></div>
-      </div>
-      <div class="table-wrap">
-        <div class="tw-h"><h3>Environment</h3></div>
-        <table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>
-          <tr><td>Environment</td><td>${d.environment}</td></tr>
-        </tbody></table>
-      </div>`;
+    document.getElementById("health-grid").innerHTML = `
+      <div class="health-item"><div class="hi-label">API Status</div><div class="hi-val ok"><i class="ti ti-circle-check"></i> ${d.api}</div></div>
+      <div class="health-item"><div class="hi-label">Database</div><div class="hi-val ${d.database==='connected'?'ok':'fail'}"><i class="ti ti-${d.database==='connected'?'circle-check':'circle-x'}"></i> ${d.database}</div></div>
+      <div class="health-item"><div class="hi-label">Version</div><div class="hi-val">${d.version}</div></div>`;
+    document.getElementById("health-env").innerHTML = `<div class="tc-table"><table><thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>
+      <tr><td>Environment</td><td>${d.environment}</td></tr>
+      <tr><td>API Base</td><td><code style="font-size:11px;color:var(--t2)">${API_BASE}</code></td></tr>
+    </tbody></table></div>`;
   } catch {
-    main.innerHTML = `<div class="page-title">System Health</div><div class="page-desc">Monitor API and database status</div><div class="empty"><i class="ti ti-cloud-off"></i><p>Could not reach API</p></div>`;
+    document.getElementById("health-grid").innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--t3)"><i class="ti ti-cloud-off" style="font-size:28px;display:block;margin-bottom:8px;"></i><p>Could not reach API</p></div>`;
   }
 }
 
-/* Init */
+/* ─── Utilities ─── */
+function createModal() {
+  let el = document.getElementById("modal-overlay");
+  if (!el) { el = document.createElement("div"); el.id = "modal-overlay"; el.className = "modal-overlay"; el.onclick = (e) => { if (e.target === el) closeModal(); }; document.body.appendChild(el); }
+  return el;
+}
+function closeModal() { const el = document.getElementById("modal-overlay"); if (el) el.classList.remove("show"); }
+
+function sortTable(containerId, key) {
+  toast("Sorting coming soon", "info");
+}
+
+/* ─── Init ─── */
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 if (adminKey) {
   apiGet("/admin/verify").then(d => {
     if (d.status === "ok") {
       document.getElementById("login-page").style.display = "none";
       document.getElementById("admin-app").style.display = "";
-      switchTab("overview");
+      document.getElementById("top-info").textContent = "Connected";
+      renderTab("overview");
     }
-  }).catch(() => {
-    localStorage.removeItem(ADMIN_KEY);
-    adminKey = "";
-  });
+  }).catch(() => { localStorage.removeItem(STORAGE_KEY); adminKey = ""; });
 }
 </script>
 </body>
