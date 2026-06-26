@@ -4,6 +4,19 @@
 -- Enable pgvector extension
 CREATE EXTENSION IF NOT EXISTS vector;
 
+-- Users table (auth) — must be created before profiles due to FK
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255),
+    auth_provider VARCHAR(50) DEFAULT 'magic_link',
+    is_active BOOLEAN DEFAULT TRUE,
+    plan_tier VARCHAR(20) DEFAULT 'free',
+    export_count INTEGER DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    last_login TIMESTAMPTZ
+);
+
 -- Profiles table (Companies House officers)
 CREATE TABLE IF NOT EXISTS profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -71,19 +84,6 @@ CREATE TABLE IF NOT EXISTS orgs (
 CREATE INDEX IF NOT EXISTS idx_orgs_name ON orgs USING gin(name gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_orgs_type ON orgs(org_type);
 CREATE INDEX IF NOT EXISTS idx_orgs_country ON orgs(country);
-
--- Users table (auth)
-CREATE TABLE IF NOT EXISTS users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    name VARCHAR(255),
-    auth_provider VARCHAR(50) DEFAULT 'magic_link',
-    is_active BOOLEAN DEFAULT TRUE,
-    plan_tier VARCHAR(20) DEFAULT 'free',
-    export_count INTEGER DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    last_login TIMESTAMPTZ
-);
 
 -- Search history table (usage tracking)
 CREATE TABLE IF NOT EXISTS search_history (
