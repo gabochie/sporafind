@@ -725,6 +725,11 @@ body{
         </div>
       </div>
       <div class="grid" id="main-grid"></div>
+      <div id="load-more-wrap" style="text-align:center;padding:20px 0;display:none">
+        <button class="btn-outline" id="load-more-btn" onclick="loadMore()" style="padding:10px 32px;font-size:13px;">
+          <i class="ti ti-loader"></i> Load more
+        </button>
+      </div>
       <div class="insight">
         <div class="ih">
           <div class="ii"><i class="ti ti-sparkles"></i></div>
@@ -777,6 +782,9 @@ let curMode = "people";
 let curFilter = "all";
 let curScope = "gh";
 let curSidebar = "all";
+let curPage = 1;
+let allItems = [];
+let totalItems = 0;
 let cachedStats = null;
 let interactionCount = 0;
 const EMAIL_STORAGE_KEY = "sf-email-captured";
@@ -809,18 +817,21 @@ async function setMode(el, mode) {
   document.querySelectorAll(".mode-tab").forEach(t=>t.classList.remove("active"));
   el.classList.add("active");
   curMode = mode; curFilter = "all"; curSidebar = "all"; cachedStats = null;
+  curPage = 1; allItems = [];
   await renderAll();
 }
 
 function setScope(el, scope) {
   document.querySelectorAll(".scope-pill").forEach(p=>p.classList.remove("active"));
   el.classList.add("active"); curScope = scope;
+  curPage = 1; allItems = [];
   renderAll();
 }
 
 async function setFilter(el, f) {
   document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
   el.classList.add("active"); curFilter = f;
+  curPage = 1; allItems = [];
   await renderGrid(); updateMainTitle(); trackInteraction();
 }
 
@@ -861,36 +872,55 @@ async function renderStats() {
   ).join("");
 }
 
-async function renderGrid() {
+async function renderGrid(append = false) {
   const grid = document.getElementById("main-grid");
-  grid.innerHTML = `<div class="loading-state"><i class="ti ti-loader"></i><p>Loading…</p></div>`;
+  const lw = document.getElementById("load-more-wrap");
+  if (!append) { curPage = 1; allItems = []; lw.style.display = "none"; grid.innerHTML = `<div class="loading-state"><i class="ti ti-loader"></i><p>Loading…</p></div>`; }
+  else { document.getElementById("load-more-btn").innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite"></i> Loading...'; document.getElementById("load-more-btn").disabled = true; }
   try {
-    const params = new URLSearchParams({page:"1", page_size:"50"});
+    const params = new URLSearchParams({page: String(curPage), page_size:"50"});
     if (curFilter !== "all") params.set(curMode==="people"?"segment":"org_type", curFilter);
     if (curScope === "gh") params.set("origin","gh");
     const endpoint = curMode === "people" ? `/profiles?${params}` : `/orgs?${params}`;
     const data = await apiGet(endpoint);
     const items = data.items || [];
-    if (!items.length) {
+    totalItems = data.total || 0;
+    if (!append) allItems = [];
+    allItems.push(...items);
+    if (!allItems.length) {
       grid.innerHTML = `<div class="empty-state"><i class="ti ti-search-off"></i><h3>No results found</h3><p>Data ingestion is still running. Check back soon.</p></div>`;
+      lw.style.display = "none";
       return;
     }
     if (curMode === "people") {
-      grid.innerHTML = items.map(p=>{
+      grid.innerHTML = allItems.map(p=>{
         const c = SEG_COLORS[p.seg] || SEG_COLORS.people;
         const loc = [p.locality, p.country].filter(Boolean).join(", ") || p.country_of_residence || "—";
         const role = p.role || p.occupation || p.company_name || "—";
         return `<div class="card"><div class="card-bar" style="background:${c.bar}"></div><div class="avatar" style="background:${c.tag};color:${c.tagT}">${getInitials(p.name)}</div><div class="cn">${p.name}</div><div class="cr">${role.length>40?role.slice(0,40)+"…":role}</div><div class="tags"><span class="tag" style="background:${c.tag};color:${c.tagT}">${c.label}</span>${(p.tags||[]).map(t=>`<span class="tag" style="background:var(--s2);color:var(--t2);border:1px solid var(--bd)">${t}</span>`).join("")}</div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
       }).join("");
     } else {
-      grid.innerHTML = items.map(o=>{
+      grid.innerHTML = allItems.map(o=>{
         const loc = [o.locality, o.country].filter(Boolean).join(", ") || "—";
         return `<div class="card"><div class="card-bar" style="background:var(--green)"></div><div class="org-icon" style="background:var(--s2);color:var(--gl)"><i class="ti ti-building-community"></i></div><div class="cn">${o.name}</div><div class="cr">${o.status||"Active"}</div><div class="tags"><span class="tag" style="background:var(--s2);color:var(--t2);border:1px solid var(--bd)">${ORG_TYPE_LABEL[o.org_type]||o.company_type||"Org"}</span></div><div class="footer"><div class="loc"><i class="ti ti-map-pin"></i>${loc}</div></div></div>`;
       }).join("");
     }
+    if (allItems.length < totalItems) {
+      lw.style.display = "";
+      document.getElementById("load-more-btn").innerHTML = `<i class="ti ti-arrow-down"></i> Load more (${allItems.length} of ${totalItems})`;
+      document.getElementById("load-more-btn").disabled = false;
+    } else {
+      lw.style.display = "none";
+    }
   } catch {
-    grid.innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load data</h3><p>Make sure the API server is running</p></div>`;
+    if (!append) grid.innerHTML = `<div class="empty-state"><i class="ti ti-cloud-off"></i><h3>Could not load data</h3><p>Make sure the API server is running</p></div>`;
+    lw.style.display = "none";
   }
+}
+
+async function loadMore() {
+  curPage++;
+  await renderGrid(true);
 }
 
 function renderInsights() {

@@ -5,6 +5,7 @@ from sqlalchemy import select, func, or_
 from app.database import get_db
 from app.models.profile import Profile
 from app.schemas.profile import ProfileResponse, ProfileList
+from app.routers.auth_utils import verify_public_access
 
 router = APIRouter(prefix="/search", tags=["search"])
 
@@ -18,6 +19,7 @@ async def search_profiles(
     country: str | None = None,
     origin: str | None = None,
     db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_public_access),
 ):
     query = select(Profile).where(Profile.is_active == True)
     count_query = select(func.count(Profile.id)).where(Profile.is_active == True)

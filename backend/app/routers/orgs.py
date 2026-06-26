@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from app.database import get_db
 from app.models.org import Org
 from app.schemas.org import OrgResponse, OrgList
+from app.routers.auth_utils import verify_public_access
 
 router = APIRouter(prefix="/orgs", tags=["orgs"])
 
@@ -17,6 +18,7 @@ async def list_orgs(
     country: str | None = None,
     origin: str | None = None,
     db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_public_access),
 ):
     query = select(Org)
     count_query = select(func.count(Org.id))
@@ -48,7 +50,13 @@ async def list_orgs(
 
 
 @router.get("/{org_id}", response_model=OrgResponse)
-async def get_org(org_id: str, db: AsyncSession = Depends(get_db)):
+async def get_org(
+    org_id: str,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_public_access),
+):
     result = await db.execute(select(Org).where(Org.id == org_id))
     org = result.scalar_one_or_none()
+    if not org:
+        raise HTTPException(status_code=404, detail="Org not found")
     return OrgResponse.model_validate(org)

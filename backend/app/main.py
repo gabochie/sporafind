@@ -4,23 +4,23 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.database import get_engine, Base
+from app.database import get_engine
 from app.routers import profiles, orgs, search, stats, auth, admin
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    engine = None
     try:
         engine = get_engine()
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
     except Exception as e:
-        print(f"DB init skipped: {e}")
+        print(f"DB engine init skipped: {e}")
     yield
-    try:
-        await engine.dispose()
-    except Exception:
-        pass
+    if engine is not None:
+        try:
+            await engine.dispose()
+        except Exception:
+            pass
 
 
 app = FastAPI(title="Sporafind API", version="0.1.0", lifespan=lifespan)

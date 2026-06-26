@@ -1,31 +1,24 @@
-from datetime import datetime, timezone
-from typing import Any
-
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy import select, func, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.database import get_db
+from app.database import get_db, get_session
 from app.models.user import User
 from app.models.profile import Profile
 from app.models.org import Org
+from app.models.activity_log import ActivityLog
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
-_activity_log: list[dict[str, Any]] = []
 
-
-def log_action(action: str, detail: str, user_id: str | None = None):
-    _activity_log.insert(0, {
-        "action": action,
-        "detail": detail,
-        "user_id": user_id,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-    })
-    if len(_activity_log) > 200:
-        _activity_log.pop()
+async def log_action(action: str, detail: str, user_id: str | None = None):
+    session = get_session()
+    async with session() as db:
+        entry = ActivityLog(action=action, detail=detail, user_id=user_id)
+        db.add(entry)
+        await db.commit()
 
 
 async def verify_admin(x_admin_key: str = Header(...)):
@@ -60,8 +53,23 @@ async def admin_verify(admin: bool = Depends(verify_admin)):
 async def get_activity(
     limit: int = Query(50, ge=1, le=200),
     admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
 ):
-    return {"items": _activity_log[:limit]}
+    rows = await db.execute(
+        select(ActivityLog).order_by(ActivityLog.created_at.desc()).limit(limit)
+    )
+    items = rows.scalars().all()
+    return {
+        "items": [
+            {
+                "action": a.action,
+                "detail": a.detail,
+                "user_id": a.user_id,
+                "timestamp": a.created_at.isoformat(),
+            }
+            for a in items
+        ]
+    }
 
 
 @router.get("/users")
@@ -112,7 +120,7 @@ async def update_user(
         user.plan_tier = body.plan_tier
         changes.append(f"plan={body.plan_tier}")
     await db.commit()
-    log_action("user_updated", f"User {user.email}: {', '.join(changes)}")
+    await log_action("user_updated", f"User {user.email}: {', '.join(changes)}")
     return {"status": "updated", "user_id": user_id}
 
 
@@ -227,7 +235,7 @@ async def update_profile(
     if body.origin is not None:
         profile.origin = body.origin
     await db.commit()
-    log_action("profile_updated", f"Profile {profile.name}: segment={body.segment}, active={body.is_active}")
+    await log_action("profile_updated", f"Profile {profile.name}: segment={body.segment}, active={body.is_active}")
     return {"status": "updated", "profile_id": profile_id}
 
 
@@ -243,7 +251,7 @@ async def delete_profile(
         raise HTTPException(status_code=404, detail="Profile not found")
     profile.is_active = False
     await db.commit()
-    log_action("profile_deleted", f"Profile {profile.name} deactivated")
+    await log_action("profile_deleted", f"Profile {profile.name} deactivated")
     return {"status": "deleted", "profile_id": profile_id}
 
 
@@ -271,7 +279,7 @@ async def batch_profile_action(
             p.segment = body.value
         count += 1
     await db.commit()
-    log_action("batch_profiles", f"{count} profiles: {body.action}")
+    await log_action("batch_profiles", f"{count} profiles: {body.action}")
     return {"status": "ok", "affected": count}
 
 
@@ -323,7 +331,7 @@ async def update_org(
     if body.tags is not None:
         org.tags = body.tags
     await db.commit()
-    log_action("org_updated", f"Org {org.name}: type={body.org_type}")
+    await log_action("org_updated", f"Org {org.name}: type={body.org_type}")
     return {"status": "updated", "org_id": org_id}
 
 
@@ -339,7 +347,7 @@ async def delete_org(
         raise HTTPException(status_code=404, detail="Org not found")
     await db.delete(org)
     await db.commit()
-    log_action("org_deleted", f"Org {org.name} deleted")
+    await log_action("org_deleted", f"Org {org.name} deleted")
     return {"status": "deleted", "org_id": org_id}
 
 
@@ -363,7 +371,7 @@ async def batch_org_action(
             o.org_type = body.value
         count += 1
     await db.commit()
-    log_action("batch_orgs", f"{count} orgs: {body.action}")
+    await log_action("batch_orgs", f"{count} orgs: {body.action}")
     return {"status": "ok", "affected": count}
 
 

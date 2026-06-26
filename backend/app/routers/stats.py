@@ -5,12 +5,16 @@ from sqlalchemy import select, func
 from app.database import get_db
 from app.models.profile import Profile
 from app.models.org import Org
+from app.routers.auth_utils import verify_public_access
 
 router = APIRouter(prefix="/stats", tags=["stats"])
 
 
 @router.get("")
-async def get_stats(db: AsyncSession = Depends(get_db)):
+async def get_stats(
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_public_access),
+):
     try:
         profile_count = await db.execute(select(func.count(Profile.id)).where(Profile.is_active == True))
         org_count = await db.execute(select(func.count(Org.id)))

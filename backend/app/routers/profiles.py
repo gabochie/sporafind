@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from app.database import get_db
 from app.models.profile import Profile
 from app.schemas.profile import ProfileResponse, ProfileList
+from app.routers.auth_utils import verify_public_access
 
 router = APIRouter(prefix="/profiles", tags=["profiles"])
 
@@ -17,6 +18,7 @@ async def list_profiles(
     country: str | None = None,
     origin: str | None = None,
     db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_public_access),
 ):
     query = select(Profile).where(Profile.is_active == True)
     count_query = select(func.count(Profile.id)).where(Profile.is_active == True)
@@ -48,7 +50,13 @@ async def list_profiles(
 
 
 @router.get("/{profile_id}", response_model=ProfileResponse)
-async def get_profile(profile_id: str, db: AsyncSession = Depends(get_db)):
+async def get_profile(
+    profile_id: str,
+    db: AsyncSession = Depends(get_db),
+    _: bool = Depends(verify_public_access),
+):
     result = await db.execute(select(Profile).where(Profile.id == profile_id))
     profile = result.scalar_one_or_none()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
     return ProfileResponse.model_validate({**profile.__dict__, "is_claimed": profile.claimed_by is not None})

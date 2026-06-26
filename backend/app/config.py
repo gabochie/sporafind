@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     companies_house_api_key: str = ""
     auth_secret: str = ""
     admin_key: str = ""
+    public_api_key: str = ""
     cors_origins: str = "http://localhost:8000,http://localhost:3000"
     environment: str = "development"
 
