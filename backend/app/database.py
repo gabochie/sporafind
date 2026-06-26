@@ -15,7 +15,7 @@ def get_engine():
         _engine = create_async_engine(
             settings.database_url,
             echo=settings.environment == "development",
-            connect_args={"timeout": 15},
+            connect_args={"timeout": 15, "ssl": "require"},
         )
     return _engine
 
