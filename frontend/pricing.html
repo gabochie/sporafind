@@ -234,7 +234,7 @@ footer{background:var(--navy);padding:72px 48px 40px}
     </div>
     <div class="scroll-wrap"><table class="compare-table">
       <thead>
-        <tr><th>Feature</th><th>Starter</th><th>Growth</th><th>Enterprise</th></tr>
+        <tr><th>Feature</th><th>Free</th><th>Pro</th><th>Enterprise</th></tr>
       </thead>
       <tbody>
         <tr><td>AI natural language search</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
@@ -282,7 +282,7 @@ footer{background:var(--navy);padding:72px 48px 40px}
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">Can I export data to my CRM? <i class="ti ti-chevron-down"></i></div>
-      <div class="faq-a">Growth and Enterprise plans include native HubSpot and Salesforce integration. CSV and XLSX export is available on all plans. Notion and Airtable sync coming in Q3 2026.</div>
+      <div class="faq-a">Pro and Enterprise plans include native HubSpot and Salesforce integration. CSV and XLSX export is available on all plans. Notion and Airtable sync coming in Q3 2026.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)">What data sources power the intelligence? <i class="ti ti-chevron-down"></i></div>
@@ -388,49 +388,44 @@ async function loadPricing() {
   } catch {}
   // Fallback: hardcoded
   grid.innerHTML = `<div class="price-card">
-    <div class="price-tier">Starter</div>
-    <div class="price-amount" id="starterPrice">$49<span>/mo</span></div>
-    <p class="price-desc">For individuals and small teams exploring diaspora connections and running initial outreach.</p>
+    <div class="price-tier">Free</div>
+    <div class="price-amount">$0<span>/mo</span></div>
+    <p class="price-desc">Get started with basic diaspora search and discovery.</p>
     <ul class="price-list">
-      <li><i class="ti ti-check"></i> 500 profile views / month</li>
-      <li><i class="ti ti-check"></i> Full AI segmentation (5 classes)</li>
-      <li><i class="ti ti-check"></i> Organisation discovery</li>
-      <li><i class="ti ti-check"></i> Ghana diaspora scope</li>
-      <li><i class="ti ti-check"></i> CSV export (100 records)</li>
-      <li><i class="ti ti-check"></i> Email support</li>
+      <li><i class="ti ti-check"></i> Browse 50 profiles/month</li>
+      <li><i class="ti ti-check"></i> Basic search filters</li>
+      <li><i class="ti ti-check"></i> Grid & list view</li>
+      <li><i class="ti ti-check"></i> Community insights</li>
     </ul>
     <button class="btn-price btn-price-outline" onclick="location.href='workspace.html'">Start free trial</button>
   </div>
   <div class="price-card popular">
     <div class="popular-badge">Most popular</div>
-    <div class="price-tier light">Growth</div>
-    <div class="price-amount light" id="growthPrice">$199<span>/mo</span></div>
-    <p class="price-desc light">For operators, investment teams, and agencies running active diaspora engagement programmes.</p>
+    <div class="price-tier light">Pro</div>
+    <div class="price-amount light">$29<span>/mo</span></div>
+    <p class="price-desc light">Unlock advanced search, exports, and AI-powered insights.</p>
     <ul class="price-list">
-      <li class="light"><i class="ti ti-check gold-i"></i> Unlimited profile views</li>
-      <li class="light"><i class="ti ti-check gold-i"></i> Full 5-segment model with wealth tier</li>
-      <li class="light"><i class="ti ti-check gold-i"></i> Pan-African scope unlock (54 nations)</li>
-      <li class="light"><i class="ti ti-check gold-i"></i> AI outreach generation</li>
-      <li class="light"><i class="ti ti-check gold-i"></i> Unlimited CSV + XLSX export</li>
-      <li class="light"><i class="ti ti-check gold-i"></i> HubSpot & Salesforce integrations</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> Unlimited profile browsing</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> Advanced multi-field search</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> CSV export up to 1000 records</li>
+      <li class="light"><i class="ti ti-check gold-i"></i> AI segment enrichment</li>
       <li class="light"><i class="ti ti-check gold-i"></i> Priority support</li>
     </ul>
     <button class="btn-price btn-price-gold" onclick="location.href='workspace.html'"><i class="ti ti-rocket"></i> Start 14-day free trial</button>
   </div>
   <div class="price-card">
     <div class="price-tier">Enterprise</div>
-    <div class="price-amount" style="font-size:38px">Custom</div>
-    <p class="price-desc">For governments, development banks, investment authorities, and institutions operating at national scale.</p>
+    <div class="price-amount">$99<span>/mo</span></div>
+    <p class="price-desc">Full platform access with custom integrations and dedicated support.</p>
     <ul class="price-list">
-      <li><i class="ti ti-check"></i> Everything in Growth, plus:</li>
-      <li><i class="ti ti-check"></i> Dedicated AI scan runs</li>
-      <li><i class="ti ti-check"></i> White-label option</li>
-      <li><i class="ti ti-check"></i> Custom data integrations</li>
-      <li><i class="ti ti-check"></i> SLA + compliance support</li>
-      <li><i class="ti ti-check"></i> Onboarding & training</li>
-      <li><i class="ti ti-check"></i> API access with dedicated rate limits</li>
+      <li><i class="ti ti-check"></i> Everything in Pro</li>
+      <li><i class="ti ti-check"></i> Unlimited CSV exports</li>
+      <li><i class="ti ti-check"></i> API access & webhooks</li>
+      <li><i class="ti ti-check"></i> Custom integrations</li>
+      <li><i class="ti ti-check"></i> Dedicated account manager</li>
+      <li><i class="ti ti-check"></i> SLA guarantee</li>
     </ul>
-    <button class="btn-price btn-price-ghost-light" onclick="location.href='contact.html'" style="background:var(--navy);color:#fff;border:0.5px solid rgba(255,255,255,0.15)">Talk to the team →</button>
+    <button class="btn-price btn-price-outline" onclick="location.href='contact.html'">Talk to the team →</button>
   </div>`;
 }
 loadPricing();
