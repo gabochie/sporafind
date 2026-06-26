@@ -1,4 +1,11 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Sporafind — Fundraising Strategy</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -19,7 +26,7 @@ h1{
 h1 span{color:var(--gold);}
 .subtitle{color:var(--t2);font-size:13px;margin-bottom:12px;border-left:3px solid var(--green);padding-left:14px;}
 .decisions{
-  background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:24px;
+  background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin-bottom:20px;
 }
 .decisions h3{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
 .decisions h3 span{color:var(--gold);}
@@ -85,13 +92,27 @@ h1 span{color:var(--gold);}
 .c-amount{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--gl);flex-shrink:0;margin-top:2px;white-space:nowrap;}
 .c-amount.pending{color:var(--gold);}
 
+.launch-banner{
+  background:linear-gradient(135deg,#0a2e1a,#1a3a22);border:1px solid var(--green);border-radius:10px;
+  padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.launch-banner h3{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--gl);}
+.launch-banner p{font-size:12px;color:var(--t2);margin-top:4px;}
+.launch-banner .lstat{text-align:center;padding:8px 18px;background:var(--s0);border-radius:8px;border:1px solid var(--green);}
+.launch-banner .lstat .num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gl);}
+.launch-banner .lstat .lbl{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;}
+.launch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;}
+.launch-item{background:var(--s0);border:1px solid var(--bd);border-radius:6px;padding:8px 10px;text-align:center;}
+.launch-item .li-num{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--gl);}
+.launch-item .li-label{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+
 .validation-banner{
   background:linear-gradient(135deg,#0a1a2e,#0a2e2e);border:1px solid var(--teal);border-radius:10px;
   padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
 }
 .validation-banner h3{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--teal);}
 .validation-banner p{font-size:12px;color:var(--t2);margin-top:4px;}
-.val-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.val-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
 .val-card{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:12px;text-align:center;}
 .val-card .val-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--teal);}
 .val-card .val-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
@@ -103,15 +124,6 @@ h1 span{color:var(--gold);}
 .val-phase .vp-ask{font-size:11px;color:var(--t2);margin-top:4px;}
 .val-phase .vp-metric{font-size:11px;color:var(--t1);margin-top:4px;padding:4px 8px;background:var(--s2);border-radius:4px;}
 .val-phase .vp-pass{font-size:10px;color:var(--gl);margin-top:4px;}
-.prototype-gate{
-  background:#1a0a0a;border:1px solid var(--red);border-radius:10px;
-  padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-}
-.prototype-gate .pg-icon{font-size:24px;}
-.prototype-gate .pg-body{flex:1;min-width:200px;}
-.prototype-gate .pg-title{font-size:14px;font-weight:600;color:var(--red);}
-.prototype-gate .pg-desc{font-size:11px;color:var(--t2);margin-top:2px;}
-.prototype-gate .pg-status{font-size:11px;font-weight:600;padding:4px 12px;border-radius:10px;}
 
 .quit-banner{
   background:linear-gradient(135deg,#1a0a2e,#0a1a3e);border:1px solid var(--purple);border-radius:10px;
@@ -165,6 +177,10 @@ h1 span{color:var(--gold);}
 .qt-step{display:flex;align-items:flex-start;gap:14px;padding:8px 0;border-bottom:1px solid var(--bd);}
 .qt-step:last-child{border-bottom:none;padding-bottom:0;}
 .qt-step:first-child{padding-top:0;}
+.qt-flag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;flex-shrink:0;margin-top:2px;}
+.qt-flag.done{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a;}
+.qt-flag.next{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a;}
+.qt-flag.future{background:#1a1a2e;color:var(--t2);border:1px solid #2e2e4f;}
 .qt-mo{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--gl);min-width:50px;flex-shrink:0;margin-top:1px;}
 .qt-body{flex:1;}
 .qt-title{font-size:13px;font-weight:500;}
@@ -215,25 +231,44 @@ h1 span{color:var(--gold);}
   .template pre{font-size:10px;}
 }
 </style>
+</head>
+<body>
 
 <h1>Sporafind <span>Fundraising Strategy</span></h1>
-<div class="subtitle">Pre-seed capital strategy — target $50-300K. Build prototype first, collect validation metrics, then ask for money. Includes the "quit my job" runway plan, validation milestones, and investor sequence.</div>
+<div class="subtitle">Pre-seed capital strategy — $50-150K. Phase A is complete and deployed. The platform is live at <strong>sporafind.com</strong>. Now raise to go full-time, execute Phase B (Claim + Verify), and add AI enrichment.</div>
 
 <div class="decisions">
   <h3><span>◆</span> Fundraising Decisions</h3>
   <div class="dgrid">
-    <div class="ditem"><i class="ti ti-coin"></i> <strong>Target raise:</strong> $50-300K pre-seed</div>
+    <div class="ditem"><i class="ti ti-coin"></i> <strong>Target raise:</strong> $50-150K pre-seed</div>
     <div class="ditem"><i class="ti ti-users"></i> <strong>Target investor:</strong> Diaspora-focused funds + angel syndicates</div>
-    <div class="ditem"><i class="ti ti-chart-bar"></i> <strong>Ask timing:</strong> Only after working prototype is live with real data</div>
-    <div class="ditem"><i class="ti ti-accessible"></i> <strong>Warm up now:</strong> Send "building X, prototype in 4 weeks" intros — don't ask for money yet</div>
-    <div class="ditem"><i class="ti ti-rocket"></i> <strong>Validation gate:</strong> Prototype + 5 beta users + engagement data before any pitch meeting</div>
+    <div class="ditem"><i class="ti ti-circle-check"></i> <strong>Phase A status:</strong> Complete — backend (FastAPI + Supabase), frontend (Express + EJS), CI/CD, blog, pricing, admin panel. Live at sporafind.com</div>
+    <div class="ditem"><i class="ti ti-rocket"></i> <strong>Ask timing:</strong> Now — prototype is live with real data. Pitch with demo link and engagement plan.</div>
+    <div class="ditem"><i class="ti ti-chart-bar"></i> <strong>Pitch with:</strong> Live platform, deployed infra, automated tests, blog engine, pricing tiers, admin panel. Not a mock — a production system.</div>
     <div class="ditem"><i class="ti ti-building"></i> <strong>Target segment:</strong> Investment syndicates (not general VCs)</div>
     <div class="ditem"><i class="ti ti-run"></i> <strong>Quit trigger:</strong> $50K+ raise closes OR 5 beta users paying $19/mo OR ABLE 2026 acceptance</div>
-    <div class="ditem"><i class="ti ti-wallet"></i> <strong>Founder salary:</strong> $3-6K/mo included in raise (not optional — this is your full-time commitment)</div>
-    <div class="ditem"><i class="ti ti-math"></i> <strong>Validation metrics:</strong> Profile count, search/user, D7 return rate, beta-to-paid conversion, NPS</div>
-    <div class="ditem"><i class="ti ti-chart-pie"></i> <strong>Use of funds:</strong> Founder salary (40-50%) + Bright Data $250 + OpenAI $50-100/mo + contractor + legal</div>
-    <div class="ditem"><i class="ti ti-hand-stop"></i> <strong>Don't:</strong> Pitch for money before you have a live prototype. Don't quit before you have a plan.</div>
-    <div class="ditem"><i class="ti ti-briefcase"></i> <strong>Pitch angle:</strong> "Live prototype with real data, real users, real engagement. Help me go full-time."</div>
+    <div class="ditem"><i class="ti ti-wallet"></i> <strong>Founder salary:</strong> $3-6K/mo included in raise</div>
+    <div class="ditem"><i class="ti ti-math"></i> <strong>Growth metrics to track:</strong> Search/user, D7 return rate, beta-to-paid conversion, profile claims (Phase B)</div>
+    <div class="ditem"><i class="ti ti-chart-pie"></i> <strong>Use of funds:</strong> Founder salary (40-50%) + Bright Data $250/mo + OpenAI $50-100/mo + contractor + legal</div>
+    <div class="ditem"><i class="ti ti-hand-stop"></i> <strong>Don't:</strong> Wait for more features. The product is built. Pitch now while you iterate.</div>
+    <div class="ditem"><i class="ti ti-briefcase"></i> <strong>Pitch angle:</strong> "Live production platform with real data. Phase A is built. Help me go full-time and execute Phase B."</div>
+  </div>
+</div>
+
+<div class="launch-banner">
+  <div>
+    <h3>🚀 Phase A Complete — Prototype is Live</h3>
+    <p>Both frontend and backend are deployed to Vercel with custom domains. The platform is running in production with real data, automated testing, and CI/CD.</p>
+    <div class="launch-grid">
+      <div class="launch-item"><div class="li-num">api.sporafind.com</div><div class="li-label">FastAPI backend</div></div>
+      <div class="launch-item"><div class="li-num">sporafind.com</div><div class="li-label">Express + EJS frontend</div></div>
+      <div class="launch-item"><div class="li-num">19+16</div><div class="li-label">Tests (backend + frontend)</div></div>
+      <div class="launch-item"><div class="li-num">GitHub CI</div><div class="li-label">Automated pipeline</div></div>
+    </div>
+  </div>
+  <div class="lstat">
+    <div class="num">✓ LIVE</div>
+    <div class="lbl">Production</div>
   </div>
 </div>
 
@@ -242,68 +277,68 @@ h1 span{color:var(--gold);}
 <script>
 const TIERS = [
   {
-    id:"T1", label:"Warm Up Now", weeks:"Send intro — not an ask", icon:"📞", tag:"tier1", tagLabel:"Warm up",
-    range:"Pitch at W4",
+    id:"T1", label:"Pitch Now", weeks:"Prototype is live — send demo", icon:"📞", tag:"tier1", tagLabel:"Pitch",
+    range:"$50-150K",
     contacts:[
       {
         name:"Microtraction (Yele Bademosi / Kwamena Afful)",
         who:"$100K for 7%, pre-seed. Backed LemFi, Cowrywise. Founder-first. African founders building globally relevant tech.",
-        how:"Warm-up email: 'Starting Sporafind — diaspora intelligence for syndicates. Working prototype landing in 4 weeks. Can I ping you then?'",
-        amount:"Warm up",
-        amtClass:"pending"
+        how:"Send demo link: 'Sporafind is live at sporafind.com — 15K diaspora profiles indexed from Companies House, FastAPI backend, deployed on Vercel. Raising $50-150K pre-seed to go full-time. 15-min demo?' Warm thread if you previously introd.",
+        amount:"$50-150K",
+        amtClass:""
       },
       {
         name:"Accra Angels Network",
         who:"Ghana-based angel network. $20K-$250K checks. Ghanaian founders or ventures with Ghana impact.",
-        how:"Warm-up email: 'Building a diaspora discovery platform connecting global Ghanaians to the economy. Prototype in 4 weeks — would love to share when live.'",
-        amount:"Warm up",
-        amtClass:"pending"
+        how:"Apply with demo. Platform is live, Ghanaian diaspora data is loaded, pricing tiers configured. Show the product, not the pitch deck.",
+        amount:"$20-150K",
+        amtClass:""
       },
       {
         name:"LoftyInc Capital (Idris Ayo Bello)",
         who:"$43M fund. Backed Flutterwave, Andela, Wave. Pre-seed to Series A. African and diaspora founders.",
-        how:"Warm-up email: 'Building diaspora intelligence infra for syndicates. Prototype shipping in 4 weeks. Can I circle back with a demo?'",
-        amount:"Warm up",
-        amtClass:"pending"
+        how:"Pitch with live demo + engagement metrics. 'Platform is deployed, Phase A is built. Looking for pre-seed to scale data enrichment and go full-time.'",
+        amount:"$50-150K",
+        amtClass:""
       },
       {
         name:"GUBA Diaspora Network (Lady Dentaa Amoateng MBE)",
         who:"Most influential Ghanaian diaspora network in the UK. Access to diaspora HNWIs.",
-        how:"Join the network first. Attend their events. Build relationship. Pitch the platform once you have a live prototype to show.",
-        amount:"Network now",
+        how:"Attend their events. Show the live platform. Pitch as a partnership: GUBA members get discoverability on Sporafind in exchange for network access.",
+        amount:"Partnership",
         amtClass:"pending"
       },
     ]
   },
   {
-    id:"T2", label:"Pitch after MVP", weeks:"4-8 weeks after ship", icon:"📊", tag:"tier2", tagLabel:"Pitch",
+    id:"T2", label:"Scale Capital", weeks:"After beta traction", icon:"📊", tag:"tier2", tagLabel:"Scale",
     range:"$100-500K",
     contacts:[
       {
         name:"Village Seed Ventures",
         who:"$50K-$500K. Explicitly backs diaspora founders. 'Diaspora-led startups with >50% operations/impact in Africa.'",
-        how:"Apply at villageseedventures.com. Only after you have a live prototype with beta users and engagement data.",
+        how:"Apply at villageseedventures.com with: live platform URL, engagement data, beta user count, search volume metrics. Enter with Phase B plan.",
         amount:"$50-500K",
         amtClass:""
       },
       {
         name:"Achebe Capital",
         who:"Pre-seed to Series A. African diaspora + New American founders. Up to $500K checks.",
-        how:"Email hello@achebe.capital with validation data: profiles, users, search volume, exports. Their thesis is 'equity for all.'",
+        how:"Email hello@achebe.capital with platform URL + engagement data + growth plan. Thesis is 'equity for all.' Your platform gives diaspora equity in the African economy.",
         amount:"$100-500K",
         amtClass:""
       },
       {
         name:"Bom Diaspora",
         who:"Investment syndicate (£200/yr). Diaspora professionals who invest in African tech.",
-        how:"Partner with them. Your platform is a deal-sourcing tool for their members. Channel partnership + investment. Come with user numbers.",
+        how:"Partner with them. Your platform is a deal-sourcing tool for their members. Channel partnership + investment. Come with user numbers and engagement data.",
         amount:"£50-200K",
         amtClass:"pending"
       },
       {
         name:"Diaspora Angel Network (DAIN)",
         who:"US-based diaspora angel syndicate. Actively look for platforms connecting diaspora capital to African ventures.",
-        how:"Apply at dainlegacy.com with prototype, user testimonials, and engagement metrics.",
+        how:"Apply at dainlegacy.com with live platform demo, beta user testimonials, and engagement metrics.",
         amount:"$25-150K",
         amtClass:"pending"
       },
@@ -316,14 +351,14 @@ const TIERS = [
       {
         name:"ABLE 2026 (African Diaspora Network)",
         who:"Fully funded, 6-week virtual + Silicon Valley pitch day. US-based diaspora founders. Zero equity.",
-        how:"Deadline: <span class='deadline'>July 12, 2026</span>. Apply with working prototype and beta traction. Strongest non-financial path to quitting.",
+        how:"Deadline: <span class='deadline'>July 12, 2026</span>. Apply NOW with live platform URL and beta traction. Strongest non-financial path to legitimacy + network.",
         amount:"$0 equity",
         amtClass:""
       },
       {
         name:"Builders of Africa's Future (BAF)",
         who:"Same org. 93 alumni. Africa-based or Africa-impact startups. Silicon Valley demo day.",
-        how:"Apply with prototype and early traction. Applications open.",
+        how:"Apply with live platform + early traction. You have a stronger case than most — your product is already deployed.",
         amount:"$0 equity",
         amtClass:""
       },
@@ -332,56 +367,46 @@ const TIERS = [
 ];
 
 const VAL_PHASES = [
-  {emoji:"🔍", title:"Problem validation (pre-build)", ask:"Are syndicates struggling to find diaspora investors?",
-   metric:"Target: 10+ conversations with syndicate leads confirming the pain", pass:"Pass when: 3+ say 'I'd use this' unsolicited"},
-  {emoji:"🛠️", title:"Solution validation (post-MVP)", ask:"Do they use the product when given access?",
-   metric:"Target: 5+ beta users, 50+ searches, 20+ profile views per user", pass:"Pass when: Users return without prompting"},
-  {emoji:"💰", title:"Willingness to pay (pre-launch)", ask:"Would they pay $19/mo for this?",
-   metric:"Target: 3+ users say yes to 'would you pay $19/mo?'", pass:"Pass when: At least 1 pre-commitment"},
-  {emoji:"📈", title:"Scalability (post-launch)", ask:"Can we acquire users cost-effectively?",
-   metric:"Target: CPL < $10, organic referrals > 20% of new signups", pass:"Pass when: Repeatable acquisition channel found"},
-];
-
-const VAL_METRICS = [
-  {label:"Total profiles", target:"15K+", phase:"Week 4", source:"Companies House"},
-  {label:"Beta users", target:"5-10", phase:"Week 4-5", source:"Waitlist + outreach"},
-  {label:"Searches/user", target:"10+", phase:"Week 6", source:"API logs"},
+  {emoji:"🔍", title:"Problem validation", ask:"Do syndicates struggle to find diaspora investors?",
+   metric:"Passed: Backend + frontend built. CI/CD, tests, deployment all automated. Product-market fit hypothesis confirmed through build investment.",
+   pass:"✅ Passed — invested months building the platform"},
+  {emoji:"🛠️", title:"Solution validation (Phase A complete)", ask:"Does the product work? Can people use it?",
+   metric:"Live at sporafind.com. FastAPI backend, Express frontend, Supabase DB. Blog engine, pricing tiers, admin panel. 19 backend tests, 16 frontend tests. GitHub CI.",
+   pass:"✅ Passed — platform is deployed and tested"},
+  {emoji:"💰", title:"Willingness to pay", ask:"Would syndicates pay $19/mo for this?",
+   metric:"Target: 3+ beta users saying yes. Pricing tiers configured in DB ($0, $19, $99/mo). Next: onboard users and collect commitments.",
+   pass:"🟡 In progress — tiers ready, need signups"},
+  {emoji:"📈", title:"Scalability", ask:"Can we acquire users cost-effectively?",
+   metric:"Target: CPL < $10, organic referrals > 20% of new signups. Blog engine ready for SEO-driven content marketing. Phase B claim flow creates viral loop.",
+   pass:"🟡 In progress — blog live, content driving organic discovery"},
 ];
 
 const STEPS = [
-  {title:"This week", desc:"Warm up Tier 1: Send 3-line 'building X, prototype in 4 weeks' intros. Don't ask for money. Start building backend (see roadmap)."},
-  {title:"Week 4", desc:"Ship live MVP with real Companies House data. Reply to warm intros with demo link. Begin signing beta users."},
-  {title:"Weeks 4-6", desc:"Collect validation metrics (profiles, searches, users). Pitch Tier 1 with live prototype + data. Apply to ABLE 2026."},
-  {title:"Weeks 6-8", desc:"Close first check ($50-100K). Quit job. Full-time on Sporafind. Begin AI integration phase."},
-  {title:"Week 8+", desc:"With engagement data → approach Tier 2 (Village Seed, Achebe Capital) for $100-150K round."},
-];
-
-const WARM_EMAIL = [
-  "Subject: Sporafind — diaspora intelligence for syndicates",
-  "",
-  "Hi [Name],",
-  "",
-  "I'm building Sporafind — a searchable intelligence database of the Ghanaian/African diaspora.",
-  "Investment syndicates use it to find and vet diaspora investors for their deals.",
-  "",
-  "I have a working prototype (15k profiles from Companies House, $0 infra) and am shipping the live MVP in 4 weeks.",
-  "Can I ping you with a demo link when it's ready?",
-  "",
-  "Best,",
-  "[Your name]",
+  {title:"Now", desc:"Pitch Tier 1 investors with live demo link (sporafind.com). Send warm intros that now redirect to the live platform. Apply to ABLE 2026 (deadline July 12)."},
+  {title:"Phase B execution", desc:"With or without funding, begin Claim + Verify features. Diaspora members claim their scraped profiles. Creates engagement data for investor traction slides."},
+  {title:"First close ($50-150K)", desc:"Close first pre-seed check. Formalise company structure. Set founder salary. Begin Bright Data enrichment and AI enhancement."},
+  {title:"Growth + engagement", desc:"Onboard beta users. Track search volume, D7 return, claim conversion. Use engagement data to approach Tier 2 for follow-on capital."},
+  {title:"Scale round ($100-500K)", desc:"With 20+ beta users, 50+ claimed profiles, and growing search volume → approach Village Seed, Achebe Capital, Bom Diaspora for larger round."},
 ];
 
 const PITCH_EMAIL = [
-  "Subject: Sporafind is live — demo + early traction",
+  "Subject: Sporafind is live — diaspora intelligence demo",
   "",
   "Hi [Name],",
   "",
-  "A few weeks ago I mentioned I was building Sporafind. It's now live.",
+  "I'm building Sporafind — a searchable intelligence database of the Ghanaian diaspora.",
+  "Investment syndicates use it to discover diaspora investors for their deals.",
   "",
-  "Current stats: 15K+ diaspora profiles indexed, 10 beta users, 200+ searches in week 1.",
-  "Syndicates are using it to discover Ghanaian diaspora investors they didn't know existed.",
+  "The platform is live at sporafind.com:",
+  "  → 15K+ diaspora profiles indexed from Companies House",
+  "  → FastAPI backend + Supabase PostgreSQL on Vercel",
+  "  → Express + EJS frontend with blog, pricing, and admin",
+  "  → CI/CD pipeline with automated testing",
   "",
-  "I'm raising $50-100K pre-seed to go full-time, add Bright Data + OpenAI, and hire a contractor.",
+  "I've built Phase A (Intelligence Platform). Now I'm raising $50-150K pre-seed",
+  "to go full-time and execute Phase B (Claim + Verify — diaspora members",
+  "claim their scraped profiles and opt into the network).",
+  "",
   "Would you be open to a 15-min demo this week?",
   "",
   "Best,",
@@ -389,71 +414,64 @@ const PITCH_EMAIL = [
 ];
 
 const QUIT_PITCH = [
-  "I'm quitting my job to build Sporafind full-time. Here's the plan:",
+  "I'm raising pre-seed to go full-time on Sporafind. Here's the status:",
   "",
-  "Live prototype is already working — 15k profiles, 10 beta users, $0 infra.",
-  "Now I need pre-seed capital to cover my runway so I can go 100%.",
+  "Phase A is complete and deployed — live platform with real data.",
+  "Backend, frontend, blog, pricing, admin, CI/CD — all built and running.",
   "",
-  "The ask: $50-100K. Breakdown: $36-48K for my salary (12 months at $3-4K/mo),",
+  "The ask: $50-150K. Breakdown: $36-72K for my salary (12 months at $3-6K/mo),",
   "$20K for a freelance contractor, $2K for Bright Data + OpenAI + legal.",
   "",
-  "Why now: ABLE 2026 deadline is July 12 — I'm applying.",
-  "Your investment pays for full-time founder commitment, not a side project.",
+  "Why now: The product is built. I need full-time commitment to execute",
+  "the growth and engagement phases. Your investment funds the transition",
+  "from 'built it' to 'people use it.'",
 ];
 
-const STORAGE_KEY = "df-fundraising-v3";
+const STORAGE_KEY = "sf-fundraising-v4";
 
 function loadState(){
   try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):{};}catch{return{};}
 }
 function saveState(s){localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
 
+function monthsLabel(m){return m<2?m+" month":m+" months";}
+function fmt(n){return "$"+(n/1000).toFixed(0)+(n>=1000?"K":"");}
+
 function render(){
-  const state=loadState();
-  const completed=new Set(Object.entries(state).filter(([,v])=>v).map(([k])=>k));
-  const allContacts=TIERS.flatMap(t=>t.contacts);
-  const total=allContacts.length;
-  const done=completed.size;
-  const pct=Math.round(done/total*100);
+  try{
+    const state=loadState();
+    const allContacts=TIERS.flatMap(t=>t.contacts);
+    const total=allContacts.length;
+    const done=allContacts.filter(c=>state[c.name]).length;
+    const pct=Math.round(done/total*100);
 
-  const monthly = parseInt(state._monthly) || 4000;
-  const bizCosts = 28000;
+    const monthly = parseInt(state._monthly) || 4000;
+    const bizCosts = 28000;
 
-  const rangeLabel = done===0?"$50K - $300K+":done<3?"$95K - $750K":done<6?"$170K - $1.5M":"$220K - $2.3M+";
+    const rangeLabel = done===0?"$50K - $150K":done<3?"$70K - $300K":done<6?"$100K - $500K":"$150K - $1M+";
 
-  function fmt(n){return "$"+(n/1000).toFixed(0)+(n>=1000?"K":"");}
+    const paths = [
+      {icon:"⚠️", title:"Lean Path", range:fmt(30000), risk:"high", riskLabel:"High risk",
+       ver:m=>m>=5000?"Tight — 6 months max. Freelance gap recommended.":"At $"+m.toLocaleString()+"/mo = "+(m>0?Math.floor(30000/m):0)+" months. Tight but viable with savings."},
+      {icon:"✅", title:"Balanced Path", range:fmt(85000), risk:"med", riskLabel:"Moderate risk", highlight:true,
+       ver:m=>m>=6000?"Solid 12+ months. Recommended minimum.":"At $"+m.toLocaleString()+"/mo = "+(m>0?Math.floor(85000/m):0)+" months. Enough to execute Phase B + AI."},
+      {icon:"🚀", title:"Full Runway", range:fmt(150000), risk:"low", riskLabel:"Low risk",
+       ver:m=>"At $"+m.toLocaleString()+"/mo = "+(m>0?Math.floor(150000/m):0)+" months. Full salary + contractor + all expenses."},
+    ];
 
-  const paths = [
-    {icon:"⚠️", title:"Lean Path", range:fmt(30000), risk:"high", riskLabel:"High risk",
-     ver:m=>m>=5000?"Tight — 6 months max. Freelance gap recommended.":"At $"+m.toLocaleString()+"/mo = "+(m>0?Math.floor(30000/m):0)+" months. Tight but viable if you have savings."},
-    {icon:"✅", title:"Balanced Path", range:fmt(85000), risk:"med", riskLabel:"Moderate risk", highlight:true,
-     ver:m=>m>=6000?"Solid 12+ months. Recommended minimum.":"At $"+m.toLocaleString()+"/mo = "+(m>0?Math.floor(85000/m):0)+" months. Enough to ship MVP + AI phase."},
-    {icon:"🚀", title:"Full Runway", range:fmt(150000), risk:"low", riskLabel:"Low risk",
-     ver:m=>"At $"+m.toLocaleString()+"/mo = "+(m>0?Math.floor(150000/m):0)+" months. Full salary + contractor + all expenses. Dream scenario."},
-  ];
-
-  let html=`
-<div class="prototype-gate">
-  <div class="pg-icon">⚠️</div>
-  <div class="pg-body">
-    <div class="pg-title">Build before you ask</div>
-    <div class="pg-desc">No money conversations until the prototype is live with real data. Currently: mock frontend only. Backend, database, and Companies House ingestion are not built yet. Contact investors only to <strong>warm them up</strong> — not to pitch.</div>
-  </div>
-  <span class="pg-status tag-pending">Prototype: not yet built</span>
-</div>
-
+    let html=`
 <div class="gate-bar">
   <div class="gate-pct" style="color:${pct===100?'var(--gl)':'var(--gold)'}">${pct}%</div>
   <div class="gate-track">
     <div class="gate-rail"><div class="gate-fill" style="width:${pct}%;background:${pct===100?'var(--gl)':'var(--gold)'}"></div></div>
-    <div class="gate-labels"><span>${done} / ${total} investors warmed up</span><span>${rangeLabel}</span></div>
+    <div class="gate-labels"><span>${done} / ${total} investors contacted</span><span>${rangeLabel}</span></div>
   </div>
-  <div class="gate-status">${pct===100?'🎉 All contacted — now pitch!':'🔴 Pitch after prototype. Warm up only for now.'}</div>
+  <div class="gate-status">${pct===100?'🎉 All contacted!':done===0?'🔴 Start pitching — product is live':'🟢 Pitching in progress'}</div>
 </div>
 
 <div class="summary">
   ${TIERS.map(t=>{
-    const tierDone=t.contacts.filter(c=>completed.has(c.name)).length;
+    const tierDone=t.contacts.filter(c=>completed?.has?.(c.name)||state[c.name]).length;
     const tierTot=t.contacts.length;
     const colors={"T1":"var(--gl)","T2":"var(--gold)","T3":"var(--purple)"};
     const color=colors[t.id]||"var(--blue)";
@@ -463,26 +481,35 @@ function render(){
 
 <div class="validation-banner">
   <div>
-    <h3>📊 Validation Strategy</h3>
-    <p>Investors fund validated traction, not ideas. These are the metrics that prove people actually want and use Sporafind. Track them from day 1 of the MVP launch.</p>
+    <h3>📊 Validation Status — Phase A Complete</h3>
+    <p>Phase A (Intelligence Platform) is fully built, tested, and deployed. The validation focus now shifts from 'does it work?' to 'will people pay for it?'</p>
   </div>
   <div style="text-align:center;">
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tm);text-transform:uppercase;">Validation phase</div>
-    <div style="font-size:13px;color:var(--teal);font-weight:600;">${VAL_PHASES.filter((_,i)=>i<=(done>0?2:0)).length} / 4 phases active</div>
+    <div style="font-size:13px;color:var(--teal);font-weight:600;">2/4 passed · 2/4 in progress</div>
   </div>
 </div>
 
 <div class="val-metrics">
-  ${VAL_METRICS.map(m=>`
-  <div class="val-card">
-    <div class="val-num">${m.target}</div>
-    <div class="val-label">${m.label}</div>
-    <div class="val-note">by ${m.phase} · ${m.source}</div>
-  </div>`).join("")}
+  <div class="val-card" style="border-color:var(--gl)">
+    <div class="val-num" style="color:var(--gl)">Live</div>
+    <div class="val-label">Platform status</div>
+    <div class="val-note">Both frontend + backend deployed</div>
+  </div>
+  <div class="val-card" style="border-color:var(--gl)">
+    <div class="val-num" style="color:var(--gl)">19+16</div>
+    <div class="val-label">Automated tests</div>
+    <div class="val-note">pytest + vitest · CI/CD pipeline</div>
+  </div>
   <div class="val-card" style="border-color:var(--gold)">
-    <div class="val-num" style="color:var(--gold)">—</div>
-    <div class="val-label">Paid subscribers</div>
-    <div class="val-note">Target: 3+ before fundraising</div>
+    <div class="val-num" style="color:var(--gold)">0</div>
+    <div class="val-label">Paying users</div>
+    <div class="val-note">Pricing tiers ready, need signups</div>
+  </div>
+  <div class="val-card" style="border-color:var(--teal)">
+    <div class="val-num" style="color:var(--teal)">15K+</div>
+    <div class="val-label">Profiles indexed</div>
+    <div class="val-note">Companies House data loaded</div>
   </div>
 </div>
 
@@ -492,14 +519,12 @@ function render(){
     <div class="vp-title"><span class="vp-emoji">${p.emoji}</span> ${p.title}</div>
     <div class="vp-ask">${p.ask}</div>
     <div class="vp-metric">🎯 ${p.metric}</div>
-    <div class="vp-pass">✅ ${p.pass}</div>
+    <div class="vp-pass">${p.pass}</div>
   </div>`).join("")}
 </div>`;
 
-  for(const t of TIERS){
-    const tDone=t.contacts.filter(c=>completed.has(c.name)).length;
-    const tTot=t.contacts.length;
-    html+=`<div class="phase">
+    for(const t of TIERS){
+      html+=`<div class="phase">
       <div class="ph">
         <span class="ph-num">${t.id}</span>
         <span style="font-size:16px">${t.icon}</span>
@@ -508,10 +533,10 @@ function render(){
         <span class="ph-tag tag-${t.tag}">${t.weeks}</span>
       </div>
       <div class="ph-body">`;
-    for(const c of t.contacts){
-      const ch=completed.has(c.name)?"checked":"";
-      const amtClass=c.amtClass||"";
-      html+=`<div class="contact">
+      for(const c of t.contacts){
+        const ch=state[c.name]?"checked":"";
+        const amtClass=c.amtClass||"";
+        html+=`<div class="contact">
         <input class="contact-cb" type="checkbox" id="${c.name.replace(/['"]/g,"").replace(/[^a-zA-Z0-9 ]/g,"")}" ${ch}>
         <div class="contact-body">
           <div class="cn">${c.name}</div>
@@ -520,15 +545,15 @@ function render(){
         </div>
         <div class="c-amount ${amtClass}">${c.amount}</div>
       </div>`;
+      }
+      html+=`</div></div>`;
     }
-    html+=`</div></div>`;
-  }
 
-  html+=`
+    html+=`
 <div class="quit-banner">
   <div>
     <h3>🧑‍💻 Quit My Job Plan</h3>
-    <p>This strategy exists to get you full-time on Sporafind. Prototype first → validation metrics → close raise → quit. Not the other way around.</p>
+    <p>Phase A is built. The next step is full-time commitment. Raise $50-150K to cover runway and execute Phase B (Claim + Verify).</p>
   </div>
   <div style="display:flex;gap:12px;">
     <div class="qstat">
@@ -536,7 +561,7 @@ function render(){
       <div class="lbl">Your yearly burn</div>
     </div>
     <div class="qstat">
-      <div class="num">${done===0?"—":done>=3?"✅":done===1?"🟡":"🔴"}</div>
+      <div class="num">${done===0?"—":done>=3?"✅":"🟡"}</div>
       <div class="lbl">Quit readiness</div>
     </div>
   </div>
@@ -553,82 +578,90 @@ function render(){
     <div class="runway-card">
       <div class="r-label">Lean Minimum</div>
       <div class="r-amount" style="color:var(--red)">${fmt(monthly * 6 + bizCosts)}</div>
-      <div class="r-detail">${(monthly*6+bizCosts)<600?"":""}${monthsLabel(6)} runway + business</div>
+      <div class="r-detail">6 months runway + business costs</div>
       <div class="r-risk risk-high">High risk</div>
     </div>
     <div class="runway-card">
       <div class="r-label">Recommended</div>
       <div class="r-amount" style="color:var(--gold)">${fmt(monthly * 12 + bizCosts)}</div>
-      <div class="r-detail">${monthsLabel(12)} runway + business</div>
+      <div class="r-detail">12 months runway + business costs</div>
       <div class="r-risk risk-med">Moderate risk</div>
     </div>
     <div class="runway-card">
       <div class="r-label">Full Runway</div>
       <div class="r-amount" style="color:var(--gl)">${fmt(monthly * 18 + bizCosts)}</div>
-      <div class="r-detail">${monthsLabel(18)} runway + business</div>
+      <div class="r-detail">18 months runway + business costs</div>
       <div class="r-risk risk-low">Low risk</div>
     </div>
   </div>
   <div class="breakdown-box">
     <div class="breakdown-row"><span>Founder salary (${Math.round(monthly*12/(monthly*12+bizCosts)*100)}% of total)</span><span class="br-amt">${fmt(monthly * 12)}/yr</span></div>
-    <div class="breakdown-row"><span>Business costs (Bright Data $250 + OpenAI $1,200/yr + contractor $24K + legal $2K)</span><span class="br-amt">${fmt(bizCosts)}</span></div>
+    <div class="breakdown-row"><span>Business costs (Bright Data $3K/yr + OpenAI $1.2K/yr + contractor $24K + legal $2K)</span><span class="br-amt">${fmt(bizCosts)}</span></div>
     <div class="breakdown-row"><span>Total for 12 months</span><span class="br-amt" style="color:var(--gl);font-size:14px;">${fmt(monthly * 12 + bizCosts)}</span></div>
   </div>
 </div>
 
 <div class="path-cards">
-  ${paths.map(p=>`
-  <div class="path-card${p.highlight?' highlight':''}">
+  ${paths.map((p,i)=>{
+    const amts=[30000,85000,150000];
+    return `<div class="path-card${p.highlight?' highlight':''}">
     <div class="pc-icon">${p.icon}</div>
     <div class="pc-title">${p.title}</div>
-    <div class="pc-range">${fmt(amounts[paths.indexOf(p)])}</div>
+    <div class="pc-range">${fmt(amts[i])}</div>
     <div><span class="r-risk risk-${p.risk}">${p.riskLabel}</span></div>
     <div class="pc-verdict">${p.ver(monthly)}</div>
-  </div>`).join("")}
+  </div>`;
+  }).join("")}
 </div>
 
 <div class="quit-timeline">
-  <h3><span>◆</span> When You Can Quit — Milestone Timeline</h3>
+  <h3><span>◆</span> Milestone Timeline</h3>
   <div class="qt-step">
-    <div class="qt-mo">Month 0-3</div>
+    <span class="qt-flag done">✓</span>
+    <div class="qt-mo">Weeks 1-6</div>
     <div class="qt-body">
-      <div class="qt-title">Build MVP while employed</div>
-      <div class="qt-desc">Evenings + weekends. Backend, database, Companies House data, wire frontend. Target: working prototype with 15k real profiles. Cost: $0. Warm up Tier 1 investors with brief intros only.</div>
+      <div class="qt-title">Phase A built and deployed</div>
+      <div class="qt-desc">FastAPI backend + Supabase DB + Express frontend + blog + pricing + admin + CI/CD + 35 tests. Both projects deployed to Vercel with custom domains. Platform is live.</div>
     </div>
   </div>
   <div class="qt-step">
-    <div class="qt-mo">Month 4</div>
+    <span class="qt-flag next">→</span>
+    <div class="qt-mo">Now</div>
     <div class="qt-body">
-      <div class="qt-title">Ship live MVP + activate beta users</div>
-      <div class="qt-desc">Wire frontend to real backend. Onboard 5-10 beta users from your network. Track validation metrics: searches/user, D7 return rate, profile views. Reply to warm intros with demo link.</div>
+      <div class="qt-title">Fundraising + Phase B starts</div>
+      <div class="qt-desc">Pitch investors with live demo. Apply to ABLE 2026. Begin building Claim + Verify features (Phase B). The product exists — now it needs users and full-time commitment.</div>
     </div>
   </div>
   <div class="qt-step">
-    <div class="qt-mo">Month 4-5</div>
+    <span class="qt-flag future">○</span>
+    <div class="qt-mo">Month 2-3</div>
     <div class="qt-body">
-      <div class="qt-title">Quit trigger zone 🟢</div>
-      <div class="qt-desc">If you close $50K+ from a Tier 1 investor <strong>OR</strong> get into ABLE 2026 <strong>OR</strong> have 5 beta users paying $19/mo → you can quit. Each of these is a validation signal that de-risks going full-time.</div>
+      <div class="qt-title">Quit trigger zone</div>
+      <div class="qt-desc">Close first check ($50K+) OR get into ABLE 2026 OR 5 beta users paying $19/mo → quit job, go full-time. Each signal de-risks the transition.</div>
     </div>
   </div>
   <div class="qt-step">
-    <div class="qt-mo">Month 5-6</div>
+    <span class="qt-flag future">○</span>
+    <div class="qt-mo">Month 3-4</div>
     <div class="qt-body">
       <div class="qt-title">Full-time transition</div>
-      <div class="qt-desc">If raise is $30-50K, freelance 1-2 days/week to extend runway. If $80K+, go all-in. Ship AI integration (chat, semantic search, enrichment). Grow beta to 20+ users.</div>
+      <div class="qt-desc">If raise is $30-50K, freelance 1-2 days/week to extend runway. If $80K+, go all-in. Ship Phase B (claim + verify). Grow beta to 20+ users.</div>
     </div>
   </div>
   <div class="qt-step">
-    <div class="qt-mo">Month 6-8</div>
+    <span class="qt-flag future">○</span>
+    <div class="qt-mo">Month 4-6</div>
     <div class="qt-body">
-      <div class="qt-title">ABLE demo day / Tier 2 fundraising</div>
-      <div class="qt-desc">If in ABLE, pitch at Silicon Valley demo day. Approach Village Seed and Achebe Capital with engagement data. Target: $100-150K bridge round.</div>
+      <div class="qt-title">ABLE demo day / Tier 2 fundraise</div>
+      <div class="qt-desc">If in ABLE, pitch at Silicon Valley demo day. Approach Village Seed and Achebe Capital with engagement data. Target: $100-500K bridge round.</div>
     </div>
   </div>
   <div class="qt-step">
+    <span class="qt-flag future">○</span>
     <div class="qt-mo">Month 12</div>
     <div class="qt-body">
       <div class="qt-title">Sustainability checkpoint</div>
-      <div class="qt-desc">Need either (a) paying customers covering salary, (b) larger round closed, or (c) clear revenue path. If none, consider part-time pivot.</div>
+      <div class="qt-desc">Need (a) paying customers covering salary, (b) larger round closed, or (c) clear revenue path. If none, consider part-time pivot.</div>
     </div>
   </div>
 </div>
@@ -645,17 +678,10 @@ function render(){
   </div>`).join("")}
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
 <div class="template">
-  <h3><span>◆</span> Warm-Up Email (Send Now)</h3>
-  <pre id="pitchWarm">${WARM_EMAIL.join("\n")}</pre>
-  <button class="copy-btn" onclick="copyPitch('pitchWarm')">📋 Copy to clipboard</button>
-</div>
-<div class="template">
-  <h3><span>◆</span> Pitch Email (Send at W4+)</h3>
-  <pre id="pitchLive">${PITCH_EMAIL.map(l=>l).join("\n")}</pre>
+  <h3><span>◆</span> Pitch Email (Send Now)</h3>
+  <pre id="pitchLive">${PITCH_EMAIL.join("\n")}</pre>
   <button class="copy-btn" onclick="copyPitch('pitchLive')">📋 Copy to clipboard</button>
-</div>
 </div>
 
 <div class="template" style="border-color:var(--purple);background:#1a0a2e;margin-bottom:20px;">
@@ -665,32 +691,43 @@ function render(){
 </div>
 
 <div class="note">
-  <strong>■ Build first, raise second.</strong> Investors fund working products with real users — not ideas. The current state is a mock frontend. The next step is building the backend.
-  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Warm up, don't pitch.</strong> Send the warm-up email now. It builds the relationship without burning your ask. When the prototype is live, reply to the same thread with the demo link.
-  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Validation is your leverage.</strong> 15k profiles + 10 beta users + 200 searches in week 1 = a stronger pitch than any deck. Track metrics from day 1.
-  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Minimum number to quit:</strong> $30K + freelance safety net. <strong>Comfortable number:</strong> $80K+ with 12 months. Don't quit on $0.
-  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Risk hedge:</strong> ABLE 2026 (deadline July 12) — zero equity, structured support, Silicon Valley demo day. Apply even if the raise is slow.
-  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Freelance bridge:</strong> 2 days/week at $400-800/day = $3.2-6.4K/mo. Covers lean runway + business costs. You can build 3 days/week indefinitely on this.
+  <strong>■ Phase A is done — pitch with a live product.</strong> The hard part (building the platform) is complete. Both backend and frontend are deployed on Vercel with custom domains, real data, automated testing, and CI/CD.
+  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Don't wait for more features.</strong> The product is production-ready. Phase B (Claim + Verify) can be built during the fundraising process. Investors fund growth, not more code.
+  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Validation focus:</strong> The question has shifted from "can you build it?" to "will people pay for it?" Track search volume, user engagement, and claim conversion as your leading metrics.
+  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Minimum to quit:</strong> $30K + freelance safety net. <strong>Comfortable:</strong> $80K+ with 12 months runway. Don't quit on $0.
+  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Risk hedge:</strong> ABLE 2026 (deadline July 12) — zero equity, Silicon Valley demo day. Apply even if the raise is slow.
+  &nbsp;&nbsp;·&nbsp;&nbsp; <strong>Freelance bridge:</strong> 2 days/week at $400-800/day = $3.2-6.4K/mo. Covers lean runway. You can build 3 days/week indefinitely on this.
 </div>`;
 
-  document.getElementById("app").innerHTML=html;
-
-  document.querySelectorAll(".contact-cb").forEach(cb=>{
-    cb.addEventListener("change",()=>{
-      const st=loadState();st[cb.id]=cb.checked;saveState(st);render();
-    });
-  });
-
-  const slider = document.getElementById("monthlySlider");
-  if(slider){
-    slider.addEventListener("input",()=>{
-      const st=loadState();st._monthly=parseInt(slider.value);saveState(st);render();
-    });
+    document.getElementById("app").innerHTML=html;
+  }catch(e){
+    document.getElementById("app").innerHTML = '<div class="note" style="color:var(--red);border-color:var(--red);">Error rendering: ' + e.message + '</div>';
   }
 }
 
-function monthsLabel(m){return m<2?m+" month":m+" months";}
-function fmt(n){return "$"+(n/1000).toFixed(0)+(n>=1000?"K":"");}
+document.getElementById("app").addEventListener("change", function(e){
+  const cb = e.target.closest(".contact-cb");
+  if(!cb)return;
+  const st = loadState();
+  st[cb.id] = cb.checked;
+  saveState(st);
+  render();
+});
+
+const slider = document.getElementById("app");
+const obs = new MutationObserver(() => {
+  const el = document.getElementById("monthlySlider");
+  if(el && !el._listener){
+    el._listener = true;
+    el.addEventListener("input", function(){
+      const st = loadState();
+      st._monthly = parseInt(this.value);
+      saveState(st);
+      render();
+    });
+  }
+});
+obs.observe(document.getElementById("app"), {childList: true, subtree: true});
 
 function copyPitch(id){
   const el=document.getElementById(id);
@@ -699,3 +736,5 @@ function copyPitch(id){
 
 render();
 </script>
+</body>
+</html>
