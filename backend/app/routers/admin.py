@@ -7,7 +7,6 @@ from sqlalchemy import select, func, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from slowapi import Limiter
 from slowapi.util import get_remote_address
-import redis.asyncio as redis
 
 from app.config import settings
 from app.database import get_db, get_session
@@ -424,6 +423,7 @@ async def trigger_import(
     await db.commit()
 
     try:
+        import redis.asyncio as redis
         r = redis.from_url(settings.redis_url, decode_responses=True)
         await r.lpush("arq:queue", f"{import_run_id}")
         await r.aclose()
