@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.profile import Profile
@@ -10,6 +12,7 @@ from app.models.user import User
 from app.models.pricing import PricingPlan
 from app.routers.auth_utils import verify_public_access
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/stats", tags=["stats"])
 
 
@@ -48,7 +51,9 @@ async def get_stats(
 
 
 @router.get("/public-metrics")
+@limiter.limit("30/minute")
 async def get_public_metrics(
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
     try:

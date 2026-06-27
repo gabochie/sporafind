@@ -1,13 +1,16 @@
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.user import User
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
@@ -23,7 +26,8 @@ class AuthResponse(BaseModel):
 
 
 @router.post("/signup", response_model=AuthResponse)
-async def signup(req: SignupRequest, db: AsyncSession = Depends(get_db)):
+@limiter.limit("5/minute")
+async def signup(req: SignupRequest, request: Request, db: AsyncSession = Depends(get_db)):
     existing = await db.execute(select(User).where(User.email == req.email))
     if existing.scalar_one_or_none():
         return AuthResponse(
@@ -46,5 +50,6 @@ async def signup(req: SignupRequest, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/magic-link")
-async def send_magic_link(email: str):
+@limiter.limit("5/minute")
+async def send_magic_link(request: Request, email: str):
     return {"message": "Magic link would be sent here (Better Auth integration pending)"}

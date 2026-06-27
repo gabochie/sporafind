@@ -1,15 +1,18 @@
 import re
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import BaseModel
 from sqlalchemy import select, func, or_
 from sqlalchemy.ext.asyncio import AsyncSession
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.blog import BlogPost
 from app.routers.auth_utils import verify_public_access
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/blog", tags=["blog"])
 
 
@@ -119,7 +122,9 @@ class PageViewRequest(BaseModel):
 
 
 @router.post("/analytics/pageview")
+@limiter.limit("30/minute")
 async def track_pageview(
+    request: Request,
     body: PageViewRequest,
     db: AsyncSession = Depends(get_db),
 ):
@@ -132,7 +137,9 @@ async def track_pageview(
 
 
 @router.get("/analytics/posts")
+@limiter.limit("30/minute")
 async def post_analytics(
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
     rows = await db.execute(
