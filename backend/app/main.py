@@ -1,8 +1,10 @@
+import asyncio
+import inspect
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler, Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
@@ -12,6 +14,11 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from app.config import settings
 from app.database import get_engine
 from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog
+
+
+# Patch slowapi's deprecated iscoroutinefunction check
+if not hasattr(asyncio, "iscoroutinefunction"):
+    asyncio.iscoroutinefunction = inspect.iscoroutinefunction
 
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
@@ -29,6 +36,19 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 
+class RequestBodySizeMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        content_length = request.headers.get("content-length")
+        if content_length:
+            size = int(content_length)
+            if size > 1_048_576:
+                return JSONResponse(
+                    status_code=413,
+                    content={"detail": "Request body too large (max 1MB)"},
+                )
+        return await call_next(request)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     engine = None
@@ -44,17 +64,28 @@ async def lifespan(app: FastAPI):
             pass
 
 
+async def production_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
+
+
 app = FastAPI(title="Sporafind API", version="0.1.0", lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+if settings.environment == "production":
+    app.add_exception_handler(Exception, production_exception_handler)
+
+app.add_middleware(RequestBodySizeMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Content-Type", "Authorization", "X-Admin-Key", "X-Api-Key"],
 )

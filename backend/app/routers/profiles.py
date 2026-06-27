@@ -1,17 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.profile import Profile
 from app.schemas.profile import ProfileResponse, ProfileList
 from app.routers.auth_utils import verify_public_access
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/profiles", tags=["profiles"])
 
 
 @router.get("", response_model=ProfileList)
+@limiter.limit("30/minute")
 async def list_profiles(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(24, ge=1, le=100),
     segment: str | None = None,
@@ -50,7 +55,9 @@ async def list_profiles(
 
 
 @router.get("/{profile_id}", response_model=ProfileResponse)
+@limiter.limit("30/minute")
 async def get_profile(
+    request: Request,
     profile_id: str,
     db: AsyncSession = Depends(get_db),
     _: bool = Depends(verify_public_access),

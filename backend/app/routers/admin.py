@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import BaseModel
 from sqlalchemy import select, func, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.config import settings
 from app.database import get_db, get_session
@@ -10,6 +12,7 @@ from app.models.profile import Profile
 from app.models.org import Org
 from app.models.activity_log import ActivityLog
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
@@ -45,12 +48,15 @@ class UpdateOrgRequest(BaseModel):
 
 
 @router.get("/verify")
-async def admin_verify(admin: bool = Depends(verify_admin)):
+@limiter.limit("20/minute")
+async def admin_verify(request: Request, admin: bool = Depends(verify_admin)):
     return {"status": "ok", "role": "admin"}
 
 
 @router.get("/activity")
+@limiter.limit("20/minute")
 async def get_activity(
+    request: Request,
     limit: int = Query(50, ge=1, le=200),
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
@@ -73,7 +79,9 @@ async def get_activity(
 
 
 @router.get("/users")
+@limiter.limit("20/minute")
 async def list_users(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     q: str = Query("", max_length=200),
@@ -102,7 +110,9 @@ async def list_users(
 
 
 @router.patch("/users/{user_id}")
+@limiter.limit("10/minute")
 async def update_user(
+    request: Request,
     user_id: str,
     body: UpdateUserRequest,
     admin: bool = Depends(verify_admin),
@@ -125,7 +135,9 @@ async def update_user(
 
 
 @router.get("/analytics")
+@limiter.limit("20/minute")
 async def admin_analytics(
+    request: Request,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
 ):
@@ -160,7 +172,9 @@ async def admin_analytics(
 
 
 @router.get("/health")
+@limiter.limit("20/minute")
 async def admin_health(
+    request: Request,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
 ):
@@ -179,7 +193,9 @@ async def admin_health(
 
 
 @router.get("/profiles")
+@limiter.limit("20/minute")
 async def list_all_profiles(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     q: str = Query("", max_length=200),
@@ -216,7 +232,9 @@ async def list_all_profiles(
 
 
 @router.patch("/profiles/{profile_id}")
+@limiter.limit("10/minute")
 async def update_profile(
+    request: Request,
     profile_id: str,
     body: UpdateProfileRequest,
     admin: bool = Depends(verify_admin),
@@ -240,7 +258,9 @@ async def update_profile(
 
 
 @router.delete("/profiles/{profile_id}")
+@limiter.limit("10/minute")
 async def delete_profile(
+    request: Request,
     profile_id: str,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
@@ -262,7 +282,9 @@ class BatchProfileAction(BaseModel):
 
 
 @router.post("/profiles/batch")
+@limiter.limit("10/minute")
 async def batch_profile_action(
+    request: Request,
     body: BatchProfileAction,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
@@ -284,7 +306,9 @@ async def batch_profile_action(
 
 
 @router.get("/orgs")
+@limiter.limit("20/minute")
 async def list_all_orgs(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     q: str = Query("", max_length=200),
@@ -316,7 +340,9 @@ async def list_all_orgs(
 
 
 @router.patch("/orgs/{org_id}")
+@limiter.limit("10/minute")
 async def update_org(
+    request: Request,
     org_id: str,
     body: UpdateOrgRequest,
     admin: bool = Depends(verify_admin),
@@ -336,7 +362,9 @@ async def update_org(
 
 
 @router.delete("/orgs/{org_id}")
+@limiter.limit("10/minute")
 async def delete_org(
+    request: Request,
     org_id: str,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
@@ -358,7 +386,9 @@ class BatchOrgAction(BaseModel):
 
 
 @router.post("/orgs/batch")
+@limiter.limit("10/minute")
 async def batch_org_action(
+    request: Request,
     body: BatchOrgAction,
     admin: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
@@ -376,14 +406,18 @@ async def batch_org_action(
 
 
 @router.post("/import/trigger")
+@limiter.limit("5/minute")
 async def trigger_import(
+    request: Request,
     admin: bool = Depends(verify_admin),
 ):
     return {"status": "accepted", "message": "Import triggered (backend job pending)"}
 
 
 @router.get("/import/status")
+@limiter.limit("20/minute")
 async def import_status(
+    request: Request,
     admin: bool = Depends(verify_admin),
 ):
     return {"status": "idle", "last_run": None, "records_imported": 0}

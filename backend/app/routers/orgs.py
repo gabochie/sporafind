@@ -1,17 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.org import Org
 from app.schemas.org import OrgResponse, OrgList
 from app.routers.auth_utils import verify_public_access
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/orgs", tags=["orgs"])
 
 
 @router.get("", response_model=OrgList)
+@limiter.limit("30/minute")
 async def list_orgs(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(24, ge=1, le=100),
     org_type: str | None = None,
@@ -50,7 +55,9 @@ async def list_orgs(
 
 
 @router.get("/{org_id}", response_model=OrgResponse)
+@limiter.limit("30/minute")
 async def get_org(
+    request: Request,
     org_id: str,
     db: AsyncSession = Depends(get_db),
     _: bool = Depends(verify_public_access),

@@ -17,7 +17,9 @@ router = APIRouter(prefix="/stats", tags=["stats"])
 
 
 @router.get("")
+@limiter.limit("30/minute")
 async def get_stats(
+    request: Request,
     db: AsyncSession = Depends(get_db),
     _: bool = Depends(verify_public_access),
 ):

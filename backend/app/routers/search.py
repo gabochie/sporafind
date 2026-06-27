@@ -1,17 +1,22 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, or_
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.profile import Profile
 from app.schemas.profile import ProfileResponse, ProfileList
 from app.routers.auth_utils import verify_public_access
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/search", tags=["search"])
 
 
 @router.get("", response_model=ProfileList)
+@limiter.limit("30/minute")
 async def search_profiles(
+    request: Request,
     q: str = Query("", min_length=0, max_length=200),
     page: int = Query(1, ge=1),
     page_size: int = Query(24, ge=1, le=100),

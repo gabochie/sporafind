@@ -1,16 +1,21 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.pricing import PricingPlan
 from app.routers.auth_utils import verify_public_access
 
+limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/pricing", tags=["pricing"])
 
 
 @router.get("")
+@limiter.limit("30/minute")
 async def get_pricing(
+    request: Request,
     db: AsyncSession = Depends(get_db),
     _: bool = Depends(verify_public_access),
 ):

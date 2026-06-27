@@ -50,7 +50,9 @@ def post_to_dict(p: BlogPost) -> dict:
 # --- PUBLIC ---
 
 @router.get("/posts")
+@limiter.limit("30/minute")
 async def list_posts(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(9, ge=1, le=50),
     tag: str | None = None,
@@ -97,7 +99,9 @@ async def list_posts(
 
 
 @router.get("/posts/{slug}")
+@limiter.limit("30/minute")
 async def get_post(
+    request: Request,
     slug: str,
     _: bool = Depends(verify_public_access),
     db: AsyncSession = Depends(get_db),
@@ -198,7 +202,9 @@ class UpdatePostRequest(BaseModel):
 
 
 @router.get("/admin/posts")
+@limiter.limit("20/minute")
 async def list_all_posts(
+    request: Request,
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
     status: str | None = None,
@@ -230,7 +236,9 @@ async def list_all_posts(
 
 
 @router.post("/admin/posts")
+@limiter.limit("10/minute")
 async def create_post(
+    request: Request,
     body: CreatePostRequest,
     _: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
@@ -269,7 +277,9 @@ async def create_post(
 
 
 @router.put("/admin/posts/{post_id}")
+@limiter.limit("10/minute")
 async def update_post(
+    request: Request,
     post_id: str,
     body: UpdatePostRequest,
     _: bool = Depends(verify_admin),
@@ -312,7 +322,9 @@ async def update_post(
 
 
 @router.delete("/admin/posts/{post_id}")
+@limiter.limit("10/minute")
 async def delete_post(
+    request: Request,
     post_id: str,
     _: bool = Depends(verify_admin),
     db: AsyncSession = Depends(get_db),
