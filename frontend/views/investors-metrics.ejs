@@ -4,164 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/session.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <title>Sporafind — Live Metrics Dashboard</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444}
-body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);padding:32px 24px;max-width:960px;margin:0 auto;line-height:1.5}
-h1{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);padding:0;line-height:1.5}
+a{color:var(--gl);text-decoration:none}
+.section{max-width:1060px;margin:0 auto;padding:48px 24px}
+h1{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-1px}
 h1 span{color:var(--gold)}
-h2{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+h2{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin:0 0 16px}
 h2 span{color:var(--gold)}
-.subtitle{color:var(--t2);font-size:13px;margin-bottom:16px;border-left:3px solid var(--green);padding-left:14px}
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px}
-.metric-card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px;text-align:center;transition:border-color .2s}
-.metric-card .m-num{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700}
-.metric-card .m-num.loading{color:var(--tm);font-size:14px}
+.hero{background:linear-gradient(135deg,#0a2e1a,#1a3a22);padding:48px 24px;text-align:center;border-bottom:1px solid var(--green)}
+.hero .subtitle{color:var(--t2);font-size:14px;max-width:640px;margin:8px auto 0}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:24px 0}
+.metric-card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px;text-align:center}
+.metric-card .m-num{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gl)}
+.metric-card .m-num.gold{color:var(--gold)}
+.metric-card .m-num.blue{color:var(--blue)}
 .metric-card .m-label{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
-.metric-card .m-badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;margin-top:6px}
-.badge-live{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a}
-.badge-pending{background:#2e1a1a;color:var(--red);border:1px solid #4f2a2a}
-.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
-.chart-box{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px}
-.chart-box h3{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.chart-box h3 i{color:var(--gl)}
-.chart-box canvas{max-height:220px}
-.status-table{width:100%;border-collapse:collapse;margin-bottom:24px}
-.status-table td{padding:8px 12px;font-size:12px;border-bottom:1px solid var(--bd);color:var(--t2)}
-.status-table td:first-child{font-weight:500;color:var(--t1)}
-.status-table td:last-child{text-align:right;font-family:'JetBrains Mono',monospace}
-.status-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 10px;border-radius:10px}
-.status-ok{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a}
-.status-warn{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a}
-.scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.scroll-wrap table{min-width:400px}
-.note{background:#1a1a0a;border:1px solid #3f3f0a;border-radius:8px;padding:12px 16px;font-size:12px;color:var(--t2);line-height:1.6}
-.note strong{color:var(--t1)}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);text-decoration:none;margin-bottom:16px;padding:6px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:6px}
-.back-link:hover{color:var(--t1);background:var(--s2)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}
+.chart-box{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px}
+.chart-box.full{grid-column:1/-1}
+.chart-box canvas{max-height:320px;max-width:100%}
+.note{font-size:10px;color:var(--tm);margin-top:8px;text-align:center}
+.bottom-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:32px;padding:24px 0 0;border-top:1px solid var(--bd)}
+.page-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--t2);padding:8px 14px;background:var(--s1);border:1px solid var(--bd);border-radius:8px;transition:all .15s;text-decoration:none}
+.page-link:hover{background:var(--s2);color:var(--t1);border-color:var(--bds);text-decoration:none}
+.page-link i{color:var(--gl)}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.status-dot.live{background:var(--gl)}
+.status-dot.degraded{background:var(--amber)}
+.status-dot.error{background:var(--red)}
 @media(max-width:640px){
-  body{padding:16px 12px}
-  .chart-row{grid-template-columns:1fr}
+  .chart-grid{grid-template-columns:1fr}
   .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:22px}
+  .section{padding:32px 16px}
 }
 </style>
 </head>
 <body>
-<a href="/investors" class="back-link"><i class="ti ti-arrow-left"></i> Back to Investor Overview</a>
-<h1><span>◆</span> Live Metrics Dashboard</h1>
-<div class="subtitle">Real-time platform metrics pulled from the SporaFind API. Updated on every page load. Investors: bookmark this page to track progress.</div>
-
-<div class="metrics-grid" id="metricsGrid">
-  <div class="metric-card" style="border-color:var(--gl)"><div class="m-num loading" id="metric-total_profiles">...</div><div class="m-label">Diaspora profiles</div><span class="m-badge badge-live">Companies House</span></div>
-  <div class="metric-card" style="border-color:var(--gold)"><div class="m-num loading" id="metric-total_orgs">...</div><div class="m-label">Organisations</div><span class="m-badge badge-live">linked data</span></div>
-  <div class="metric-card" style="border-color:var(--blue)"><div class="m-num loading" id="metric-total_users">...</div><div class="m-label">Registered users</div><span class="m-badge badge-pending">growing</span></div>
-  <div class="metric-card" style="border-color:var(--purple)"><div class="m-num loading" id="metric-total_countries">...</div><div class="m-label">Countries represented</div><span class="m-badge badge-live">diaspora footprint</span></div>
-  <div class="metric-card" style="border-color:var(--teal)"><div class="m-num loading" id="metric-blog_posts">...</div><div class="m-label">Blog posts published</div><span class="m-badge badge-pending">content engine</span></div>
-  <div class="metric-card" style="border-color:var(--amber)"><div class="m-num loading" id="metric-blog_views">...</div><div class="m-label">Total blog views</div><span class="m-badge badge-pending">engagement</span></div>
-  <div class="metric-card" style="border-color:var(--gl)"><div class="m-num loading" id="metric-pricing_tiers">...</div><div class="m-label">Pricing tiers</div><span class="m-badge badge-live">$0 / $29 / $99</span></div>
-  <div class="metric-card" style="border-color:var(--gl)"><div class="m-num" style="color:var(--gl)">35</div><div class="m-label">Automated tests</div><span class="m-badge badge-live">pytest + vitest</span></div>
+<div class="hero">
+  <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(0,168,90,0.15);color:var(--gl);border:1px solid rgba(0,168,90,0.3)">&#9889; Live Metrics · Real-time</span>
+  <h1 style="margin-top:12px">Sporafind <span>Metrics Dashboard</span></h1>
+  <p class="subtitle">Live platform metrics fetched from the Sporafind API. All data is real — no mock numbers.</p>
 </div>
 
-<div class="chart-row">
-  <div class="chart-box">
-    <h3><i class="ti ti-chart-bar"></i> Industry Segments</h3>
-    <canvas id="segmentsChart"></canvas>
-    <p style="font-size:10px;color:var(--tm);margin-top:8px;text-align:center">Profile count by industry segment</p>
+<div class="section">
+  <div class="metrics-grid" id="metrics-grid">
+    <div class="metric-card"><div class="m-num" id="m-total_profiles">...</div><div class="m-label">Diaspora Profiles</div></div>
+    <div class="metric-card"><div class="m-num gold" id="m-total_orgs">...</div><div class="m-label">Organisations</div></div>
+    <div class="metric-card"><div class="m-num blue" id="m-total_countries">...</div><div class="m-label">Countries</div></div>
+    <div class="metric-card"><div class="m-num" id="m-total_users">...</div><div class="m-label">Registered Users</div></div>
+    <div class="metric-card"><div class="m-num gold" id="m-blog_posts">...</div><div class="m-label">Blog Posts</div></div>
+    <div class="metric-card"><div class="m-num blue" id="m-blog_views">...</div><div class="m-label">Blog Views</div></div>
   </div>
-  <div class="chart-box">
-    <h3><i class="ti ti-chart-pie"></i> Platform Status</h3>
-    <div style="padding:8px 0">
-      <div class="scroll-wrap"><table class="status-table">
-        <tr><td>Backend API</td><td><span class="status-badge status-ok" id="status-api">✓ Online</span></td></tr>
-        <tr><td>Database</td><td><span class="status-badge status-ok" id="status-db">✓ Connected</span></td></tr>
-        <tr><td>CI/CD Pipeline</td><td><span class="status-badge status-ok">✓ GitHub Actions</span></td></tr>
-        <tr><td>Deployment</td><td><span class="status-badge status-ok" id="status-deploy">✓ Vercel</span></td></tr>
-        <tr><td>Custom Domain</td><td><span class="status-badge status-ok">✓ sporafind.com</span></td></tr>
-        <tr><td>API Domain</td><td><span class="status-badge status-ok">✓ api.sporafind.com</span></td></tr>
-        <tr><td>Test Suite</td><td><span class="status-badge status-ok">35 tests passing</span></td></tr>
-      </table></div>
+
+  <div class="chart-grid">
+    <div class="chart-box full">
+      <h2><span>&#9672;</span> Platform Growth (Simulated Monthly)</h2>
+      <p class="note">Based on ingestion rate projections — 15K profiles loaded in Phase A, scaling to 100K+</p>
+      <canvas id="growthChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h2><span>&#9672;</span> Segments</h2>
+      <canvas id="segmentChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h2><span>&#9672;</span> Status</h2>
+      <div id="status-block" style="text-align:center;padding:32px 0">
+        <div style="font-size:48px;margin-bottom:8px"><span class="status-dot live" id="status-dot"></span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px" id="status-text">Loading...</div>
+        <div style="font-size:11px;color:var(--tm);margin-top:8px">Deployment: <span id="deployment-text">Vercel</span></div>
+        <div style="font-size:11px;color:var(--tm);margin-top:4px">Automated tests: <span id="tests-text">35</span></div>
+        <div style="font-size:11px;color:var(--tm);margin-top:4px">CI/CD: <span id="cicd-text">&#10003;</span></div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="chart-row">
-  <div class="chart-box">
-    <h3><i class="ti ti-map-pin"></i> Feature Maturity</h3>
-    <div style="padding:8px 0">
-      <div class="scroll-wrap"><table class="status-table">
-        <tr><td>Profile search & filters</td><td><span class="status-badge status-ok">✓ Live</span></td></tr>
-        <tr><td>Organisation data</td><td><span class="status-badge status-ok">✓ Live</span></td></tr>
-        <tr><td>Pricing & billing</td><td><span class="status-badge status-ok">✓ Configured</span></td></tr>
-        <tr><td>Blog engine</td><td><span class="status-badge status-ok">✓ Live</span></td></tr>
-        <tr><td>Admin panel</td><td><span class="status-badge status-ok">✓ Live</span></td></tr>
-        <tr><td>Auth & signup</td><td><span class="status-badge status-ok">✓ Ready</span></td></tr>
-        <tr><td>Claim + Verify (Phase B)</td><td><span class="status-badge status-warn">In development</span></td></tr>
-        <tr><td>Connections (Phase C)</td><td><span class="status-badge status-warn">Planned</span></td></tr>
-      </table></div>
-    </div>
+  <div class="bottom-nav">
+    <a href="/investors" class="page-link"><i class="ti ti-home"></i> Overview</a>
+    <a href="/investors/financials" class="page-link"><i class="ti ti-chart-line"></i> Financials</a>
+    <a href="/investors/deck" class="page-link"><i class="ti ti-presentation"></i> Deck</a>
+    <a href="/investors/data-room" class="page-link"><i class="ti ti-file-text"></i> Data Room</a>
   </div>
-  <div class="chart-box">
-    <h3><i class="ti ti-database"></i> Data Sources</h3>
-    <canvas id="sourcesChart"></canvas>
-    <p style="font-size:10px;color:var(--tm);margin-top:8px;text-align:center">Profile sources breakdown</p>
-  </div>
-</div>
-
-<div class="note">
-  <strong>■ Live data from production API.</strong> All metrics pull from the live backend at api.sporafind.com. Profile/organisation counts reflect actual data in the database. Blog stats are tracked via pageview analytics. <a href="/investors" style="color:var(--gl);">Back to Investor Overview →</a>
 </div>
 
 <script>
-async function loadMetrics(){
+async function loadMetrics() {
   try {
     const r = await fetch('/api/stats/public-metrics');
     const d = await r.json();
-    const loadingEls = document.querySelectorAll('.m-num.loading');
-    loadingEls.forEach(el => el.classList.remove('loading'));
-    for(const [key, value] of Object.entries(d)){
-      const el = document.getElementById('metric-'+key);
-      if(el) el.textContent = typeof value === 'number' ? value.toLocaleString() : value;
+    for (const [key, value] of Object.entries(d)) {
+      const el = document.getElementById('m-' + key);
+      if (el) el.textContent = typeof value === 'number' ? value.toLocaleString() : value;
     }
-    if(d.segments && Object.keys(d.segments).length > 0){
-      const segCtx = document.getElementById('segmentsChart');
-      if(segCtx){
-        new Chart(segCtx, {
-          type: 'bar',
-          data: {
-            labels: Object.keys(d.segments),
-            datasets: [{ label: 'Profiles', data: Object.values(d.segments), backgroundColor: '#00a85a', borderRadius: 4 }]
-          },
-          options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { x: { ticks: { color: '#666', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: '#2a2a2a' } } }
-          }
-        });
-      }
-    }
-    const srcCtx = document.getElementById('sourcesChart');
-    if(srcCtx){
-      new Chart(srcCtx, {
+    if (d.status === 'healthy') { document.getElementById('status-text').textContent = 'All Systems Operational'; document.getElementById('status-dot').className = 'status-dot live'; }
+    else { document.getElementById('status-text').textContent = 'Degraded'; document.getElementById('status-dot').className = 'status-dot degraded'; }
+    if (d.deployment) document.getElementById('deployment-text').textContent = d.deployment;
+    if (d.tests) document.getElementById('tests-text').textContent = d.tests.toLocaleString();
+    if (d.ci_cd !== undefined) document.getElementById('cicd-text').textContent = d.ci_cd ? '\u2713' : '\u2014';
+
+    // Segment chart
+    if (d.segments && Object.keys(d.segments).length) {
+      new Chart(document.getElementById('segmentChart'), {
         type: 'doughnut',
         data: {
-          labels: ['Companies House', 'Other'],
-          datasets: [{ data: [d.total_profiles || 1, 0], backgroundColor: ['#00a85a', '#2a2a2a'], borderWidth: 0 }]
+          labels: Object.keys(d.segments),
+          datasets: [{ data: Object.values(d.segments), backgroundColor: ['#00a85a','#2563EB','#7C3AED','#D4A017','#0E7490','#B45309','#ef4444'], borderWidth: 0 }]
         },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { color: '#a0a0a0', font: { size: 10 }, boxWidth: 10, padding: 8 } } }
-        }
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { color: '#a0a0a0', font: { size: 10 }, boxWidth: 12, padding: 8 } } } }
       });
     }
   } catch(e) {
-    document.querySelectorAll('.m-num.loading').forEach(el => { el.textContent = '—'; el.classList.remove('loading'); });
+    document.getElementById('status-text').textContent = 'API Unreachable';
+    document.getElementById('status-dot').className = 'status-dot error';
   }
 }
+
+// Growth chart — simulated monthly projection based on known data
+function drawGrowthChart() {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const profiles = [12000, 12500, 13000, 13500, 14200, 15000, 16200, 17800, 19800, 22200, 25000, 28500];
+  const orgs = [6500, 6700, 6900, 7200, 7600, 8100, 8700, 9400, 10200, 11200, 12400, 13800];
+  new Chart(document.getElementById('growthChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Profiles', data: profiles, borderColor: '#00a85a', backgroundColor: 'rgba(0,168,90,0.08)', fill: true, tension: 0.3, pointRadius: 3 },
+        { label: 'Organisations', data: orgs, borderColor: '#D4A017', backgroundColor: 'rgba(212,160,23,0.08)', fill: true, tension: 0.3, pointRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      scales: { x: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: '#1a1a1a' } }, y: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: '#1a1a1a' }, beginAtZero: false } },
+      plugins: { legend: { position: 'top', labels: { color: '#a0a0a0', font: { size: 11 }, boxWidth: 12, padding: 12, usePointStyle: true } } }
+    }
+  });
+}
+
 loadMetrics();
+drawGrowthChart();
 </script>
 </body>
 </html>

@@ -4,228 +4,231 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="/js/session.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <title>Sporafind — Financial Model</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--purple:#7C3AED;--teal:#0E7490;--amber:#B45309;--red:#ef4444}
-body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);padding:32px 24px;max-width:960px;margin:0 auto;line-height:1.5}
-h1{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--teal:#0E7490;--red:#ef4444}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);padding:0;line-height:1.5}
+a{color:var(--gl);text-decoration:none}
+.section{max-width:1060px;margin:0 auto;padding:48px 24px}
+h1{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;letter-spacing:-1px}
 h1 span{color:var(--gold)}
-h2{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
-h2 span{color:var(--gold)}
-.subtitle{color:var(--t2);font-size:13px;margin-bottom:16px;border-left:3px solid var(--green);padding-left:14px}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);text-decoration:none;margin-bottom:16px;padding:6px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:6px}
-.back-link:hover{color:var(--t1);background:var(--s2)}
-.assumptions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-.assume-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px 14px}
-.assume-card label{font-size:11px;color:var(--t2);display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.assume-card label span{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--t1)}
-.assume-card input[type=range]{width:100%;height:5px;-webkit-appearance:none;appearance:none;background:var(--s3);border-radius:3px;border:1px solid var(--bd);outline:none}
-.assume-card input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gl);cursor:pointer;border:2px solid var(--s0)}
-.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.fm-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px;text-align:center}
-.fm-card .fm-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700}
-.fm-card .fm-label{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.chart-box{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:20px}
-.chart-box h3{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.chart-box h3 i{color:var(--gl)}
-.chart-box canvas{max-height:260px}
-.summary-table{width:100%;border-collapse:collapse;margin-bottom:20px}
-.summary-table th{padding:8px 12px;font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;text-align:right;border-bottom:2px solid var(--bd)}
-.summary-table th:first-child{text-align:left}
-.summary-table td{padding:8px 12px;font-size:12px;text-align:right;border-bottom:1px solid var(--bd);color:var(--t2);font-family:'JetBrains Mono',monospace}
-.summary-table td:first-child{text-align:left;color:var(--t1);font-family:'Inter',sans-serif;font-weight:500}
-.summary-table tr:last-child td{border-bottom:none;font-weight:700;color:var(--gl);font-size:13px}
-.btn{display:inline-block;font-size:11px;font-weight:600;padding:8px 16px;border-radius:6px;background:var(--gl);color:var(--s0);border:none;cursor:pointer;text-decoration:none;transition:all .15s;margin-right:8px}
-.btn:hover{background:#00c86e}
-.btn-outline{background:transparent;color:var(--t1);border:1px solid var(--bd)}
-.btn-outline:hover{background:var(--s2)}
-.scenario-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
-.scenario-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:14px;text-align:center}
-.scenario-card.highlight{border-color:var(--gl);box-shadow:0 0 0 1px var(--gl)}
-.scenario-card .sc-name{font-size:11px;color:var(--tm);text-transform:uppercase;letter-spacing:1px}
-.scenario-card .sc-rev{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--t1);margin:6px 0}
-.scenario-card .sc-detail{font-size:10px;color:var(--t2);line-height:1.5}
-.scenario-card .sc-tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:8px;margin-top:6px}
-.tag-conservative{background:#2e1a1a;color:var(--red);border:1px solid #4f2a2a}
-.tag-base{background:#2e2e1a;color:var(--gold);border:1px solid #4f4f2a}
-.tag-optimistic{background:#0a2e1a;color:var(--gl);border:1px solid #1a4f2a}
-.scroll-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.scroll-wrap table{min-width:600px}
+h2{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin:0 0 16px}
+h2 i{color:var(--gold);margin-right:6px}
+.hero{background:linear-gradient(135deg,#0a1a2e,#1a2e1a);padding:48px 24px;text-align:center;border-bottom:1px solid var(--gl)}
+.hero .subtitle{color:var(--t2);font-size:14px;max-width:640px;margin:8px auto 0}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:24px 0}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px}
+.card .big{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:var(--gl);display:block}
+.card .big.gold{color:var(--gold)}
+.card .big.blue{color:var(--blue)}
+.card .big.red{color:var(--red)}
+.card p{font-size:11px;color:var(--tm);margin-top:4px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}
+.chart-box{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px}
+.chart-box.full{grid-column:1/-1}
+.chart-box canvas{max-height:300px;max-width:100%}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+th{text-align:left;padding:10px 12px;color:var(--tm);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.5px;border-bottom:1px solid var(--bd)}
+td{padding:10px 12px;border-bottom:1px solid var(--s2);color:var(--t2)}
+td.num{font-family:'JetBrains Mono',monospace;text-align:right;color:var(--t1)}
+tr.highlight td{background:rgba(0,168,90,0.06);color:var(--gl);font-weight:600}
+tr.total td{border-top:2px solid var(--gl);font-weight:700;color:var(--t1)}
+.assumptions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.assumption-item{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center}
+.assumption-item .ai-label{font-size:11px;color:var(--t2)}
+.assumption-item .ai-val{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gl)}
+input[type=range]{width:120px;accent-color:var(--gl);cursor:pointer}
+input[type=number]{width:80px;background:var(--s0);border:1px solid var(--bd);border-radius:4px;color:var(--t1);padding:4px 6px;font-family:'JetBrains Mono',monospace;font-size:12px;text-align:right}
+input[type=number]:focus{outline:none;border-color:var(--gl)}
+.bottom-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:32px;padding:24px 0 0;border-top:1px solid var(--bd)}
+.page-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--t2);padding:8px 14px;background:var(--s1);border:1px solid var(--bd);border-radius:8px;transition:all .15s;text-decoration:none}
+.page-link:hover{background:var(--s2);color:var(--t1);border-color:var(--bds);text-decoration:none}
+.page-link i{color:var(--gl)}
 @media(max-width:640px){
-  body{padding:16px 12px}
-  .assumptions,.metrics-row,.scenario-cards{grid-template-columns:1fr}
+  .chart-grid,.assumptions{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:22px}
+  .section{padding:32px 16px}
+  input[type=range]{width:80px}
 }
 </style>
 </head>
 <body>
-<a href="/investors" class="back-link"><i class="ti ti-arrow-left"></i> Back to Investor Overview</a>
-<h1><span>◆</span> Financial Model</h1>
-<div class="subtitle">Interactive 12-month projection. Adjust the sliders to see how changes in growth, conversion, and pricing affect revenue and runway. All calculations run client-side.</div>
-
-<h2><span>◆</span> Key Assumptions</h2>
-<div class="assumptions">
-  <div class="assume-card"><label>Monthly new signups <span id="val-growth">200</span></label><input type="range" id="slider-growth" min="50" max="2000" step="50" value="200"></div>
-  <div class="assume-card"><label>Free → Pro conversion <span id="val-conv">5%</span></label><input type="range" id="slider-conv" min="1" max="15" step="0.5" value="5"></div>
-  <div class="assume-card"><label>Pro → Enterprise conversion <span id="val-ent-conv">3%</span></label><input type="range" id="slider-ent-conv" min="0.5" max="10" step="0.5" value="3"></div>
-  <div class="assume-card"><label>Monthly churn rate <span id="val-churn">5%</span></label><input type="range" id="slider-churn" min="1" max="15" step="0.5" value="5"></div>
-  <div class="assume-card"><label>Monthly growth in signups <span id="val-mom">10%</span></label><input type="range" id="slider-mom" min="0" max="30" step="1" value="10"></div>
-  <div class="assume-card"><label>Monthly burn rate <span id="val-burn">$4,000</span></label><input type="range" id="slider-burn" min="2000" max="10000" step="500" value="4000"></div>
+<div class="hero">
+  <span style="font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;background:rgba(0,168,90,0.15);color:var(--gl);border:1px solid rgba(0,168,90,0.3)">&#9889; Interactive Financial Model</span>
+  <h1 style="margin-top:12px">Sporafind <span>Financial Projections</span></h1>
+  <p class="subtitle">Three-year financial model with adjustable assumptions. Click and drag sliders to see how changes affect revenue, costs, and runway.</p>
 </div>
 
-<h2><span>◆</span> 12-Month Projection</h2>
-<div class="metrics-row" id="metricsRow">
-  <div class="fm-card"><div class="fm-num" id="fm-mrr" style="color:var(--gl)">—</div><div class="fm-label">MRR (month 12)</div></div>
-  <div class="fm-card"><div class="fm-num" id="fm-arr" style="color:var(--gold)">—</div><div class="fm-label">ARR run-rate</div></div>
-  <div class="fm-card"><div class="fm-num" id="fm-total-users" style="color:var(--blue)">—</div><div class="fm-label">Total users (mo 12)</div></div>
-  <div class="fm-card"><div class="fm-num" id="fm-runway" style="color:var(--purple)">—</div><div class="fm-label">Months of runway</div></div>
-</div>
+<div class="section">
+  <h2><i class="ti ti-sliders"></i> Key Assumptions</h2>
+  <div class="assumptions">
+    <div class="assumption-item"><div class="ai-label">Pro subscribers (Year 1)</div><div><input type="range" id="a-pro" min="10" max="500" value="80"> <span class="ai-val" id="v-pro">80</span></div></div>
+    <div class="assumption-item"><div class="ai-label">Enterprise subscribers (Y1)</div><div><input type="range" id="a-enterprise" min="2" max="50" value="10"> <span class="ai-val" id="v-enterprise">10</span></div></div>
+    <div class="assumption-item"><div class="ai-label">Annual growth rate</div><div><input type="range" id="a-growth" min="20" max="200" value="80"> <span class="ai-val" id="v-growth">80</span>%</div></div>
+    <div class="assumption-item"><div class="ai-label">Monthly burn (opex)</div><div><input type="number" id="a-burn" value="8000" step="1000" min="2000" max="30000"> <span class="ai-val">$</span></div></div>
+  </div>
 
-<div class="chart-box">
-  <h3><i class="ti ti-chart-line"></i> Monthly Revenue Projection</h3>
-  <canvas id="revenueChart"></canvas>
-</div>
+  <div class="metrics-grid" id="revenue-metrics">
+    <div class="card"><span class="big" id="r1">$27.8K</span><p>Year 1 Revenue</p></div>
+    <div class="card"><span class="big gold" id="r2">$138.7K</span><p>Year 2 Revenue</p></div>
+    <div class="card"><span class="big blue" id="r3">$427.2K</span><p>Year 3 Revenue</p></div>
+    <div class="card"><span class="big red" id="runway">18.8</span><p>Runway (months) with $100K raise</p></div>
+  </div>
 
-<h2><span>◆</span> Scenario Analysis</h2>
-<div class="scenario-cards" id="scenarioCards"></div>
+  <div class="chart-grid">
+    <div class="chart-box full">
+      <h2><i class="ti ti-chart-line"></i> Revenue Projection</h2>
+      <canvas id="revenueChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h2><i class="ti ti-chart-pie"></i> Year 3 Revenue Mix</h2>
+      <canvas id="mixChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h2><i class="ti ti-currency-dollar"></i> Unit Economics</h2>
+      <table>
+        <tr><th>Metric</th><th class="num">Pro</th><th class="num">Enterprise</th></tr>
+        <tr><td>Monthly price</td><td class="num">$29</td><td class="num">$99</td></tr>
+        <tr><td>Annual price (2mo free)</td><td class="num">$290</td><td class="num">$990</td></tr>
+        <tr><td>Est. CAC</td><td class="num">$50</td><td class="num">$200</td></tr>
+        <tr><td>Gross margin</td><td class="num">85%</td><td class="num">92%</td></tr>
+        <tr><td>Monthly churn</td><td class="num">5%</td><td class="num">2%</td></tr>
+        <tr class="total"><td>LTV (12mo)</td><td class="num">$493</td><td class="num">$1,165</td></tr>
+      </table>
+    </div>
+  </div>
 
-<h2><span>◆</span> Monthly Breakdown</h2>
-<div class="chart-box">
-  <div class="scroll-wrap"><table class="summary-table" id="monthlyTable">
-    <thead><tr><th>Month</th><th>New Users</th><th>Free</th><th>Pro</th><th>Enterprise</th><th>MRR</th><th>Burn</th><th>Net</th></tr></thead>
-    <tbody></tbody>
-  </table></div>
-</div>
+  <h2><i class="ti ti-table"></i> Full P&amp;L Projection</h2>
+  <table id="pnl-table">
+    <tr><th>Item</th><th class="num">Year 1</th><th class="num">Year 2</th><th class="num">Year 3</th></tr>
+    <tr><td>Pro subscriptions</td><td class="num" id="pnl-pro1">$27,840</td><td class="num" id="pnl-pro2">$90,048</td><td class="num" id="pnl-pro3">$220,877</td></tr>
+    <tr><td>Enterprise subscriptions</td><td class="num" id="pnl-ent1">$11,880</td><td class="num" id="pnl-ent2">$48,643</td><td class="num" id="pnl-ent3">$206,381</td></tr>
+    <tr class="highlight"><td>Total Revenue</td><td class="num" id="pnl-rev1">$39,720</td><td class="num" id="pnl-rev2">$138,691</td><td class="num" id="pnl-rev3">$427,258</td></tr>
+    <tr><td>Hosting & infrastructure</td><td class="num">$3,600</td><td class="num">$7,200</td><td class="num">$14,400</td></tr>
+    <tr><td>API costs (OpenAI, Bright Data)</td><td class="num">$4,200</td><td class="num">$8,400</td><td class="num">$16,800</td></tr>
+    <tr><td>Founder salary</td><td class="num">$48,000</td><td class="num">$60,000</td><td class="num">$80,000</td></tr>
+    <tr><td>Contractors</td><td class="num">$36,000</td><td class="num">$48,000</td><td class="num">$60,000</td></tr>
+    <tr><td>Marketing</td><td class="num">$2,400</td><td class="num">$12,000</td><td class="num">$24,000</td></tr>
+    <tr><td>Legal & compliance</td><td class="num">$2,000</td><td class="num">$3,000</td><td class="num">$5,000</td></tr>
+    <tr class="total"><td>Total Costs</td><td class="num" id="pnl-cost1">$96,200</td><td class="num" id="pnl-cost2">$138,600</td><td class="num" id="pnl-cost3">$200,200</td></tr>
+    <tr><td>Net Income</td><td class="num" id="pnl-net1" style="color:var(--red)">-$56,480</td><td class="num" id="pnl-net2">$91</td><td class="num" id="pnl-net3" style="color:var(--gl)">$227,058</td></tr>
+  </table>
 
-<div style="display:flex;gap:8px;margin-bottom:20px">
-  <button class="btn" onclick="downloadCSV()">📥 Download CSV</button>
-  <a href="/investors/financials" class="btn btn-outline">🔄 Reset to defaults</a>
-</div>
-
-<div class="note" style="background:#1a1a0a;border:1px solid #3f3f0a;border-radius:8px;padding:12px 16px;font-size:12px;color:var(--t2);line-height:1.6">
-<strong>■ Notes:</strong> MRR = Monthly Recurring Revenue (Pro $29 + Enterprise $99). ARR = MRR × 12. Runway = cash remaining ÷ monthly net burn. Churn applied monthly. Growth compounds monthly. Phase C connection fees (15% platform take) not included — this is a pure subscription model projection. <a href="/investors" style="color:var(--gl);">Back to Investor Overview →</a>
+  <div class="bottom-nav">
+    <a href="/investors" class="page-link"><i class="ti ti-home"></i> Overview</a>
+    <a href="/investors/metrics" class="page-link"><i class="ti ti-dashboard"></i> Metrics</a>
+    <a href="/investors/deck" class="page-link"><i class="ti ti-presentation"></i> Deck</a>
+    <a href="/investors/data-room" class="page-link"><i class="ti ti-file-text"></i> Data Room</a>
+  </div>
 </div>
 
 <script>
-const PRO_PRICE = 29, ENT_PRICE = 99;
-let revenueChart = null;
+function fmt(num) { return '$' + Math.round(num).toLocaleString(); }
+function fmtShort(num) { if (num >= 1000000) return '$' + (num/1000000).toFixed(1) + 'M'; if (num >= 1000) return '$' + (num/1000).toFixed(1) + 'K'; return '$' + Math.round(num).toLocaleString(); }
 
-function calc(){
-  const growth = parseInt(document.getElementById('slider-growth').value);
-  const conv = parseFloat(document.getElementById('slider-conv').value) / 100;
-  const entConv = parseFloat(document.getElementById('slider-ent-conv').value) / 100;
-  const churn = parseFloat(document.getElementById('slider-churn').value) / 100;
-  const mom = parseFloat(document.getElementById('slider-mom').value) / 100;
-  const burn = parseInt(document.getElementById('slider-burn').value);
+let revenueChart, mixChart;
 
-  document.getElementById('val-growth').textContent = growth;
-  document.getElementById('val-conv').textContent = (conv * 100).toFixed(1) + '%';
-  document.getElementById('val-ent-conv').textContent = (entConv * 100).toFixed(1) + '%';
-  document.getElementById('val-churn').textContent = (churn * 100).toFixed(0) + '%';
-  document.getElementById('val-mom').textContent = (mom * 100).toFixed(0) + '%';
-  document.getElementById('val-burn').textContent = '$' + burn.toLocaleString();
+function calcModel() {
+  const pro = parseInt(document.getElementById('a-pro').value);
+  const ent = parseInt(document.getElementById('a-enterprise').value);
+  const growth = parseInt(document.getElementById('a-growth').value) / 100;
+  const monthlyBurn = parseInt(document.getElementById('a-burn').value);
 
-  let free = 0, pro = 0, ent = 0;
-  let months = [], mrrData = [], freeData = [], proData = [], entData = [], usersData = [];
-  let newUsers = growth;
+  const proPrices = [29 * 12 * 0.833, 29 * 12, 29 * 12]; // Y1: 10mo avg (ramp), Y2-3: full year
+  const entPrices = [99 * 12 * 0.833, 99 * 12, 99 * 12];
 
-  for(let m = 1; m <= 12; m++){
-    const newFree = Math.round(newUsers * (1 - conv));
-    const newPro = Math.round(newUsers * conv * (1 - entConv));
-    const newEnt = Math.round(newUsers * conv * entConv);
+  const proSubs = [pro, pro * (1 + growth), pro * (1 + growth) * (1 + growth * 0.7)];
+  const entSubs = [ent, ent * (1 + growth * 0.8), ent * (1 + growth * 0.8) * (1 + growth * 0.6)];
 
-    free = Math.round(free * (1 - churn) + newFree);
-    pro = Math.round(pro * (1 - churn) + newPro);
-    ent = Math.round(ent * (1 - churn) + newEnt);
+  const proRev = proSubs.map((s, i) => Math.round(s * proPrices[i]));
+  const entRev = entSubs.map((s, i) => Math.round(s * entPrices[i]));
+  const totalRev = proRev.map((v, i) => v + entRev[i]);
 
-    const mrr = pro * PRO_PRICE + ent * ENT_PRICE;
-    months.push('M' + m);
-    mrrData.push(mrr);
-    freeData.push(free);
-    proData.push(pro);
-    entData.push(ent);
-    usersData.push(free + pro + ent);
+  // Costs scale with growth
+  const baseCosts = [monthlyBurn * 12, monthlyBurn * 12 * 1.3, monthlyBurn * 12 * 1.6];
+  const infraCosts = [3600, 7200, 14400];
+  const apiCosts = [4200, 8400, 16800];
+  const marketingCosts = [2400, 12000, 24000];
+  const legalCosts = [2000, 3000, 5000];
+  const totalCosts = baseCosts.map((v, i) => v + infraCosts[i] + apiCosts[i] + marketingCosts[i] + legalCosts[i]);
+  const netIncome = totalRev.map((v, i) => v - totalCosts[i]);
 
-    newUsers = Math.round(newUsers * (1 + mom));
-  }
+  return { proSubs, entSubs, proRev, entRev, totalRev, totalCosts, netIncome, monthlyBurn };
+}
 
-  const finalMRR = mrrData[11];
-  const finalARR = finalMRR * 12;
-  const totalUsers = usersData[11];
-  const annualRevenue = mrrData.reduce((a,b) => a+b, 0);
-  const annualBurn = burn * 12;
-  const monthsRunway = annualRevenue > annualBurn ? 60 : Math.floor((50000 + annualRevenue) / Math.max(annualBurn - annualRevenue, 1));
+function updateUI() {
+  const d = calcModel();
 
-  document.getElementById('fm-mrr').textContent = '$' + finalMRR.toLocaleString();
-  document.getElementById('fm-arr').textContent = '$' + finalARR.toLocaleString();
-  document.getElementById('fm-total-users').textContent = totalUsers.toLocaleString();
-  document.getElementById('fm-runway').textContent = Math.min(monthsRunway, 60) + ' mo';
+  document.getElementById('v-pro').textContent = document.getElementById('a-pro').value;
+  document.getElementById('v-enterprise').textContent = document.getElementById('a-enterprise').value;
+  document.getElementById('v-growth').textContent = document.getElementById('a-growth').value;
 
-  // Scenarios
-  const scenarios = [
-    {name:'Conservative',mult:0.5,tag:'tag-conservative',label:'Half growth'},
-    {name:'Base Case',mult:1,tag:'tag-base',label:'Current assumptions',highlight:true},
-    {name:'Optimistic',mult:2,tag:'tag-optimistic',label:'Double growth'},
-  ];
-  document.getElementById('scenarioCards').innerHTML = scenarios.map(s => {
-    const scMRR = Math.round(finalMRR * s.mult);
-    return `<div class="scenario-card${s.highlight?' highlight':''}"><div class="sc-name">${s.name}</div><div class="sc-rev">$${scMRR.toLocaleString()}</div><div class="sc-detail">MRR month 12 · ${s.label}</div><span class="sc-tag ${s.tag}">${scMRR > 50000 ? '🚀 Scale' : scMRR > 10000 ? '📈 Growing' : '🌱 Early'}</span></div>`;
-  }).join('');
+  document.getElementById('r1').textContent = fmtShort(d.totalRev[0]);
+  document.getElementById('r2').textContent = fmtShort(d.totalRev[1]);
+  document.getElementById('r3').textContent = fmtShort(d.totalRev[2]);
 
-  // Table
-  let tableHtml = '';
-  for(let i = 0; i < 12; i++){
-    const net = mrrData[i] - burn;
-    tableHtml += `<tr><td>Month ${i+1}</td><td>${(i===0?growth:Math.round(growth*Math.pow(1+mom,i))).toLocaleString()}</td><td>${freeData[i].toLocaleString()}</td><td>${proData[i].toLocaleString()}</td><td>${entData[i].toLocaleString()}</td><td>$${mrrData[i].toLocaleString()}</td><td>$${burn.toLocaleString()}</td><td style="color:${net>=0?'var(--gl)':'var(--red)'}">${net>=0?'+':''}$${net.toLocaleString()}</td></tr>`;
-  }
-  document.querySelector('#monthlyTable tbody').innerHTML = tableHtml;
+  const raise = 100000;
+  const avgBurn = d.monthlyBurn + 3000;
+  const runway = (raise / avgBurn).toFixed(1);
+  document.getElementById('runway').textContent = runway;
 
-  // Chart
-  const ctx = document.getElementById('revenueChart');
-  if(revenueChart) revenueChart.destroy();
-  revenueChart = new Chart(ctx, {
-    type: 'line',
+  // P&L table
+  document.getElementById('pnl-pro1').textContent = fmt(d.proRev[0]);
+  document.getElementById('pnl-pro2').textContent = fmt(d.proRev[1]);
+  document.getElementById('pnl-pro3').textContent = fmt(d.proRev[2]);
+  document.getElementById('pnl-ent1').textContent = fmt(d.entRev[0]);
+  document.getElementById('pnl-ent2').textContent = fmt(d.entRev[1]);
+  document.getElementById('pnl-ent3').textContent = fmt(d.entRev[2]);
+  document.getElementById('pnl-rev1').textContent = fmt(d.totalRev[0]);
+  document.getElementById('pnl-rev2').textContent = fmt(d.totalRev[1]);
+  document.getElementById('pnl-rev3').textContent = fmt(d.totalRev[2]);
+  document.getElementById('pnl-cost1').textContent = fmt(d.totalCosts[0]);
+  document.getElementById('pnl-cost2').textContent = fmt(d.totalCosts[1]);
+  document.getElementById('pnl-cost3').textContent = fmt(d.totalCosts[2]);
+
+  const net1 = document.getElementById('pnl-net1');
+  const net2 = document.getElementById('pnl-net2');
+  const net3 = document.getElementById('pnl-net3');
+  net1.textContent = fmt(d.netIncome[0]); net1.style.color = d.netIncome[0] < 0 ? 'var(--red)' : 'var(--gl)';
+  net2.textContent = fmt(d.netIncome[1]); net2.style.color = d.netIncome[1] < 0 ? 'var(--red)' : 'var(--gl)';
+  net3.textContent = fmt(d.netIncome[2]); net3.style.color = d.netIncome[2] < 0 ? 'var(--red)' : 'var(--gl)';
+
+  // Revenue chart
+  if (revenueChart) revenueChart.destroy();
+  revenueChart = new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
     data: {
-      labels: months,
+      labels: ['Year 1', 'Year 2', 'Year 3'],
       datasets: [
-        { label: 'MRR', data: mrrData, borderColor: '#00a85a', backgroundColor: 'rgba(0,168,90,0.1)', fill: true, tension: 0.3, pointRadius: 3 },
-        { label: 'Burn', data: Array(12).fill(burn), borderColor: '#ef4444', borderDash: [4,4], pointRadius: 0, borderWidth: 1.5 }
+        { label: 'Pro', data: d.proRev, backgroundColor: '#00a85a', borderRadius: 4 },
+        { label: 'Enterprise', data: d.entRev, backgroundColor: '#D4A017', borderRadius: 4 }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { color: '#a0a0a0', font: { size: 11 }, boxWidth: 12, padding: 12 } }
-      },
-      scales: {
-        x: { ticks: { color: '#666', font: { size: 10 } }, grid: { color: '#2a2a2a' } },
-        y: { ticks: { color: '#666', font: { size: 10 }, callback: v => '$'+v.toLocaleString() }, grid: { color: '#2a2a2a' } }
-      }
+      responsive: true, maintainAspectRatio: true, scales: { x: { stacked: true, ticks: { color: '#666', font: { size: 11 } }, grid: { display: false } }, y: { stacked: true, ticks: { color: '#666', font: { size: 10 }, callback: v => fmtShort(v) }, grid: { color: '#1a1a1a' } } },
+      plugins: { legend: { position: 'top', labels: { color: '#a0a0a0', font: { size: 11 }, boxWidth: 12, usePointStyle: true } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmt(ctx.raw) } } }
     }
   });
-}
 
-document.querySelectorAll('.assume-card input[type=range]').forEach(el => {
-  el.addEventListener('input', calc);
-});
-calc();
-
-function downloadCSV(){
-  const table = document.getElementById('monthlyTable');
-  let csv = 'Month,New Users,Free,Pro,Enterprise,MRR,Burn,Net\n';
-  table.querySelectorAll('tbody tr').forEach(row => {
-    const cells = row.querySelectorAll('td');
-    csv += Array.from(cells).map(c => c.textContent.replace(/,/g,'')).join(',') + '\n';
+  // Mix chart
+  if (mixChart) mixChart.destroy();
+  mixChart = new Chart(document.getElementById('mixChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Pro', 'Enterprise'],
+      datasets: [{ data: [d.proRev[2], d.entRev[2]], backgroundColor: ['#00a85a', '#D4A017'], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { color: '#a0a0a0', font: { size: 11 }, boxWidth: 12, padding: 12 } }, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + fmt(ctx.raw) + ' (' + Math.round(ctx.raw / (d.proRev[2]+d.entRev[2]) * 100) + '%)' } } } }
   });
-  const blob = new Blob([csv], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'sporafind-financial-model.csv';
-  a.click();
 }
+
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', updateUI));
+updateUI();
 </script>
 </body>
 </html>
