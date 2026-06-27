@@ -39,13 +39,11 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 class RequestBodySizeMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         content_length = request.headers.get("content-length")
-        if content_length:
-            size = int(content_length)
-            if size > 1_048_576:
-                return JSONResponse(
-                    status_code=413,
-                    content={"detail": "Request body too large (max 1MB)"},
-                )
+        if content_length and int(content_length) > 1_048_576:
+            return JSONResponse(
+                status_code=413,
+                content={"detail": "Request body too large (max 1MB)"},
+            )
         return await call_next(request)
 
 
