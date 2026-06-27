@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     database_url: str = ""
     supabase_url: str = ""
@@ -8,7 +9,7 @@ class Settings(BaseSettings):
     auth_secret: str = ""
     admin_key: str = ""
     public_api_key: str = ""
-    cors_origins: str = "http://localhost:8000,http://localhost:3000"
+    cors_origins: str = "http://localhost:8000,http://localhost:3000,https://www.sporafind.com"
     environment: str = "development"
 
     @property
@@ -16,5 +17,6 @@ class Settings(BaseSettings):
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+
 
 settings = Settings()
