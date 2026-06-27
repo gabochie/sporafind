@@ -490,6 +490,7 @@ img{display:block}
         <a class="sidebar-link" data-view="users"><i class="ti ti-user-search"></i> Users</a>
         <a class="sidebar-link" data-view="team"><i class="ti ti-users-group"></i> Team</a>
         <a class="sidebar-link" data-view="settings"><i class="ti ti-settings"></i> Settings</a>
+        <a class="sidebar-link" data-view="import"><i class="ti ti-cloud-down"></i> Data Import</a>
       </div>
       <div class="sidebar-group">
         <div class="sidebar-group-label">Content</div>
@@ -1462,6 +1463,63 @@ img{display:block}
         </div>
       </div>
 
+      <!-- ===== DATA IMPORT ===== -->
+      <div class="page-view" id="view-import">
+        <div class="page-header">
+          <div class="page-header-left">
+            <div class="page-header-title">Data Import</div>
+            <div class="page-header-sub">Import diaspora profiles from Companies House. Runs as a background job with progress tracking.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:24px">
+          <button class="btn btn-gold btn-md" id="importTriggerBtn" onclick="triggerImport()"><i class="ti ti-cloud-down"></i> Start Import (Sync)</button>
+          <button class="btn btn-outline btn-md" id="importRefreshBtn" onclick="loadImportHistory()"><i class="ti ti-refresh"></i> Refresh Status</button>
+        </div>
+
+        <div id="importCurrent" style="display:none;background:var(--surface-bg);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-size:14px;font-weight:600">Current Import <span id="importRunId" style="font-size:11px;color:var(--text-muted)"></span></div>
+            <span id="importStatusBadge" class="badge" style="padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">Pending</span>
+          </div>
+          <div style="margin:12px 0">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px">
+              <span>Progress</span><span id="importProgressText">0 / 0</span>
+            </div>
+            <div style="width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+              <div id="importProgressBar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--green),#00c86e);border-radius:3px;transition:width .3s"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;font-size:11px">
+            <div><span style="color:var(--text-muted)">Found</span><br><span id="impFound" style="font-weight:600">0</span></div>
+            <div><span style="color:var(--text-muted)">Imported</span><br><span id="impImported" style="font-weight:600;color:var(--green)">0</span></div>
+            <div><span style="color:var(--text-muted)">Failed</span><br><span id="impFailed" style="font-weight:600;color:#ef4444">0</span></div>
+            <div><span style="color:var(--text-muted)">Orgs Imported</span><br><span id="impOrgs" style="font-weight:600;color:var(--gold)">0</span></div>
+          </div>
+          <div id="importError" style="display:none;margin-top:12px;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:12px;color:#ef4444"></div>
+        </div>
+
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Import History</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Found</th>
+                <th>Imported</th>
+                <th>Failed</th>
+                <th>Orgs</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody id="importHistoryBody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">No imports yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- ===== USERS ===== -->
       <div class="page-view" id="view-users">
         <div class="page-header">
@@ -2086,6 +2144,88 @@ async function loadActivityLog() {
   } catch(e) {
     loading.textContent = 'Could not load activity log.';
     console.error('Activity log error', e);
+  }
+}
+
+// ===== DATA IMPORT =====
+let importPollTimer = null;
+
+async function triggerImport() {
+  const btn = document.getElementById('importTriggerBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Importing...';
+  try {
+    const r = await fetch('/admin/import/start-sync', { headers: { 'X-Admin-Key': 'sporafind_admin_v1' } });
+    const data = await r.json();
+    showImportResult(data);
+  } catch(e) {
+    document.getElementById('importCurrent').style.display = 'block';
+    document.getElementById('importStatusBadge').textContent = 'Error';
+    document.getElementById('importError').style.display = 'block';
+    document.getElementById('importError').textContent = 'Failed to start import: ' + e.message;
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-cloud-down"></i> Start Import (Sync)';
+  loadImportHistory();
+}
+
+function showImportResult(data) {
+  const el = document.getElementById('importCurrent');
+  el.style.display = 'block';
+  document.getElementById('importRunId').textContent = '#' + data.id.slice(0,8);
+  document.getElementById('importStatusBadge').textContent = data.status;
+  document.getElementById('impFound').textContent = data.records_imported + data.records_failed;
+  document.getElementById('impImported').textContent = data.records_imported || 0;
+  document.getElementById('impFailed').textContent = data.records_failed || 0;
+  document.getElementById('impOrgs').textContent = data.orgs_imported || 0;
+  document.getElementById('importProgressText').textContent = (data.records_imported || 0) + ' / ' + ((data.records_imported || 0) + (data.records_failed || 0));
+
+  const total = (data.records_imported || 0) + (data.records_failed || 0);
+  const pct = total > 0 ? Math.round((data.records_imported || 0) / total * 100) : 0;
+  document.getElementById('importProgressBar').style.width = pct + '%';
+
+  if (data.error_message) {
+    document.getElementById('importError').style.display = 'block';
+    document.getElementById('importError').textContent = data.error_message;
+  } else {
+    document.getElementById('importError').style.display = 'none';
+  }
+
+  const badge = document.getElementById('importStatusBadge');
+  badge.style.background = data.status === 'completed' ? 'rgba(0,168,90,0.15)' : data.status === 'failed' ? 'rgba(239,68,68,0.15)' : 'rgba(212,160,23,0.15)';
+  badge.style.color = data.status === 'completed' ? 'var(--green)' : data.status === 'failed' ? '#ef4444' : 'var(--gold)';
+}
+
+async function loadImportHistory() {
+  try {
+    const r = await fetch('/admin/import/status', { headers: { 'X-Admin-Key': 'sporafind_admin_v1' } });
+    const data = await r.json();
+    const tbody = document.getElementById('importHistoryBody');
+    if (!data.runs || !data.runs.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">No imports yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.runs.map(r => {
+      const started = r.started_at ? new Date(r.started_at) : null;
+      const completed = r.completed_at ? new Date(r.completed_at) : null;
+      let duration = '—';
+      if (started && completed) {
+        const secs = Math.round((completed - started) / 1000);
+        duration = secs < 60 ? secs + 's' : Math.floor(secs/60) + 'm ' + (secs%60) + 's';
+      }
+      const statusColor = r.status === 'completed' ? 'var(--green)' : r.status === 'failed' || r.status === 'error' ? '#ef4444' : 'var(--gold)';
+      return `<tr>
+        <td>${r.created_at ? new Date(r.created_at).toLocaleDateString() : '—'}</td>
+        <td style="color:${statusColor};font-weight:600">${r.status}</td>
+        <td>${r.records_found || 0}</td>
+        <td>${r.records_imported || 0}</td>
+        <td>${r.records_failed || 0}</td>
+        <td>${r.orgs_imported || 0}</td>
+        <td>${duration}</td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    console.error('Import history error', e);
   }
 }
 

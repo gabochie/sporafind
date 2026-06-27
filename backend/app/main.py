@@ -12,7 +12,7 @@ from slowapi.util import get_remote_address
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import settings
-from app.database import get_engine
+from app.database import Base, get_engine
 from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog
 
 
@@ -52,6 +52,8 @@ async def lifespan(app: FastAPI):
     engine = None
     try:
         engine = get_engine()
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
     except Exception as e:
         print(f"DB engine init skipped: {e}")
     yield

@@ -1,9 +1,13 @@
+from uuid import uuid4
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import BaseModel
 from sqlalchemy import select, func, text, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from slowapi import Limiter
 from slowapi.util import get_remote_address
+import redis.asyncio as redis
 
 from app.config import settings
 from app.database import get_db, get_session
@@ -11,6 +15,8 @@ from app.models.user import User
 from app.models.profile import Profile
 from app.models.org import Org
 from app.models.activity_log import ActivityLog
+from app.models.import_run import ImportRun
+from app.services.importer import run_import
 
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -409,15 +415,77 @@ async def batch_org_action(
 @limiter.limit("5/minute")
 async def trigger_import(
     request: Request,
+    db: AsyncSession = Depends(get_db),
     admin: bool = Depends(verify_admin),
 ):
-    return {"status": "accepted", "message": "Import triggered (backend job pending)"}
+    import_run_id = str(uuid4())
+    run = ImportRun(id=import_run_id, status="queued")
+    db.add(run)
+    await db.commit()
+
+    try:
+        r = redis.from_url(settings.redis_url, decode_responses=True)
+        await r.lpush("arq:queue", f"{import_run_id}")
+        await r.aclose()
+    except Exception:
+        pass
+
+    return {
+        "status": "accepted",
+        "import_run_id": import_run_id,
+        "message": "Import queued for background processing",
+    }
 
 
 @router.get("/import/status")
 @limiter.limit("20/minute")
 async def import_status(
     request: Request,
+    db: AsyncSession = Depends(get_db),
     admin: bool = Depends(verify_admin),
 ):
-    return {"status": "idle", "last_run": None, "records_imported": 0}
+    latest = await db.execute(
+        select(ImportRun).order_by(ImportRun.created_at.desc()).limit(10)
+    )
+    runs = latest.scalars().all()
+    return {
+        "runs": [
+            {
+                "id": r.id,
+                "status": r.status,
+                "records_found": r.records_found,
+                "records_imported": r.records_imported,
+                "records_failed": r.records_failed,
+                "orgs_found": r.orgs_found,
+                "orgs_imported": r.orgs_imported,
+                "error_message": r.error_message,
+                "started_at": str(r.started_at) if r.started_at else None,
+                "completed_at": str(r.completed_at) if r.completed_at else None,
+                "created_at": str(r.created_at),
+            }
+            for r in runs
+        ]
+    }
+
+
+@router.post("/import/start-sync")
+@limiter.limit("2/minute")
+async def start_import_sync(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    admin: bool = Depends(verify_admin),
+):
+    import_run_id = str(uuid4())
+    run = ImportRun(id=import_run_id, status="queued")
+    db.add(run)
+    await db.commit()
+    await run_import(import_run_id, db)
+    run = await db.get(ImportRun, import_run_id)
+    return {
+        "id": run.id,
+        "status": run.status,
+        "records_imported": run.records_imported,
+        "records_failed": run.records_failed,
+        "orgs_imported": run.orgs_imported,
+        "error_message": run.error_message,
+    }

@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     auth_secret: str = ""
     admin_key: str = ""
     public_api_key: str = ""
+    redis_url: str = "redis://localhost:6379"
     cors_origins: str = "http://localhost:8000,http://localhost:3000,https://www.sporafind.com"
     environment: str = "development"
 
