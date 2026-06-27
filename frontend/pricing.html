@@ -456,11 +456,6 @@ function setBilling(type){
       if (monthly && monthly !== '0') el.innerHTML = '$' + monthly + '<span>/mo</span>';
     });
   }
-  // Fallback for hardcoded IDs
-  const sP = document.getElementById('starterPrice');
-  const gP = document.getElementById('growthPrice');
-  if (sP && !sP.dataset.monthly) sP.innerHTML = type === 'annual' ? '$39<span>/mo</span>' : '$49<span>/mo</span>';
-  if (gP && !gP.dataset.monthly) gP.innerHTML = type === 'annual' ? '$159<span>/mo</span>' : '$199<span>/mo</span>';
 }
 
 // Open first FAQ by default
