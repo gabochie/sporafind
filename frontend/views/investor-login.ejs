@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Sporafind — Investor Portal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--red:#ef4444}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);min-height:100vh;display:flex;align-items:center;justify-content:center;line-height:1.5}
+.auth-wrap{width:100%;max-width:420px;padding:24px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:40px 32px}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
+.logomark{width:36px;height:36px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.star{width:16px;height:16px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.wordmark{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;letter-spacing:-0.5px;color:#fff}
+.wordmark span{color:var(--gold)}
+h1{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;text-align:center;margin-bottom:4px}
+.sub{font-size:13px;color:var(--t2);text-align:center;margin-bottom:28px;line-height:1.6}
+.form-group{margin-bottom:18px}
+label{font-size:12px;font-weight:500;color:var(--t2);display:block;margin-bottom:6px}
+input{width:100%;padding:11px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t1);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+input:focus{border-color:var(--gl)}
+input::placeholder{color:var(--tm)}
+.btn{width:100%;padding:12px;background:var(--gl);color:var(--s0);font-size:14px;font-weight:600;border:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#00c86e}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--t1);border:1px solid var(--bd)}
+.btn-outline:hover{background:var(--s2);border-color:var(--bds)}
+.error{font-size:12px;color:var(--red);margin-top:10px;display:none;align-items:center;gap:6px}
+.error.show{display:flex}
+.success{font-size:12px;color:var(--gl);margin-top:10px;display:none}
+.success.show{display:block}
+.divider{text-align:center;font-size:11px;color:var(--tm);margin:18px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--bd)}
+.divider::before{left:0}
+.divider::after{right:0}
+.demo-hint{text-align:center;font-size:12px;color:var(--tm);margin-top:20px}
+.demo-hint a{color:var(--gl);cursor:pointer;text-decoration:none}
+.demo-hint a:hover{text-decoration:underline}
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.step{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--tm);flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="card">
+    <div class="logo">
+      <div class="logomark"><div class="star"></div></div>
+      <div class="wordmark">Spora<span>Find</span></div>
+    </div>
+    <h1>Investor Portal</h1>
+    <p class="sub">Access the Sporafind pitch deck, financial model, metrics dashboard, and data room.</p>
+
+    <div class="steps">
+      <div class="step"><span class="step-num">1</span> Enter your email to request access</div>
+      <div class="step"><span class="step-num">2</span> We'll verify and send your portal link</div>
+      <div class="step"><span class="step-num">3</span> View deck, financials, and data room</div>
+    </div>
+
+    <div id="loginForm">
+      <div class="form-group">
+        <label>Full name</label>
+        <input type="text" id="investorName" placeholder="Your name" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="investorEmail" placeholder="you@firm.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>Company (optional)</label>
+        <input type="text" id="investorCompany" placeholder="Your investment firm">
+      </div>
+      <button class="btn" id="investorLoginBtn" onclick="doInvestorLogin()"><i class="ti ti-login"></i> Request Access</button>
+      <div class="error" id="investorLoginError"><i class="ti ti-alert-circle"></i> <span id="investorLoginErrorText">Please check your details and try again.</span></div>
+      <div class="success" id="investorLoginSuccess">Access granted — redirecting to your dashboard...</div>
+    </div>
+
+    <div class="divider">or</div>
+    <button class="btn btn-outline" onclick="demoLogin()"><i class="ti ti-flask"></i> Demo Access (Instant)</button>
+
+    <div class="demo-hint">
+      Already have access? <a href="/investors/dashboard">Go to dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+async function doInvestorLogin() {
+  const name = document.getElementById('investorName').value.trim();
+  const email = document.getElementById('investorEmail').value.trim();
+  const company = document.getElementById('investorCompany').value.trim();
+  const errEl = document.getElementById('investorLoginError');
+  const errText = document.getElementById('investorLoginErrorText');
+  const btn = document.getElementById('investorLoginBtn');
+
+  if (!name || !email) {
+    errText.textContent = 'Name and email are required.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Requesting...';
+  errEl.classList.remove('show');
+
+  try {
+    const r = await fetch('/api/investor/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, role: 'investor' }),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      errText.textContent = data.detail || 'Signup failed';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-login"></i> Request Access';
+      return;
+    }
+    localStorage.setItem('sf_investor_token', data.token);
+    localStorage.setItem('sf_investor_user', JSON.stringify(data));
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('investorLoginSuccess').classList.add('show');
+    setTimeout(() => { window.location.href = '/investors/dashboard'; }, 1000);
+  } catch(e) {
+    errText.textContent = 'Could not connect to server.';
+    errEl.classList.add('show');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-login"></i> Request Access';
+  }
+}
+
+async function demoLogin() {
+  const demoEmail = 'investor@sporafind.com';
+  const demoName = 'Demo Investor';
+  try {
+    const r = await fetch('/api/investor/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: demoEmail, name: demoName, role: 'investor' }),
+    });
+    const data = await r.json();
+    if (r.ok) {
+      localStorage.setItem('sf_investor_token', data.token);
+      localStorage.setItem('sf_investor_user', JSON.stringify(data));
+      window.location.href = '/investors/dashboard';
+    }
+  } catch(e) {}
+}
+</script>
+</body>
+</html>

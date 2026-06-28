@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/session.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Sporafind — Investor Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--s0:#0f0f0f;--s1:#1a1a1a;--s2:#242424;--s3:#2e2e2e;--bd:#2a2a2a;--bds:#383838;--t1:#e8e8e8;--t2:#a0a0a0;--tm:#666;--green:#006B3C;--gl:#00a85a;--gold:#D4A017;--blue:#2563EB;--red:#ef4444;--orange:#B45309;--purple:#7C3AED}
+body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);line-height:1.5}
+a{color:var(--gl);text-decoration:none}
+a:hover{text-decoration:underline}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--s1);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100}
+.header-left{display:flex;align-items:center;gap:10px}
+.logomark{width:28px;height:28px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.star{width:13px;height:13px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.wordmark{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;letter-spacing:-0.3px;color:#fff}
+.wordmark span{color:var(--gold)}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-right span{font-size:12px;color:var(--t2)}
+.header-right a{font-size:12px;color:var(--t2);cursor:pointer}
+.header-right a:hover{color:var(--gl);text-decoration:none}
+.container{max-width:960px;margin:0 auto;padding:24px}
+h1{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px}
+h1 span{color:var(--gold)}
+h2{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;margin-bottom:12px}
+h2 span{color:var(--gold)}
+.sub{font-size:13px;color:var(--t2);margin-bottom:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px}
+.card h3{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.card h3 i{color:var(--gl)}
+.card .val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--t1)}
+.card .val .lbl{font-size:11px;color:var(--tm);font-family:'Inter',sans-serif;font-weight:400}
+.resource-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.resource-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:16px;text-align:center;transition:all .15s;cursor:pointer;text-decoration:none;color:var(--t1)}
+.resource-card:hover{background:var(--s2);border-color:var(--gl);text-decoration:none}
+.resource-card i{font-size:28px;color:var(--gl);margin-bottom:8px;display:block}
+.resource-card .r-name{font-size:13px;font-weight:600}
+.resource-card .r-desc{font-size:10px;color:var(--tm);margin-top:2px}
+.input-group{margin-bottom:12px}
+.input-group label{font-size:11px;font-weight:500;color:var(--t2);display:block;margin-bottom:4px}
+.input-group input,.input-group select{width:100%;padding:8px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--t1);font-size:13px;font-family:'Inter',sans-serif;outline:none}
+.input-group input:focus,.input-group select:focus{border-color:var(--gl)}
+.input-group select option{background:var(--s2)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:all .12s}
+.btn-primary{background:var(--gl);color:var(--s0)}
+.btn-primary:hover{background:#00c86e}
+.btn-outline{background:transparent;color:var(--t1);border:1px solid var(--bd)}
+.btn-outline:hover{background:var(--s2);border-color:var(--bds)}
+.btn-sm{padding:6px 12px;font-size:11px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600}
+.badge-green{background:rgba(0,168,90,0.15);color:var(--gl)}
+.badge-gold{background:rgba(212,160,23,0.15);color:var(--gold)}
+.badge-blue{background:rgba(37,99,235,0.15);color:var(--blue)}
+.badge-red{background:rgba(239,68,68,0.15);color:var(--red)}
+.badge-gray{background:var(--s2);color:var(--tm)}
+.msg-item{padding:12px 0;border-bottom:1px solid var(--bd)}
+.msg-item:last-child{border-bottom:none}
+.msg-subject{font-size:13px;font-weight:600;color:var(--t1)}
+.msg-body{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.5}
+.msg-meta{font-size:10px;color:var(--tm);margin-top:4px}
+.empty{text-align:center;padding:24px;color:var(--tm);font-size:13px}
+textarea{width:100%;padding:8px 10px;background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--t1);font-size:13px;font-family:'Inter',sans-serif;outline:none;resize:vertical;min-height:60px}
+textarea:focus{border-color:var(--gl)}
+.notice{padding:10px 14px;border-radius:6px;font-size:12px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.notice-info{background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.2);color:var(--blue)}
+.notice-warn{background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2);color:var(--gold)}
+@media(max-width:640px){.grid-2,.resource-grid{grid-template-columns:1fr}.container{padding:16px}.header{padding:12px 16px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <div class="logomark"><div class="star"></div></div>
+    <div class="wordmark">Spora<span>Find</span> <span style="font-size:10px;color:var(--tm);font-family:'Inter',sans-serif;font-weight:400">· Investor Portal</span></div>
+  </div>
+  <div class="header-right">
+    <span id="investorNameDisplay"></span>
+    <a onclick="logoutInvestor()"><i class="ti ti-logout"></i> Sign out</a>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Loading -->
+  <div id="loadingScreen" style="text-align:center;padding:60px 20px">
+    <i class="ti ti-loader" style="font-size:32px;color:var(--gl);animation:spin 1s linear infinite"></i>
+    <p style="color:var(--tm);margin-top:12px;font-size:13px">Loading your dashboard...</p>
+  </div>
+
+  <!-- Dashboard content (hidden until loaded) -->
+  <div id="dashboardContent" style="display:none">
+
+    <!-- Status notice -->
+    <div id="pendingNotice" class="notice notice-info" style="display:none">
+      <i class="ti ti-clock-hour-4"></i>
+      <span>Your investor profile is pending review. You can browse resources, but some features may be limited until approved.</span>
+    </div>
+    <div id="approvedNotice" class="notice notice-info" style="display:none">
+      <i class="ti ti-circle-check"></i>
+      <span>Your investor profile is approved. Welcome to the Sporafind investor network.</span>
+    </div>
+
+    <h1><span>◆</span> Investor Dashboard</h1>
+    <p class="sub">Welcome, <span id="investorNameGreeting"></span>. Track your commitment, access investor resources, and message the founder.</p>
+
+    <!-- Key metrics -->
+    <div class="grid-2">
+      <div class="card">
+        <h3><i class="ti ti-user-check"></i> Status</h3>
+        <div><span class="badge badge-gold" id="investorStatusBadge">Pending</span></div>
+      </div>
+      <div class="card">
+        <h3><i class="ti ti-coin"></i> Commitment</h3>
+        <div class="val" id="investorCommitmentDisplay">— <span class="lbl">Not yet committed</span></div>
+      </div>
+    </div>
+
+    <!-- Investor Resources -->
+    <h2><span>◆</span> Investor Resources</h2>
+    <div class="resource-grid">
+      <a href="/investors/metrics" class="resource-card">
+        <i class="ti ti-dashboard"></i>
+        <div class="r-name">Live Metrics</div>
+        <div class="r-desc">Growth charts & platform KPIs</div>
+      </a>
+      <a href="/investors/financials" class="resource-card">
+        <i class="ti ti-chart-line"></i>
+        <div class="r-name">Financial Model</div>
+        <div class="r-desc">Interactive P&L with projections</div>
+      </a>
+      <a href="/investors/deck" class="resource-card">
+        <i class="ti ti-presentation"></i>
+        <div class="r-name">Pitch Deck</div>
+        <div class="r-desc">10-slide investor deck</div>
+      </a>
+      <a href="/investors/data-room" class="resource-card">
+        <i class="ti ti-file-text"></i>
+        <div class="r-name">Data Room</div>
+        <div class="r-desc">Cap table, market, legal docs</div>
+      </a>
+    </div>
+
+    <!-- My Commitment -->
+    <h2><span>◆</span> My Interest</h2>
+    <div class="card" style="margin-bottom:24px">
+      <div class="grid-2" style="margin-bottom:0">
+        <div class="input-group">
+          <label>Commitment amount (USD)</label>
+          <input type="number" id="commitAmount" placeholder="e.g. 50000" min="0">
+        </div>
+        <div class="input-group">
+          <label>Tier</label>
+          <select id="commitTier">
+            <option value="">Select tier</option>
+            <option value="pre_seed">Pre-Seed ($10K–$50K)</option>
+            <option value="seed">Seed ($50K–$150K)</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Note to founder (optional)</label>
+        <textarea id="commitNote" placeholder="Any specific questions or areas of interest..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="submitCommitment()"><i class="ti ti-send"></i> Submit Interest</button>
+      <div id="commitResult" style="font-size:11px;color:var(--gl);margin-top:8px;display:none">Interest recorded — the founder will be in touch.</div>
+    </div>
+
+    <!-- Message Founder -->
+    <h2><span>◆</span> Message Founder</h2>
+    <div class="card" style="margin-bottom:24px" id="messageSection">
+      <div id="messageThread"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)">
+        <div class="input-group">
+          <label>Subject</label>
+          <input type="text" id="msgSubject" placeholder="Topic">
+        </div>
+        <div class="input-group">
+          <label>Message</label>
+          <textarea id="msgBody" placeholder="Type your message to the Sporafind founder..."></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="sendMessage()"><i class="ti ti-send"></i> Send Message</button>
+        <div id="msgResult" style="font-size:11px;color:var(--gl);margin-top:8px;display:none">Message sent.</div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <h2><span>◆</span> Next Steps</h2>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-circle-check" style="color:var(--gl)"></i> NDA signed</div>
+        <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-circle-check" style="color:var(--gl)"></i> Deck reviewed</div>
+        <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-circle" style="color:var(--tm)"></i> Call scheduled</div>
+        <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-circle" style="color:var(--tm)"></i> Term sheet</div>
+        <div style="display:flex;align-items:center;gap:8px"><i class="ti ti-circle" style="color:var(--tm)"></i> Committed</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function getToken() {
+  return localStorage.getItem('sf_investor_token');
+}
+
+function getStoredUser() {
+  try { return JSON.parse(localStorage.getItem('sf_investor_user')); } catch { return null; }
+}
+
+// Sync localStorage token to cookie for server-side auth
+(function syncCookie() {
+  const token = getToken();
+  if (token && !document.cookie.includes('investor_token=')) {
+    document.cookie = 'investor_token=' + token + '; path=/; max-age=' + (30*24*60*60);
+  }
+})();
+
+async function apiFetch(path, opts = {}) {
+  const token = getToken();
+  if (!token) { window.location.href = '/investors/login'; return null; }
+  const headers = { 'Content-Type': 'application/json', ...opts.headers };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  try {
+    const r = await fetch(path, { ...opts, headers });
+    if (r.status === 401) { localStorage.removeItem('sf_investor_token'); localStorage.removeItem('sf_investor_user'); window.location.href = '/investors/login'; return null; }
+    if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.detail || 'API error'); }
+    return await r.json();
+  } catch(e) { throw e; }
+}
+
+function logoutInvestor() {
+  localStorage.removeItem('sf_investor_token');
+  localStorage.removeItem('sf_investor_user');
+  window.location.href = '/investors/login';
+}
+
+async function loadDashboard() {
+  document.getElementById('loadingScreen').style.display = 'block';
+  document.getElementById('dashboardContent').style.display = 'none';
+
+  const user = getStoredUser();
+  if (!user) { window.location.href = '/investors/login'; return; }
+
+  document.getElementById('investorNameDisplay').textContent = user.email;
+  document.getElementById('investorNameGreeting').textContent = user.name || 'Investor';
+
+  try {
+    const data = await apiFetch('/api/investor/me');
+    if (!data) return;
+
+    const profile = data.profile || {};
+    const commitment = data.commitment || {};
+
+    // Status badge
+    const status = profile.status || 'pending';
+    const badge = document.getElementById('investorStatusBadge');
+    badge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+    if (status === 'approved') { badge.className = 'badge badge-green'; document.getElementById('approvedNotice').style.display = 'flex'; }
+    else if (status === 'declined') { badge.className = 'badge badge-red'; }
+    else { badge.className = 'badge badge-gold'; document.getElementById('pendingNotice').style.display = 'flex'; }
+
+    // Commitment display
+    const commitEl = document.getElementById('investorCommitmentDisplay');
+    if (commitment.amount) {
+      commitEl.innerHTML = '$' + Number(commitment.amount).toLocaleString() + ' <span class="lbl">· ' + (commitment.tier || 'interested') + '</span>';
+      document.getElementById('commitAmount').value = commitment.amount || '';
+      document.getElementById('commitTier').value = commitment.tier || '';
+    }
+
+    // Load messages
+    loadMessages();
+
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('dashboardContent').style.display = 'block';
+  } catch(e) {
+    document.getElementById('loadingScreen').innerHTML = '<p style="color:var(--red)">Could not load dashboard. <a href="/investors/login">Try again</a></p>';
+  }
+}
+
+async function submitCommitment() {
+  const amount = parseInt(document.getElementById('commitAmount').value) || null;
+  const tier = document.getElementById('commitTier').value || null;
+  const notes = document.getElementById('commitNote').value || null;
+
+  if (!amount || !tier) { alert('Please enter an amount and select a tier.'); return; }
+
+  try {
+    await apiFetch('/api/investor/commit', {
+      method: 'POST',
+      body: JSON.stringify({ amount, tier, notes }),
+    });
+    document.getElementById('commitResult').style.display = 'block';
+    setTimeout(() => location.reload(), 1500);
+  } catch(e) {
+    alert('Failed to submit: ' + e.message);
+  }
+}
+
+async function loadMessages() {
+  try {
+    const data = await apiFetch('/api/investor/messages');
+    const container = document.getElementById('messageThread');
+    if (!data || !data.messages || !data.messages.length) {
+      container.innerHTML = '<div class="empty">No messages yet. Start a conversation with the founder.</div>';
+      return;
+    }
+    container.innerHTML = data.messages.map(m => `
+      <div class="msg-item">
+        <div class="msg-subject">${m.subject || '(No subject)'}</div>
+        <div class="msg-body">${m.body}</div>
+        <div class="msg-meta">${m.created_at ? new Date(m.created_at).toLocaleString() : ''} ${m.read_at ? '· Read' : '· Unread'}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('messageThread').innerHTML = '<div class="empty">Could not load messages.</div>';
+  }
+}
+
+async function sendMessage() {
+  const subject = document.getElementById('msgSubject').value.trim();
+  const body = document.getElementById('msgBody').value.trim();
+  if (!body) { alert('Please enter a message.'); return; }
+  try {
+    await apiFetch('/api/investor/message', {
+      method: 'POST',
+      body: JSON.stringify({ subject, body }),
+    });
+    document.getElementById('msgResult').style.display = 'block';
+    document.getElementById('msgSubject').value = '';
+    document.getElementById('msgBody').value = '';
+    setTimeout(() => { document.getElementById('msgResult').style.display = 'none'; loadMessages(); }, 500);
+  } catch(e) {
+    alert('Failed to send: ' + e.message);
+  }
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

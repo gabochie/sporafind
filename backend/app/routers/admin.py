@@ -15,6 +15,9 @@ from app.models.profile import Profile
 from app.models.org import Org
 from app.models.activity_log import ActivityLog
 from app.models.import_run import ImportRun
+from app.models.investor_profile import InvestorProfile
+from app.models.investor_commitment import InvestorCommitment
+from app.models.investor_message import InvestorMessage
 from app.services.importer import run_import
 
 limiter = Limiter(key_func=get_remote_address)
@@ -408,6 +411,197 @@ async def batch_org_action(
     await db.commit()
     await log_action("batch_orgs", f"{count} orgs: {body.action}")
     return {"status": "ok", "affected": count}
+
+
+@router.get("/investors")
+@limiter.limit("20/minute")
+async def list_investors(
+    request: Request,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    rows = await db.execute(
+        select(
+            User.id, User.email, User.name, User.created_at,
+            InvestorProfile.company, InvestorProfile.investment_focus,
+            InvestorProfile.check_size_min, InvestorProfile.check_size_max,
+            InvestorProfile.status.label("investor_status"),
+            InvestorCommitment.amount, InvestorCommitment.tier,
+            InvestorCommitment.status.label("commitment_status"),
+        )
+        .select_from(User)
+        .outerjoin(InvestorProfile, InvestorProfile.user_id == User.id)
+        .outerjoin(InvestorCommitment, InvestorCommitment.user_id == User.id)
+        .where(User.role == "investor")
+        .order_by(User.created_at.desc())
+    )
+    items = rows.all()
+    return {
+        "investors": [
+            {
+                "id": r.id,
+                "email": r.email,
+                "name": r.name,
+                "company": r.company,
+                "investment_focus": r.investment_focus,
+                "check_size_min": r.check_size_min,
+                "check_size_max": r.check_size_max,
+                "investor_status": r.investor_status or "pending",
+                "commitment_amount": r.amount,
+                "commitment_tier": r.tier,
+                "commitment_status": r.commitment_status,
+                "created_at": str(r.created_at),
+            }
+            for r in items
+        ]
+    }
+
+
+@router.get("/investors/{investor_id}")
+@limiter.limit("20/minute")
+async def get_investor_detail(
+    request: Request,
+    investor_id: str,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    user = await db.get(User, investor_id)
+    if not user or user.role != "investor":
+        raise HTTPException(status_code=404, detail="Investor not found")
+
+    profile_result = await db.execute(
+        select(InvestorProfile).where(InvestorProfile.user_id == user.id)
+    )
+    profile = profile_result.scalar_one_or_none()
+
+    commit_result = await db.execute(
+        select(InvestorCommitment).where(InvestorCommitment.user_id == user.id)
+    )
+    commitment = commit_result.scalar_one_or_none()
+
+    msg_result = await db.execute(
+        select(InvestorMessage)
+        .where(
+            (InvestorMessage.from_user_id == user.id)
+            | (InvestorMessage.to_user_id == user.id)
+        )
+        .order_by(InvestorMessage.created_at.desc())
+        .limit(50)
+    )
+    messages = msg_result.scalars().all()
+
+    return {
+        "user": {"id": user.id, "email": user.email, "name": user.name, "role": user.role},
+        "profile": {
+            "company": profile.company if profile else None,
+            "investment_focus": profile.investment_focus if profile else None,
+            "check_size_min": profile.check_size_min if profile else None,
+            "check_size_max": profile.check_size_max if profile else None,
+            "status": profile.status if profile else "pending",
+            "notes": profile.notes if profile else None,
+        } if profile else None,
+        "commitment": {
+            "amount": commitment.amount if commitment else None,
+            "tier": commitment.tier if commitment else None,
+            "status": commitment.status if commitment else None,
+        } if commitment else None,
+        "messages": [
+            {
+                "id": m.id,
+                "from_user_id": m.from_user_id,
+                "subject": m.subject,
+                "body": m.body,
+                "read_at": str(m.read_at) if m.read_at else None,
+                "created_at": str(m.created_at),
+            }
+            for m in messages
+        ],
+    }
+
+
+class InvestorStatusUpdate(BaseModel):
+    status: str
+
+
+class InvestorNoteUpdate(BaseModel):
+    notes: str
+
+
+class AdminMessageRequest(BaseModel):
+    subject: str | None = None
+    body: str
+
+
+@router.patch("/investors/{investor_id}/status")
+@limiter.limit("10/minute")
+async def update_investor_status(
+    request: Request,
+    investor_id: str,
+    body: InvestorStatusUpdate,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    user = await db.get(User, investor_id)
+    if not user or user.role != "investor":
+        raise HTTPException(status_code=404, detail="Investor not found")
+    result = await db.execute(
+        select(InvestorProfile).where(InvestorProfile.user_id == user.id)
+    )
+    profile = result.scalar_one_or_none()
+    if not profile:
+        profile = InvestorProfile(user_id=user.id)
+        db.add(profile)
+    profile.status = body.status
+    await db.commit()
+    await log_action("investor_status", f"Investor {user.email} status → {body.status}")
+    return {"status": "updated"}
+
+
+@router.patch("/investors/{investor_id}/note")
+@limiter.limit("10/minute")
+async def add_investor_note(
+    request: Request,
+    investor_id: str,
+    body: InvestorNoteUpdate,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(InvestorProfile).where(InvestorProfile.user_id == investor_id)
+    )
+    profile = result.scalar_one_or_none()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Investor profile not found")
+    profile.notes = body.notes
+    await db.commit()
+    await log_action("investor_note", f"Note added for investor {investor_id}")
+    return {"status": "updated"}
+
+
+@router.post("/investors/{investor_id}/message")
+@limiter.limit("10/minute")
+async def admin_reply_investor(
+    request: Request,
+    investor_id: str,
+    body: AdminMessageRequest,
+    admin: bool = Depends(verify_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    admin_result = await db.execute(
+        select(User.id).where(User.role == "admin").limit(1)
+    )
+    admin_user_id = admin_result.scalar_one_or_none()
+
+    msg = InvestorMessage(
+        from_user_id=admin_user_id or investor_id,
+        to_user_id=investor_id,
+        subject=body.subject,
+        body=body.body,
+    )
+    db.add(msg)
+    await db.commit()
+    await log_action("investor_message", f"Message sent to investor {investor_id}")
+    return {"status": "sent", "message_id": msg.id}
 
 
 @router.post("/import/trigger")

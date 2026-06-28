@@ -3,6 +3,7 @@ import inspect
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler, Limiter
@@ -13,7 +14,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import settings
 from app.database import Base, get_engine
-from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog
+from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog, investor
 
 
 # Patch slowapi's deprecated iscoroutinefunction check
@@ -53,9 +54,18 @@ async def lifespan(app: FastAPI):
     try:
         engine = get_engine()
         async with engine.begin() as conn:
+            # Add role column to public.users if it doesn't exist
+            result = await conn.execute(
+                text("SELECT column_name FROM information_schema.columns WHERE table_name='users' AND table_schema='public' AND column_name='role'")
+            )
+            if not result.scalar():
+                await conn.execute(text("ALTER TABLE public.users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user'"))
+                print("Added 'role' column to users table", flush=True)
+            else:
+                print("Role column already exists in public.users", flush=True)
             await conn.run_sync(Base.metadata.create_all)
     except Exception as e:
-        print(f"DB engine init skipped: {e}")
+        print(f"DB init: {e}", flush=True)
     yield
     if engine is not None:
         try:
@@ -98,6 +108,7 @@ app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(pricing.router)
 app.include_router(blog.router)
+app.include_router(investor.router)
 
 
 @app.get("/")

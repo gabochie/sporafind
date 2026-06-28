@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -36,6 +37,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(DIR, 'views'));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get(['/admin', '/workspace', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising'], (req, res) => {
   res.redirect(301, req.path + '.html');
@@ -142,6 +144,64 @@ app.get('/api/pricing', async (req, res) => {
   } catch { res.status(502).json({ plans: [] }); }
 });
 
+// Investor API proxy — forwards Bearer token to FastAPI
+async function proxyInvestorAPI(req, res) {
+  try {
+    const auth = req.headers.authorization || '';
+    const pathSuffix = req.path.replace('/api/investor', '');
+    const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    const url = `${API_BASE}/investor${pathSuffix}${qs}`;
+    const headers = { 'Content-Type': 'application/json' };
+    if (auth) headers['Authorization'] = auth;
+    const opts = { method: req.method, headers };
+    if (!['GET','DELETE'].includes(req.method)) opts.body = JSON.stringify(req.body);
+    const r = await fetch(url, opts);
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+}
+
+app.all('/api/investor/me', (req, res) => proxyInvestorAPI(req, res));
+app.all('/api/investor/profile', (req, res) => proxyInvestorAPI(req, res));
+app.all('/api/investor/commit', (req, res) => proxyInvestorAPI(req, res));
+app.all('/api/investor/message', (req, res) => proxyInvestorAPI(req, res));
+app.all('/api/investor/messages', (req, res) => proxyInvestorAPI(req, res));
+
+// Admin investor API proxy
+app.get('/api/admin/investors', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/investors`, { headers: { 'X-Admin-Key': ADMIN_KEY } });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ investors: [] }); }
+});
+
+app.get('/api/admin/investors/:id', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/investors/${req.params.id}`, { headers: { 'X-Admin-Key': ADMIN_KEY } });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
+app.patch('/api/admin/investors/:id/status', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/investors/${req.params.id}/status`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ADMIN_KEY }, body: JSON.stringify(req.body) });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
+app.patch('/api/admin/investors/:id/note', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/investors/${req.params.id}/note`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ADMIN_KEY }, body: JSON.stringify(req.body) });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
+app.post('/api/admin/investors/:id/message', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/investors/${req.params.id}/message`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ADMIN_KEY }, body: JSON.stringify(req.body) });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
 app.post('/api/analytics/pageview', async (req, res) => {
   try {
     await fetchFromAPI('/blog/analytics/pageview', {
@@ -170,11 +230,65 @@ app.get('/api/analytics/posts', async (req, res) => {
   });
 });
 
+// Investor auth middleware
+async function requireInvestor(req, res, next) {
+  const token = req.cookies?.investor_token || req.query.token;
+  if (!token) return res.redirect('/investors/login');
+  try {
+    const r = await fetch(`${API_BASE}/auth/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!r.ok) return res.redirect('/investors/login');
+    const user = await r.json();
+    if (user.role !== 'investor' && user.role !== 'admin') return res.redirect('/investors/login');
+    req.investor = user;
+    req.investorToken = token;
+    next();
+  } catch {
+    res.redirect('/investors/login');
+  }
+}
+
+// Public teaser page
 app.get('/investors', (req, res) => res.render('investors'));
-app.get('/investors/metrics', (req, res) => res.render('investors-metrics'));
-app.get('/investors/financials', (req, res) => res.render('investors-financials'));
-app.get('/investors/deck', (req, res) => res.render('investors-deck'));
-app.get('/investors/data-room', (req, res) => res.render('investors-data-room'));
+
+// Login/verify pages (public)
+app.get('/investors/login', (req, res) => {
+  if (req.cookies?.investor_token) return res.redirect('/investors/dashboard');
+  res.render('investor-login');
+});
+app.get('/investors/verify', (req, res) => res.render('investor-verify'));
+
+// Login API — returns JWT + sets httpOnly cookie
+app.post('/api/investor/login', express.json(), async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: req.body.email, name: req.body.name, role: 'investor' }),
+    });
+    const data = await r.json();
+    if (!r.ok) return res.status(r.status).json(data);
+    res.cookie('investor_token', data.token, {
+      httpOnly: false, sameSite: 'lax', path: '/',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+    return res.json(data);
+  } catch {
+    res.status(502).json({ detail: 'Backend unavailable' });
+  }
+});
+
+// Dashboard (private)
+app.get('/investors/dashboard', requireInvestor, (req, res) => {
+  res.render('investor-dashboard', { token: req.investorToken, investor: req.investor });
+});
+
+// Private investor pages — behind auth
+app.get('/investors/metrics', requireInvestor, (req, res) => res.render('investors-metrics', { investor: req.investor }));
+app.get('/investors/financials', requireInvestor, (req, res) => res.render('investors-financials', { investor: req.investor }));
+app.get('/investors/deck', requireInvestor, (req, res) => res.render('investors-deck', { investor: req.investor }));
+app.get('/investors/data-room', requireInvestor, (req, res) => res.render('investors-data-room', { investor: req.investor }));
 
 app.get('/sitemap.xml', async (req, res) => {
   let blogPosts = [];
@@ -185,7 +299,7 @@ app.get('/sitemap.xml', async (req, res) => {
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published');
   const site = 'https://sporafind.com';
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising', '/investors', '/investors/metrics', '/investors/financials', '/investors/deck', '/investors/data-room'];
+  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising', '/investors', '/investors/login'];
   staticPages.forEach(p => { xml += `  <url><loc>${site}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`; });
   blogPosts.forEach(p => { xml += `  <url><loc>${site}/blog/${p.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`; });
   xml += '</urlset>';
@@ -225,6 +339,7 @@ if (require.main === module) {
     console.log(' Sporafind running at http://localhost:' + PORT);
     console.log('  Workspace  user@sporafind.com / demo123');
     console.log('  Admin      admin@sporafind.com / demo123');
+    console.log('  Investor   investor@sporafind.com (via portal)');
     console.log('  Blog       http://localhost:' + PORT + '/blog');
   });
 }

@@ -489,6 +489,7 @@ img{display:block}
         <div class="sidebar-group-label">Admin</div>
         <a class="sidebar-link" data-view="users"><i class="ti ti-user-search"></i> Users</a>
         <a class="sidebar-link" data-view="team"><i class="ti ti-users-group"></i> Team</a>
+        <a class="sidebar-link" data-view="investors"><i class="ti ti-chart-line"></i> Investors</a>
         <a class="sidebar-link" data-view="settings"><i class="ti ti-settings"></i> Settings</a>
         <a class="sidebar-link" data-view="import"><i class="ti ti-cloud-down"></i> Data Import</a>
       </div>
@@ -1310,6 +1311,161 @@ img{display:block}
         </div>
       </div>
 
+      <!-- ===== INVESTORS ===== -->
+      <div class="page-view" id="view-investors">
+        <div class="page-header">
+          <div class="page-header-left">
+            <div class="page-header-title">Investors</div>
+            <div class="page-header-sub">Manage investor profiles, review commitments, and correspond with potential backers.</div>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="exportInvestorsCSV()"><i class="ti ti-download"></i> Export CSV</button>
+            <button class="btn btn-gold btn-sm" onclick="loadInvestorsPage()"><i class="ti ti-refresh"></i> Refresh</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon green"><i class="ti ti-users"></i></div>
+            </div>
+            <div class="kpi-value" id="investorTotalCount">0</div>
+            <div class="kpi-label">Total investors</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon gold"><i class="ti ti-coin"></i></div>
+            </div>
+            <div class="kpi-value" id="investorTotalCommitments">$0</div>
+            <div class="kpi-label">Total commitments</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon blue"><i class="ti ti-chart-line"></i></div>
+            </div>
+            <div class="kpi-value" id="investorAvgCheck">$0</div>
+            <div class="kpi-label">Avg check size</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div class="kpi-icon purple"><i class="ti ti-trending-up"></i></div>
+            </div>
+            <div class="kpi-value" id="investorConversionRate">0%</div>
+            <div class="kpi-label">Conversion rate</div>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <div class="data-table-toolbar">
+            <div class="data-table-toolbar-left">
+              <div class="data-table-search">
+                <i class="ti ti-search"></i>
+                <input type="text" placeholder="Search investors..." id="investorSearchInput">
+              </div>
+              <div class="data-table-filters">
+                <select id="investorStatusFilter"><option value="">All status</option><option>pending</option><option>approved</option><option>declined</option></select>
+              </div>
+            </div>
+            <div class="data-table-toolbar-right">
+              <span style="font-size:12px;color:var(--text-muted)"><span id="investorShowing">0</span> investors</span>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Investor</th>
+                <th>Company</th>
+                <th>Focus</th>
+                <th>Commitment</th>
+                <th>Tier</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="investorTableBody">
+              <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">Loading investors...</td></tr>
+            </tbody>
+          </table>
+          <div class="data-table-pagination">
+            <span>Showing <strong id="investorTotalDisplay">0</strong> investors</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Investor detail modal -->
+      <div class="modal-overlay" id="investorModal">
+        <div class="modal">
+          <div class="modal-header">
+            <span class="modal-header-title" id="investorModalTitle">Investor details</span>
+            <button class="modal-close" onclick="document.getElementById('investorModal').classList.remove('open')"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="modal-body" id="investorModalBody" style="max-height:70vh;overflow-y:auto">
+            <div id="investorDetailLoading" style="text-align:center;padding:24px;color:var(--text-muted)">Loading...</div>
+            <div id="investorDetailContent" style="display:none">
+              <div class="profile-detail-header">
+                <div class="profile-detail-avatar" style="background:var(--gold-light);color:var(--gold-dark)" id="invDetailAvatar">IN</div>
+                <div>
+                  <div class="profile-detail-name" id="invDetailName">—</div>
+                  <div class="profile-detail-title" id="invDetailEmail">—</div>
+                </div>
+              </div>
+              <div class="profile-detail-meta">
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Company</div>
+                  <div class="profile-detail-value" id="invDetailCompany">—</div>
+                </div>
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Investment focus</div>
+                  <div class="profile-detail-value" id="invDetailFocus">—</div>
+                </div>
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Check size</div>
+                  <div class="profile-detail-value" id="invDetailCheckSize">—</div>
+                </div>
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Status</div>
+                  <div class="profile-detail-value" id="invDetailStatus">—</div>
+                </div>
+              </div>
+              <div class="profile-detail-section">Commitment</div>
+              <div class="profile-detail-meta">
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Amount</div>
+                  <div class="profile-detail-value" id="invDetailCommitAmount">—</div>
+                </div>
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Tier</div>
+                  <div class="profile-detail-value" id="invDetailCommitTier">—</div>
+                </div>
+                <div class="profile-detail-field">
+                  <div class="profile-detail-label">Commitment status</div>
+                  <div class="profile-detail-value" id="invDetailCommitStatus">—</div>
+                </div>
+              </div>
+              <div class="profile-detail-section">Actions</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+                <button class="btn btn-primary btn-sm" onclick="updateInvestorStatus('approved')"><i class="ti ti-circle-check"></i> Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="updateInvestorStatus('declined')"><i class="ti ti-x"></i> Decline</button>
+                <input type="hidden" id="investorDetailId">
+              </div>
+              <div class="profile-detail-section">Notes</div>
+              <div style="display:flex;gap:8px;margin-bottom:12px">
+                <input type="text" id="invDetailNoteInput" style="flex:1;padding:8px 12px;border:0.5px solid var(--cream2);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;outline:none" placeholder="Add internal note...">
+                <button class="btn btn-outline btn-sm" onclick="addInvestorNote()">Save note</button>
+              </div>
+              <div id="invDetailNotes" style="font-size:13px;color:var(--text-mid);margin-bottom:16px;padding:12px;background:var(--cream);border-radius:var(--radius-sm)">—</div>
+              <div class="profile-detail-section">Messages</div>
+              <div id="invDetailMessages" style="margin-bottom:12px"></div>
+              <div style="display:flex;gap:8px">
+                <input type="text" id="invDetailMsgSubject" style="flex:1;padding:8px 12px;border:0.5px solid var(--cream2);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;outline:none" placeholder="Subject">
+                <button class="btn btn-gold btn-sm" onclick="sendInvestorMessage()">Send</button>
+              </div>
+              <textarea id="invDetailMsgBody" style="width:100%;margin-top:8px;padding:8px 12px;border:0.5px solid var(--cream2);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;outline:none;resize:vertical;min-height:60px" placeholder="Type your reply..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ===== SETTINGS ===== -->
       <div class="page-view" id="view-settings">
         <div class="page-header">
@@ -1804,6 +1960,7 @@ const adminViewConfigs = {
   users: {render: renderUsersTable},
   blog: {render: loadBlogPosts},
   activity: {render: loadActivityLog},
+  investors: {render: loadInvestorsPage},
   search: {render: null},
 };
 
@@ -2227,6 +2384,157 @@ async function loadImportHistory() {
   } catch(e) {
     console.error('Import history error', e);
   }
+}
+
+// ===== INVESTORS PAGE =====
+let investorsData = [];
+
+async function loadInvestorsPage() {
+  try {
+    const r = await fetch('/api/admin/investors');
+    const data = await r.json();
+    investorsData = data.investors || [];
+    renderInvestorsTable();
+    updateInvestorKPIs();
+  } catch(e) {
+    document.getElementById('investorTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">Could not load investors.</td></tr>';
+  }
+}
+
+function updateInvestorKPIs() {
+  const total = investorsData.length;
+  const totalCommit = investorsData.reduce((sum, i) => sum + (i.commitment_amount || 0), 0);
+  const committed = investorsData.filter(i => i.commitment_status === 'committed' || i.commitment_status === 'confirmed').length;
+  const avgCheck = committed > 0 ? Math.round(totalCommit / committed) : 0;
+  const conversionRate = total > 0 ? Math.round((committed / total) * 100) : 0;
+
+  document.getElementById('investorTotalCount').textContent = total;
+  document.getElementById('investorTotalCommitments').textContent = '$' + totalCommit.toLocaleString();
+  document.getElementById('investorAvgCheck').textContent = avgCheck > 0 ? '$' + avgCheck.toLocaleString() : '$0';
+  document.getElementById('investorConversionRate').textContent = conversionRate + '%';
+}
+
+function renderInvestorsTable() {
+  const tbody = document.getElementById('investorTableBody');
+  const filter = document.getElementById('investorStatusFilter')?.value || '';
+  const searchQ = (document.getElementById('investorSearchInput')?.value || '').toLowerCase();
+  const filtered = investorsData.filter(i => {
+    if (filter && i.investor_status !== filter) return false;
+    if (searchQ && !(i.name || '').toLowerCase().includes(searchQ) && !(i.email || '').toLowerCase().includes(searchQ) && !(i.company || '').toLowerCase().includes(searchQ)) return false;
+    return true;
+  });
+  document.getElementById('investorShowing').textContent = filtered.length;
+  document.getElementById('investorTotalDisplay').textContent = filtered.length;
+  tbody.innerHTML = filtered.map(i => {
+    const statusColor = i.investor_status === 'approved' ? 'badge-green' : i.investor_status === 'declined' ? 'badge-red' : 'badge-gold';
+    const initials = (i.name || i.email || '??').charAt(0).toUpperCase() + ((i.name || '').split(' ')[1] || '').charAt(0).toUpperCase() || '?';
+    const commitDisplay = i.commitment_amount ? '$' + Number(i.commitment_amount).toLocaleString() : '—';
+    return `<tr>
+      <td>
+        <div class="avatar-row">
+          <div class="avatar-sm" style="background:var(--gold-light);color:var(--gold-dark)">${initials}</div>
+          <div>
+            <div class="avatar-row-info">${i.name || 'Unnamed'}</div>
+            <div class="avatar-row-sub">${i.email}</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-size:13px">${i.company || '—'}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${i.investment_focus || '—'}</td>
+      <td style="font-weight:600">${commitDisplay}</td>
+      <td><span class="badge badge-blue">${i.commitment_tier || '—'}</span></td>
+      <td><span class="badge ${statusColor}">${i.investor_status}</span></td>
+      <td>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="openInvestorDetail('${i.id}')" title="View"><i class="ti ti-eye"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+document.getElementById('investorSearchInput')?.addEventListener('input', renderInvestorsTable);
+document.getElementById('investorStatusFilter')?.addEventListener('change', renderInvestorsTable);
+
+async function openInvestorDetail(id) {
+  document.getElementById('investorModal').classList.add('open');
+  document.getElementById('investorDetailLoading').style.display = 'block';
+  document.getElementById('investorDetailContent').style.display = 'none';
+  document.getElementById('investorDetailId').value = id;
+
+  try {
+    const r = await fetch('/api/admin/investors/' + id);
+    const data = await r.json();
+    document.getElementById('investorDetailLoading').style.display = 'none';
+    document.getElementById('investorDetailContent').style.display = 'block';
+    document.getElementById('investorModalTitle').textContent = data.user.name || 'Investor details';
+    document.getElementById('invDetailName').textContent = data.user.name || 'Unnamed';
+    document.getElementById('invDetailEmail').textContent = data.user.email;
+    document.getElementById('invDetailAvatar').textContent = (data.user.name || '?').charAt(0).toUpperCase();
+    document.getElementById('invDetailCompany').textContent = data.profile?.company || '—';
+    document.getElementById('invDetailFocus').textContent = data.profile?.investment_focus || '—';
+    document.getElementById('invDetailCheckSize').textContent = (data.profile?.check_size_min && data.profile?.check_size_max) ? '$' + data.profile.check_size_min.toLocaleString() + ' — $' + data.profile.check_size_max.toLocaleString() : '—';
+    document.getElementById('invDetailStatus').innerHTML = '<span class="badge ' + (data.profile?.status === 'approved' ? 'badge-green' : data.profile?.status === 'declined' ? 'badge-red' : 'badge-gold') + '">' + (data.profile?.status || 'pending') + '</span>';
+    document.getElementById('invDetailCommitAmount').textContent = data.commitment?.amount ? '$' + Number(data.commitment.amount).toLocaleString() : '—';
+    document.getElementById('invDetailCommitTier').textContent = data.commitment?.tier || '—';
+    document.getElementById('invDetailCommitStatus').textContent = data.commitment?.status || '—';
+    document.getElementById('invDetailNotes').textContent = data.profile?.notes || '—';
+    document.getElementById('invDetailNoteInput').value = data.profile?.notes || '';
+    const msgs = data.messages || [];
+    document.getElementById('invDetailMessages').innerHTML = msgs.length ? msgs.map(m => `<div style="padding:8px 0;border-bottom:0.5px solid var(--cream2);font-size:13px"><strong>${m.subject || '(no subject)'}</strong><br>${m.body}<br><span style="font-size:10px;color:var(--text-muted)">${m.created_at ? new Date(m.created_at).toLocaleString() : ''}</span></div>`).join('') : '<div style="font-size:12px;color:var(--text-muted)">No messages yet.</div>';
+  } catch(e) {
+    document.getElementById('investorDetailLoading').textContent = 'Failed to load details.';
+  }
+}
+
+async function updateInvestorStatus(status) {
+  const id = document.getElementById('investorDetailId').value;
+  if (!id) return;
+  try {
+    await fetch('/api/admin/investors/' + id + '/status', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) });
+    alert('Status updated to ' + status);
+    openInvestorDetail(id);
+    loadInvestorsPage();
+  } catch(e) { alert('Failed to update status'); }
+}
+
+async function addInvestorNote() {
+  const id = document.getElementById('investorDetailId').value;
+  const notes = document.getElementById('invDetailNoteInput').value;
+  if (!id) return;
+  try {
+    await fetch('/api/admin/investors/' + id + '/note', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ notes }) });
+    document.getElementById('invDetailNotes').textContent = notes || '—';
+  } catch(e) { alert('Failed to save note'); }
+}
+
+async function sendInvestorMessage() {
+  const id = document.getElementById('investorDetailId').value;
+  const subject = document.getElementById('invDetailMsgSubject').value;
+  const body = document.getElementById('invDetailMsgBody').value;
+  if (!id || !body) { alert('Message body is required.'); return; }
+  try {
+    await fetch('/api/admin/investors/' + id + '/message', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject, body }) });
+    document.getElementById('invDetailMsgSubject').value = '';
+    document.getElementById('invDetailMsgBody').value = '';
+    alert('Message sent.');
+    openInvestorDetail(id);
+  } catch(e) { alert('Failed to send message'); }
+}
+
+function exportInvestorsCSV() {
+  if (!investorsData.length) return alert('No investor data to export.');
+  const headers = ['Name', 'Email', 'Company', 'Investment Focus', 'Check Size Min', 'Check Size Max', 'Status', 'Commitment Amount', 'Commitment Tier', 'Commitment Status'];
+  const rows = investorsData.map(i => [
+    i.name || '', i.email || '', i.company || '', i.investment_focus || '',
+    i.check_size_min || '', i.check_size_max || '', i.investor_status || '',
+    i.commitment_amount || '', i.commitment_tier || '', i.commitment_status || ''
+  ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(','));
+  const csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'sporafind_investors_' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+  URL.revokeObjectURL(link.href);
 }
 
 // ===== SEARCH =====

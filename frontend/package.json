@@ -10,6 +10,7 @@
     "vercel-build": "echo vercel-build done"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "debug": "^2.6.9",
     "ejs": "^6.0.1",
     "express": "^4.18.2",

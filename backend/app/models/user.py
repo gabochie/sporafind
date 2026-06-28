@@ -18,5 +18,6 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     plan_tier: Mapped[str] = mapped_column(String(20), default="free")
     export_count: Mapped[int] = mapped_column(default=0)
+    role: Mapped[str] = mapped_column(String(20), default="user")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     last_login: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

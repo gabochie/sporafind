@@ -18,18 +18,21 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 class SignupRequest(BaseModel):
     email: EmailStr
     name: str | None = None
+    role: str = "user"
 
 
 class TokenResponse(BaseModel):
     token: str
     user_id: str
     email: str
+    role: str
 
 
 class MeResponse(BaseModel):
     user_id: str
     email: str
     name: str | None
+    role: str
     plan_tier: str
     export_count: int
     created_at: str
@@ -42,7 +45,7 @@ async def signup(req: SignupRequest, request: Request, db: AsyncSession = Depend
     existing = await db.execute(select(User).where(User.email == req.email))
     user = existing.scalar_one_or_none()
     if not user:
-        user = User(email=req.email, name=req.name)
+        user = User(email=req.email, name=req.name, role=req.role)
         db.add(user)
         await db.commit()
         await db.refresh(user)
@@ -51,7 +54,7 @@ async def signup(req: SignupRequest, request: Request, db: AsyncSession = Depend
     await db.commit()
 
     token = create_token(user.id)
-    return TokenResponse(token=token, user_id=user.id, email=user.email)
+    return TokenResponse(token=token, user_id=user.id, email=user.email, role=user.role)
 
 
 @router.get("/me", response_model=MeResponse)
@@ -60,6 +63,7 @@ async def get_me(user: User = Depends(verify_token)):
         user_id=user.id,
         email=user.email,
         name=user.name,
+        role=user.role,
         plan_tier=user.plan_tier,
         export_count=user.export_count,
         created_at=str(user.created_at),
