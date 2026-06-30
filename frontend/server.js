@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -33,6 +35,20 @@ async function fetchFromAPI(pathname, opts = {}) {
   }
 }
 
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+
+const loginLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { detail: 'Too many requests, try again later' },
+});
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(DIR, 'views'));
 
@@ -50,7 +66,6 @@ app.use((req, res, next) => {
     const filePath = path.join(DIR, req.path === '/' ? 'index.html' : req.path.replace(/^\//, ''));
     if (fs.existsSync(filePath)) {
       let html = fs.readFileSync(filePath, 'utf8');
-      html = html.replace('</head>', '<script src="/js/session.js"></script></head>');
       res.setHeader('Content-Type', 'text/html');
       return res.send(html);
     }
@@ -68,7 +83,7 @@ app.get('/blog', async (req, res) => {
         categories: data.categories, tags: data.tags, isoDate,
       });
     }
-  } catch {}
+  } catch (e) { console.error('Blog fetch error:', e); }
   const posts = readPosts();
   const published = posts.filter(p => p.status === 'published').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   const page = parseInt(req.query.page) || 1;
@@ -94,7 +109,7 @@ app.get('/blog/:slug', async (req, res) => {
       const allTags = data ? data.tags : [];
       return res.render('blog-post', { post, related, allTags, isoDate });
     }
-  } catch {}
+  } catch (e) { console.error('Blog post fetch error:', e); }
   const posts = readPosts();
   const post = posts.find(p => p.slug === req.params.slug && p.status === 'published');
   if (!post) return res.status(404).send('Post not found');
@@ -106,7 +121,26 @@ app.get('/blog/:slug', async (req, res) => {
 const ADMIN_KEY = process.env.ADMIN_KEY || '';
 const PUBLIC_API_KEY = process.env.PUBLIC_API_KEY || '';
 
-// Blog admin proxy — forwards to FastAPI with X-Admin-Key
+// Admin login — proxies to FastAPI /auth/login, sets httpOnly cookie
+app.post('/api/admin/login', loginLimiter, async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: req.body.email, password: req.body.password }),
+    });
+    const data = await r.json();
+    if (!r.ok) return res.status(r.status).json(data);
+    res.cookie('admin_token', data.token, {
+      httpOnly: true, secure: true, sameSite: 'strict', path: '/',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    return res.json(data);
+  } catch {
+    res.status(502).json({ detail: 'Backend unavailable' });
+  }
+});
+
 async function proxyAdmin(req, res, pathSuffix) {
   try {
     const url = `${API_BASE}/blog/admin/${pathSuffix}`;
@@ -135,6 +169,25 @@ app.get('/api/admin/activity', async (req, res) => {
   } catch { res.status(502).json({ items: [] }); }
 });
 
+// Admin import endpoints — proxy with server-side admin key
+app.post('/api/admin/import/start-sync', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/import/start-sync`, {
+      method: 'POST', headers: { 'X-Admin-Key': ADMIN_KEY },
+    });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
+app.get('/api/admin/import/status', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/import/status`, {
+      headers: { 'X-Admin-Key': ADMIN_KEY },
+    });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ runs: [] }); }
+});
+
 app.get('/api/pricing', async (req, res) => {
   try {
     const headers = {};
@@ -144,7 +197,6 @@ app.get('/api/pricing', async (req, res) => {
   } catch { res.status(502).json({ plans: [] }); }
 });
 
-// Investor API proxy — forwards Bearer token to FastAPI
 async function proxyInvestorAPI(req, res) {
   try {
     const auth = req.headers.authorization || '';
@@ -166,7 +218,6 @@ app.all('/api/investor/commit', (req, res) => proxyInvestorAPI(req, res));
 app.all('/api/investor/message', (req, res) => proxyInvestorAPI(req, res));
 app.all('/api/investor/messages', (req, res) => proxyInvestorAPI(req, res));
 
-// Admin investor API proxy
 app.get('/api/admin/investors', async (req, res) => {
   try {
     const r = await fetch(`${API_BASE}/admin/investors`, { headers: { 'X-Admin-Key': ADMIN_KEY } });
@@ -208,7 +259,7 @@ app.post('/api/analytics/pageview', async (req, res) => {
       method: 'POST', body: JSON.stringify({ slug: req.body.slug }),
     });
     return res.json({ ok: true });
-  } catch {}
+  } catch (e) { console.error('Pageview error:', e); }
   const posts = readPosts();
   const post = posts.find(p => p.slug === req.body.slug);
   if (post) { post.views = (post.views || 0) + 1; fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2)); }
@@ -219,7 +270,7 @@ app.get('/api/analytics/posts', async (req, res) => {
   try {
     const data = await fetchFromAPI('/blog/analytics/posts');
     if (data) return res.json(data);
-  } catch {}
+  } catch (e) { console.error('Analytics fetch error:', e); }
   const posts = readPosts();
   res.json({
     totalPosts: posts.filter(p => p.status === 'published').length,
@@ -230,7 +281,6 @@ app.get('/api/analytics/posts', async (req, res) => {
   });
 });
 
-// Investor auth middleware
 async function requireInvestor(req, res, next) {
   const token = req.cookies?.investor_token || req.query.token;
   if (!token) return res.redirect('/investors/login');
@@ -249,18 +299,15 @@ async function requireInvestor(req, res, next) {
   }
 }
 
-// Public teaser page
 app.get('/investors', (req, res) => res.render('investors'));
 
-// Login/verify pages (public)
 app.get('/investors/login', (req, res) => {
   if (req.cookies?.investor_token) return res.redirect('/investors/dashboard');
   res.render('investor-login');
 });
 app.get('/investors/verify', (req, res) => res.render('investor-verify'));
 
-// Login API — returns JWT + sets httpOnly cookie
-app.post('/api/investor/login', express.json(), async (req, res) => {
+app.post('/api/investor/login', loginLimiter, async (req, res) => {
   try {
     const r = await fetch(`${API_BASE}/auth/signup`, {
       method: 'POST',
@@ -270,8 +317,8 @@ app.post('/api/investor/login', express.json(), async (req, res) => {
     const data = await r.json();
     if (!r.ok) return res.status(r.status).json(data);
     res.cookie('investor_token', data.token, {
-      httpOnly: false, sameSite: 'lax', path: '/',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true, secure: true, sameSite: 'strict', path: '/',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     return res.json(data);
   } catch {
@@ -279,12 +326,10 @@ app.post('/api/investor/login', express.json(), async (req, res) => {
   }
 });
 
-// Dashboard (private)
 app.get('/investors/dashboard', requireInvestor, (req, res) => {
   res.render('investor-dashboard', { token: req.investorToken, investor: req.investor });
 });
 
-// Private investor pages — behind auth
 app.get('/investors/metrics', requireInvestor, (req, res) => res.render('investors-metrics', { investor: req.investor }));
 app.get('/investors/financials', requireInvestor, (req, res) => res.render('investors-financials', { investor: req.investor }));
 app.get('/investors/deck', requireInvestor, (req, res) => res.render('investors-deck', { investor: req.investor }));
@@ -295,7 +340,7 @@ app.get('/sitemap.xml', async (req, res) => {
   try {
     const data = await fetchFromAPI('/blog/analytics/posts');
     if (data) blogPosts = data.posts;
-  } catch {}
+  } catch (e) { console.error('Sitemap fetch error:', e); }
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published');
   const site = 'https://sporafind.com';
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
@@ -311,7 +356,7 @@ app.get('/rss.xml', async (req, res) => {
   try {
     const data = await fetchFromAPI('/blog/analytics/posts');
     if (data) blogPosts = data.posts;
-  } catch {}
+  } catch (e) { console.error('RSS fetch error:', e); }
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   const site = 'https://sporafind.com';
   let rss = '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>\n';
@@ -328,7 +373,15 @@ app.get('/rss.xml', async (req, res) => {
   res.header('Content-Type', 'application/rss+xml').send(rss);
 });
 
-app.use(express.static(DIR));
+app.use(express.static(DIR, {
+  maxAge: '1h',
+  etag: true,
+}));
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).type('html').send('<!DOCTYPE html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>500 — Sporafind</title><style>body{font-family:Inter,sans-serif;background:#0f0f0f;color:#e8e8e8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;text-align:center}h1{font-size:clamp(24px,5vw,48px);color:#ef4444}a{color:#00a85a}</style></head><body><div><h1>500</h1><p>Something went wrong</p><p><a href="/">← Back to sporafind.com</a></p></div></body></html>');
+});
 
 app.use((req, res) => {
   res.status(404).type('html').send('<!DOCTYPE html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>404 — Sporafind</title><style>body{font-family:Inter,sans-serif;background:#0f0f0f;color:#e8e8e8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;text-align:center}h1{font-size:clamp(24px,5vw,48px)}a{color:#00a85a}</style></head><body><div><h1>404</h1><p>Page not found</p><p><a href="/">← Back to sporafind.com</a></p></div></body></html>');
@@ -337,8 +390,6 @@ app.use((req, res) => {
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(' Sporafind running at http://localhost:' + PORT);
-    console.log('  Workspace  user@sporafind.com / demo123');
-    console.log('  Admin      admin@sporafind.com / demo123');
     console.log('  Investor   investor@sporafind.com (via portal)');
     console.log('  Blog       http://localhost:' + PORT + '/blog');
   });

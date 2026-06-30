@@ -1,4 +1,6 @@
 from datetime import datetime, timezone
+
+import bcrypt
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -13,8 +15,11 @@ bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def _get_serializer() -> URLSafeTimedSerializer:
+    secret = settings.auth_secret
+    if not secret:
+        raise RuntimeError("AUTH_SECRET must be set in production")
     return URLSafeTimedSerializer(
-        secret_key=settings.auth_secret or settings.admin_key or "dev-fallback-secret",
+        secret_key=secret,
         salt="sporafind-auth",
     )
 
@@ -54,3 +59,11 @@ async def verify_token(
         raise HTTPException(status_code=403, detail="User account is deactivated")
 
     return user
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+
+def verify_password(password: str, hashed: str) -> bool:
+    return bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8"))

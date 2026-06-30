@@ -61,8 +61,13 @@ async def lifespan(app: FastAPI):
             if not result.scalar():
                 await conn.execute(text("ALTER TABLE public.users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user'"))
                 print("Added 'role' column to users table", flush=True)
-            else:
-                print("Role column already exists in public.users", flush=True)
+            # Add hashed_password column to public.users if it doesn't exist
+            result = await conn.execute(
+                text("SELECT column_name FROM information_schema.columns WHERE table_name='users' AND table_schema='public' AND column_name='hashed_password'")
+            )
+            if not result.scalar():
+                await conn.execute(text("ALTER TABLE public.users ADD COLUMN hashed_password VARCHAR(255)"))
+                print("Added 'hashed_password' column to users table", flush=True)
             await conn.run_sync(Base.metadata.create_all)
     except Exception as e:
         print(f"DB init: {e}", flush=True)

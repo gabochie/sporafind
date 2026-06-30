@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<script src="/js/session.js"></script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -413,6 +413,7 @@ img{display:block}
   .data-table-filters{flex-wrap:wrap}
 }
 </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 </head>
 <body>
 
@@ -450,9 +451,8 @@ img{display:block}
         <label class="form-remember"><input type="checkbox" checked> Remember me</label>
         <a href="javascript:void(0)" class="form-forgot" onclick="alert('Password reset link sent (demo)')">Forgot password?</a>
       </div>
-      <button class="btn-login" id="loginBtn" onclick="doLogin()"><i class="ti ti-login"></i> Sign in to dashboard</button>
+      <button class="btn-login" id="loginBtn"><i class="ti ti-login"></i> Sign in to dashboard</button>
       <div class="login-error" id="loginError"><i class="ti ti-alert-circle"></i> Invalid credentials. Try again.</div>
-      <div class="login-signup">Demo: <a href="#" id="demoLoginBtn">click here for instant access</a></div>
     </div>
   </div>
 </div>
@@ -1989,46 +1989,54 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
-function doLogin() {
+async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPassword').value.trim();
   const errEl = document.getElementById('loginError');
-  const result = DF.login(email, pass);
-  if(result) {
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Signing in...';
+  try {
+    const r = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass }),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      errEl.textContent = data.detail || 'Login failed';
+      errEl.classList.add('show');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-login"></i> Sign in to dashboard';
+      return;
+    }
     errEl.classList.remove('show');
+    document.querySelector('.sidebar-user-avatar').textContent = (email[0] || '').toUpperCase();
+    document.querySelector('.sidebar-user-name').textContent = data.email;
+    document.querySelector('.sidebar-user-role').textContent = 'Admin';
     enterDashboard();
-  } else {
+  } catch(e) {
+    errEl.textContent = 'Backend unavailable';
     errEl.classList.add('show');
-    document.getElementById('loginBtn').disabled = true;
-    setTimeout(() => document.getElementById('loginBtn').disabled = false, 1500);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-login"></i> Sign in to dashboard';
   }
 }
-
-document.getElementById('demoLoginBtn').addEventListener('click', e => {
-  e.preventDefault();
-  document.getElementById('loginEmail').value = 'admin@sporafind.com';
-  document.getElementById('loginPassword').value = 'demo123';
-  doLogin();
-});
 
 function enterDashboard() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('adminLayout').classList.add('active');
   initCharts();
   loadBlogAnalytics();
-  const u = DF.getUser();
-  if(u) {
-    document.querySelector('.sidebar-user-avatar').textContent = u.initials;
-    document.querySelector('.sidebar-user-name').textContent = u.name;
-    document.querySelector('.sidebar-user-role').textContent = u.role;
-  }
 }
 
-(function checkSession() {
-  if(DF.isLoggedIn()) enterDashboard();
-})();
+// Always show login screen on page load (server-side auth sets admin_token cookie)
+// In production, Cloudflare Access protects /admin* so only authenticated users reach here
 
-document.getElementById('sidebarLogout').addEventListener('click', DF.logout);
+document.getElementById('sidebarLogout').addEventListener('click', () => {
+  document.cookie = 'admin_token=; path=/; max-age=0';
+  window.location.href = '/admin';
+});
 
 // ===== MOBILE SIDEBAR =====
 document.getElementById('mobileToggle').addEventListener('click', () => {
@@ -2227,7 +2235,7 @@ async function saveBlogPost() {
     excerpt: document.getElementById('blogEditExcerpt').value,
     metaTitle: document.getElementById('blogEditMetaTitle').value,
     metaDesc: document.getElementById('blogEditMetaDesc').value,
-    body: document.getElementById('blogEditBody').value,
+    body: typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(document.getElementById('blogEditBody').value) : document.getElementById('blogEditBody').value,
     publishedAt: document.getElementById('blogEditPublishDate').value || null,
   };
   if(!data.title) return alert('Title is required');
@@ -2312,7 +2320,7 @@ async function triggerImport() {
   btn.disabled = true;
   btn.innerHTML = '<i class="ti ti-loader"></i> Importing...';
   try {
-    const r = await fetch('/admin/import/start-sync', { headers: { 'X-Admin-Key': 'sporafind_admin_v1' } });
+    const r = await fetch('/api/admin/import/start-sync');
     const data = await r.json();
     showImportResult(data);
   } catch(e) {
@@ -2355,7 +2363,7 @@ function showImportResult(data) {
 
 async function loadImportHistory() {
   try {
-    const r = await fetch('/admin/import/status', { headers: { 'X-Admin-Key': 'sporafind_admin_v1' } });
+    const r = await fetch('/api/admin/import/status');
     const data = await r.json();
     const tbody = document.getElementById('importHistoryBody');
     if (!data.runs || !data.runs.length) {

@@ -14,6 +14,7 @@ class User(Base):
     id: Mapped[str] = mapped_column(UUID(as_uuid=False), primary_key=True, default=lambda: str(uuid4()))
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    hashed_password: Mapped[str | None] = mapped_column(String(255), nullable=True)
     auth_provider: Mapped[str] = mapped_column(String(50), default="magic_link")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     plan_tier: Mapped[str] = mapped_column(String(20), default="free")
