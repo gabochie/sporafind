@@ -200,6 +200,15 @@ app.get('/api/admin/activity', async (req, res) => {
   } catch { res.status(502).json({ items: [] }); }
 });
 
+app.get('/api/admin/smoke-test-stats', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/smoke-test-stats`, {
+      headers: { 'X-Admin-Key': ADMIN_KEY },
+    });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ uptime_pct: 0, total_checks: 0, passed: 0, failed: 0, endpoints: {}, latest: [] }); }
+});
+
 // Admin import endpoints — proxy with server-side admin key
 app.post('/api/admin/import/start-sync', async (req, res) => {
   try {

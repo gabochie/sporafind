@@ -18,6 +18,7 @@ from app.models.import_run import ImportRun
 from app.models.investor_profile import InvestorProfile
 from app.models.investor_commitment import InvestorCommitment
 from app.models.investor_message import InvestorMessage
+from app.models.smoke_test_result import SmokeTestResult
 from app.services.importer import run_import
 from app.services.diaspora_importer import run_diaspora_import
 
@@ -687,6 +688,97 @@ async def start_import_sync(
         "records_failed": run.records_failed,
         "orgs_imported": run.orgs_imported,
         "error_message": run.error_message,
+    }
+
+
+class SmokeTestPayload(BaseModel):
+    endpoint: str
+    passed: bool
+    status_code: int | None = None
+    duration_ms: int | None = None
+    error: str | None = None
+
+
+@router.post("/smoke-test")
+@limiter.limit("10/minute")
+async def record_smoke_test(
+    body: SmokeTestPayload,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    admin: bool = Depends(verify_admin),
+):
+    result = SmokeTestResult(
+        endpoint=body.endpoint,
+        passed=body.passed,
+        status_code=body.status_code,
+        duration_ms=body.duration_ms,
+        error=body.error,
+    )
+    db.add(result)
+    await db.commit()
+    return {"status": "recorded", "id": result.id}
+
+
+@router.get("/smoke-test-stats")
+@limiter.limit("10/minute")
+async def smoke_test_stats(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    admin: bool = Depends(verify_admin),
+):
+    from datetime import timedelta
+
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    recent = await db.execute(
+        select(SmokeTestResult)
+        .where(SmokeTestResult.created_at >= cutoff)
+        .order_by(SmokeTestResult.created_at.desc())
+    )
+    rows = recent.scalars().all()
+    total = len(rows) if rows else 0
+    passed = sum(1 for r in rows if r.passed) if rows else 0
+    avg_ms = (
+        round(sum(r.duration_ms or 0 for r in rows) / total)
+        if total > 0 and any(r.duration_ms for r in rows)
+        else None
+    )
+
+    endpoint_breakdown: dict[str, dict] = {}
+    for r in rows:
+        ep = endpoint_breakdown.setdefault(r.endpoint, {"total": 0, "passed": 0, "avg_ms": 0, "ms_total": 0})
+        ep["total"] += 1
+        if r.passed:
+            ep["passed"] += 1
+        if r.duration_ms:
+            ep["ms_total"] += r.duration_ms
+
+    for ep in endpoint_breakdown.values():
+        ep["avg_ms"] = round(ep["ms_total"] / ep["total"]) if ep["total"] > 0 else None
+        del ep["ms_total"]
+
+    latest = await db.execute(
+        select(SmokeTestResult).order_by(SmokeTestResult.created_at.desc()).limit(10)
+    )
+    latest_rows = latest.scalars().all()
+
+    return {
+        "uptime_pct": round(passed / total * 100, 1) if total > 0 else 100,
+        "total_checks": total,
+        "passed": passed,
+        "failed": total - passed,
+        "avg_response_ms": avg_ms,
+        "endpoints": endpoint_breakdown,
+        "latest": [
+            {
+                "endpoint": r.endpoint,
+                "passed": r.passed,
+                "status_code": r.status_code,
+                "duration_ms": r.duration_ms,
+                "error": r.error,
+                "timestamp": r.created_at.isoformat(),
+            }
+            for r in latest_rows
+        ],
     }
 
 

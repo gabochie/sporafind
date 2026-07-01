@@ -723,6 +723,42 @@ img{display:block}
             </div>
           </div>
         </div>
+
+        <div class="charts-grid">
+          <div class="chart-card full">
+            <div class="chart-card-header">
+              <span class="chart-card-title">Smoke test</span>
+              <span class="chart-card-action" onclick="loadSmokeTestStats()">Refresh <i class="ti ti-refresh"></i></span>
+            </div>
+            <div id="smokeTestCard">
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                  <div id="smokeUptime" style="font-size:22px;font-weight:700">—</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Uptime (24h)</div>
+                </div>
+                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                  <div id="smokePassed" style="font-size:22px;font-weight:700;color:var(--green)">—</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Passed</div>
+                </div>
+                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                  <div id="smokeFailed" style="font-size:22px;font-weight:700;color:var(--red)">—</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Failed</div>
+                </div>
+                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                  <div id="smokeAvgMs" style="font-size:22px;font-weight:700">—</div>
+                  <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Avg response</div>
+                </div>
+              </div>
+              <div id="smokeTestEndpoints">
+                <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:12px">Loading smoke test data...</div>
+              </div>
+              <div style="margin-top:12px;font-size:10px;color:var(--text-muted);display:flex;justify-content:space-between">
+                <span>Runs every 30 min via GitHub Actions</span>
+                <span id="smokeLastRun">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ===== SEARCH ===== -->
@@ -1926,7 +1962,7 @@ const peopleData = [
 const countries = ['United States','United Kingdom','Canada','Germany','Netherlands','UAE','Australia','Switzerland','France','South Africa'];
 const sectors = ['Fintech','Healthcare','Real Estate','Technology','Energy','Agriculture','Education','Manufacturing'];
 const adminViewConfigs = {
-  dashboard: {render: loadBlogAnalytics},
+  dashboard: {render: () => { loadBlogAnalytics(); loadSmokeTestStats(); }},
   people: {render: renderPeopleTable},
   users: {render: renderUsersTable},
   blog: {render: loadBlogPosts},
@@ -1999,6 +2035,7 @@ function enterDashboard() {
   document.getElementById('adminLayout').classList.add('active');
   initCharts();
   loadBlogAnalytics();
+  loadSmokeTestStats();
 }
 
 // Always show login screen on page load (server-side auth sets admin_token cookie)
@@ -2290,6 +2327,50 @@ async function loadBlogAnalytics() {
     const stats = await s.json();
     document.getElementById('profileCount').textContent = (stats.total_profiles || 0).toLocaleString();
   } catch(e) { /* stats unavailable */ }
+}
+
+// ===== SMOKE TEST =====
+async function loadSmokeTestStats() {
+  try {
+    const r = await fetch('/api/admin/smoke-test-stats');
+    const data = await r.json();
+    document.getElementById('smokeUptime').textContent = (data.uptime_pct || 0) + '%';
+    document.getElementById('smokePassed').textContent = data.passed || 0;
+    document.getElementById('smokeFailed').textContent = data.failed || 0;
+    document.getElementById('smokeAvgMs').textContent = data.avg_response_ms ? data.avg_response_ms + 'ms' : '—';
+    document.getElementById('smokeUptime').style.color = data.uptime_pct >= 99 ? 'var(--green)' : data.uptime_pct >= 90 ? 'var(--gold)' : 'var(--red)';
+
+    const endpoints = document.getElementById('smokeTestEndpoints');
+    if (data.latest && data.latest.length) {
+      const last = data.latest[0];
+      document.getElementById('smokeLastRun').textContent = 'Last run: ' + new Date(last.timestamp).toLocaleString();
+
+      endpoints.innerHTML = `
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr style="border-bottom:1px solid var(--border)">
+            <th style="text-align:left;padding:4px 8px;color:var(--text-muted)">Endpoint</th>
+            <th style="text-align:center;padding:4px 8px;color:var(--text-muted)">Status</th>
+            <th style="text-align:right;padding:4px 8px;color:var(--text-muted)">Code</th>
+            <th style="text-align:right;padding:4px 8px;color:var(--text-muted)">Time</th>
+          </tr></thead>
+          <tbody>
+            ${data.latest.slice(0,6).map(r => `
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:4px 8px;font-family:monospace;font-size:11px">${r.endpoint}</td>
+                <td style="text-align:center;padding:4px 8px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.passed ? 'var(--green)' : 'var(--red)'}"></span></td>
+                <td style="text-align:right;padding:4px 8px;font-family:monospace">${r.status_code || 'ERR'}</td>
+                <td style="text-align:right;padding:4px 8px;font-family:monospace">${r.duration_ms ? r.duration_ms + 'ms' : '—'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    } else {
+      endpoints.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:12px">No smoke test data yet. Results appear after the first GitHub Actions run.</div>';
+    }
+  } catch(e) {
+    document.getElementById('smokeTestEndpoints').innerHTML = '<div style="text-align:center;padding:16px;color:var(--red);font-size:12px">Failed to load smoke test data</div>';
+    console.error('Smoke test error', e);
+  }
 }
 
 // ===== ACTIVITY LOG (disabled for now — admin events not yet logged) =====
