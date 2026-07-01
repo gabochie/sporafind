@@ -23,10 +23,10 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
+          --health-cmd pg_isready -U postgres
+          --health-interval 5s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 12
 
     steps:
       - uses: actions/checkout@v4
@@ -39,7 +39,26 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install asyncpg
           pip install -r requirements.txt
+
+      - name: Wait for Postgres
+        run: |
+          python -c "
+import asyncio, asyncpg, time
+async def wait_for_pg():
+    for i in range(30):
+        try:
+            conn = await asyncpg.connect('postgresql://postgres:postgres@localhost:5432/sporafind_test')
+            print('Postgres ready:', await conn.fetchval('SELECT version()'))
+            await conn.close()
+            return
+        except Exception as e:
+            print(f'Waiting for PG ({i+1}/30): {e}')
+            await asyncio.sleep(2)
+    raise SystemExit(1)
+asyncio.run(wait_for_pg())
+"
 
       - name: Run tests
         env:
