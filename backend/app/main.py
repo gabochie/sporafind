@@ -124,3 +124,14 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "healthy", "version": "0.1.0"}
+
+@app.get("/debug/db")
+async def debug_db():
+    from app.config import settings
+    url = settings.database_url
+    if url:
+        masked = url[:20] + '***' + url[-10:]
+    else:
+        masked = 'NOT SET'
+    return {"database_url": masked, "environment": settings.environment, "auth_secret_set": bool(settings.auth_secret)}
+
