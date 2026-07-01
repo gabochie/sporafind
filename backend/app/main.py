@@ -90,6 +90,19 @@ async def lifespan(app: FastAPI):
             if not result.scalar():
                 await conn.execute(text("ALTER TABLE public.users ADD COLUMN hashed_password VARCHAR(255)"))
                 logger.info("Added 'hashed_password' column to users table")
+            # Add stripe columns if they don't exist
+            for col_info in [
+                ("stripe_customer_id", "VARCHAR(255)"),
+                ("stripe_subscription_id", "VARCHAR(255)"),
+                ("subscription_status", "VARCHAR(50)"),
+                ("subscription_period_end", "TIMESTAMPTZ"),
+            ]:
+                result = await conn.execute(
+                    text(f"SELECT column_name FROM information_schema.columns WHERE table_name='users' AND table_schema='public' AND column_name='{col_info[0]}'")
+                )
+                if not result.scalar():
+                    await conn.execute(text(f"ALTER TABLE public.users ADD COLUMN {col_info[0]} {col_info[1]}"))
+                    logger.info("Added '%s' column to users table", col_info[0])
             await conn.run_sync(Base.metadata.create_all)
         logger.info("Database initialized")
     except Exception as e:
