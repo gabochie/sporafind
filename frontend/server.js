@@ -210,6 +210,15 @@ app.post('/api/admin/import/start-sync', async (req, res) => {
   } catch { res.status(502).json({ error: 'Backend unavailable' }); }
 });
 
+app.post('/api/admin/import/diaspora-sync', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/admin/import/diaspora-sync`, {
+      method: 'POST', headers: { 'X-Admin-Key': ADMIN_KEY },
+    });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
 app.get('/api/admin/import/status', async (req, res) => {
   try {
     const r = await fetch(`${API_BASE}/admin/import/status`, {

@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     supabase_url: str = ""
     supabase_anon_key: str = ""
     companies_house_api_key: str = ""
+    opencorporates_api_key: str = ""
     auth_secret: str = ""
     admin_key: str = ""
     public_api_key: str = ""

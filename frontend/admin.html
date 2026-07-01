@@ -139,6 +139,8 @@ img{display:block}
 .btn-primary:hover{background:var(--green-dark)}
 .btn-gold{background:var(--gold);color:#0A0E1A}
 .btn-gold:hover{background:var(--gold-dark)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-dark)}
 .btn-outline{background:transparent;border:0.5px solid var(--cream3);color:var(--text-mid)}
 .btn-outline:hover{border-color:var(--slate3);color:var(--text-dark)}
 .btn-ghost{background:transparent;color:var(--text-mid)}
@@ -1592,12 +1594,13 @@ img{display:block}
         <div class="page-header">
           <div class="page-header-left">
             <div class="page-header-title">Data Import</div>
-            <div class="page-header-sub">Import diaspora profiles from Companies House. Runs as a background job with progress tracking.</div>
+            <div class="page-header-sub">Import diaspora profiles from Companies House and US diaspora directories.</div>
           </div>
         </div>
 
         <div style="display:flex;gap:12px;margin-bottom:24px">
           <button class="btn btn-gold btn-md" id="importTriggerBtn" onclick="triggerImport()"><i class="ti ti-cloud-down"></i> Start Import (Sync)</button>
+          <button class="btn btn-green btn-md" id="diasporaImportBtn" onclick="triggerDiasporaImport()"><i class="ti ti-world"></i> Diaspora Import (MD/TX)</button>
           <button class="btn btn-outline btn-md" id="importRefreshBtn" onclick="loadImportHistory()"><i class="ti ti-refresh"></i> Refresh Status</button>
         </div>
 
@@ -2310,6 +2313,25 @@ async function triggerImport() {
   }
   btn.disabled = false;
   btn.innerHTML = '<i class="ti ti-cloud-down"></i> Start Import (Sync)';
+  loadImportHistory();
+}
+
+async function triggerDiasporaImport() {
+  const btn = document.getElementById('diasporaImportBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Importing...';
+  try {
+    const r = await fetch('/api/admin/import/diaspora-sync');
+    const data = await r.json();
+    showImportResult(data);
+  } catch(e) {
+    document.getElementById('importCurrent').style.display = 'block';
+    document.getElementById('importStatusBadge').textContent = 'Error';
+    document.getElementById('importError').style.display = 'block';
+    document.getElementById('importError').textContent = 'Failed to start diaspora import: ' + e.message;
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-world"></i> Diaspora Import (MD/TX)';
   loadImportHistory();
 }
 

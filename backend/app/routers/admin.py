@@ -19,6 +19,7 @@ from app.models.investor_profile import InvestorProfile
 from app.models.investor_commitment import InvestorCommitment
 from app.models.investor_message import InvestorMessage
 from app.services.importer import run_import
+from app.services.diaspora_importer import run_diaspora_import
 
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -678,6 +679,29 @@ async def start_import_sync(
     db.add(run)
     await db.commit()
     await run_import(import_run_id, db)
+    run = await db.get(ImportRun, import_run_id)
+    return {
+        "id": run.id,
+        "status": run.status,
+        "records_imported": run.records_imported,
+        "records_failed": run.records_failed,
+        "orgs_imported": run.orgs_imported,
+        "error_message": run.error_message,
+    }
+
+
+@router.post("/import/diaspora-sync")
+@limiter.limit("1/minute")
+async def start_diaspora_import_sync(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    admin: bool = Depends(verify_admin),
+):
+    import_run_id = str(uuid4())
+    run = ImportRun(id=import_run_id, status="queued")
+    db.add(run)
+    await db.commit()
+    await run_diaspora_import(import_run_id, db)
     run = await db.get(ImportRun, import_run_id)
     return {
         "id": run.id,
