@@ -262,6 +262,8 @@ a{text-decoration:none;color:inherit}
 .btn-primary:hover{background:var(--green-dark)}
 .btn-gold{background:var(--gold);color:#0A0E1A}
 .btn-gold:hover{background:var(--gold-dark)}
+.btn-green{background:#006B3C;color:#fff}
+.btn-green:hover{background:#004d2b}
 .btn-outline{background:transparent;border:.5px solid var(--cream3);color:var(--text-mid)}
 .btn-outline:hover{border-color:var(--slate3);color:var(--text-dark)}
 .btn-ghost{background:transparent;color:var(--text-mid)}
@@ -835,16 +837,20 @@ a{text-decoration:none;color:inherit}
 
           <div class="acct-section">
             <div class="acct-section-title">Subscription</div>
-            <div class="acct-section-desc">You're on the Growth plan. See usage and billing details below.</div>
-            <div class="acct-usage">
-              <div class="acct-usage-item"><div class="acct-usage-val">12,840</div><div class="acct-usage-label">Profiles viewed</div></div>
-              <div class="acct-usage-item"><div class="acct-usage-val">7,800</div><div class="acct-usage-label">API calls (78%)</div></div>
-              <div class="acct-usage-item"><div class="acct-usage-val">14</div><div class="acct-usage-label">Saved lists</div></div>
-              <div class="acct-usage-item"><div class="acct-usage-val">6</div><div class="acct-usage-label">Exports this month</div></div>
+            <div class="acct-section-desc" id="billingDesc">Loading billing info...</div>
+            <div class="acct-usage" id="billingUsage" style="display:none">
+              <div class="acct-usage-item"><div class="acct-usage-val" id="billingProfilesViewed">—</div><div class="acct-usage-label">Profiles viewed</div></div>
+              <div class="acct-usage-item"><div class="acct-usage-val" id="billingApiCalls">—</div><div class="acct-usage-label">API calls</div></div>
+              <div class="acct-usage-item"><div class="acct-usage-val" id="billingSavedLists">—</div><div class="acct-usage-label">Saved lists</div></div>
+              <div class="acct-usage-item"><div class="acct-usage-val" id="billingExports">—</div><div class="acct-usage-label">Exports this month</div></div>
             </div>
-            <div class="acct-row"><div><div class="acct-row-label">Current plan</div><div class="acct-row-desc">Growth with pan-African scope</div></div><span class="badge badge-gold">$199/mo</span></div>
-            <div class="acct-row"><div><div class="acct-row-label">Payment method</div><div class="acct-row-desc">Visa ending in 4242 · Expires 12/27</div></div><button class="btn btn-outline btn-sm">Update</button></div>
-            <div class="acct-row"><div><div class="acct-row-label">Invoices</div><div class="acct-row-desc">View and download past invoices</div></div><button class="btn btn-ghost btn-sm"><i class="ti ti-file-text"></i> View all</button></div>
+            <div class="acct-row"><div><div class="acct-row-label">Current plan</div><div class="acct-row-desc" id="billingPlanDesc">—</div></div><span class="badge badge-gold" id="billingPlanBadge">—</span></div>
+            <div class="acct-row" id="billingStatusRow"><div><div class="acct-row-label">Status</div><div class="acct-row-desc" id="billingStatusDesc">—</div></div><span class="badge" id="billingStatusBadge">—</span></div>
+            <div class="acct-row" id="billingPeriodRow"><div><div class="acct-row-label">Current period ends</div><div class="acct-row-desc" id="billingPeriodDesc">—</div></div></div>
+            <div class="acct-row" id="billingActions" style="display:none;gap:8px">
+              <button class="btn btn-gold btn-sm" id="billingManageBtn" onclick="manageBilling()"><i class="ti ti-credit-card"></i> Manage billing</button>
+              <button class="btn btn-green btn-sm" id="billingUpgradeBtn" onclick="upgradeBilling()" style="display:none"><i class="ti ti-rocket"></i> Upgrade</button>
+            </div>
           </div>
 
           <div class="acct-section">
@@ -1408,8 +1414,48 @@ async function loadAccount() {
     const u2 = getUser();
     const nameInput = document.querySelector('#view-account .acct-input');
     if (nameInput) nameInput.value = u.name || u2?.name || '';
-    document.querySelector('#view-account .acct-section-desc').textContent = u.email + ' · ' + u.plan_tier + ' plan';
+    document.querySelector('#view-account .acct-section:nth-child(1) .acct-section-desc').textContent = u.email + ' · ' + u.plan_tier + ' plan';
   } catch {}
+  loadBillingStatus();
+}
+
+async function loadBillingStatus() {
+  try {
+    const r = await api('/api/billing/status');
+    if (!r) return;
+    const b = await r.json();
+    const plan = b.plan_tier || 'free';
+    const status = b.subscription_status || 'none';
+    const period = b.period_end ? new Date(b.period_end).toLocaleDateString() : '—';
+    document.getElementById('billingPlanDesc').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' plan';
+    document.getElementById('billingPlanBadge').textContent = plan === 'free' ? '$0/mo' : plan === 'pro' ? '$29/mo' : '$99/mo';
+    document.getElementById('billingStatusDesc').textContent = status;
+    const badge = document.getElementById('billingStatusBadge');
+    badge.textContent = status;
+    badge.style.background = status === 'active' ? 'rgba(0,168,90,0.15)' : status === 'past_due' ? 'rgba(239,68,68,0.15)' : 'rgba(138,155,176,0.15)';
+    badge.style.color = status === 'active' ? 'var(--green)' : status === 'past_due' ? '#ef4444' : 'var(--text-muted)';
+    document.getElementById('billingPeriodDesc').textContent = period;
+    document.getElementById('billingDesc').textContent = 'You\'re on the ' + plan + ' plan' + (status === 'active' ? '.' : ' — ' + status + '.');
+    document.getElementById('billingActions').style.display = 'flex';
+    document.getElementById('billingManageBtn').style.display = plan !== 'free' && status === 'active' ? '' : 'none';
+    document.getElementById('billingUpgradeBtn').style.display = plan === 'free' ? '' : 'none';
+  } catch(e) {
+    document.getElementById('billingDesc').textContent = 'Billing info unavailable';
+    console.error('Billing status error', e);
+  }
+}
+
+async function manageBilling() {
+  try {
+    const r = await api('/api/billing/portal', { method: 'POST' });
+    if (!r) return;
+    const data = await r.json();
+    if (data.url) window.location.href = data.url;
+  } catch(e) { console.error('Billing portal error', e); }
+}
+
+async function upgradeBilling() {
+  window.location.href = '/pricing.html';
 }
 
 // ===== ONBOARDING =====

@@ -16,7 +16,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from app.config import settings
 from app.database import Base, get_engine, dispose_engine
 from app.logger import setup_logging, logger
-from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog, investor, subscriber
+from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog, investor, subscriber, billing
 
 
 setup_logging()
@@ -137,6 +137,7 @@ app.include_router(pricing.router)
 app.include_router(blog.router)
 app.include_router(investor.router)
 app.include_router(subscriber.router)
+app.include_router(billing.router)
 
 
 @app.get("/")

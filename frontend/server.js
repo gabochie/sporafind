@@ -298,6 +298,38 @@ app.all('/api/workspace/lists/:id', (req, res) => proxyWorkspaceAPI(req, res));
 app.all('/api/workspace/exports', (req, res) => proxyWorkspaceAPI(req, res));
 app.all('/api/workspace/activity', (req, res) => proxyWorkspaceAPI(req, res));
 
+// Billing proxy — forwards Bearer token same as workspace API
+async function proxyBilling(req, res) {
+  try {
+    const auth = req.headers.authorization || '';
+    const pathSuffix = req.path.replace('/api/billing', '');
+    const url = `${API_BASE}/billing${pathSuffix}`;
+    const headers = { 'Content-Type': 'application/json' };
+    if (auth) headers['Authorization'] = auth;
+    const opts = { method: req.method, headers };
+    if (!['GET','DELETE'].includes(req.method)) opts.body = JSON.stringify(req.body);
+    const r = await fetch(url, opts);
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+}
+
+app.post('/api/billing/create-checkout-session', (req, res) => proxyBilling(req, res));
+app.post('/api/billing/portal', (req, res) => proxyBilling(req, res));
+app.get('/api/billing/status', (req, res) => proxyBilling(req, res));
+
+// Billing webhook — raw body passthrough, no auth
+app.post('/api/billing/webhook', async (req, res) => {
+  try {
+    const raw = req.body ? JSON.stringify(req.body) : '';
+    const r = await fetch(`${API_BASE}/billing/webhook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'stripe-signature': req.headers['stripe-signature'] || '' },
+      body: raw,
+    });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ status: 'error' }); }
+});
+
 app.get('/api/admin/investors', async (req, res) => {
   try {
     const r = await fetch(`${API_BASE}/admin/investors`, { headers: { 'X-Admin-Key': ADMIN_KEY } });

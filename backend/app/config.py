@@ -14,6 +14,13 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:8000,http://localhost:3000,https://www.sporafind.com"
     environment: str = "development"
 
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+    stripe_price_pro_monthly: str = ""
+    stripe_price_pro_yearly: str = ""
+    stripe_price_enterprise_monthly: str = ""
+    stripe_price_enterprise_yearly: str = ""
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
