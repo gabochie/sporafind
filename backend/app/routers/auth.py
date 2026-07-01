@@ -27,6 +27,11 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+
 class TokenResponse(BaseModel):
     token: str
     user_id: str
@@ -88,6 +93,18 @@ async def login(req: LoginRequest, request: Request, db: AsyncSession = Depends(
 
     token = create_token(user.id)
     return TokenResponse(token=token, user_id=user.id, email=user.email, role=user.role)
+
+
+@router.post("/change-password")
+@limiter.limit("5/minute")
+async def change_password(req: ChangePasswordRequest, request: Request, user: User = Depends(verify_token), db: AsyncSession = Depends(get_db)):
+    if not user.hashed_password:
+        raise HTTPException(status_code=400, detail="This account does not have a password set")
+    if not verify_password(req.current_password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+    user.hashed_password = hash_password(req.new_password)
+    await db.commit()
+    return {"detail": "Password updated successfully"}
 
 
 @router.get("/me", response_model=MeResponse)

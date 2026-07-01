@@ -1617,6 +1617,20 @@ img{display:block}
             <button class="btn btn-outline btn-sm">Update</button>
           </div>
         </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">Password</div>
+          <div class="settings-section-desc">Change your admin account password.</div>
+          <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:12px">
+            <input class="settings-input" id="pwCurrent" type="password" placeholder="Current password" style="max-width:320px">
+            <input class="settings-input" id="pwNew" type="password" placeholder="New password" style="max-width:320px">
+            <input class="settings-input" id="pwConfirm" type="password" placeholder="Confirm new password" style="max-width:320px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <button class="btn btn-green" id="pwChangeBtn" onclick="changePassword()"><i class="ti ti-key"></i> Update password</button>
+              <span id="pwStatus" style="font-size:13px"></span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ===== DATA IMPORT ===== -->
@@ -2032,6 +2046,37 @@ function enterDashboard() {
 
 // Always show login screen on page load (server-side auth sets admin_token cookie)
 // In production, Cloudflare Access protects /admin* so only authenticated users reach here
+
+async function changePassword() {
+  const current = document.getElementById('pwCurrent').value;
+  const newPw = document.getElementById('pwNew').value;
+  const confirm = document.getElementById('pwConfirm').value;
+  const status = document.getElementById('pwStatus');
+  const btn = document.getElementById('pwChangeBtn');
+  if (!current || !newPw || !confirm) { status.innerHTML = '<span style="color:var(--gold)">Fill all fields</span>'; return; }
+  if (newPw !== confirm) { status.innerHTML = '<span style="color:var(--gold)">Passwords do not match</span>'; return; }
+  if (newPw.length < 6) { status.innerHTML = '<span style="color:var(--gold)">Minimum 6 characters</span>'; return; }
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> Updating...';
+  try {
+    const r = await fetch('/api/auth/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ current_password: current, new_password: newPw }),
+    });
+    const data = await r.json();
+    if (!r.ok) { status.innerHTML = `<span style="color:#ef4444">${data.detail || 'Failed'}</span>`; return; }
+    status.innerHTML = '<span style="color:var(--green)">Password updated</span>';
+    document.getElementById('pwCurrent').value = '';
+    document.getElementById('pwNew').value = '';
+    document.getElementById('pwConfirm').value = '';
+  } catch(e) {
+    status.innerHTML = '<span style="color:#ef4444">Backend unavailable</span>';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-key"></i> Update password';
+  }
+}
 
 document.getElementById('sidebarLogout').addEventListener('click', () => {
   document.cookie = 'admin_token=; path=/; max-age=0';

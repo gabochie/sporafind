@@ -121,6 +121,21 @@ app.get('/blog/:slug', async (req, res) => {
 const ADMIN_KEY = process.env.ADMIN_KEY || '';
 const PUBLIC_API_KEY = process.env.PUBLIC_API_KEY || '';
 
+// Change password — uses admin_token cookie as Bearer token
+app.post('/api/auth/change-password', loginLimiter, async (req, res) => {
+  try {
+    const token = req.cookies?.admin_token || req.headers.authorization?.replace('Bearer ', '') || '';
+    const r = await fetch(`${API_BASE}/auth/change-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(req.body),
+    });
+    return res.status(r.status).json(await r.json());
+  } catch {
+    res.status(502).json({ detail: 'Backend unavailable' });
+  }
+});
+
 // Admin login — proxies to FastAPI /auth/login, sets httpOnly cookie
 app.post('/api/admin/login', loginLimiter, async (req, res) => {
   try {
