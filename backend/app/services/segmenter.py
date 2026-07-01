@@ -1,7 +1,10 @@
+import re
+
+
 ROLE_KEYWORDS: dict[str, list[str]] = {
     "finance": [
         "finance", "accountant", "auditor", "cfo", "financial", "controller",
-        "treasury", "investment", "banker", "analyst", "portfolio", "asset",
+        "treasury", "investment", "banker", "portfolio", "asset",
         "wealth", "tax", "comptroller", "risk", "compliance", "actuary",
         "bookkeeper", "payroll", "underwriter", "merger", "acquisition",
     ],
@@ -20,11 +23,11 @@ ROLE_KEYWORDS: dict[str, list[str]] = {
     "healthcare": [
         "doctor", "physician", "nurse", "surgeon", "clinical", "pharmacist",
         "medical", "health", "dentist", "psychiatrist", "therapist", "radiologist",
-        "consultant", "hospital", "healthcare", "veterinary", "vet",
+        "hospital", "healthcare", "veterinary", "vet",
     ],
     "real_estate": [
         "real estate", "property", "surveyor", "estate agent", "landlord",
-        "developer", "construction", "architect", "civil engineer", "quantity surveyor",
+        "construction", "architect", "civil engineer", "quantity surveyor",
         "facilities", "housing", "mortgage", "valuation",
     ],
     "consulting": [
@@ -50,23 +53,38 @@ ROLE_KEYWORDS: dict[str, list[str]] = {
 }
 
 
+def _word_boundary(kw: str) -> re.Pattern:
+    return re.compile(rf"(?<![a-z]){re.escape(kw)}(?![a-z])", re.IGNORECASE)
+
+
+_ROLE_PATTERNS: dict[str, list[re.Pattern]] = {
+    seg: [_word_boundary(kw) for kw in kws]
+    for seg, kws in ROLE_KEYWORDS.items()
+}
+
+
 def segment_by_role(role: str | None) -> str | None:
     if not role:
         return None
     role_lower = role.lower().strip()
-    for segment, keywords in ROLE_KEYWORDS.items():
-        for kw in keywords:
-            if kw in role_lower:
+    for segment, patterns in _ROLE_PATTERNS.items():
+        for pat in patterns:
+            if pat.search(role_lower):
                 return segment
     return None
 
 
+_ORIGIN_PATTERNS: dict[str, list[re.Pattern]] = {
+    "gh": [_word_boundary(kw) for kw in ["ghana", "ghanaian"]],
+}
+
+
 def determine_origin(country_of_residence: str | None, nationality: str | None) -> str | None:
-    gh_keywords = ["ghana", "ghanaian"]
     for val in [country_of_residence, nationality]:
         if val:
             vl = val.lower()
-            for kw in gh_keywords:
-                if kw in vl:
-                    return "gh"
+            for origin, patterns in _ORIGIN_PATTERNS.items():
+                for pat in patterns:
+                    if pat.search(vl):
+                        return origin
     return None

@@ -26,6 +26,7 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
     run.started_at = datetime.now(timezone.utc)
     await db.commit()
 
+    oc = None
     try:
         oc = OpenCorporatesClient()
         seen_org_ids: set[str] = set()
@@ -37,14 +38,12 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
         if oc.available:
             for jurisdiction in JURISDICTIONS:
                 logger.info("Diaspora import: searching %s via OpenCorporates", jurisdiction)
-                companies = await oc.search_diaspora_companies(jurisdiction, max_pages=3)
+                companies = await oc.search_diaspora_companies(jurisdiction, max_pages=2)
                 run.records_found += len(companies)
-                await db.commit()
 
                 for item in companies:
                     company = oc.parse_company(item)
                     if not company:
-                        run.records_failed += 1
                         continue
 
                     cid = company["source_id"]
@@ -58,7 +57,6 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
                     if dup.scalar_one_or_none():
                         continue
 
-                    origin = company.get("origin") or _detect_origin_from_name(company["name"])
                     org = Org(
                         id=str(uuid4()),
                         source=company["source"],
@@ -76,7 +74,7 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
                         incorporation_date=company["incorporation_date"],
                         org_type=company.get("company_type") or "company",
                         tags=company["tags"],
-                        origin=origin,
+                        origin=company.get("origin"),
                     )
                     org_batch.append(org)
                     run.orgs_imported += 1
@@ -105,7 +103,6 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
                                 continue
 
                             segment = segment_by_role(officer.get("role"))
-                            officer_origin = officer.get("origin") or _detect_origin_from_name(officer["name"])
                             profile = Profile(
                                 id=str(uuid4()),
                                 source=officer["source"],
@@ -127,7 +124,7 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
                                 is_active=officer["is_active"],
                                 tags=officer["tags"],
                                 segment=segment,
-                                origin=officer_origin,
+                                origin=officer["origin"],
                             )
                             profile_batch.append(profile)
                             run.records_imported += 1
@@ -138,8 +135,10 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
                                 profile_batch.clear()
 
                         await db.commit()
-                    except Exception:
-                        pass
+                    except Exception as exc:
+                        logger.warning("Error fetching officers for company %s: %s", company.get("name", "?"), exc)
+        else:
+            logger.info("OpenCorporates API key not set — skipping Phase 1")
 
         if org_batch:
             db.add_all(org_batch)
@@ -213,6 +212,11 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
 
         await db.commit()
         run.status = "completed"
+        logger.info(
+            "Diaspora import completed: %d records, %d orgs",
+            run.records_imported,
+            run.orgs_imported,
+        )
 
     except Exception as e:
         run.status = "failed"
@@ -221,12 +225,5 @@ async def run_diaspora_import(import_run_id: str, db: AsyncSession) -> None:
     finally:
         run.completed_at = datetime.now(timezone.utc)
         await db.commit()
-
-
-def _detect_origin_from_name(name: str) -> str | None:
-    from app.services.opencorporates import ORIGIN_MAP
-    nl = name.lower()
-    for key, code in ORIGIN_MAP.items():
-        if key in nl:
-            return code
-    return None
+        if oc:
+            await oc.close()
