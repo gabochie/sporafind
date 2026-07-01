@@ -200,6 +200,8 @@ async def _handle_checkout_completed(data: dict, db: AsyncSession):
         user.stripe_subscription_id = subscription_id
         user.plan_tier = plan_tier
         user.subscription_status = "active"
+        if user.role == "user":
+            user.role = "subscriber"
         await db.commit()
 
 
@@ -235,6 +237,8 @@ async def _handle_subscription_updated(data: dict, db: AsyncSession):
             price_id = items[0].get("price", {}).get("id")
             plan = PRICE_TO_PLAN.get(price_id, "free")
             user.plan_tier = plan
+        if user.role == "user":
+            user.role = "subscriber"
 
     await db.commit()
 
