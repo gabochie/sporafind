@@ -1,5 +1,6 @@
 import asyncio
 import inspect
+import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -13,16 +14,39 @@ from slowapi.util import get_remote_address
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import settings
-from app.database import Base, get_engine
+from app.database import Base, get_engine, dispose_engine
+from app.logger import setup_logging, logger
 from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog, investor, subscriber
 
 
-# Patch slowapi's deprecated iscoroutinefunction check
+setup_logging()
+
 if not hasattr(asyncio, "iscoroutinefunction"):
     asyncio.iscoroutinefunction = inspect.iscoroutinefunction
 
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+
+
+class RequestLogMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        start = time.monotonic()
+        response = await call_next(request)
+        duration = time.monotonic() - start
+        logger.info(
+            "%s %s %s %.0fms",
+            request.method,
+            request.url.path,
+            response.status_code,
+            duration * 1000,
+            extra={
+                "method": request.method,
+                "path": request.url.path,
+                "status": response.status_code,
+                "duration_ms": round(duration * 1000),
+            },
+        )
+        return response
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -54,32 +78,29 @@ async def lifespan(app: FastAPI):
     try:
         engine = get_engine()
         async with engine.begin() as conn:
-            # Add role column to public.users if it doesn't exist
             result = await conn.execute(
                 text("SELECT column_name FROM information_schema.columns WHERE table_name='users' AND table_schema='public' AND column_name='role'")
             )
             if not result.scalar():
                 await conn.execute(text("ALTER TABLE public.users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user'"))
-                print("Added 'role' column to users table", flush=True)
-            # Add hashed_password column to public.users if it doesn't exist
+                logger.info("Added 'role' column to users table")
             result = await conn.execute(
                 text("SELECT column_name FROM information_schema.columns WHERE table_name='users' AND table_schema='public' AND column_name='hashed_password'")
             )
             if not result.scalar():
                 await conn.execute(text("ALTER TABLE public.users ADD COLUMN hashed_password VARCHAR(255)"))
-                print("Added 'hashed_password' column to users table", flush=True)
+                logger.info("Added 'hashed_password' column to users table")
             await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database initialized")
     except Exception as e:
-        print(f"DB init: {e}", flush=True)
+        logger.error("DB init failed", exc_info=e)
     yield
     if engine is not None:
-        try:
-            await engine.dispose()
-        except Exception:
-            pass
+        await dispose_engine(engine)
 
 
 async def production_exception_handler(request: Request, exc: Exception):
+    logger.error("Unhandled exception", exc_info=exc)
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"},
@@ -93,6 +114,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 if settings.environment == "production":
     app.add_exception_handler(Exception, production_exception_handler)
 
+app.add_middleware(RequestLogMiddleware)
 app.add_middleware(RequestBodySizeMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(SlowAPIMiddleware)
@@ -125,6 +147,3 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "healthy", "version": "0.1.0"}
-
-
-

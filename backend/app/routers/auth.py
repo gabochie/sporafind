@@ -107,6 +107,13 @@ async def change_password(req: ChangePasswordRequest, request: Request, user: Us
     return {"detail": "Password updated successfully"}
 
 
+@router.post("/refresh")
+@limiter.limit("10/minute")
+async def refresh_token(request: Request, user: User = Depends(verify_token)):
+    new_token = create_token(user.id)
+    return TokenResponse(token=new_token, user_id=user.id, email=user.email, role=user.role)
+
+
 @router.get("/me", response_model=MeResponse)
 async def get_me(user: User = Depends(verify_token)):
     return MeResponse(

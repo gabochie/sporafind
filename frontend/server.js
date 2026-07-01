@@ -136,6 +136,22 @@ app.post('/api/auth/change-password', loginLimiter, async (req, res) => {
   }
 });
 
+// Refresh token — accepts Bearer token, returns new token
+app.post('/api/auth/refresh', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '') || req.cookies?.admin_token || '';
+    if (!token) return res.status(401).json({ detail: 'No token provided' });
+    const r = await fetch(`${API_BASE}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  } catch {
+    res.status(502).json({ detail: 'Backend unavailable' });
+  }
+});
+
 // Admin login — proxies to FastAPI /auth/login, sets httpOnly cookie
 app.post('/api/admin/login', loginLimiter, async (req, res) => {
   try {

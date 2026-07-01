@@ -1,7 +1,10 @@
+import asyncio
+
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
+from app.logger import logger
 
 _engine = None
 _async_session = None
@@ -40,7 +43,21 @@ async def get_db():
         try:
             yield s
         except Exception as e:
-            print(f"[DB] Connection error: {e}", flush=True)
+            logger.error("Database connection error", exc_info=e)
             raise
         finally:
             await s.close()
+
+
+async def dispose_engine(engine=None) -> None:
+    if engine is None:
+        engine = _engine
+    if engine is None:
+        return
+    try:
+        await asyncio.wait_for(engine.dispose(), timeout=5.0)
+        logger.info("Database engine disposed")
+    except asyncio.TimeoutError:
+        logger.warning("Database engine disposal timed out")
+    except Exception as e:
+        logger.error("Database engine disposal error", exc_info=e)
