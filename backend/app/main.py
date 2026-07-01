@@ -125,19 +125,5 @@ async def root():
 async def health():
     return {"status": "healthy", "version": "0.1.0"}
 
-@app.get("/debug/db")
-async def debug_db():
-    from app.config import settings
-    from app.database import get_engine
-    url = settings.database_url
-    masked = (url[:20] + '***' + url[-20:]) if url else 'NOT SET'
-    result = {"database_url": masked, "environment": settings.environment, "auth_secret_set": bool(settings.auth_secret)}
-    try:
-        engine = get_engine()
-        async with engine.connect() as conn:
-            await conn.execute(text("SELECT 1"))
-            result["db_connect"] = "OK"
-    except Exception as e:
-        result["db_connect"] = f"FAIL: {type(e).__name__}: {e}"
-    return result
+
 
