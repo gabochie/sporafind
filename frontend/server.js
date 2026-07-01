@@ -55,7 +55,7 @@ app.set('views', path.join(DIR, 'views'));
 app.use(express.json());
 app.use(cookieParser());
 
-app.get(['/admin', '/workspace', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising'], (req, res) => {
+app.get(['/admin', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising'], (req, res) => {
   res.redirect(301, req.path + '.html');
 });
 
@@ -203,6 +203,15 @@ app.get('/api/admin/import/status', async (req, res) => {
   } catch { res.status(502).json({ runs: [] }); }
 });
 
+app.get('/api/stats', async (req, res) => {
+  try {
+    const headers = {};
+    if (PUBLIC_API_KEY) headers['X-Api-Key'] = PUBLIC_API_KEY;
+    const r = await fetch(`${API_BASE}/stats`, { headers });
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ total_profiles: 0 }); }
+});
+
 app.get('/api/pricing', async (req, res) => {
   try {
     const headers = {};
@@ -232,6 +241,28 @@ app.all('/api/investor/profile', (req, res) => proxyInvestorAPI(req, res));
 app.all('/api/investor/commit', (req, res) => proxyInvestorAPI(req, res));
 app.all('/api/investor/message', (req, res) => proxyInvestorAPI(req, res));
 app.all('/api/investor/messages', (req, res) => proxyInvestorAPI(req, res));
+
+async function proxyWorkspaceAPI(req, res) {
+  try {
+    const auth = req.headers.authorization || '';
+    const pathSuffix = req.path.replace('/api/workspace', '');
+    const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    const url = `${API_BASE}/workspace${pathSuffix}${qs}`;
+    const headers = { 'Content-Type': 'application/json' };
+    if (auth) headers['Authorization'] = auth;
+    const opts = { method: req.method, headers };
+    if (!['GET','DELETE'].includes(req.method)) opts.body = JSON.stringify(req.body);
+    const r = await fetch(url, opts);
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+}
+
+app.all('/api/workspace/me', (req, res) => proxyWorkspaceAPI(req, res));
+app.all('/api/workspace/search', (req, res) => proxyWorkspaceAPI(req, res));
+app.all('/api/workspace/lists', (req, res) => proxyWorkspaceAPI(req, res));
+app.all('/api/workspace/lists/:id', (req, res) => proxyWorkspaceAPI(req, res));
+app.all('/api/workspace/exports', (req, res) => proxyWorkspaceAPI(req, res));
+app.all('/api/workspace/activity', (req, res) => proxyWorkspaceAPI(req, res));
 
 app.get('/api/admin/investors', async (req, res) => {
   try {
@@ -350,6 +381,37 @@ app.get('/investors/financials', requireInvestor, (req, res) => res.render('inve
 app.get('/investors/deck', requireInvestor, (req, res) => res.render('investors-deck', { investor: req.investor }));
 app.get('/investors/data-room', requireInvestor, (req, res) => res.render('investors-data-room', { investor: req.investor }));
 
+app.get('/workspace', (req, res) => res.render('workspace'));
+app.get('/workspace/app', (req, res) => res.sendFile(path.join(DIR, 'workspace.html')));
+
+app.post('/api/workspace/login', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: req.body.email, password: req.body.password }),
+    });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  } catch {
+    res.status(502).json({ detail: 'Backend unavailable' });
+  }
+});
+
+app.post('/api/workspace/signup', async (req, res) => {
+  try {
+    const r = await fetch(`${API_BASE}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: req.body.email, name: req.body.name, password: req.body.password, role: 'subscriber' }),
+    });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  } catch {
+    res.status(502).json({ detail: 'Backend unavailable' });
+  }
+});
+
 app.get('/sitemap.xml', async (req, res) => {
   let blogPosts = [];
   try {
@@ -359,7 +421,7 @@ app.get('/sitemap.xml', async (req, res) => {
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published');
   const site = 'https://sporafind.com';
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising', '/investors', '/investors/login'];
+  const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising', '/investors', '/investors/login', '/workspace'];
   staticPages.forEach(p => { xml += `  <url><loc>${site}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`; });
   blogPosts.forEach(p => { xml += `  <url><loc>${site}/blog/${p.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`; });
   xml += '</urlset>';

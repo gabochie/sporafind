@@ -11,6 +11,7 @@
     { "src": "/api(/.*)?", "dest": "api/server.js" },
     { "src": "/sitemap\\.xml", "dest": "api/server.js" },
     { "src": "/rss\\.xml", "dest": "api/server.js" },
-    { "src": "/investors(/.*)?", "dest": "api/server.js" }
+    { "src": "/investors(/.*)?", "dest": "api/server.js" },
+    { "src": "/workspace(/.*)?", "dest": "api/server.js" }
   ]
 }

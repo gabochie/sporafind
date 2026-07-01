@@ -14,7 +14,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import settings
 from app.database import Base, get_engine
-from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog, investor
+from app.routers import profiles, orgs, search, stats, auth, admin, pricing, blog, investor, subscriber
 
 
 # Patch slowapi's deprecated iscoroutinefunction check
@@ -114,6 +114,7 @@ app.include_router(admin.router)
 app.include_router(pricing.router)
 app.include_router(blog.router)
 app.include_router(investor.router)
+app.include_router(subscriber.router)
 
 
 @app.get("/")

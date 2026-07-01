@@ -70,7 +70,11 @@ async def get_activity(
     db: AsyncSession = Depends(get_db),
 ):
     rows = await db.execute(
-        select(ActivityLog).order_by(ActivityLog.created_at.desc()).limit(limit)
+        select(ActivityLog)
+        .join(User, ActivityLog.user_id == User.id)
+        .where(User.role == "admin")
+        .order_by(ActivityLog.created_at.desc())
+        .limit(limit)
     )
     items = rows.scalars().all()
     return {

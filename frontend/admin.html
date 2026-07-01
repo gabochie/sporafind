@@ -483,7 +483,7 @@ img{display:block}
         <div class="sidebar-group-label">Workspace</div>
         <a class="sidebar-link" data-view="lists"><i class="ti ti-list-check"></i> Saved Lists</a>
         <a class="sidebar-link" data-view="exports"><i class="ti ti-download"></i> Exports</a>
-        <a class="sidebar-link" data-view="activity"><i class="ti ti-timeline"></i> Activity Log</a>
+        <a class="sidebar-link" data-view="activity" style="display:none"><i class="ti ti-timeline"></i> Activity Log</a>
       </div>
       <div class="sidebar-group">
         <div class="sidebar-group-label">Admin</div>
@@ -621,11 +621,11 @@ img{display:block}
         <div class="kpi-grid" style="margin-top:0">
           <div class="kpi-card">
             <div class="kpi-top">
-              <div class="kpi-icon green"><i class="ti ti-users"></i></div>
-              <span class="kpi-change up">↑ 18.3%</span>
+              <div class="kpi-icon green"><i class="ti ti-database"></i></div>
+              <span class="kpi-change up">↑ 12.1%</span>
             </div>
-            <div class="kpi-value">247</div>
-            <div class="kpi-label">Active workspace users</div>
+            <div class="kpi-value" id="profileCount">—</div>
+            <div class="kpi-label">Total profiles</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-top">
@@ -707,43 +707,15 @@ img{display:block}
         <div class="charts-grid">
           <div class="chart-card full">
             <div class="chart-card-header">
-              <span class="chart-card-title">Recent activity</span>
-              <span class="chart-card-action" onclick="navigateTo('activity')">View all <i class="ti ti-arrow-right"></i></span>
+              <span class="chart-card-title">Platform health</span>
+              <span class="chart-card-action" onclick="loadImportHistory()">Refresh <i class="ti ti-refresh"></i></span>
             </div>
-            <div class="activity-list">
+            <div class="activity-list" id="importHistoryList">
               <div class="activity-item">
                 <div class="activity-dot green"></div>
                 <div class="activity-content">
-                  <div class="activity-text"><strong>AI scan completed</strong> — 340 new Ghanaian entrepreneur profiles discovered in Canada</div>
-                  <div class="activity-time">22 minutes ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot gold"></div>
-                <div class="activity-content">
-                  <div class="activity-text"><strong>Export generated</strong> — <strong>8,200</strong> investor profiles exported to CSV by <strong>Esi K.</strong></div>
-                  <div class="activity-time">1 hour ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot blue"></div>
-                <div class="activity-content">
-                  <div class="activity-text"><strong>List saved</strong> — <strong>"UK Healthcare Investors"</strong> created with 164 profiles</div>
-                  <div class="activity-time">3 hours ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot green"></div>
-                <div class="activity-content">
-                  <div class="activity-text"><strong>Org discovery</strong> — 12 diaspora associations mapped in Washington, D.C.</div>
-                  <div class="activity-time">5 hours ago</div>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot red"></div>
-                <div class="activity-content">
-                  <div class="activity-text"><strong>Team member added</strong> — <strong>Kwame Asare</strong> joined with Analyst role</div>
-                  <div class="activity-time">1 day ago</div>
+                  <div class="activity-text"><strong>No import history</strong></div>
+                  <div class="activity-time">Run a sync via the <strong>Data</strong> tab to populate the database.</div>
                 </div>
               </div>
             </div>
@@ -1251,26 +1223,8 @@ img{display:block}
         </div>
       </div>
 
-      <!-- ===== ACTIVITY LOG ===== -->
-      <div class="page-view" id="view-activity">
-        <div class="page-header">
-          <div class="page-header-left">
-            <div class="page-header-title">Activity log</div>
-            <div class="page-header-sub">Full audit trail of searches, exports, scans, and team actions.</div>
-          </div>
-          <div class="page-header-actions">
-            <button class="btn btn-outline btn-sm"><i class="ti ti-filter"></i> Filter</button>
-            <button class="btn btn-ghost btn-sm"><i class="ti ti-download"></i> Export log</button>
-          </div>
-        </div>
-        <div class="data-table-wrap">
-          <div class="activity-list" id="activityLogList" style="padding:0 20px">
-            <div class="activity-item" style="text-align:center;padding:40px;color:var(--text-muted);justify-content:center" id="activityLogLoading">
-              <i class="ti ti-loader" style="animation:spin 1s linear infinite;margin-right:8px"></i> Loading activity...
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- ===== ACTIVITY LOG (hidden — admin events only) ===== -->
+      <div class="page-view" id="view-activity" style="display:none"></div>
 
       <!-- ===== TEAM ===== -->
       <div class="page-view" id="view-team">
@@ -1973,7 +1927,7 @@ const adminViewConfigs = {
   people: {render: renderPeopleTable},
   users: {render: renderUsersTable},
   blog: {render: loadBlogPosts},
-  activity: {render: loadActivityLog},
+  activity: {render: null},
   investors: {render: loadInvestorsPage},
   search: {render: null},
 };
@@ -2328,34 +2282,14 @@ async function loadBlogAnalytics() {
     const drafts = allPosts.filter(p => p.status === 'draft').length;
     document.getElementById('blogKpiDrafts').textContent = drafts;
   } catch(e) { console.error('Blog analytics error', e); }
+  try {
+    const s = await fetch('/api/stats');
+    const stats = await s.json();
+    document.getElementById('profileCount').textContent = (stats.total_profiles || 0).toLocaleString();
+  } catch(e) { /* stats unavailable */ }
 }
 
-// ===== ACTIVITY LOG =====
-async function loadActivityLog() {
-  const list = document.getElementById('activityLogList');
-  const loading = document.getElementById('activityLogLoading');
-  try {
-    const r = await fetch('/api/admin/activity?limit=50');
-    const data = await r.json();
-    if (!data.items || !data.items.length) { loading.textContent = 'No activity yet.'; return; }
-    loading.style.display = 'none';
-    const timeAgo = (ts) => { const s = Math.floor((Date.now() - new Date(ts).getTime())/1000); if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; };
-    const dotColor = (a) => { if(a.includes('scan')||a.includes('discover')) return 'green'; if(a.includes('export')) return 'gold'; if(a.includes('list')||a.includes('search')) return 'blue'; return 'red'; };
-    list.innerHTML = data.items.map(a => `
-      <div class="activity-item">
-        <div class="activity-dot ${dotColor(a.action)}"></div>
-        <div class="activity-content">
-          <div class="activity-text"><strong>${a.action}</strong> — ${a.detail}</div>
-          <div class="activity-time">${timeAgo(a.timestamp)}</div>
-          ${a.user_id ? `<div class="activity-user"><i class="ti ti-user"></i> ${a.user_id}</div>` : ''}
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
-    loading.textContent = 'Could not load activity log.';
-    console.error('Activity log error', e);
-  }
-}
+// ===== ACTIVITY LOG (disabled for now — admin events not yet logged) =====
 
 // ===== DATA IMPORT =====
 let importPollTimer = null;

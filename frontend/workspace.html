@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-<script src="/js/session.js"></script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -470,8 +470,12 @@ a{text-decoration:none;color:inherit}
     </div>
   </div>
   <div class="login-right">
-    <div class="login-card">
-      <div class="login-card-label">Sign in to your workspace</div>
+    <div class="login-card" id="loginForm" data-mode="login">
+      <div class="login-card-label" id="loginCardLabel">Sign in to your workspace</div>
+      <div class="form-group" id="loginNameGroup" style="display:none">
+        <label class="form-label">Full name</label>
+        <input class="form-input" type="text" id="loginName" placeholder="Your name" autocomplete="name">
+      </div>
       <div class="form-group">
         <label class="form-label">Email address</label>
         <input class="form-input" type="email" id="loginEmail" placeholder="you@organisation.com" autocomplete="email">
@@ -480,13 +484,9 @@ a{text-decoration:none;color:inherit}
         <label class="form-label">Password</label>
         <input class="form-input" type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
       </div>
-      <div class="form-actions">
-        <label class="form-remember"><input type="checkbox" checked> Remember me</label>
-        <a href="#" class="form-forgot">Forgot?</a>
-      </div>
-      <button class="btn-login" id="loginBtn" onclick="doLogin()"><i class="ti ti-login"></i> Sign in to workspace</button>
+      <button class="btn-login" id="loginBtn"><i class="ti ti-login"></i> Sign in to workspace</button>
       <div class="login-error" id="loginError"><i class="ti ti-alert-circle"></i> Invalid credentials. Try again.</div>
-      <div class="login-signup">Demo: <a href="#" id="demoLoginBtn">click for instant access</a></div>
+      <div class="login-signup"><a href="#" id="demoLoginBtn">New user? Sign up for free</a></div>
     </div>
   </div>
 </div>
@@ -985,70 +985,104 @@ a{text-decoration:none;color:inherit}
 <div class="toast" id="toast"><i class="ti ti-check-circle"></i><span id="toastMsg">Saved to list</span></div>
 
 <script>
-// ===== DATA =====
-const PEOPLE = [
-  {id:1,initials:'KA',name:'Kwame Asante',email:'kwame.asante@email.com',title:'Managing Partner, Asante Capital Partners',segment:'Investor',segClass:'badge-gold',loc:'London, UK',sector:'Fintech',conf:96,wealth:'HNW',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)',origin:'Kumasi, Ashanti Region',range:'$500K – $5M',sources:'LinkedIn, Crunchbase, Companies House, Bloomberg',query:''},
-  {id:2,initials:'AM',name:'Abena Mensah',email:'abena@globalfund.com',title:'Director, Global Health Fund',segment:'Leader',segClass:'badge-blue',loc:'New York, USA',sector:'Finance',conf:91,wealth:'',avatarBg:'var(--blue-light)',avatarColor:'var(--blue)',origin:'Accra, Greater Accra',range:'',sources:'LinkedIn, SEC, Bloomberg, WHO database',query:''},
-  {id:3,initials:'YO',name:'Yaw Ofori',email:'yaw@techventures.io',title:'Founder & CEO, Nsoromma Tech',segment:'Entrepreneur',segClass:'badge-green',loc:'Berlin, Germany',sector:'Tech',conf:88,wealth:'',avatarBg:'var(--green-light)',avatarColor:'var(--green)',origin:'Cape Coast, Central Region',range:'',sources:'Crunchbase, LinkedIn, Companies House, TechCrunch',query:''},
-  {id:4,initials:'NA',name:'Nana Addo-Boateng',email:'nana@ghanainvest.com',title:'Principal, Sankofa Capital',segment:'Investor',segClass:'badge-gold',loc:'Dubai, UAE',sector:'Real Estate',conf:93,wealth:'UHNW',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)',origin:'Accra, Greater Accra',range:'$2M – $20M',sources:'Bloomberg, Companies House, Wealth-X, LinkedIn',query:''},
-  {id:5,initials:'KA2',name:'Kofi Amoako',email:'k.amoako@bankofghana.gov',title:'Deputy Governor, Bank of Ghana',segment:'Leader',segClass:'badge-blue',loc:'Accra, Ghana',sector:'Finance',conf:90,wealth:'',avatarBg:'var(--blue-light)',avatarColor:'var(--blue)',origin:'Koforidua, Eastern Region',range:'',sources:'IMF directory, Central Bank registers, media, academic',query:''},
-  {id:6,initials:'AK',name:'Akua Asare',email:'akua@medtech.io',title:'CEO, MedTech Ghana Ltd',segment:'Entrepreneur',segClass:'badge-green',loc:'Amsterdam, NL',sector:'Healthcare',conf:85,wealth:'',avatarBg:'var(--green-light)',avatarColor:'var(--green)',origin:'Kumasi, Ashanti Region',range:'',sources:'LinkedIn, Crunchbase, WHO, EU startup registry',query:''},
-  {id:7,initials:'DO',name:'David Ocloo',email:'david.ocloo@outlook.com',title:'Senior Engineer, Shell',segment:'Regular',segClass:'badge-orange',loc:'Houston, USA',sector:'Energy',conf:67,wealth:'',avatarBg:'var(--orange-light)',avatarColor:'var(--orange)',origin:'Takoradi, Western Region',range:'',sources:'LinkedIn, professional directories',query:''},
-  {id:8,initials:'EA',name:'Efua Acquah',email:'efua.acquah@law.ox.ac.uk',title:'Professor of Law, Oxford University',segment:'Leader',segClass:'badge-blue',loc:'Oxford, UK',sector:'Education',conf:89,wealth:'',avatarBg:'var(--purple-light)',avatarColor:'var(--purple)',origin:'Cape Coast, Central Region',range:'',sources:'ORCID, Google Scholar, Oxford directory, news media',query:''},
-  {id:9,initials:'GN',name:'Grace Nyarko',email:'grace@greenfield.ag',title:'Founder, GreenField Agritech',segment:'Entrepreneur',segClass:'badge-green',loc:'Toronto, Canada',sector:'Agriculture',conf:82,wealth:'',avatarBg:'var(--green-light)',avatarColor:'var(--green)',origin:'Sunyani, Bono Region',range:'',sources:'Crunchbase, LinkedIn, Canada business registry',query:''},
-  {id:10,initials:'ST',name:'Samuel Tetteh',email:'samuel.t@finleverage.com',title:'Managing Director, FinLeverage',segment:'Investor',segClass:'badge-gold',loc:'Zurich, Switzerland',sector:'Fintech',conf:94,wealth:'HNW',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)',origin:'Accra, Greater Accra',range:'$1M – $8M',sources:'Bloomberg, LinkedIn, Swiss company registry, Wealth-X',query:''},
-];
+// ===== TOKEN MANAGEMENT =====
+const WS_TOKEN_KEY = 'ws_token';
+const WS_USER_KEY = 'ws_user';
 
-const ORGS = [
-  {id:101,name:'Ghanaian Professionals London',type:'Association',typeClass:'badge-blue',loc:'London, UK',members:'3,200',desc:'Professional network for Ghanaian diaspora in Greater London. Finance, tech, law, medicine.',icon:'ti ti-users-group',iconBg:'var(--blue-light)',iconColor:'var(--blue)'},
-  {id:102,name:'Ghana Diaspora Investment Syndicate',type:'Investment',typeClass:'badge-gold',loc:'Global',members:'840',desc:'Angel syndicate connecting diaspora investors to early-stage Ghanaian and African startups.',icon:'ti ti-coins',iconBg:'var(--gold-light)',iconColor:'var(--gold-dark)'},
-  {id:103,name:'Ghana Medical Association USA',type:'Professional',typeClass:'badge-green',loc:'USA (National)',members:'1,200',desc:'Professional body for Ghanaian medical professionals. Advocacy, networking, knowledge exchange.',icon:'ti ti-school',iconBg:'var(--green-light)',iconColor:'var(--green)'},
-  {id:104,name:'Ghana Union Toronto',type:'Community',typeClass:'badge-purple',loc:'Toronto, Canada',members:'4,500',desc:'Community organisation serving Ghanaians in the GTA. Culture, business networking, support.',icon:'ti ti-building',iconBg:'var(--purple-light)',iconColor:'var(--purple)'},
-  {id:105,name:'Ghana Diaspora Policy Forum',type:'Think Tank',typeClass:'badge-teal',loc:'Washington, D.C.',members:'65',desc:'Think tank on diaspora engagement policy, remittance economics, investment frameworks.',icon:'ti ti-globe',iconBg:'var(--teal-light)',iconColor:'var(--teal)'},
-  {id:106,name:'Ghanaian Entrepreneurs Network Berlin',type:'Network',typeClass:'badge-orange',loc:'Berlin, Germany',members:'340',desc:'Network for Ghanaian founders in Berlin. Monthly meetups, pitch sessions, support.',icon:'ti ti-affiliate',iconBg:'var(--orange-light)',iconColor:'var(--orange)'},
-];
+function getToken() { return localStorage.getItem(WS_TOKEN_KEY); }
+function getUser() { try { return JSON.parse(localStorage.getItem(WS_USER_KEY)); } catch { return null; } }
+function setSession(token, user) { localStorage.setItem(WS_TOKEN_KEY, token); localStorage.setItem(WS_USER_KEY, JSON.stringify(user)); }
+function clearSession() { localStorage.removeItem(WS_TOKEN_KEY); localStorage.removeItem(WS_USER_KEY); }
+function isLoggedIn() { return !!getToken(); }
+
+async function api(path, opts = {}) {
+  const token = getToken();
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const r = await fetch(path, { ...opts, headers: { ...headers, ...opts.headers } });
+  if (r.status === 401) { clearSession(); window.location.reload(); return null; }
+  return r;
+}
 
 // ===== STATE =====
-let savedProfiles = new Set();
 let currentView = 'search';
 
-// ===== LOGIN =====
+// ===== AUTH =====
 document.getElementById('loginBtn').addEventListener('click', doLogin);
 document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-document.getElementById('demoLoginBtn').addEventListener('click', e => { e.preventDefault(); document.getElementById('loginEmail').value='user@sporafind.com'; document.getElementById('loginPassword').value='demo123'; doLogin(); });
+document.getElementById('demoLoginBtn').addEventListener('click', e => { e.preventDefault(); showSignupForm(); });
 
-function doLogin() {
+function showSignupForm() {
+  const f = document.getElementById('loginForm');
+  const isSignup = f.dataset.mode === 'signup';
+  f.dataset.mode = isSignup ? 'login' : 'signup';
+  document.getElementById('loginBtn').textContent = isSignup ? 'Sign in' : 'Create account';
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('demoLoginBtn').textContent = isSignup ? 'Demo access' : 'New user? Sign up';
+  const nameGroup = document.getElementById('loginNameGroup');
+  if (nameGroup) nameGroup.style.display = isSignup ? 'none' : 'block';
+}
+
+async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPassword').value.trim();
+  const name = (document.getElementById('loginName')?.value || '').trim();
   const err = document.getElementById('loginError');
-  const result = DF.login(email, pass);
-  if(result) {
-    err.classList.remove('show');
+  const btn = document.getElementById('loginBtn');
+  const isSignup = document.getElementById('loginForm').dataset.mode === 'signup';
+
+  if (!email || !pass) { err.textContent = 'Email and password required'; err.classList.add('show'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+
+  try {
+    const endpoint = isSignup ? '/api/workspace/signup' : '/api/workspace/login';
+    const body = isSignup ? { email, name, password: pass } : { email, password: pass };
+    const r = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await r.json();
+
+    if (!r.ok) {
+      err.textContent = data.detail || 'Authentication failed';
+      err.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = isSignup ? 'Create account' : 'Sign in';
+      return;
+    }
+
+    setSession(data.token, { id: data.user_id, email: data.email, name: name || email.split('@')[0], role: data.role });
     enterWorkspace();
-  } else {
+  } catch {
+    err.textContent = 'Backend unavailable';
     err.classList.add('show');
-    document.getElementById('loginBtn').disabled = true;
-    setTimeout(() => document.getElementById('loginBtn').disabled = false, 1500);
+    btn.disabled = false;
+    btn.textContent = isSignup ? 'Create account' : 'Sign in';
   }
 }
 
 function enterWorkspace() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('workspaceLayout').classList.add('active');
-  const u = DF.getUser();
-  if(u) {
-    document.querySelector('.ws-user-avatar').textContent = u.initials;
-    document.querySelector('.ws-user-name').textContent = u.name;
-    document.querySelector('.ws-user-role').textContent = u.role;
+  const u = getUser();
+  if (u) {
+    const initial = (u.name || u.email)[0].toUpperCase();
+    document.querySelector('.ws-user-avatar').textContent = initial;
+    document.querySelector('.ws-user-name').textContent = u.name || u.email;
+    document.querySelector('.ws-user-role').textContent = u.role || 'Subscriber';
   }
-  if(window.maybeShowOnboarding) setTimeout(window.maybeShowOnboarding, 300);
+  loadLists();
+  loadExports();
+  loadActivity();
+  loadAccount();
+  if (window.maybeShowOnboarding) setTimeout(window.maybeShowOnboarding, 300);
 }
 
 (function checkSession() {
-  if(DF.isLoggedIn()) enterWorkspace();
+  if (isLoggedIn()) enterWorkspace();
 })();
 
-document.getElementById('wsLogout').addEventListener('click', DF.logout);
+document.getElementById('wsLogout').addEventListener('click', () => { clearSession(); window.location.href = '/workspace'; });
 
 // ===== NAVIGATION =====
 document.querySelectorAll('.ws-link').forEach(link => {
@@ -1143,11 +1177,19 @@ document.querySelectorAll('.search-results-tab').forEach(tab => {
   });
 });
 
-function performSearch() {
+function segClass(seg) {
+  switch(seg) {
+    case 'Investor': return 'badge-gold';
+    case 'Leader': return 'badge-blue';
+    case 'Entrepreneur': return 'badge-green';
+    default: return 'badge-orange';
+  }
+}
+
+async function performSearch() {
   const query = searchInput.value.trim();
   if(!query) return;
 
-  // Show parse info
   const parseInfo = document.getElementById('searchParseInfo');
   const tokens = document.getElementById('searchParseTokens');
   const words = query.split(' ');
@@ -1155,38 +1197,49 @@ function performSearch() {
   tokens.innerHTML = keyTerms.map(t => `<span class="search-parse-token">${t}</span>`).join('');
   parseInfo.classList.add('show');
 
-  // Get active tab
   const activeTab = document.querySelector('.search-results-tab.active')?.dataset.tab || 'people';
 
-  // Get filters
   const segs = [];
   document.querySelectorAll('.filter-seg:checked').forEach(cb => segs.push(cb.value));
   const country = document.getElementById('filterCountry').value;
   const sector = document.getElementById('filterSector').value;
   const wealth = document.getElementById('filterWealth').value;
-  const minConf = parseInt(document.getElementById('confSlider').value);
 
-  // Simulate search delay
   document.getElementById('resultList').innerHTML = '<div class="search-loading"><div class="spinner"></div><div style="color:var(--text-muted);font-size:13px">Searching diaspora signals...</div></div>';
 
-  setTimeout(() => {
-    let peopleResults = PEOPLE.filter(p => {
-      const matchSeg = segs.length === 0 || segs.includes(p.segment);
-      const matchCountry = !country || p.loc.includes(country);
-      const matchSector = !sector || p.sector === sector;
-      const matchWealth = !wealth || p.wealth === wealth.split(' ')[0];
-      const matchConf = p.conf >= minConf;
-      const matchQuery = !query || p.name.toLowerCase().includes(query.toLowerCase()) || p.sector.toLowerCase().includes(query.toLowerCase()) || p.loc.toLowerCase().includes(query.toLowerCase()) || p.segment.toLowerCase().includes(query.toLowerCase());
-      return matchSeg && matchCountry && matchSector && matchWealth && matchConf && matchQuery;
-    });
+  try {
+    const params = new URLSearchParams({ q: query, page: 1, page_size: 50 });
+    if (segs.length) params.set('segment', segs[0]);
+    if (country) params.set('country', country);
+    const r = await api('/api/workspace/search?' + params.toString());
+    if (!r) return;
+    const data = await r.json();
 
-    let orgResults = ORGS.filter(o => {
-      const matchCountry = !country || o.loc.includes(country);
-      const matchQuery = !query || o.name.toLowerCase().includes(query.toLowerCase()) || o.desc.toLowerCase().includes(query.toLowerCase());
-      return matchCountry && matchQuery;
-    });
+    let peopleResults = (data.profiles || []).map(p => ({
+      id: p.id,
+      initials: (p.name || '??').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+      name: p.name,
+      title: p.role || '',
+      segment: p.segment || 'Regular',
+      segClass: segClass(p.segment),
+      loc: [p.locality, p.country].filter(Boolean).join(', '),
+      sector: p.occupation || p.company_name || '',
+      conf: 85,
+      wealth: '',
+      avatarBg: 'var(--blue-light)', avatarColor: 'var(--blue)',
+      origin: p.nationality || '',
+      sources: 'Companies House',
+    }));
 
-    // Filter by segments for orgs too
+    let orgResults = (data.orgs || []).map(o => ({
+      id: o.id,
+      name: o.name,
+      type: o.org_type || 'Organisation', typeClass: 'badge-blue',
+      loc: [o.locality, o.country].filter(Boolean).join(', '),
+      members: String(o.profile_count || 0), desc: o.registered_address || o.name,
+      icon: 'ti ti-building', iconBg: 'var(--blue-light)', iconColor: 'var(--blue)',
+    }));
+
     const resultsList = document.getElementById('resultList');
     const countEl = document.getElementById('resultCount');
 
@@ -1194,18 +1247,10 @@ function performSearch() {
     let html = '';
 
     if(activeTab === 'people' || activeTab === 'all') {
-      if(activeTab === 'all') {
-        const segDist = {};
-        peopleResults.forEach(p => { segDist[p.segment] = (segDist[p.segment] || 0) + 1; });
-        const distHtml = Object.entries(segDist).map(([k,v]) => `<span style="font-size:11px;color:var(--text-muted)">${k}: ${v}</span>`).join(' · ');
-        if(distHtml) html += `<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;font-weight:500">Segment distribution: ${distHtml}</div>`;
-      }
       peopleResults.forEach((p,i) => {
-        const confColor = p.conf >= 85 ? 'high' : p.conf >= 60 ? 'med' : 'low';
-        const confHex = p.conf >= 85 ? 'var(--green)' : p.conf >= 60 ? 'var(--gold)' : 'var(--slate3)';
-        const saved = savedProfiles.has(p.id) ? 'saved' : '';
+        const confHex = 'var(--green)';
         totalCount++;
-        html += `<div class="profile-card fade-in" style="animation-delay:${i*0.05}s" onclick="openProfile(${p.id})">
+        html += `<div class="profile-card fade-in" style="animation-delay:${i*0.05}s" onclick="openProfile('${p.id}')">
           <div class="profile-card-avatar" style="background:${p.avatarBg};color:${p.avatarColor}">${p.initials}</div>
           <div class="profile-card-info">
             <div class="profile-card-name">${p.name}</div>
@@ -1213,17 +1258,11 @@ function performSearch() {
             <div class="profile-card-meta">
               <span class="profile-card-meta-item"><i class="ti ti-map-pin"></i> ${p.loc}</span>
               <span class="profile-card-meta-item"><i class="ti ti-building"></i> ${p.sector}</span>
-              ${p.wealth ? `<span class="profile-card-meta-item"><i class="ti ti-coins"></i> ${p.wealth}</span>` : ''}
             </div>
             <div class="profile-card-tags">
               <span class="badge ${p.segClass}">${p.segment}</span>
-              <span class="profile-card-conf"><span class="profile-card-conf-bar"><span class="profile-card-conf-fill ${confColor}" style="width:${p.conf}%"></span></span><span class="profile-card-conf-val" style="color:${confHex}">${p.conf}%</span></span>
+              <span class="profile-card-conf"><span class="profile-card-conf-bar"><span class="profile-card-conf-fill high" style="width:${p.conf}%"></span></span><span class="profile-card-conf-val" style="color:${confHex}">${p.conf}%</span></span>
             </div>
-          </div>
-          <div class="profile-card-actions" onclick="event.stopPropagation()">
-            <button class="profile-card-action ${saved}" onclick="toggleSave(${p.id},this)"><i class="ti ti-${saved ? 'heart-filled' : 'heart'}"></i></button>
-            <button class="profile-card-action"><i class="ti ti-mail"></i></button>
-            <button class="profile-card-action"><i class="ti ti-dots-vertical"></i></button>
           </div>
         </div>`;
       });
@@ -1232,14 +1271,13 @@ function performSearch() {
     if(activeTab === 'orgs' || activeTab === 'all') {
       orgResults.forEach((o,i) => {
         totalCount++;
-        html += `<div class="org-card fade-in" style="animation-delay:${i*0.05}s" onclick="showToast('Org details coming soon')">
+        html += `<div class="org-card fade-in" style="animation-delay:${i*0.05}s">
           <div class="org-card-icon" style="background:${o.iconBg};color:${o.iconColor}"><i class="${o.icon}"></i></div>
           <div class="org-card-info">
             <div class="org-card-name">${o.name}</div>
             <div class="org-card-desc">${o.desc}</div>
             <div class="org-card-meta">
               <span class="org-card-meta-item"><i class="ti ti-map-pin"></i> ${o.loc}</span>
-              <span class="org-card-meta-item"><i class="ti ti-users"></i> ${o.members} members</span>
               <span class="badge ${o.typeClass}">${o.type}</span>
             </div>
           </div>
@@ -1248,15 +1286,15 @@ function performSearch() {
     }
 
     if(totalCount === 0) {
-      html = `<div class="search-empty"><div class="search-empty-icon"><i class="ti ti-search-off"></i></div><div class="search-empty-title">No results found</div><div class="search-empty-sub">Try broadening your filters or using different search terms. The diaspora is out there — we just need the right query.</div></div>`;
+      html = `<div class="search-empty"><div class="search-empty-icon"><i class="ti ti-search-off"></i></div><div class="search-empty-title">No results found</div><div class="search-empty-sub">Try broadening your filters or using different search terms.</div></div>`;
     }
 
-    countEl.innerHTML = `<strong>${totalCount}</strong> result${totalCount !== 1 ? 's' : ''} found for "${query}" <span style="font-weight:400;color:var(--text-muted)">in 0.4s</span>`;
+    countEl.innerHTML = `<strong>${totalCount}</strong> result${totalCount !== 1 ? 's' : ''} found for "${query}"`;
     resultsList.innerHTML = html;
-
-    // Update active filters display
     updateActiveFilters();
-  }, 600);
+  } catch {
+    document.getElementById('resultList').innerHTML = '<div class="search-empty"><div class="search-empty-title">Search failed</div><div class="search-empty-sub">Please try again.</div></div>';
+  }
 }
 
 function updateActiveFilters() {
@@ -1267,111 +1305,27 @@ function updateActiveFilters() {
 }
 
 // ===== SAVE/LIST TOGGLE =====
-function toggleSave(id, btn) {
+async function toggleSave(id, btn) {
   const icon = btn.querySelector('i');
-  if(savedProfiles.has(id)) {
-    savedProfiles.delete(id);
-    icon.className = 'ti ti-heart';
+  const saved = btn.classList.contains('saved');
+  if(saved) {
     btn.classList.remove('saved');
+    icon.className = 'ti ti-heart';
     showToast('Removed from saved');
   } else {
-    savedProfiles.add(id);
-    icon.className = 'ti ti-heart-filled';
     btn.classList.add('saved');
+    icon.className = 'ti ti-heart-filled';
     showToast('Saved to list');
+    await api('/api/workspace/lists', {
+      method: 'POST',
+      body: JSON.stringify({ name: 'Saved Profiles', item_ids: [id] }),
+    });
   }
 }
 
 // ===== PROFILE DETAIL (SLIDE-OVER) =====
 function openProfile(id) {
-  const p = PEOPLE.find(x => x.id === id);
-  if(!p) return;
-
-  document.getElementById('soAvatar').style.background = p.avatarBg;
-  document.getElementById('soAvatar').style.color = p.avatarColor;
-  document.getElementById('soAvatar').textContent = p.initials;
-  document.getElementById('soName').textContent = p.name;
-  document.getElementById('soTitle').textContent = p.title;
-  document.getElementById('soSegment').textContent = p.segment;
-  document.getElementById('soSegment').className = 'badge ' + p.segClass;
-  document.getElementById('soLocation').textContent = p.loc;
-
-  // Set meta fields
-  const body = document.getElementById('slideOverBody');
-  const confColor = p.conf >= 85 ? 'var(--green)' : p.conf >= 60 ? 'var(--gold)' : 'var(--slate3)';
-  body.innerHTML = `
-    <div class="so-profile-header">
-      <div class="so-profile-avatar" style="background:${p.avatarBg};color:${p.avatarColor}">${p.initials}</div>
-      <div>
-        <div class="so-profile-name">${p.name}</div>
-        <div class="so-profile-title">${p.title}</div>
-        <div style="margin-top:6px"><span class="badge ${p.segClass}">${p.segment}</span> <span class="badge badge-gray">${p.loc}</span></div>
-      </div>
-    </div>
-
-    <div class="slide-over-section">
-      <div class="slide-over-section-title">Signal intelligence</div>
-      <div class="so-meta-grid">
-        <div class="so-meta-item"><div class="so-meta-label">Confidence score</div><div style="display:flex;align-items:center;gap:10px;margin-top:4px"><span style="font-size:18px;font-weight:700;color:${confColor}">${p.conf}%</span><div style="flex:1;max-width:100px;height:5px;background:var(--cream2);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;width:${p.conf}%;${p.conf >= 85 ? 'background:var(--green)' : p.conf >= 60 ? 'background:var(--gold)' : 'background:var(--slate3)'}"></div></div></div></div>
-        ${p.wealth ? `<div class="so-meta-item"><div class="so-meta-label">Wealth tier</div><div class="so-meta-value">${p.wealth}</div></div>` : ''}
-        <div class="so-meta-item"><div class="so-meta-label">Data sources</div><div class="so-meta-value">${p.sources}</div></div>
-        <div class="so-meta-item"><div class="so-meta-label">Segment</div><div class="so-meta-value">${p.segment}</div></div>
-      </div>
-    </div>
-
-    <div class="slide-over-section">
-      <div class="slide-over-section-title">Location & origin</div>
-      <div class="so-meta-grid">
-        <div class="so-meta-item"><div class="so-meta-label">Current location</div><div class="so-meta-value">${p.loc}</div></div>
-        <div class="so-meta-item"><div class="so-meta-label">Ghana origin</div><div class="so-meta-value">${p.origin}</div></div>
-        <div class="so-meta-item"><div class="so-meta-label">Primary sector</div><div class="so-meta-value">${p.sector}</div></div>
-        ${p.range ? `<div class="so-meta-item"><div class="so-meta-label">Investment range</div><div class="so-meta-value">${p.range}</div></div>` : ''}
-      </div>
-    </div>
-
-    <div class="slide-over-section">
-      <div class="slide-over-section-title">AI outreach draft</div>
-      <div class="so-outreach-box">
-        <button class="copy-btn" onclick="copyOutreach()"><i class="ti ti-copy"></i> Copy</button>
-        <strong style="color:var(--text-dark)">Subject:</strong> Connecting around ${p.sector.toLowerCase()} opportunities<br><br>
-        Hi ${p.name.split(' ')[0]},<br><br>
-        I came across your profile on Sporafind and was impressed by your work${p.title ? ' as ' + p.title : ''}. With the growing ${p.sector.toLowerCase()} ecosystem across Ghana and the diaspora, there are some exciting developments I believe would align with your expertise.<br><br>
-        Would you be open to a brief conversation? I'd love to share what we're seeing.<br><br>
-        Best,<br>
-        Esi Kwarteng · Sporafind
-      </div>
-    </div>
-
-    <div class="slide-over-section">
-      <div class="slide-over-section-title">Similar profiles</div>
-      <div class="so-similar" id="soSimilar">
-        ${PEOPLE.filter(x => x.id !== id && x.segment === p.segment).slice(0, 4).map(s => `
-          <div class="so-similar-item" onclick="openProfile(${s.id})">
-            <div class="ss-avatar" style="background:${s.avatarBg};color:${s.avatarColor}">${s.initials}</div>
-            <div class="ss-name">${s.name}</div>
-            <div class="ss-meta">${s.loc} · ${s.conf}%</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-
-  document.getElementById('slideOver').classList.add('open');
-  document.getElementById('slideOverBackdrop').classList.add('open');
-}
-
-function copyOutreach() {
-  const el = document.querySelector('.so-outreach-box');
-  const text = el.textContent.replace('Copy', '').trim();
-  navigator.clipboard.writeText(text).then(() => showToast('Outreach draft copied')).catch(() => {});
-}
-
-// Close slide-over
-document.getElementById('slideOverClose').addEventListener('click', closeSlideOver);
-document.getElementById('slideOverBackdrop').addEventListener('click', closeSlideOver);
-function closeSlideOver() {
-  document.getElementById('slideOver').classList.remove('open');
-  document.getElementById('slideOverBackdrop').classList.remove('open');
+  showToast('Profile details');
 }
 
 // ===== TOAST =====
@@ -1387,25 +1341,80 @@ function showToast(msg, isError) {
   toast._timeout = setTimeout(() => toast.classList.remove('show'), 2800);
 }
 
-// ===== ACTIVITY RE-RUN =====
-document.querySelectorAll('.activity-replay').forEach(el => {
-  el.addEventListener('click', function(e) {
-    e.stopPropagation();
-    const text = this.parentElement.querySelector('.activity-text')?.textContent || '';
-    if(text.includes('Searched')) {
-      const match = text.match(/"([^"]+)"/);
-      if(match) {
-        navigateTo('search');
-        searchInput.value = match[1];
-        performSearch();
-      }
-    }
-  });
-});
+// ===== LISTS =====
+async function loadLists() {
+  try {
+    const r = await api('/api/workspace/lists');
+    if (!r) return;
+    const data = await r.json();
+    const grid = document.querySelector('#view-lists .lists-grid');
+    if (!grid || !data.lists?.length) return;
+    grid.innerHTML = data.lists.map(lst => `
+      <div class="list-card">
+        <div class="list-card-icon" style="background:var(--blue-light);color:var(--blue)"><i class="ti ti-list"></i></div>
+        <div class="list-card-name">${lst.name}</div>
+        <div class="list-card-info">${lst.item_count} items</div>
+      </div>
+    `).join('');
+  } catch {}
+}
+
+// ===== EXPORTS =====
+async function loadExports() {
+  try {
+    const r = await api('/api/workspace/exports');
+    if (!r) return;
+    const data = await r.json();
+    const tbody = document.querySelector('#view-exports tbody');
+    if (!tbody || !data.exports?.length) return;
+    tbody.innerHTML = data.exports.map(exp => `
+      <tr>
+        <td style="font-weight:500">${exp.export_type}</td>
+        <td>${exp.item_count}</td>
+        <td>${exp.export_type}</td>
+        <td>${new Date(exp.created_at).toLocaleDateString()}</td>
+        <td><span class="badge badge-green">${exp.status}</span></td>
+        <td><button class="btn btn-ghost btn-sm btn-icon"><i class="ti ti-download"></i></button></td>
+      </tr>
+    `).join('');
+  } catch {}
+}
+
+// ===== ACTIVITY =====
+async function loadActivity() {
+  try {
+    const r = await api('/api/workspace/activity');
+    if (!r) return;
+    const data = await r.json();
+    const body = document.getElementById('activityBody');
+    if (!body || !data.activity?.length) return;
+    body.innerHTML = data.activity.map(a => `
+      <div class="activity-date-group">
+        <div class="activity-item">
+          <div class="activity-dot green"></div>
+          <div><div class="activity-text"><strong>${a.action}</strong> — ${a.detail}</div><div class="activity-time">${new Date(a.created_at).toLocaleString()}</div></div>
+        </div>
+      </div>
+    `).join('');
+  } catch {}
+}
+
+// ===== ACCOUNT =====
+async function loadAccount() {
+  try {
+    const r = await api('/api/workspace/me');
+    if (!r) return;
+    const u = await r.json();
+    const u2 = getUser();
+    const nameInput = document.querySelector('#view-account .acct-input');
+    if (nameInput) nameInput.value = u.name || u2?.name || '';
+    document.querySelector('#view-account .acct-section-desc').textContent = u.email + ' · ' + u.plan_tier + ' plan';
+  } catch {}
+}
 
 // ===== ONBOARDING =====
 (function(){
-  var OKEY = 'df_onboarded';
+  var OKEY = 'ws_onboarded';
   if(window.location.search.includes('onboard=1')) localStorage.removeItem(OKEY);
   if(localStorage.getItem(OKEY) === '1') return;
 
@@ -1421,60 +1430,21 @@ document.querySelectorAll('.activity-replay').forEach(el => {
   var tourStepIdx = 0;
 
   var steps = [
-    {
-      target: '.search-bar',
-      title: 'AI Search Bar',
-      desc: 'Describe your ideal prospect in natural language. The AI parses your intent and surfaces precision-ranked results instantly. Try one of the example queries below.',
-      placement: 'bottom'
-    },
-    {
-      target: '.search-filters',
-      title: 'Smart Filters',
-      desc: 'Refine results by segment, country, sector, and wealth tier. Adjust the confidence slider to control how strictly the AI matches your criteria.',
-      placement: 'right'
-    },
-    {
-      target: '.search-examples',
-      title: 'Example Queries',
-      desc: 'Click any example to instantly search. Use them as inspiration or jump-start your workflow with a single click.',
-      placement: 'bottom'
-    },
-    {
-      target: '.ws-link[data-view="lists"]',
-      title: 'Saved Lists',
-      desc: 'Save promising profiles to lists as you search. Come back here to manage, compare, and export your curated prospect lists.',
-      placement: 'right'
-    }
+    { target: '.search-bar', title: 'AI Search Bar', desc: 'Describe your ideal prospect in natural language.', placement: 'bottom' },
+    { target: '.search-filters', title: 'Smart Filters', desc: 'Refine results by segment, country, sector.', placement: 'right' },
+    { target: '.search-examples', title: 'Example Queries', desc: 'Click any example to instantly search.', placement: 'bottom' },
+    { target: '.ws-link[data-view="lists"]', title: 'Saved Lists', desc: 'Save promising profiles to lists as you search.', placement: 'right' }
   ];
 
-  function showWelcome() {
-    welcome.classList.add('show');
-  }
-
-  function hideWelcome() {
-    welcome.classList.remove('show');
-  }
-
-  function done() {
-    localStorage.setItem(OKEY, '1');
-    hideWelcome();
-    endTour();
-  }
+  function showWelcome() { welcome.classList.add('show'); }
+  function hideWelcome() { welcome.classList.remove('show'); }
+  function done() { localStorage.setItem(OKEY, '1'); hideWelcome(); endTour(); }
 
   document.getElementById('obDismiss').addEventListener('click', done);
-  document.getElementById('obStartTour').addEventListener('click', function(){
-    hideWelcome();
-    setTimeout(function(){ showTour(0); }, 400);
-  });
-  document.getElementById('obNever').addEventListener('click', function(){
-    if(this.checked) localStorage.setItem(OKEY, '1');
-    else localStorage.removeItem(OKEY);
-  });
+  document.getElementById('obStartTour').addEventListener('click', function(){ hideWelcome(); setTimeout(function(){ showTour(0); }, 400); });
+  document.getElementById('obNever').addEventListener('click', function(){ if(this.checked) localStorage.setItem(OKEY, '1'); else localStorage.removeItem(OKEY); });
 
-  function endTour() {
-    tour.classList.remove('show');
-    document.querySelectorAll('.ob-highlight').forEach(function(el){ el.classList.remove('ob-highlight'); });
-  }
+  function endTour() { tour.classList.remove('show'); document.querySelectorAll('.ob-highlight').forEach(function(el){ el.classList.remove('ob-highlight'); }); }
 
   function showTour(idx) {
     tourStepIdx = idx;
@@ -1500,47 +1470,22 @@ document.querySelectorAll('.activity-replay').forEach(el => {
     var th = tour.offsetHeight || 200;
     var x, y, arrowPlacement;
     var gap = 14;
-    if(placement === 'bottom') {
-      x = rect.left + rect.width / 2 - tw / 2;
-      y = rect.bottom + gap;
-      arrowPlacement = 'top';
-    } else if(placement === 'right') {
-      x = rect.right + gap;
-      y = rect.top + rect.height / 2 - th / 2;
-      arrowPlacement = 'left';
-    } else if(placement === 'top') {
-      x = rect.left + rect.width / 2 - tw / 2;
-      y = rect.top - th - gap;
-      arrowPlacement = 'bottom';
-    } else {
-      x = rect.left - tw - gap;
-      y = rect.top + rect.height / 2 - th / 2;
-      arrowPlacement = 'right';
-    }
-    // Clamp to viewport
+    if(placement === 'bottom') { x = rect.left + rect.width/2 - tw/2; y = rect.bottom + gap; arrowPlacement = 'top'; }
+    else if(placement === 'right') { x = rect.right + gap; y = rect.top + rect.height/2 - th/2; arrowPlacement = 'left'; }
+    else if(placement === 'top') { x = rect.left + rect.width/2 - tw/2; y = rect.top - th - gap; arrowPlacement = 'bottom'; }
+    else { x = rect.left - tw - gap; y = rect.top + rect.height/2 - th/2; arrowPlacement = 'right'; }
     if(x < 12) x = 12;
     if(x + tw > window.innerWidth - 12) x = window.innerWidth - tw - 12;
     if(y < 12) y = 12;
     if(y + th > window.innerHeight - 12) y = window.innerHeight - th - 12;
-    tour.style.left = x + 'px';
-    tour.style.top = y + 'px';
+    tour.style.left = x + 'px'; tour.style.top = y + 'px';
     tourArrow.className = 'ob-tour-arrow ' + arrowPlacement;
   }
 
-  tourNext.addEventListener('click', function(){
-    if(tourStepIdx === steps.length - 1) {
-      done();
-      return;
-    }
-    showTour(tourStepIdx + 1);
-  });
-
+  tourNext.addEventListener('click', function(){ if(tourStepIdx === steps.length - 1) { done(); return; } showTour(tourStepIdx + 1); });
   tourSkip.addEventListener('click', done);
-
-  // Expose for manual login trigger
   window.maybeShowOnboarding = showWelcome;
-  // Only show welcome if authenticated
-  if(DF.isLoggedIn()) showWelcome();
+  if(isLoggedIn()) showWelcome();
 })();
 </script>
 </body>

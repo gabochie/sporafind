@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace — Sporafind</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0f0f0f; color: #e8e8e8; min-height: 100vh; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; max-width: 1200px; margin: 0 auto; }
+    nav .logo { font-weight: 700; font-size: 22px; color: #00a85a; letter-spacing: -0.5px; }
+    nav .logo span { color: #e8e8e8; }
+    nav .nav-links { display: flex; gap: 24px; align-items: center; }
+    nav .nav-links a { color: #9ca3af; text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    nav .nav-links a:hover { color: #e8e8e8; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all .2s; cursor: pointer; border: none; }
+    .btn-primary { background: #00a85a; color: #0f0f0f; }
+    .btn-primary:hover { background: #00cc6a; }
+    .btn-outline { background: transparent; color: #e8e8e8; border: 1px solid #2a2a2a; }
+    .btn-outline:hover { border-color: #00a85a; color: #00a85a; }
+    .hero { max-width: 900px; margin: 80px auto 0; text-align: center; padding: 0 40px; }
+    .hero h1 { font-size: clamp(36px, 6vw, 64px); font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; }
+    .hero h1 em { font-style: normal; color: #00a85a; }
+    .hero p { font-size: 18px; color: #9ca3af; margin-top: 20px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .hero .cta-group { margin-top: 36px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .hero .cta-group .btn { padding: 14px 32px; font-size: 16px; }
+    .features { max-width: 1100px; margin: 100px auto; padding: 0 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature-card { background: #1a1a1a; border-radius: 12px; padding: 28px; border: 1px solid #2a2a2a; }
+    .feature-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: #9ca3af; line-height: 1.6; }
+    footer { text-align: center; padding: 40px; color: #4b5563; font-size: 13px; border-top: 1px solid #1a1a1a; max-width: 1200px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Sporafind<span>Workspace</span></div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/workspace/app">Sign In</a>
+      <a href="/workspace/app" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Search intelligence for the <em>African diaspora</em></h1>
+    <p>Discover profiles, organisations, and insights across the global African diaspora. Your workspace for diaspora intelligence.</p>
+    <div class="cta-group">
+      <a href="/workspace/app" class="btn btn-primary">Get Started Free</a>
+      <a href="/workspace/app" class="btn btn-outline">Sign In</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="icon">🔍</div>
+      <h3>AI-Powered Search</h3>
+      <p>Search across hundreds of thousands of diaspora profiles and organisations with natural language queries and intelligent filters.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📋</div>
+      <h3>Saved Lists</h3>
+      <p>Curate prospect lists, track interesting profiles, and organise your research into custom collections.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📥</div>
+      <h3>Export & Integrate</h3>
+      <p>Export data to CSV, XLSX, or push directly to Salesforce and HubSpot for your workflow.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <h3>Activity Tracking</h3>
+      <p>Keep a timeline of your searches, saves, and exports so you never lose track of your research.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🌍</div>
+      <h3>Diaspora Intelligence</h3>
+      <p>Access rich profiles with diaspora origin, wealth tiers, professional segments, and geographic distribution data.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔐</div>
+      <h3>Your Private Workspace</h3>
+      <p>Secure, personalised workspace with your own saved data, exports, and activity history.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Sporafind. All rights reserved.</p>
+  </footer>
+</body>
+</html>
