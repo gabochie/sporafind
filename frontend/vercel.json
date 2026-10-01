@@ -1,8 +1,5 @@
 {
   "cleanUrls": true,
-  "functions": {
-    "api/server.js": { "runtime": "nodejs20.x" }
-  },
   "headers": [
     {
       "source": "/sw.js",
