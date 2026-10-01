@@ -88,6 +88,69 @@ describe('Blog pages', () => {
     const res = await request(app).get('/blog');
     expect(res.status).toBe(200);
   });
+
+  it('falls back to local posts when the API is healthy but empty', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ items: [], total: 0, page: 1, categories: [], tags: [] }),
+    });
+
+    const res = await request(app).get('/blog');
+    expect(res.status).toBe(200);
+    // 60 posts exist on disk; an empty DB must never blank the archive.
+    expect(res.text).toContain('post-card');
+    expect(res.text).not.toContain('Nothing matched that search');
+  });
+
+  it('forwards search queries to the API', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({ items: [], total: 0, page: 1, categories: [], tags: [] }),
+    });
+
+    await request(app).get('/blog?q=obroni');
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('q=obroni'),
+      expect.anything()
+    );
+  });
+
+  it('requests 9 posts per page and decorates cards', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        items: [{
+          id: '1',
+          slug: 'obroni-pricing-ghana',
+          title: 'Obroni pricing in Ghana',
+          body: '<p>' + 'word '.repeat(500) + '</p>',
+          excerpt: 'How to negotiate.',
+          tags: ['obroni'],
+          category: 'Relocation Guides',
+          publishedAt: '2026-01-05T00:00:00Z',
+          views: 1500,
+        }],
+        total: 1,
+        page: 1,
+        categories: ['Relocation Guides'],
+        category_counts: { 'Relocation Guides': 1 },
+        tags: [{ name: 'obroni', count: 1 }],
+        tag_total: 1,
+      }),
+    });
+
+    await request(app).get('/blog');
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining('page_size=9'),
+      expect.anything()
+    );
+
+    const res = await request(app).get('/blog');
+    expect(res.text).toContain('post-card');
+    expect(res.text).toMatch(/class="cover cover-\d"/);
+    expect(res.text).toMatch(/\d+ min read/);
+    expect(res.text).toMatch(/1\.5K/); // compact view count
+  });
 });
 
 describe('API proxy routes', () => {
