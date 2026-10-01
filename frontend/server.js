@@ -20,6 +20,88 @@ function readPosts() {
 }
 function isoDate(d) { return d ? new Date(d).toISOString() : ''; }
 
+// --- Blog presentation helpers (shared by archive + post templates) ---
+
+const CATEGORY_ICONS = [
+  [/relocat|immi|migrat|visa|resid|citizen/i, 'ti-passport'],
+  [/financ|bank|money|remit|payment|currency/i, 'ti-cash-banknote'],
+  [/market|econom|business|trade|supply|real estate|property|industry/i, 'ti-building-store'],
+  [/invest|capital|fund|fundrais/i, 'ti-chart-line'],
+  [/network|communit|association|diaspora|people/i, 'ti-users-group'],
+  [/data|tech|ai|automat|api|tool|platform/i, 'ti-cpu'],
+  [/health|education|legal|policy|govern|regulat/i, 'ti-scale'],
+  [/growth|strateg|talent|career|job|employ/i, 'ti-trending-up'],
+];
+
+function coverIcon(category) {
+  const c = category || '';
+  for (const [re, icon] of CATEGORY_ICONS) if (re.test(c)) return icon;
+  return 'ti-compass';
+}
+
+function stableHash(s) {
+  let h = 0;
+  for (let i = 0; i < String(s).length; i++) h = (h * 31 + String(s).charCodeAt(i)) >>> 0;
+  return h;
+}
+
+function readMinutes(post) {
+  const words = String(post.body || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z]+;/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+}
+
+function dateLabel(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  return Number.isNaN(dt.getTime())
+    ? ''
+    : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function decoratePost(p) {
+  return {
+    ...p,
+    views: Number(p.views) || 0,
+    readMinutes: readMinutes(p),
+    dateLabel: dateLabel(p.publishedAt),
+    coverTheme: stableHash(p.slug || p.title || '') % 6,
+    coverIcon: coverIcon(p.category),
+  };
+}
+
+function decorateAll(list) {
+  return (list || []).map(decoratePost);
+}
+
+// Windowed pagination: first, last, current +/-1, ellipses between.
+function pageWindow(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = new Set([1, total, current, current - 1, current + 1]);
+  if (current <= 3) [2, 3, 4].forEach((n) => pages.add(n));
+  if (current >= total - 2) [total - 1, total - 2, total - 3].forEach((n) => pages.add(n));
+  const out = [];
+  let prev = 0;
+  for (const n of [...pages].sort((a, b) => a - b)) {
+    if (prev && n - prev > 1) out.push('gap');
+    out.push(n);
+    prev = n;
+  }
+  return out;
+}
+
+function blogQueryString({ page, tag, cat, q }) {
+  const parts = [];
+  if (page && page > 1) parts.push(`page=${page}`);
+  if (tag) parts.push(`tag=${encodeURIComponent(tag)}`);
+  if (cat) parts.push(`cat=${encodeURIComponent(cat)}`);
+  if (q) parts.push(`q=${encodeURIComponent(q)}`);
+  return parts.length ? `?${parts.join('&')}` : '';
+}
+
 async function fetchFromAPI(pathname, opts = {}) {
   try {
     const url = `${API_BASE}${pathname}`;
@@ -73,49 +155,115 @@ app.use((req, res, next) => {
   next();
 });
 
+const BLOG_PAGE_SIZE = 9;
+
 app.get('/blog', async (req, res) => {
-  try {
-    const data = await fetchFromAPI(`/blog/posts?page=${req.query.page || 1}&page_size=6${req.query.tag ? '&tag=' + encodeURIComponent(req.query.tag) : ''}${req.query.cat ? '&cat=' + encodeURIComponent(req.query.cat) : ''}`);
-    if (data) {
-      return res.render('blog', {
-        posts: data.items, page: data.page, totalPages: Math.ceil(data.total / 6),
-        total: data.total, tag: req.query.tag || null, cat: req.query.cat || null,
-        categories: data.categories, tags: data.tags, isoDate,
-      });
-    }
-  } catch (e) { console.error('Blog fetch error:', e); }
-  const posts = readPosts();
-  const published = posts.filter(p => p.status === 'published').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-  const page = parseInt(req.query.page) || 1;
+  const q = (req.query.q || '').toString().trim().slice(0, 200) || null;
   const tag = req.query.tag || null;
   const cat = req.query.cat || null;
-  const limit = 6;
+
+  const render = (payload) => {
+    const total = payload.total || 0;
+    const totalPages = Math.max(1, Math.ceil(total / BLOG_PAGE_SIZE));
+    const page = Math.min(Math.max(1, parseInt(payload.page, 10) || 1), totalPages);
+    return res.render('blog', {
+      posts: decorateAll(payload.items),
+      page,
+      totalPages,
+      total,
+      totalPagesRaw: totalPages,
+      tag,
+      cat,
+      q,
+      categories: payload.categories || [],
+      categoryCounts: payload.category_counts || {},
+      tags: payload.tags || [],
+      tagTotal: payload.tag_total || (payload.tags || []).length,
+      pageWindow: pageWindow(page, totalPages),
+      blogQs: (overrides = {}) => blogQueryString({
+        page: overrides.page ?? page, tag, cat, q,
+      }),
+      isoDate,
+    });
+  };
+
+  try {
+    const data = await fetchFromAPI(
+      `/blog/posts?page=${req.query.page || 1}&page_size=${BLOG_PAGE_SIZE}` +
+      `${tag ? `&tag=${encodeURIComponent(tag)}` : ''}` +
+      `${cat ? `&cat=${encodeURIComponent(cat)}` : ''}` +
+      `${q ? `&q=${encodeURIComponent(q)}` : ''}`
+    );
+    if (data) return render(data);
+  } catch (e) { console.error('Blog fetch error:', e); }
+
+  // Offline / API-down fallback: same contract, served from local posts.json
+  const published = readPosts()
+    .filter((p) => p.status === 'published')
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+  const needle = q ? q.toLowerCase() : null;
   let filtered = published;
-  if (tag) filtered = filtered.filter(p => p.tags?.includes(tag));
-  if (cat) filtered = filtered.filter(p => p.category === cat);
-  const total = filtered.length;
-  const totalPages = Math.ceil(total / limit);
-  const categories = [...new Set(published.map(p => p.category).filter(Boolean))];
-  const tags = [...new Set(published.flatMap(p => p.tags || []))];
-  res.render('blog', { posts: filtered.slice((page-1)*limit, page*limit), page, totalPages, total, tag, cat, categories, tags, isoDate });
+  if (tag) filtered = filtered.filter((p) => (p.tags || []).includes(tag));
+  if (cat) filtered = filtered.filter((p) => p.category === cat);
+  if (needle) {
+    filtered = filtered.filter((p) => [p.title, p.excerpt, p.body, p.category, ...(p.tags || [])]
+      .filter(Boolean)
+      .some((field) => String(field).toLowerCase().includes(needle)));
+  }
+  const catCounts = {};
+  const tagCounts = {};
+  for (const p of published) {
+    if (p.category) catCounts[p.category] = (catCounts[p.category] || 0) + 1;
+    for (const t of p.tags || []) if (t) tagCounts[t] = (tagCounts[t] || 0) + 1;
+  }
+  const page = parseInt(req.query.page, 10) || 1;
+  const tags = Object.entries(tagCounts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .slice(0, 24);
+
+  return render({
+    items: filtered.slice((page - 1) * BLOG_PAGE_SIZE, page * BLOG_PAGE_SIZE),
+    total: filtered.length,
+    page,
+    categories: Object.keys(catCounts).sort((a, b) => catCounts[b] - catCounts[a] || a.localeCompare(b)),
+    category_counts: catCounts,
+    tags,
+    tag_total: Object.keys(tagCounts).length,
+  });
 });
 
 app.get('/blog/:slug', async (req, res) => {
+  const renderPost = (post, siblings) => {
+    const pool = siblings || [];
+    const idx = pool.findIndex((p) => p.id === post.id || p.slug === post.slug);
+    return res.render('blog-post', {
+      post: decoratePost(post),
+      related: decorateAll(
+        pool.filter((p) => (p.id || p.slug) !== (post.id || post.slug))
+          .sort((a, b) => (b.views || 0) - (a.views || 0))
+          .slice(0, 3)
+      ),
+      prevPost: idx > 0 ? decoratePost(pool[idx - 1]) : null,
+      nextPost: idx >= 0 && idx < pool.length - 1 ? decoratePost(pool[idx + 1]) : null,
+      allTags: (Array.isArray(post.tags) ? post.tags : []).map((name) => ({ name })),
+      isoDate,
+    });
+  };
+
   try {
     const post = await fetchFromAPI(`/blog/posts/${req.params.slug}`);
     if (post) {
-      const data = await fetchFromAPI(`/blog/posts?page=1&page_size=100&cat=${encodeURIComponent(post.category)}`);
-      const related = data ? data.items.filter(p => p.id !== post.id).slice(0, 3) : [];
-      const allTags = data ? data.tags : [];
-      return res.render('blog-post', { post, related, allTags, isoDate });
+      const data = await fetchFromAPI('/blog/posts?page=1&page_size=100');
+      const pool = data ? data.items : [post];
+      return renderPost(post, pool);
     }
   } catch (e) { console.error('Blog post fetch error:', e); }
+
   const posts = readPosts();
-  const post = posts.find(p => p.slug === req.params.slug && p.status === 'published');
+  const post = posts.find((p) => p.slug === req.params.slug && p.status === 'published');
   if (!post) return res.status(404).send('Post not found');
-  const related = posts.filter(p => p.id !== post.id && p.status === 'published' && p.category === post.category).slice(0, 3);
-  const allTags = [...new Set(posts.filter(p => p.status === 'published').flatMap(p => p.tags || []))];
-  res.render('blog-post', { post, related, allTags, isoDate });
+  return renderPost(post, posts.filter((p) => p.status === 'published'));
 });
 
 const ADMIN_KEY = process.env.ADMIN_KEY || '';
