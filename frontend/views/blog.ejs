@@ -18,17 +18,24 @@
 <!--CHROME:HEAD:END-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog — Sporafind Intelligence</title>
-<meta name="description" content="Expert analysis, intelligence reports, and strategies for engaging the Ghanaian diaspora. AI-powered diaspora insights for professionals, investors, and institutions.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://sporafind.com/blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blog — Sporafind Intelligence">
-<meta property="og:description" content="Expert analysis and intelligence on the Ghanaian diaspora.">
-<meta property="og:url" content="https://sporafind.com/blog">
-<meta property="og:image" content="https://sporafind.com/og-blog.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
+  <meta name="description" content="Expert analysis, intelligence reports, and strategies for engaging the Ghanaian diaspora. AI-powered diaspora insights for professionals, investors, and institutions.">
+  <meta name="robots" content="<%= (hasQuery || hasTag || hasCat) ? 'noindex, follow' : 'index, follow' %>">
+  <link rel="canonical" href="<%= canonicalUrl %>">
+  <meta property="og:site_name" content="Sporafind Intelligence">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Blog — Sporafind Intelligence">
+  <meta property="og:description" content="Expert analysis and intelligence on the Ghanaian diaspora.">
+  <meta property="og:url" content="<%= canonicalUrl %>">
+  <meta property="og:image" content="https://sporafind.com/og-blog.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Sporafind Intelligence Blog — Ghanaian diaspora analysis">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blog — Sporafind Intelligence">
+  <meta name="twitter:description" content="Expert analysis and intelligence on the Ghanaian diaspora.">
+  <meta name="twitter:image" content="https://sporafind.com/og-blog.png">
+  <meta name="twitter:image:alt" content="Sporafind Intelligence Blog — Ghanaian diaspora analysis">
 <link rel="alternate" type="application/rss+xml" title="Sporafind Blog RSS" href="/rss.xml">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"Sporafind Intelligence Blog","description":"Expert analysis and intelligence on the Ghanaian diaspora.","url":"https://sporafind.com/blog","publisher":{"@type":"Organization","name":"Sporafind"}}</script>
@@ -110,6 +117,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 .cover-4{background:linear-gradient(135deg,#7A3A06 0%,#B45309 100%)}
 .cover-5{background:linear-gradient(135deg,#0A1120 0%,#2A4A7C 100%)}
 .cover-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:76px;color:rgba(255,255,255,0.16);z-index:1}
+/* Curated photography sits over the gradient; the gradient stays as the
+   placeholder colour and as the scrim behind the category badge. */
+.cover-photo::before,.cover-photo::after{display:none}
+.cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+  filter:saturate(0.92) contrast(1.04)}
+.cover-photo .cat-badge{z-index:2;background:rgba(8,13,26,0.62);border-color:rgba(255,255,255,0.22)}
+.photo-credit{position:absolute;right:10px;bottom:8px;z-index:2;font-size:10px;line-height:1.3;
+  color:rgba(255,255,255,0.72);background:rgba(8,13,26,0.5);padding:3px 8px;border-radius:8px;
+  backdrop-filter:blur(6px);max-width:78%;text-align:right}
+.photo-credit a{color:rgba(255,255,255,0.86)}
 .cat-badge{position:absolute;top:12px;left:12px;z-index:2;font-size:11px;font-weight:600;background:rgba(8,13,26,0.55);color:#fff;padding:5px 12px;border-radius:12px;backdrop-filter:blur(6px);border:0.5px solid rgba(255,255,255,0.14);max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ---------- Featured (lead) post ---------- */
@@ -321,9 +338,14 @@ document.addEventListener('click',function(e){
 
     <% if(showFeature){ var f = posts[0]; %>
     <a href="/blog/<%= f.slug %>" class="post-feature">
-      <div class="cover cover-<%= f.coverTheme %>">
+<div class="cover cover-<%= f.coverTheme %><%= f.featureImage ? ' cover-photo' : '' %>">
+        <% if (f.featureImage) { %>
+          <img class="cover-img" src="<%= f.featureImage %>" alt="<%= f.featureImageAlt %>"
+               width="1200" height="630" loading="eager" decoding="async" fetchpriority="high">
+          <span class="photo-credit">Photo: <%= f.featureImageCredit %></span>
+        <% } %>
         <span class="cat-badge"><%= f.category %></span>
-        <i class="ti <%= f.coverIcon %> cover-icon"></i>
+        <% if (!f.featureImage) { %><i class="ti <%= f.coverIcon %> cover-icon"></i><% } %>
       </div>
       <div class="post-feature-body">
         <span class="feature-flag"><i class="ti ti-sparkles"></i> Latest</span>
@@ -343,10 +365,15 @@ document.addEventListener('click',function(e){
     <div class="blog-grid">
       <% grid.forEach(function(p){ %>
         <article class="post-card">
-          <div class="cover cover-<%= p.coverTheme %>">
-            <span class="cat-badge"><%= p.category %></span>
-            <i class="ti <%= p.coverIcon %> cover-icon"></i>
-          </div>
+<div class="cover cover-<%= p.coverTheme %><%= p.featureImage ? ' cover-photo' : '' %>">
+                <% if (p.featureImage) { %>
+                  <img class="cover-img" src="<%= p.featureImage %>" alt="<%= p.featureImageAlt %>"
+                       width="1200" height="630" loading="lazy" decoding="async">
+                  <span class="photo-credit">Photo: <%= p.featureImageCredit %></span>
+                <% } %>
+                <span class="cat-badge"><%= p.category %></span>
+                <% if (!p.featureImage) { %><i class="ti <%= p.coverIcon %> cover-icon"></i><% } %>
+              </div>
           <div class="post-card-body">
             <div class="post-card-meta">
               <time datetime="<%= p.publishedAt %>"><%= p.dateLabel %></time>
