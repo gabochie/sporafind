@@ -8,25 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/components.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --green:#006B3C;--green-dark:#004d2b;--green-light:#E8F5EE;
-  --gold:#D4A017;--gold-dark:#a87d10;--gold-light:#FFF8E7;
-  --navy:#080D1A;--navy2:#0E1627;--navy3:#16213A;--navy4:#1C2A4A;
-  --cream:#F5F0E8;--cream2:#EDE8DF;--cream3:#E5DFD5;
-  --slate:#8A9BB0;--slate2:#5A6880;--slate3:#B8C5D4;
-  --white:#FFFFFF;--bg:#F4F6F9;--bg2:#EBEEF3;
-  --text-dark:#0A0E1A;--text-mid:#3D4A5C;--text-muted:#8A9BB0;
-  --red:#DC2626;--red-light:#FEE2E2;--orange:#EA580C;--orange-light:#FFEDD5;
-  --blue:#2563EB;--blue-light:#DBEAFE;--teal:#0E7490;--teal-light:#ECFEFF;
-  --purple:#6D28D9;--purple-light:#EDE9FE;
-  --radius:10px;--radius-lg:16px;--radius-sm:6px;
-  --shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
-  --shadow-lg:0 10px 40px rgba(0,0,0,0.12);
-  --sidebar-w:250px;--header-h:64px;
-}
+
 html,body{height:100%}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);line-height:1.5;overflow:hidden}
 a{text-decoration:none;color:inherit}
@@ -70,7 +56,7 @@ img{display:block}
 .btn-login{width:100%;padding:13px;background:var(--gold);color:#0A0E1A;font-size:15px;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-login:hover{background:var(--gold-dark)}
 .btn-login:disabled{opacity:0.5;cursor:not-allowed}
-.login-error{font-size:12px;color:var(--red);margin-top:12px;display:none;align-items:center;gap:6px}
+.login-error{font-size:12px;color:var(--red-deep);margin-top:12px;display:none;align-items:center;gap:6px}
 .login-error.show{display:flex}
 .login-signup{text-align:center;margin-top:20px;font-size:13px;color:rgba(255,255,255,0.4)}
 .login-signup a{color:var(--gold);font-weight:500}
@@ -81,7 +67,7 @@ img{display:block}
 
 /* SIDEBAR */
 .sidebar{width:var(--sidebar-w);background:var(--navy);border-right:0.5px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;z-index:100}
-.sidebar-brand{display:flex;align-items:center;gap:10px;padding:16px 20px;height:var(--header-w);min-height:var(--header-w);border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.sidebar-brand{display:flex;align-items:center;gap:10px;padding:16px 20px;height:var(--header-h);min-height:var(--header-h);border-bottom:0.5px solid rgba(255,255,255,0.06)}
 .sidebar-logomark{width:32px;height:32px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sidebar-star{width:14px;height:14px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 .sidebar-wordmark{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.3px;color:#fff}
@@ -105,10 +91,10 @@ img{display:block}
 .sidebar-user-role{font-size:11px;color:var(--slate2)}
 
 .sidebar-logout-btn{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:var(--radius-sm);color:rgba(255,255,255,.25);font-size:11px;cursor:pointer;transition:color .12s;margin-top:2px}
-.sidebar-logout-btn:hover{color:var(--red)}
+.sidebar-logout-btn:hover{color:var(--red-deep)}
 
 /* HEADER */
-.header{height:var(--header-w);min-height:var(--header-w);background:var(--white);border-bottom:0.5px solid var(--cream2);display:flex;align-items:center;justify-content:space-between;padding:0 32px;gap:16px}
+.header{height:var(--header-h);min-height:var(--header-h);background:var(--white);border-bottom:0.5px solid var(--cream2);display:flex;align-items:center;justify-content:space-between;padding:0 32px;gap:16px}
 .header-left{display:flex;align-items:center;gap:24px;flex:1}
 .header-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:0.5px solid var(--cream2);border-radius:var(--radius-sm);padding:0 14px;max-width:400px;width:100%}
 .header-search i{font-size:16px;color:var(--text-muted)}
@@ -117,7 +103,7 @@ img{display:block}
 .header-right{display:flex;align-items:center;gap:8px}
 .header-btn{width:36px;height:36px;border-radius:var(--radius-sm);border:0.5px solid var(--cream2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:18px;transition:all 0.12s;position:relative}
 .header-btn:hover{background:var(--bg);border-color:var(--cream3)}
-.header-btn .notif-dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid var(--white)}
+.header-btn .notif-dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--red-deep);border:1.5px solid var(--white)}
 .header-avatar{width:36px;height:36px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
 
 /* MAIN CONTENT */
@@ -145,7 +131,7 @@ img{display:block}
 .btn-outline:hover{border-color:var(--slate3);color:var(--text-dark)}
 .btn-ghost{background:transparent;color:var(--text-mid)}
 .btn-ghost:hover{background:var(--bg);color:var(--text-dark)}
-.btn-danger{background:var(--red);color:#fff}
+.btn-danger{background:var(--red-deep);color:#fff}
 .btn-danger:hover{background:#B91C1C}
 .btn-icon{width:32px;height:32px;padding:0;display:flex;align-items:center;justify-content:center}
 
@@ -161,7 +147,7 @@ img{display:block}
 .kpi-icon.purple{background:var(--purple-light);color:var(--purple)}
 .kpi-change{font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px}
 .kpi-change.up{background:#DCFCE7;color:#15803D}
-.kpi-change.down{background:var(--red-light);color:var(--red)}
+.kpi-change.down{background:var(--red-light);color:var(--red-deep)}
 .kpi-value{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:800;letter-spacing:-1px;color:var(--text-dark);line-height:1.2}
 .kpi-label{font-size:13px;color:var(--text-muted);margin-top:4px}
 
@@ -184,7 +170,7 @@ img{display:block}
 .activity-dot.green{background:var(--green)}
 .activity-dot.gold{background:var(--gold)}
 .activity-dot.blue{background:var(--blue)}
-.activity-dot.red{background:var(--red)}
+.activity-dot.red{background:var(--red-deep)}
 .activity-content{flex:1;min-width:0}
 .activity-text{font-size:13px;color:var(--text-mid);line-height:1.5}
 .activity-text strong{color:var(--text-dark);font-weight:600}
@@ -225,7 +211,7 @@ img{display:block}
 .badge-gold{background:var(--gold-light);color:var(--gold-dark)}
 .badge-blue{background:var(--blue-light);color:var(--blue)}
 .badge-purple{background:var(--purple-light);color:var(--purple)}
-.badge-red{background:var(--red-light);color:var(--red)}
+.badge-red{background:var(--red-light);color:var(--red-deep)}
 .badge-orange{background:var(--orange-light);color:var(--orange)}
 .badge-teal{background:var(--teal-light);color:var(--teal)}
 .badge-gray{background:var(--bg2);color:var(--slate2)}
@@ -352,7 +338,7 @@ img{display:block}
 .notif-icon.green{background:var(--green-light);color:var(--green)}
 .notif-icon.gold{background:var(--gold-light);color:var(--gold)}
 .notif-icon.blue{background:var(--blue-light);color:var(--blue)}
-.notif-icon.red{background:var(--red-light);color:var(--red)}
+.notif-icon.red{background:var(--red-light);color:var(--red-deep)}
 .notif-content{flex:1;min-width:0}
 .notif-text{font-size:13px;color:var(--text-mid);line-height:1.4}
 .notif-time{font-size:11px;color:var(--text-muted);margin-top:3px}
@@ -391,7 +377,7 @@ img{display:block}
   .login-left{padding:48px 32px;flex:none}
   .login-right{width:100%;padding:32px}
   .login-h1{font-size:30px}
-  :root{--sidebar-w:0px}
+  
   .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:500;transform:translateX(-100%);transition:transform 0.25s ease}
   .sidebar.open{transform:translateX(0);width:280px}
   .sidebar-overlay{position:fixed;inset:0;background:rgba(8,13,26,0.5);z-index:499;display:none}
@@ -407,7 +393,7 @@ img{display:block}
   .header-search{max-width:200px}
   .notif-dropdown{position:fixed;left:16px;right:16px;top:auto;width:auto}
 }
-@media(max-width:600px){
+@media(max-width: 640px){
   .kpi-grid{grid-template-columns:1fr}
   .seg-analytics-grid{grid-template-columns:1fr 1fr}
   .data-table-toolbar{flex-direction:column;align-items:stretch}
@@ -741,7 +727,7 @@ img{display:block}
                   <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Passed</div>
                 </div>
                 <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
-                  <div id="smokeFailed" style="font-size:22px;font-weight:700;color:var(--red)">—</div>
+                  <div id="smokeFailed" style="font-size:22px;font-weight:700;color:var(--red-deep)">—</div>
                   <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Failed</div>
                 </div>
                 <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
@@ -1943,7 +1929,7 @@ const usersData = [
   {name:'Nana Addo-Boateng',email:'nana@ghanainvest.com',org:'Ghana Invest Partners',plan:'Enterprise',planClass:'badge-purple',searches:1204,lists:34,exports:312,lastActive:'5 hrs ago',status:'Active',statusClass:'badge-green',initials:'NA',avatarBg:'var(--teal-light)',avatarColor:'var(--teal)'},
   {name:'Efua Acquah',email:'efua.acquah@law.ox.ac.uk',org:'Oxford Diaspora Unit',plan:'Growth',planClass:'badge-gold',searches:267,lists:9,exports:43,lastActive:'1 day ago',status:'Active',statusClass:'badge-green',initials:'EA',avatarBg:'var(--orange-light)',avatarColor:'var(--orange)'},
   {name:'David Ocloo',email:'david.ocloo@outlook.com',org:'Independent',plan:'Starter',planClass:'badge-gray',searches:34,lists:1,exports:0,lastActive:'3 days ago',status:'Inactive',statusClass:'badge-orange',initials:'DO',avatarBg:'var(--green-light)',avatarColor:'var(--green)'},
-  {name:'Akua Asare',email:'akua.asare@healthtech.io',org:'HealthTech Solutions',plan:'Growth',planClass:'badge-gold',searches:156,lists:7,exports:28,lastActive:'1 week ago',status:'Active',statusClass:'badge-green',initials:'AA',avatarBg:'var(--red-light)',avatarColor:'var(--red)'},
+  {name:'Akua Asare',email:'akua.asare@healthtech.io',org:'HealthTech Solutions',plan:'Growth',planClass:'badge-gold',searches:156,lists:7,exports:28,lastActive:'1 week ago',status:'Active',statusClass:'badge-green',initials:'AA',avatarBg:'var(--red-light)',avatarColor:'var(--red-deep)'},
   {name:'Samuel Tetteh',email:'samuel.tetteh@mfg.gh',org:'Tetteh Manufacturing',plan:'Starter',planClass:'badge-gray',searches:12,lists:0,exports:3,lastActive:'2 weeks ago',status:'Trialing',statusClass:'badge-blue',initials:'ST',avatarBg:'var(--green-light)',avatarColor:'var(--green)'},
   {name:'Grace Nyarko',email:'grace@diaspora.dev',org:'Diaspora Devs',plan:'Growth',planClass:'badge-gold',searches:534,lists:15,exports:97,lastActive:'Just now',status:'Active',statusClass:'badge-green',initials:'GN',avatarBg:'var(--gold-light)',avatarColor:'var(--gold-dark)'},
 ];
@@ -2231,7 +2217,7 @@ function renderBlogTable() {
     <td>
       <button class="btn btn-ghost btn-sm btn-icon" onclick="editBlogPost('${p.id}')" title="Edit"><i class="ti ti-edit"></i></button>
       <button class="btn btn-ghost btn-sm btn-icon" onclick="viewBlogPost('${p.slug}')" title="View"><i class="ti ti-external-link"></i></button>
-      <button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red)" onclick="deleteBlogPost('${p.id}')" title="Delete"><i class="ti ti-trash"></i></button>
+      <button class="btn btn-ghost btn-sm btn-icon" style="color:var(--red-deep)" onclick="deleteBlogPost('${p.id}')" title="Delete"><i class="ti ti-trash"></i></button>
     </td>
   </tr>`).join('');
 }
@@ -2338,7 +2324,7 @@ async function loadSmokeTestStats() {
     document.getElementById('smokePassed').textContent = data.passed || 0;
     document.getElementById('smokeFailed').textContent = data.failed || 0;
     document.getElementById('smokeAvgMs').textContent = data.avg_response_ms ? data.avg_response_ms + 'ms' : '—';
-    document.getElementById('smokeUptime').style.color = data.uptime_pct >= 99 ? 'var(--green)' : data.uptime_pct >= 90 ? 'var(--gold)' : 'var(--red)';
+    document.getElementById('smokeUptime').style.color = data.uptime_pct >= 99 ? 'var(--green)' : data.uptime_pct >= 90 ? 'var(--gold)' : 'var(--red-deep)';
 
     const endpoints = document.getElementById('smokeTestEndpoints');
     if (data.latest && data.latest.length) {
@@ -2357,7 +2343,7 @@ async function loadSmokeTestStats() {
             ${data.latest.slice(0,6).map(r => `
               <tr style="border-bottom:1px solid var(--border)">
                 <td style="padding:4px 8px;font-family:monospace;font-size:11px">${r.endpoint}</td>
-                <td style="text-align:center;padding:4px 8px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.passed ? 'var(--green)' : 'var(--red)'}"></span></td>
+                <td style="text-align:center;padding:4px 8px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.passed ? 'var(--green)' : 'var(--red-deep)'}"></span></td>
                 <td style="text-align:right;padding:4px 8px;font-family:monospace">${r.status_code || 'ERR'}</td>
                 <td style="text-align:right;padding:4px 8px;font-family:monospace">${r.duration_ms ? r.duration_ms + 'ms' : '—'}</td>
               </tr>
@@ -2368,7 +2354,7 @@ async function loadSmokeTestStats() {
       endpoints.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:12px">No smoke test data yet. Results appear after the first GitHub Actions run.</div>';
     }
   } catch(e) {
-    document.getElementById('smokeTestEndpoints').innerHTML = '<div style="text-align:center;padding:16px;color:var(--red);font-size:12px">Failed to load smoke test data</div>';
+    document.getElementById('smokeTestEndpoints').innerHTML = '<div style="text-align:center;padding:16px;color:var(--red-deep);font-size:12px">Failed to load smoke test data</div>';
     console.error('Smoke test error', e);
   }
 }

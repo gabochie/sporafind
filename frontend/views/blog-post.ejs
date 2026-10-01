@@ -36,11 +36,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/components.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--navy:#080D1A;--navy2:#0C1226;--navy3:#111833;--green:#006B3C;--gold:#D4A017;--gold-dark:#B8890A;--cream:#F5F0E8;--cream2:#EDE8DF;--slate:#8A9BB0;--slate2:#6B7E99;--white:#fff;--bg:#F8F6F2;--text-dark:#1A1E2E;--text-mid:#4A4E5E;--text-muted:#8A93B5;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--green-light:rgba(0,107,60,0.08);--gold-light:rgba(212,160,23,0.1);--green-border:rgba(0,107,60,0.15)}
+
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);line-height:1.6;-webkit-font-smoothing:antialiased}
 
 /* Nav */
@@ -122,7 +124,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 .footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:13px;transition:color .12s}
 .footer-links a:hover{color:var(--gold)}
 
-@media(max-width:768px){
+@media(max-width: 900px){
   .nav{padding:0 16px}
   .nav-links{display:none}
   .nav-mobile-toggle{display:block}
