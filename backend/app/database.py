@@ -21,7 +21,13 @@ def get_engine():
         _engine = create_async_engine(
             url,
             echo=settings.environment == "development",
-            connect_args={"ssl": "require", "statement_cache_size": 0},
+            # Pre-ping drops dead pooler connections (pgbouncer + cold starts);
+            # small pool keeps Supabase free-tier limits happy.
+            pool_pre_ping=True,
+            pool_size=5,
+            max_overflow=10,
+            pool_timeout=30,
+            connect_args={"ssl": "require", "statement_cache_size": 0, "timeout": 10},
         )
     return _engine
 
