@@ -2,6 +2,15 @@
 
 import pytest
 
+from app.config import settings
+
+
+@pytest.fixture(autouse=True)
+def _no_vapid_keys(monkeypatch):
+    # Hermetic: tests must not depend on local .env VAPID keys.
+    monkeypatch.setattr(settings, "vapid_public_key", "")
+    monkeypatch.setattr(settings, "vapid_private_key", "")
+
 
 def test_push_routes_registered():
     from app.main import app
@@ -41,7 +50,7 @@ async def test_subscribe_and_unsubscribe_anonymous(client):
 
 async def test_send_requires_admin_key(client):
     res = await client.post("/push/send", json={"title": "t", "body": "b"})
-    assert res.status_code in (401, 422)
+    assert res.status_code == 401
 
 
 async def test_send_unconfigured_returns_503_with_admin(client):
