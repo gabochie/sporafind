@@ -78,7 +78,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 
 /* Blog grid */
 .blog-wrap{max-width:1200px;margin:0 auto;padding:40px 32px 80px}
-.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:24px}
+  .blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(350px,100%),1fr));gap:24px}
 .blog-card{background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-md);overflow:hidden;transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column;text-decoration:none;color:inherit}
 .blog-card:hover{box-shadow:0 8px 30px rgba(8,13,26,0.06);transform:translateY(-2px)}
 .blog-card-img{height:200px;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--slate);overflow:hidden;position:relative}
