@@ -56,6 +56,7 @@ async def list_posts(
     page_size: int = Query(9, ge=1, le=50),
     tag: str | None = None,
     cat: str | None = None,
+    q: str | None = Query(None, max_length=200),
     db: AsyncSession = Depends(get_db),
 ):
     query = select(BlogPost).where(BlogPost.status == "published")
@@ -67,6 +68,15 @@ async def list_posts(
     if cat:
         query = query.where(BlogPost.category == cat)
         count_query = count_query.where(BlogPost.category == cat)
+    if q:
+        like = f"%{q}%"
+        text_filter = or_(
+            BlogPost.title.ilike(like),
+            BlogPost.excerpt.ilike(like),
+            BlogPost.body.ilike(like),
+        )
+        query = query.where(text_filter)
+        count_query = count_query.where(text_filter)
 
     total = await db.execute(count_query)
     total_count = total.scalar() or 0
