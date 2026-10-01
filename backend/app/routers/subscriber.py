@@ -46,6 +46,20 @@ class ExportRequest(BaseModel):
     filters: dict = {}
 
 
+PLAN_EXPORT_LIMITS = {
+    "free": 100,
+    "pro": 1000,
+    "enterprise": 100000,
+}
+
+
+def _plan_limit(user: User) -> int:
+    # Active Stripe subscription overrides stored tier
+    if (user.subscription_status or "").lower() in ("active", "trialing"):
+        return PLAN_EXPORT_LIMITS["pro"]
+    return PLAN_EXPORT_LIMITS.get((user.plan_tier or "free").lower(), 100)
+
+
 async def log_activity(db: AsyncSession, user_id: str, action: str, detail: str):
     db.add(ActivityLog(user_id=user_id, action=action, detail=detail))
     await db.commit()
@@ -297,23 +311,122 @@ async def create_export(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_subscriber),
 ):
+    limit = _plan_limit(user)
+    filters = body.filters or {}
+    q = str(filters.get("q", ""))[:200]
+    segment = filters.get("segment")
+    country = filters.get("country")
+    origin = filters.get("origin")
+
+    query = select(Profile).where(Profile.is_active == True)
+    if q:
+        like = f"%{q}%"
+        query = query.where(
+            or_(
+                Profile.name.ilike(like),
+                Profile.role.ilike(like),
+                Profile.company_name.ilike(like),
+                Profile.locality.ilike(like),
+                Profile.country.ilike(like),
+                Profile.nationality.ilike(like),
+                Profile.occupation.ilike(like),
+            )
+        )
+    if segment:
+        query = query.where(Profile.segment == segment)
+    if country:
+        query = query.where(Profile.country_of_residence == country)
+    if origin:
+        query = query.where(Profile.origin == origin)
+
+    rows = (await db.execute(query.order_by(Profile.name).limit(limit + 1))).scalars().all()
+    truncated = len(rows) > limit
+    rows = rows[:limit]
+
     exp = ExportSession(
         user_id=user.id,
         export_type=body.export_type,
-        filters=json.dumps(body.filters),
+        filters=json.dumps({**filters, "limit": limit}),
+        item_count=len(rows),
         status="completed",
         completed_at=datetime.now(timezone.utc),
     )
     db.add(exp)
+    user.export_count = (user.export_count or 0) + 1
     await db.commit()
     await db.refresh(exp)
-    await log_activity(db, user.id, "export", json.dumps({"export_id": exp.id, "type": body.export_type}))
+    await log_activity(db, user.id, "export", json.dumps({"export_id": exp.id, "type": body.export_type, "count": len(rows)}))
     return {
         "id": exp.id,
         "export_type": exp.export_type,
+        "item_count": len(rows),
+        "limit": limit,
+        "truncated": truncated,
         "status": exp.status,
         "created_at": str(exp.created_at),
+        "download_url": f"/workspace/exports/{exp.id}/download",
     }
+
+
+@router.get("/exports/{export_id}/download")
+@limiter.limit("10/minute")
+async def download_export(
+    request: Request,
+    export_id: str,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_subscriber),
+):
+    import csv
+    import io
+    from fastapi.responses import StreamingResponse
+
+    row = await db.execute(
+        select(ExportSession).where(ExportSession.id == export_id, ExportSession.user_id == user.id)
+    )
+    exp = row.scalar_one_or_none()
+    if not exp:
+        raise HTTPException(status_code=404, detail="Export not found")
+    if exp.status != "completed":
+        raise HTTPException(status_code=409, detail="Export not ready")
+
+    filters = json.loads(exp.filters or "{}")
+    limit = int(filters.get("limit", _plan_limit(user)))
+    q = str(filters.get("q", ""))[:200]
+
+    query = select(Profile).where(Profile.is_active == True)
+    if q:
+        like = f"%{q}%"
+        query = query.where(
+            or_(
+                Profile.name.ilike(like),
+                Profile.role.ilike(like),
+                Profile.company_name.ilike(like),
+                Profile.locality.ilike(like),
+                Profile.country.ilike(like),
+                Profile.nationality.ilike(like),
+                Profile.occupation.ilike(like),
+            )
+        )
+    if filters.get("segment"):
+        query = query.where(Profile.segment == filters["segment"])
+    if filters.get("country"):
+        query = query.where(Profile.country_of_residence == filters["country"])
+    if filters.get("origin"):
+        query = query.where(Profile.origin == filters["origin"])
+
+    profiles = (await db.execute(query.order_by(Profile.name).limit(limit))).scalars().all()
+
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow(["name", "role", "company_name", "country_of_residence", "locality", "segment", "origin", "source"])
+    for p in profiles:
+        writer.writerow([p.name, p.role or "", p.company_name or "", p.country_of_residence or "", p.locality or "", p.segment or "", p.origin or "", p.source or ""])
+    buf.seek(0)
+    return StreamingResponse(
+        iter([buf.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=sporafind-export-{exp.id}.csv"},
+    )
 
 
 @router.get("/activity")
