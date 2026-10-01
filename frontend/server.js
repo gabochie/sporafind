@@ -141,6 +141,10 @@ app.get(['/admin', '/features', '/segments', '/pricing', '/api-docs', '/changelo
   res.redirect(301, req.path + '.html');
 });
 
+// Canonical blog is the EJS archive at /blog — keep the legacy static page reachable
+// for inbound links without serving a second, divergent copy of the content.
+app.get('/blog.html', (req, res) => res.redirect(301, '/blog'));
+
 app.use((req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
   const ext = path.extname(req.path);
@@ -261,8 +265,14 @@ app.get('/blog/:slug', async (req, res) => {
   try {
     const post = await fetchFromAPI(`/blog/posts/${req.params.slug}`);
     if (post) {
-      const data = await fetchFromAPI('/blog/posts?page=1&page_size=100');
-      const pool = data ? data.items : [post];
+      // API caps page_size at 50 — walk pages so related/prev/next stay correct.
+      const first = await fetchFromAPI('/blog/posts?page=1&page_size=50');
+      let pool = first ? first.items : [post];
+      const totalPages = first ? Math.ceil(first.total / 50) : 1;
+      for (let p = 2; p <= totalPages; p++) {
+        const next = await fetchFromAPI(`/blog/posts?page=${p}&page_size=50`);
+        if (next?.items) pool = pool.concat(next.items);
+      }
       return renderPost(post, pool);
     }
   } catch (e) { console.error('Blog post fetch error:', e); }
