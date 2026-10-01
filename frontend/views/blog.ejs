@@ -123,23 +123,40 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-l">
-    <a href="/" class="nav-logo"><div class="nav-logomark"><div class="nav-star"></div></div><span class="nav-wordmark">Spora<span>Find</span></span></a>
-    <ul class="nav-links">
-      <li><a href="/features">Features</a></li>
-      <li><a href="/segments">Segments</a></li>
-      <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/blog" style="color:#fff">Blog</a></li>
-      <li><a href="/about">About</a></li>
-    </ul>
-  </div>
-  <div class="nav-r">
-    <a href="/workspace" class="nav-btn nav-btn-outline"><i class="ti ti-user"></i> Sign in</a>
-    <a href="/pricing" class="nav-btn nav-btn-gold">Get early access</a>
-    <button class="nav-mobile-toggle" onclick="var m=this.parentElement.parentElement.querySelector('.nav-links');m.style.display=m.style.display==='flex'?'none':'flex';m.style.flexDirection='column';m.style.position='absolute';m.style.top='64px';m.style.left='0';m.style.right='0';m.style.background='var(--navy)';m.style.padding='16px';m.style.gap='4px'"><i class="ti ti-menu-2"></i></button>
+<!--CHROME:HEADER:START-->
+<!-- SPORAFIND SHARED HEADER — single source of truth.
+     Managed by scripts/build-chrome.js. DO NOT edit nav copies in pages;
+     edit this file then run: npm run build:chrome -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="/features.html" data-nav="features">Features</a>
+      <a href="/segments.html" data-nav="segments">Segments</a>
+      <a href="/pricing.html" data-nav="pricing">Pricing</a>
+      <a href="/api-docs.html" data-nav="api-docs">API docs</a>
+      <a href="/changelog.html" data-nav="changelog">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="/workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="/pricing.html" class="btn-primary-nav">Get early access →</a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu"><i class="ti ti-menu-2"></i></button>
   </div>
 </nav>
+<script>
+(function(){if(window.__sfNavBound)return;window.__sfNavBound=true;
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('#navToggle'):null;if(!b)return;
+  var l=document.querySelector('.nav-links');if(!l)return;
+  l.classList.toggle('open');
+  var i=b.querySelector('i');if(i)i.className=l.classList.contains('open')?'ti ti-x':'ti ti-menu-2';
+});})();
+</script>
+<!--CHROME:HEADER:END-->
 
 <section class="page-hdr">
   <h1>Diaspora <span>Intelligence</span></h1>
@@ -199,23 +216,66 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 <section class="subscribe-sect">
   <h2>Stay ahead of the curve</h2>
   <p>Get diaspora intelligence reports delivered to your inbox every month.</p>
-  <form class="subscribe-form" onsubmit="event.preventDefault();alert('Subscribed! (demo)')">
-    <input type="email" placeholder="you@organisation.com" required>
-    <button type="submit">Subscribe</button>
-  </form>
+  <!--CHROME:SUBSCRIBE:START-->
+<!-- SPORAFIND SHARED SUBSCRIBE FORM — single source of truth.
+     Managed by scripts/build-chrome.js. NOTE: demo behavior (alert, no POST)
+     until a subscribe endpoint exists — see gap report follow-ups. -->
+<form class="subscribe-form" onsubmit="event.preventDefault();alert('Subscribed! (demo)')">
+  <input type="email" placeholder="you@organisation.com" required>
+  <button type="submit">Subscribe</button>
+</form>
+<!--CHROME:SUBSCRIBE:END-->
 </section>
 
-<footer class="footer">
+<!--CHROME:FOOTER:START-->
+<!-- SPORAFIND SHARED FOOTER — single source of truth.
+     Managed by scripts/build-chrome.js. DO NOT edit footer copies in pages;
+     edit this file then run: npm run build:chrome -->
+<footer>
   <div class="footer-inner">
-    <div class="footer-copy">&copy; <%= new Date().getFullYear() %> Sporafind. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
-      <a href="/sources">Sources</a>
-      <a href="/contact">Contact</a>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="/features.html">Features</a>
+        <a href="/segments.html">Segments</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/api-docs.html">API docs</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="/about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/press.html">Press</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="/privacy.html">Privacy policy</a>
+        <a href="/terms.html">Terms of use</a>
+        <a href="/gdpr.html">GDPR</a>
+        <a href="/sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
     </div>
   </div>
 </footer>
+<!--CHROME:FOOTER:END-->
 
 <script src="/js/session.js"></script>
 <script>

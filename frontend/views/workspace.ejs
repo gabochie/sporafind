@@ -37,14 +37,40 @@
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">Sporafind<span>Workspace</span></div>
+  <!--CHROME:HEADER:START-->
+<!-- SPORAFIND SHARED HEADER — single source of truth.
+     Managed by scripts/build-chrome.js. DO NOT edit nav copies in pages;
+     edit this file then run: npm run build:chrome -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
     <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/workspace/app">Sign In</a>
-      <a href="/workspace/app" class="btn btn-primary">Get Started</a>
+      <a href="/features.html" data-nav="features">Features</a>
+      <a href="/segments.html" data-nav="segments">Segments</a>
+      <a href="/pricing.html" data-nav="pricing">Pricing</a>
+      <a href="/api-docs.html" data-nav="api-docs">API docs</a>
+      <a href="/changelog.html" data-nav="changelog">Changelog</a>
     </div>
-  </nav>
+    <div class="nav-cta">
+      <a href="/workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="/pricing.html" class="btn-primary-nav">Get early access →</a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu"><i class="ti ti-menu-2"></i></button>
+  </div>
+</nav>
+<script>
+(function(){if(window.__sfNavBound)return;window.__sfNavBound=true;
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('#navToggle'):null;if(!b)return;
+  var l=document.querySelector('.nav-links');if(!l)return;
+  l.classList.toggle('open');
+  var i=b.querySelector('i');if(i)i.className=l.classList.contains('open')?'ti ti-x':'ti ti-menu-2';
+});})();
+</script>
+<!--CHROME:HEADER:END-->
 
   <section class="hero">
     <h1>Search intelligence for the <em>African diaspora</em></h1>
@@ -88,8 +114,54 @@
     </div>
   </section>
 
-  <footer>
-    <p>&copy; 2026 Sporafind. All rights reserved.</p>
-  </footer>
+  <!--CHROME:FOOTER:START-->
+<!-- SPORAFIND SHARED FOOTER — single source of truth.
+     Managed by scripts/build-chrome.js. DO NOT edit footer copies in pages;
+     edit this file then run: npm run build:chrome -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo">
+          <div class="nav-logomark"><div class="nav-star"></div></div>
+          <div class="nav-wordmark">Spora<span>Find</span></div>
+        </a>
+        <p>AI-powered intelligence for the Ghanaian diaspora. Find people, organisations, and investors across 67 countries.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="/features.html">Features</a>
+        <a href="/segments.html">Segments</a>
+        <a href="/pricing.html">Pricing</a>
+        <a href="/api-docs.html">API docs</a>
+        <a href="/changelog.html">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="/about.html">About</a>
+        <a href="/blog">Blog</a>
+        <a href="/careers.html">Careers</a>
+        <a href="/press.html">Press</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="/privacy.html">Privacy policy</a>
+        <a href="/terms.html">Terms of use</a>
+        <a href="/gdpr.html">GDPR</a>
+        <a href="/sources.html">Data sources</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Sporafind · A <span>Gabochie</span> Intelligence product · Built in Accra, Ghana</div>
+      <div class="footer-bottom-links">
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">Twitter / X</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">LinkedIn</a>
+        <a href="javascript:void(0)" onclick="alert('Social links coming soon (demo)')">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!--CHROME:FOOTER:END-->
 </body>
 </html>

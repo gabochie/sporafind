@@ -1,0 +1,32 @@
+<!-- SPORAFIND SHARED HEADER — single source of truth.
+     Managed by scripts/build-chrome.js. DO NOT edit nav copies in pages;
+     edit this file then run: npm run build:chrome -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logomark"><div class="nav-star"></div></div>
+      <div class="nav-wordmark">Spora<span>Find</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="/features.html" data-nav="features">Features</a>
+      <a href="/segments.html" data-nav="segments">Segments</a>
+      <a href="/pricing.html" data-nav="pricing">Pricing</a>
+      <a href="/api-docs.html" data-nav="api-docs">API docs</a>
+      <a href="/changelog.html" data-nav="changelog">Changelog</a>
+    </div>
+    <div class="nav-cta">
+      <a href="/workspace.html" class="btn-ghost-nav">Sign in</a>
+      <a href="/pricing.html" class="btn-primary-nav">Get early access →</a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle menu"><i class="ti ti-menu-2"></i></button>
+  </div>
+</nav>
+<script>
+(function(){if(window.__sfNavBound)return;window.__sfNavBound=true;
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('#navToggle'):null;if(!b)return;
+  var l=document.querySelector('.nav-links');if(!l)return;
+  l.classList.toggle('open');
+  var i=b.querySelector('i');if(i)i.className=l.classList.contains('open')?'ti ti-x':'ti ti-menu-2';
+});})();
+</script>

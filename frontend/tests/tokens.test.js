@@ -34,7 +34,7 @@ describe('design-token consistency', () => {
   it('Tabler pinned to 3.19.0 everywhere', () => {
     const bad = pages.filter((p) => {
       const src = read(p);
-      return src.includes('tabler-icons') && !src.includes('tabler-icons-webfont@3.19.0');
+      return src.includes('icons-webfont') && !src.includes('icons-webfont@3.19.0');
     });
     expect(bad).toEqual([]);
   });
