@@ -296,6 +296,20 @@ app.all('/api/workspace/search', (req, res) => proxyWorkspaceAPI(req, res));
 app.all('/api/workspace/lists', (req, res) => proxyWorkspaceAPI(req, res));
 app.all('/api/workspace/lists/:id', (req, res) => proxyWorkspaceAPI(req, res));
 app.all('/api/workspace/exports', (req, res) => proxyWorkspaceAPI(req, res));
+app.get('/api/workspace/exports/:id/download', async (req, res) => {
+  try {
+    const auth = req.headers.authorization || '';
+    const url = `${API_BASE}/workspace/exports/${req.params.id}/download`;
+    const headers = {};
+    if (auth) headers['Authorization'] = auth;
+    const r = await fetch(url, { headers });
+    if (!r.ok) return res.status(r.status).json(await r.json().catch(() => ({ error: 'Export failed' })));
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', r.headers.get('content-disposition') || `attachment; filename=sporafind-export-${req.params.id}.csv`);
+    const text = await r.text();
+    return res.status(200).send(text);
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
 app.all('/api/workspace/activity', (req, res) => proxyWorkspaceAPI(req, res));
 
 // Billing proxy — forwards Bearer token same as workspace API
