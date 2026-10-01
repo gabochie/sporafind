@@ -10,7 +10,6 @@ from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.blog import BlogPost
-from app.routers.auth_utils import verify_public_access
 
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/blog", tags=["blog"])
@@ -57,7 +56,6 @@ async def list_posts(
     page_size: int = Query(9, ge=1, le=50),
     tag: str | None = None,
     cat: str | None = None,
-    _: bool = Depends(verify_public_access),
     db: AsyncSession = Depends(get_db),
 ):
     query = select(BlogPost).where(BlogPost.status == "published")
@@ -103,7 +101,6 @@ async def list_posts(
 async def get_post(
     request: Request,
     slug: str,
-    _: bool = Depends(verify_public_access),
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
