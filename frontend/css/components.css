@@ -1,0 +1,41 @@
+/* ==========================================================================
+   SPORAFIND SHARED COMPONENTS — canonical recipes (2026-10-01)
+   Namespaced .sf-* so adoption never collides with page-local styles.
+   Load AFTER tokens.css. New code: use these. Old pages: adopt gradually.
+   ========================================================================== */
+
+/* Buttons */
+.sf-btn{display:inline-block;font:600 13px/1 Inter,system-ui,sans-serif;border-radius:8px;padding:9px 18px;border:1px solid transparent;cursor:pointer;text-decoration:none}
+.sf-btn-primary{background:var(--green);color:#fff}.sf-btn-primary:hover{background:var(--green-dark)}
+.sf-btn-gold{background:var(--gold);color:#0A0E1A}.sf-btn-gold:hover{background:var(--gold-dark)}
+.sf-btn-outline{background:transparent;border-color:var(--cream3);color:var(--text-dark)}
+.sf-btn-ghost{background:transparent;color:var(--text-mid)}
+.sf-btn-danger{background:var(--red-deep);color:#fff}.sf-btn-danger:hover{background:var(--red-dark)}
+.sf-btn-bright{background:var(--gl);color:#0f0f0f}.sf-btn-bright:hover{filter:brightness(1.1)}
+
+/* Cards */
+.sf-card{background:#fff;border:0.5px solid var(--cream2);border-radius:16px;padding:32px 28px}
+.sf-card-dark{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px}
+
+/* Tags & badges */
+.sf-tag{display:inline-block;font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;background:rgba(0,107,60,.1);color:var(--green)}
+.sf-tag-gold{background:rgba(212,160,23,.12);color:var(--gold-dark)}
+.sf-eyebrow{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--green)}
+.sf-eyebrow-pill{font-size:12px;font-weight:600;text-transform:uppercase;color:var(--gold);background:rgba(212,160,23,.12);border:0.5px solid rgba(212,160,23,.3);border-radius:20px;padding:5px 12px}
+
+/* Forms */
+.sf-input{font:400 13px Inter,system-ui,sans-serif;background:#fff;border:1px solid var(--cream2);border-radius:6px;padding:9px 12px;color:var(--text-dark)}
+.sf-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,160,23,.15)}
+.sf-input-dark{background:var(--s2);border:1px solid var(--bd);color:var(--t1)}
+.sf-input-dark:focus{border-color:var(--gl);box-shadow:0 0 0 3px rgba(0,168,90,.15)}
+
+/* Tables */
+.sf-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:0.5px solid var(--cream2);border-radius:16px;overflow:hidden}
+.sf-table th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;background:var(--bg);color:var(--text-mid);text-align:left;padding:9px 12px;border-bottom:1px solid var(--cream2)}
+.sf-table td{padding:9px 12px;color:var(--text-mid);border-bottom:1px solid var(--cream2)}
+.sf-table tr:hover td{background:var(--cream)}
+
+/* Progress */
+.sf-bar{height:8px;background:var(--s2);border:1px solid var(--bd);border-radius:4px;overflow:hidden}
+.sf-bar > span{display:block;height:100%;background:var(--green);border-radius:4px}
+.sf-num{font-family:'JetBrains Mono',monospace;font-weight:700}
