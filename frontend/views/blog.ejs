@@ -34,7 +34,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/css/components.css">
 <style>
@@ -42,26 +41,7 @@
 
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);line-height:1.6;-webkit-font-smoothing:antialiased}
 
-/* Nav */
-.nav{background:var(--navy);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-l{display:flex;align-items:center;gap:32px}
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
-.nav-logomark{width:30px;height:30px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.nav-star{width:13px;height:13px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.nav-wordmark{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;letter-spacing:-0.3px;color:#fff}
-.nav-wordmark span{color:var(--gold)}
-.nav-links{display:flex;align-items:center;gap:4px;list-style:none}
-.nav-links a{padding:8px 14px;border-radius:var(--radius-sm);color:rgba(255,255,255,0.55);font-size:14px;font-weight:500;text-decoration:none;transition:color .12s}
-.nav-links a:hover{color:#fff}
-.nav-r{display:flex;align-items:center;gap:12px}
-.nav-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;text-decoration:none;transition:all .12s;font-family:'Inter',sans-serif}
-.nav-btn-outline{color:rgba(255,255,255,0.7);border:0.5px solid rgba(255,255,255,0.2);background:transparent}
-.nav-btn-outline:hover{color:#fff;border-color:var(--gold);background:rgba(212,160,23,0.08)}
-.nav-btn-gold{background:var(--gold);color:#0A0E1A}
-.nav-btn-gold:hover{background:var(--gold-dark)}
-.nav-mobile-toggle{display:none;background:none;border:none;color:rgba(255,255,255,0.7);font-size:24px;cursor:pointer;padding:4px}
-
-/* Page header */
+/* Page header (nav + footer come from shared chrome: /css/components.css) */
 .page-hdr{background:var(--navy);padding:60px 32px 80px;text-align:center}
 .page-hdr h1{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:800;letter-spacing:-1.5px;color:#fff;margin-bottom:12px}
 .page-hdr h1 span{color:var(--gold)}
@@ -73,8 +53,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 /* Filters */
 .filters-bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:24px 32px 8px}
 .filter-tag{display:inline-block;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;background:var(--cream2);color:var(--text-mid);text-decoration:none;transition:all .12s;border:0.5px solid transparent}
-.filter-tag:hover,.filter-tag.active{background:var(--gold);color:#0A0E1A}
-.filter-tag.active{background:var(--gold);color:#0A0E1A;font-weight:600}
+.filter-tag:hover,.filter-tag.active{background:var(--gold);color:#0A0E1A;font-weight:600}
 
 /* Blog grid */
 .blog-wrap{max-width:1200px;margin:0 auto;padding:40px 32px 80px}
@@ -115,16 +94,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);
 .subscribe-form button{padding:12px 28px;background:var(--gold);color:#0A0E1A;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;transition:background .12s}
 .subscribe-form button:hover{background:var(--gold-dark)}
 
-/* Footer */
-.footer{background:var(--navy);border-top:0.5px solid rgba(255,255,255,0.06);padding:48px 32px 32px}
-.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.footer-copy{font-size:13px;color:rgba(255,255,255,0.3)}
-.footer-links{display:flex;gap:20px}
-.footer-links a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:13px;transition:color .12s}
-.footer-links a:hover{color:var(--gold)}
+/* Footer comes from shared chrome: /css/components.css */
 
 @media(max-width: 900px){
-  .nav{padding:0 16px}
+  nav{padding:0 16px}
   .nav-links{display:none}
   .nav-mobile-toggle{display:block}
   .page-hdr{padding:40px 16px 60px}
@@ -234,15 +207,10 @@ document.addEventListener('click',function(e){
 <!-- SPORAFIND SHARED SUBSCRIBE FORM — single source of truth.
      Managed by scripts/build-chrome.js. NOTE: demo behavior (alert, no POST)
      until a subscribe endpoint exists — see gap report follow-ups. -->
-<!--CHROME:SUBSCRIBE:START-->
-<!-- SPORAFIND SHARED SUBSCRIBE FORM — single source of truth.
-     Managed by scripts/build-chrome.js. NOTE: demo behavior (alert, no POST)
-     until a subscribe endpoint exists — see gap report follow-ups. -->
 <form class="subscribe-form" onsubmit="event.preventDefault();alert('Subscribed! (demo)')">
   <input type="email" placeholder="you@organisation.com" required>
   <button type="submit">Subscribe</button>
 </form>
-<!--CHROME:SUBSCRIBE:END-->
 <!--CHROME:SUBSCRIBE:END-->
 </section>
 
