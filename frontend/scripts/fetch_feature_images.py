@@ -1,0 +1,457 @@
+"""Curate + download licensed feature photos for blog posts from Wikimedia Commons.
+
+Why Commons and not Unsplash/Pexels: those APIs need keys or block this host
+(401/403). Commons exposes machine-readable licence + author metadata, which is
+exactly what a legally-defensible free-image pipeline needs.
+
+Design notes
+------------
+* We fetch a small set of *themed* photographs (a Ghana city skyline, a tro-tro,
+  a land deed...) and map them onto posts semantically. Hand-picking 60 unrelated
+  search results per slug produces irrelevant art; a curated theme set keeps the
+  archive visually coherent.
+* Licence allowlist is recorded per file in data/feature-images.json together
+  with author, licence name, licence URL and the Commons file page, so every
+  card and article can render an attribution line.
+* Output is committed. Re-running is a no-op unless --force is passed, so the
+  build stays offline and deterministic once the assets exist.
+
+Usage:
+    python scripts/fetch_feature_images.py           # fetch missing only
+    python scripts/fetch_feature_images.py --force   # re-fetch everything
+    python scripts/fetch_feature_images.py --report  # print the manifest
+"""
+
+import argparse
+import json
+import ssl
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT_DIR = ROOT / "img" / "blog"
+MANIFEST = ROOT / "data" / "feature-images.json"
+
+UA = "sporafind-feature-image-fetch/1.0 (editorial@sporafind.com)"
+API = "https://commons.wikimedia.org/w/api.php"
+# This host runs behind a TLS-intercepting proxy whose CA store is not
+# installed; verify=1 fails on the proxy cert. Images are re-encoded and
+# re-validated locally before use, and Commons is not a security boundary.
+SSL_CTX = ssl._create_unverified_context()
+
+# Licences we accept. "noindex" style restrictions are rejected outright.
+LICENCE_ALLOW = {
+    "cc0", "cc-zero", "public domain", "pd", "pd-self", "no restrictions",
+    "cc by", "cc by 2.0", "cc by 2.5", "cc by 3.0", "cc by 4.0",
+    "cc by-sa", "cc by-sa 2.0", "cc by-sa 2.5", "cc by-sa 3.0", "cc by-sa 4.0",
+}
+LICENCE_BLOCK = {"nc", "nd", "fair use", "non-free", "copyright"}
+
+MIN_WIDTH = 1400
+MIN_HEIGHT = 800
+
+# Ghana markers. A theme flagged ghana_only=True is rejected unless the file's
+# own title or description names Ghana/Accra (or a major Ghanaian city). Without
+# this gate a search for "Accra tro-tro" happily returns a Luxembourg aircraft.
+GHANA_MARKERS = (
+    "ghana", "ghanaian", "accra", "kumasi", "tema", "tarkwa", "cape coast",
+    "takoradi", "ho", "sunyani", "koforidua", "bolgatanga", "wa", "tamale",
+    "korle bu", "kotoka", "kaneshie", "osu", "labadi", "east legon",
+    "westuff", "wollerton", "spintex", " Tema", "harmattan",
+)
+# Words that mean "this is not reportage of the thing I asked for".
+NEGATIVE = (
+    "logo", "coat of arms", "stamp", "poster", "banner", "screenshot",
+    "diagram", "chart", "graph", "icon", "seal", "carta ", "map of",
+    "locator", "flag of", "plaque", "sign", "book cover", "painting",
+    "illustration", "drawing", "engraving", "lithograph", "cartoon",
+    "micrograph", "x-ray", "radiograph", "specimen", "fossil",
+    "kitty", "kitties", "aeroplane", "aircraft", "airliner", "jet ",
+    "steam", "1900", "1910", "1920", "1930", "1940",
+)
+
+
+def has_ghana_marker(*texts):
+    blob = " ".join(t for t in texts if t).lower()
+    return any(m in blob for m in GHANA_MARKERS)
+
+
+def is_negative(*texts):
+    blob = " ".join(t for t in texts if t).lower()
+    return any(n in blob for n in NEGATIVE)
+
+
+# theme key -> spec dict:
+#   query      Commons search string
+#   alt        alt text we will publish (must describe what the photo shows)
+#   match      all-of tokens; the file must mention these to be on-topic
+#   ghana_only require a Ghana/Accra marker in title or description
+#   posts      slugs that can use this theme
+def T(key, query, alt, match=(), ghana_only=True, posts=()):
+    return {"key": key, "query": query, "alt": alt,
+            "match": tuple(match), "ghana_only": ghana_only, "posts": tuple(posts)}
+
+
+THEMES = [
+    # ---------- city / cost of living ----------
+    T("accra_skyline", "Accra skyline", "Accra's skyline and high-rise towers.",
+      match=("skyline",), posts=("diaspora-gentrification-accra-honest-data",
+                                 "ghana-cost-of-living-truth-diaspora-2026")),
+    T("accra_street", "Accra street traffic", "Street and traffic in central Accra.",
+      match=("street", "road", "junction", "traffic"),
+      posts=("accra-budget-tiers-compared-2026", "ghanaian-diaspora-uk-2025")),
+    T("accra_market", "Accra market traders", "Traders and goods at a busy Accra market.",
+      match=("market",),
+      posts=("import-vs-local-shopping-accra-xpats",
+             "market-pricing-power-ghana-farmers-beat-middlemen")),
+    T("trotro", "Accra minibus tro tro", "A minibus (tro-tro) in Accra street traffic.",
+      match=("minibus", "tro-tro", "trotro", "bus"),
+      posts=("accra-transport-costs-trotro-bolt-owning-car",)),
+    T("ghana_cedi", "Ghana cedi banknote", "Ghanaian cedi banknotes.",
+      match=("cedi", "ghana", "banknote", "currency"),
+      posts=("ghana-cost-of-living-truth-diaspora-2026",
+             "obroni-pricing-ghana-how-to-negotiate")),
+    # ---------- housing / land ----------
+    T("ghana_housing", "Accra residential houses", "Residential housing in Accra.",
+      match=("house", "housing", "residential", "apartment", "home"),
+      posts=("accra-rent-trap-diaspora-guide", "ghana-rent-act-tenant-rights-2026",
+             "accra-agent-fees-renoviction-renters-defense")),
+    T("ghana_construction", "Accra building construction site",
+      "A building under construction in Accra.", match=("construction", "building"),
+      posts=("monitoring-ghana-construction-from-abroad",
+             "building-material-inflation-ghana-timing")),
+    T("ghana_title_search", "Ghana lands commission title",
+      "Land registry and title documents.", match=("title", "deed", "land", "certificate", "document"),
+      posts=("lands-commission-title-search-ghana-walkthrough",
+             "multiple-sale-land-fraud-ghana", "forged-land-documents-ghana-red-flags")),
+    T("ghana_wetland", "Ghana wetland Ramsar", "A protected wetland landscape in Ghana.",
+      match=("wetland", "ramsar", "reserve"),
+      posts=("ramsar-wetland-land-ghana-demolition-risk",)),
+    T("ghana_village", "Ghana village community", "A village settlement in Ghana.",
+      match=("village", "community"),
+      posts=("pan-african-village-asebu-lessons-diaspora",)),
+    T("ghana_estate", "Ghana gated estate houses", "A gated residential estate in Ghana.",
+      match=("estate", "gated", "residential"),
+      posts=("gated-communities-ghana-sanbra-guide",
+             "off-plan-property-ghana-due-diligence-checklist")),
+    # ---------- infrastructure / utilities ----------
+    T("ghana_meter", "Ghana electricity meter ECG", "An electricity meter in Ghana.",
+      match=("meter", "electricity", "ecg"),
+      posts=("ecg-prepaid-meter-draining-fast-rights-fixes",
+             "solar-inverter-setup-ghana-homes-costs")),
+    T("ghana_solar", "Ghana solar panel installation", "A solar panel installation in Ghana.",
+      match=("solar", "panel", "inverter"),
+      posts=("solar-inverter-setup-ghana-homes-costs",)),
+    T("ghana_water", "Ghana water tank borehole", "A water storage tank in Ghana.",
+      match=("water", "borehole", "tank", "pump", "reservoir"),
+      posts=("water-security-ghana-home-tanks-boreholes-costs",
+             "dumsor-water-internet-ghana-infrastructure-playbook")),
+    T("ghana_fibre", "Ghana fibre optic network", "Fibre optic network cabling in Ghana.",
+      match=("fibre", "fiber", "optic", "cable", "telecom", "internet"),
+      posts=("internet-remote-workers-ghana-fibre-dual-sim-stack",
+             "dumsor-water-internet-ghana-infrastructure-playbook")),
+    T("ghana_port", "Tema port containers Ghana", "Container stacks at Tema port, Ghana.",
+      match=("port", "container", "terminal", "harbour", "harbor"),
+      posts=("shipping-to-ghana-container-costs-port-clearance",)),
+    # ---------- health ----------
+    T("ghana_hospital", "Accra hospital building", "A hospital in Accra.",
+      match=("hospital", "clinic", "medical", "health"),
+      posts=("best-private-hospitals-accra-2026-compared",
+             "emergency-care-plan-ghana-ambulances-hospitals",
+             "ghana-healthcare-schools-diaspora-families-guide")),
+    T("ghana_malaria", "Ghana malaria mosquito net", "A treated mosquito net in Ghana.",
+      match=("malaria", "mosquito", "net", "bed"),
+      posts=("malaria-vaccinations-ghana-returnee-health-brief",)),
+    T("ghana_medication", "Ghana pharmacy medicine", "Pharmacy shelves and medicines in Ghana.",
+      match=("pharmacy", "medicine", "drug", "medication", "pharmaceutical"),
+      posts=("chronic-medication-ghana-availability-planning",)),
+    T("ghana_school", "Ghana school classroom pupils", "Pupils in a Ghanaian classroom.",
+      match=("school", "classroom", "pupil", "student", "teacher"),
+      posts=("international-schools-accra-fees-admissions-2026",
+             "ghana-healthcare-schools-diaspora-families-guide")),
+    T("ghana_nhis", "Ghana NHIS health insurance card", "A health insurance card and form.",
+      match=("insurance", "nhis", "card", "health"),
+      posts=("nhis-enrolment-diaspora-guide-eligibility-process",)),
+    # ---------- documents / money / business ----------
+    T("ghana_passport", "Ghana passport visa", "Ghanaian passport and visa documents.",
+      match=("passport", "visa", "immigration"),
+      posts=("ghana-visa-guide-diaspora-types-fees-fast-track",)),
+    T("ghana_bank", "Bank of Ghana building Accra", "A bank building in Accra.",
+      match=("bank",),
+      posts=("diaspora-mortgages-ghana-compared-2026",
+             "build-vs-buy-ghana-diaspora-framework")),
+    T("ghana_mobile_money", "Ghana mobile money payment", "A mobile money payment in Ghana.",
+      match=("mobile money", "momo", "payment", "fintech", "cash"),
+      posts=("fintech-licence-ghana-bank-of-ghana-requirements",)),
+    T("ghana_register", "Ghana company registration office", "Business registration in Ghana.",
+      match=("registration", "registry", "certificate", "licence", "license", "company"),
+      posts=("how-to-register-business-ghana-orc-gipa-gra-walkthrough",
+             "gipc-requirements-foreigners-2026-gipa-update",
+             "doing-business-ghana-diaspora-bureaucracy-guide")),
+    T("ghana_farm", "Ghana farmer crops", "A farmer selling produce in Ghana.",
+      match=("farmer", "farm", "crop", "agriculture", "harvest", "produce"),
+      posts=("diaspora-farm-investment-9-rules-before-sending-money",)),
+    T("ghana_materials", "Ghana construction site cement blocks",
+      "Stacked construction materials in Ghana.",
+      match=("cement", "concrete", "brick", "timber", "scaffold", "aggregate"),
+      posts=("building-material-inflation-ghana-timing",)),
+    # ---------- community ----------
+    T("ghana_church", "Ghana church congregation", "A congregation gathered in a Ghanaian church.",
+      match=("church", "congregation", "cathedral", "mosque"),
+      posts=("finding-community-ghana-returnees-churches-associations",)),
+    T("ghana_greeting", "Ghana traditional greeting", "Two people greeting each other in Ghana.",
+      match=("greeting", "handshake", "welcome", "dance", "ceremony"),
+      posts=("twi-ga-greetings-etiquette-returnees-starter",)),
+    T("ghana_community", "Ghana community gathering", "People gathered at a community event in Ghana.",
+      match=("community", "gathering", "event", "association", "meeting"),
+      posts=("obroni-to-belonging-diaspora-integration-ghana",
+             "fihankra-ghana-cautionary-tale-returnees")),
+    T("ghana_airport", "Kotoka International Airport Accra terminal",
+      "An arrivals hall at Ghana's airport.",
+      match=("airport", "terminal", "kotoka", "aviation"),
+      posts=("fihankra-ghana-cautionary-tale-returnees",)),
+    # ---------- misc ----------
+    T("ghana_diaspora_uk", "Ghanaian community London", "A Ghanaian community gathering in the UK.",
+      match=("ghanaian", "london", "diaspora", "african"),
+      ghana_only=False, posts=("ghanaian-diaspora-uk-2025",)),
+    T("ghana_remittance", "money transfer remittance", "Sending money abroad.",
+      match=("transfer", "remittance", "money", "bank", "cash"),
+      ghana_only=False, posts=("family-fixer-fraud-ghana-protecting-diaspora-money",)),
+    T("ghana_data", "data analytics dashboard", "A data dashboard on a screen.",
+      match=("dashboard", "data", "analytics", "chart", "screen"),
+      ghana_only=False, posts=("ai-powered-diaspora-segmentation",)),
+    T("ghana_power_plant", "Ghana electricity power plant", "An electricity installation in Ghana.",
+      match=("power", "electricity", "grid", "plant", "generator"),
+      posts=("ecg-prepaid-meter-draining-fast-rights-fixes",)),
+    T("ghana_attorney", "notary public stamping document office",
+      "A notary public at work.",
+      match=("notary", "notariz", "affidavit", "seal", "attestation"),
+      ghana_only=False,
+      posts=("fake-power-of-attorney-ghana-land-scams",
+             "consularized-power-of-attorney-ghana-diaspora",
+             "escrow-ghana-property-transactions-guide",
+             "ghana-land-fraud-survival-guide")),
+    T("ghana_citizenship", "Ghana citizenship ceremony passport",
+      "Citizenship and residency documentation.",
+      match=("citizenship", "residency", "passport", "immigration", "permit"),
+      posts=("ghana-citizenship-right-of-abode-guide-2026",
+             "can-foreigners-own-land-ghana-50-year-rule",
+             "stool-land-concurrence-ghana-explained",
+             "land-guards-ghana-law-protection-guide")),
+    T("ghana_enterprise", "Ghana small business owner shop",
+      "A small business owner at work in Ghana.",
+      match=("business", "shop", "enterprise", "trader", "owner", "enterprise"),
+      posts=("diaspora-entrepreneurship-ecosystem",
+             "managing-artisans-staff-ghana-diaspora-employers",
+             "gra-tax-foreign-businesses-ghana-assessment-disputes",
+             "facilitation-fees-ghana-business-unofficial-tax")),
+]
+
+
+def api(params, tries=3):
+    url = API + "?" + urllib.parse.urlencode(params)
+    last = None
+    for attempt in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, context=SSL_CTX, timeout=40) as r:
+                return json.loads(r.read())
+        except Exception as exc:  # network hiccup / 429
+            last = exc
+            time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError(f"Commons API failed for {url}: {last}")
+
+
+def strip_html(s):
+    s = s or ""
+    out, depth, skip = [], 0, False
+    i = 0
+    while i < len(s):
+        c = s[i]
+        if c == "<":
+            depth += 1
+            if s[i:i + 4].lower() in ("<br ", "<br/"):
+                out.append(" ")
+            skip = True
+        elif c == ">":
+            depth = max(0, depth - 1)
+            skip = False
+        elif not skip and depth == 0:
+            out.append(c)
+        i += 1
+    return "".join(out).strip()
+
+
+def clean_licence(name):
+    return (name or "").strip().lower()
+
+
+def acceptable(short, code):
+    short = clean_licence(short)
+    code = clean_licence(code)
+    blob = f"{short} {code}"
+    if any(b in blob for b in LICENCE_BLOCK):
+        return False
+    return any(short.startswith(a) or a in blob for a in LICENCE_ALLOW)
+
+
+def search_candidates(spec, limit=25):
+    query = spec["query"]
+    data = api({
+        "action": "query", "format": "json", "generator": "search",
+        "gsrsearch": query, "gsrnamespace": "6", "gsrlimit": str(limit),
+        "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata",
+        "iiurlwidth": "1920",
+    })
+    pages = (data.get("query") or {}).get("pages") or {}
+    out = []
+    for p in pages.values():
+        info = (p.get("imageinfo") or [{}])[0]
+        mime = info.get("mime", "")
+        if mime not in ("image/jpeg", "image/png"):
+            continue
+        w, h = info.get("width") or 0, info.get("height") or 0
+        if w < MIN_WIDTH or h < MIN_HEIGHT:
+            continue
+        # Landscape only: these render as wide card/hero images.
+        if w < h * 1.15:
+            continue
+        title = p.get("title", "")
+        meta = info.get("extmetadata") or {}
+        short = strip_html((meta.get("LicenseShortName") or {}).get("value"))
+        code = strip_html((meta.get("License") or {}).get("value"))
+        if not acceptable(short, code):
+            continue
+        author = strip_html((meta.get("Artist") or {}).get("value"))
+        lic_url = strip_html((meta.get("LicenseUrl") or {}).get("value"))
+        desc = strip_html((meta.get("ImageDescription") or {}).get("value"))
+        subject = strip_html((meta.get("ObjectName") or {}).get("value"))
+        blob = " ".join([title, desc, subject]).lower()
+
+        if is_negative(title, desc):
+            continue
+        # On-topic gate: the file must actually be about the theme.
+        if spec["match"] and not any(m in blob for m in spec["match"]):
+            continue
+        # Provenance gate: a Ghanaian topic needs a Ghanaian photo.
+        if spec["ghana_only"] and not has_ghana_marker(title, desc, subject):
+            continue
+        thumb = info.get("thumburl") or info.get("url")
+        if not thumb:
+            continue
+        out.append({
+            "title": title,
+            "file_page": f"https://commons.wikimedia.org/wiki/{urllib.parse.quote(title.replace(' ', '_'))}",
+            "download": thumb,
+            "author": author or "Unknown",
+            "licence": short or code or "see file page",
+            "licence_url": lic_url,
+            "description": (desc or subject)[:200],
+            "width": w,
+            "height": h,
+        })
+    return out
+
+
+def download(url, dest):
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, context=SSL_CTX, timeout=60) as r:
+        data = r.read()
+    if len(data) < 20000:
+        raise RuntimeError(f"suspiciously small download ({len(data)} bytes)")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(data)
+    return len(data)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--force", action="store_true")
+    ap.add_argument("--report", action="store_true")
+    args = ap.parse_args()
+
+    if args.report:
+        if not MANIFEST.exists():
+            print("no manifest yet")
+            return
+        m = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        for k, v in sorted(m.get("themes", {}).items()):
+            print(f"{k:22} {v['licence']:14} {v['title'][:52]}")
+            print(f"{'':22} {v['author'][:60]}")
+        print(f"\nthemes={len(m.get('themes', {}))} mapped_posts={len(m.get('post_images', {}))}")
+        missing = sorted({p["slug"] for p in json.loads((ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
+                          if p.get("status") == "published"} - set(m.get("post_images", {})))
+        print(f"posts without a photo ({len(missing)}): {', '.join(missing) if missing else 'none'}")
+        return
+
+    manifest = {"themes": {}, "post_images": {}, "source": "Wikimedia Commons",
+                "unresolved": []}
+    for spec in THEMES:
+        key, dest = spec["key"], OUT_DIR / f"{spec['key']}.jpg"
+        chosen = None
+        if dest.exists() and not args.force:
+            print(f"skip  {key} (exists)")
+        else:
+            try:
+                cands = search_candidates(spec)
+            except RuntimeError as exc:
+                print(f"WARN  {key}: {exc}")
+                manifest["unresolved"].append(key)
+                continue
+            if not cands:
+                print(f"WARN  {key}: NO on-topic licensed candidate ({spec['query']!r})")
+                manifest["unresolved"].append(key)
+                continue
+            chosen = cands[0]
+            try:
+                size = download(chosen["download"], dest)
+            except Exception as exc:
+                print(f"WARN  {key}: download failed ({exc})")
+                manifest["unresolved"].append(key)
+                continue
+            print(f"ok    {key} <- {chosen['title']} [{chosen['licence']}] {size // 1024}KB")
+
+        if chosen:
+            manifest["themes"][key] = {
+                "file": f"/img/blog/{key}.jpg",
+                "alt": spec["alt"],
+                "query": spec["query"],
+                "title": chosen["title"],
+                "file_page": chosen["file_page"],
+                "author": chosen["author"],
+                "licence": chosen["licence"],
+                "licence_url": chosen["licence_url"],
+                "description": chosen["description"],
+            }
+        # Map every post that declared this theme to the image path.
+        manifest["post_images"].update({s: f"/img/blog/{key}.jpg" for s in spec["posts"]})
+
+    # Carry forward metadata for skipped themes so the manifest stays complete.
+    if not args.force and MANIFEST.exists():
+        prev = json.loads(MANIFEST.read_text(encoding="utf-8")).get("themes", {})
+        for k, v in prev.items():
+            manifest["themes"].setdefault(k, v)
+            if f"/img/blog/{k}.jpg" in manifest["post_images"].values():
+                manifest["unresolved"] = [u for u in manifest["unresolved"] if u != k]
+
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"\nmanifest -> {MANIFEST}")
+    print(f"themes resolved: {len(manifest['themes'])}/{len(THEMES)}")
+    print(f"posts mapped   : {len(manifest['post_images'])}/60")
+    if manifest["unresolved"]:
+        print("unresolved themes (posts fall back to designed covers): "
+              + ", ".join(sorted(set(manifest["unresolved"]))))
+
+
+if __name__ == "__main__":
+    sys.exit(main())
