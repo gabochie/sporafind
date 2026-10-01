@@ -161,6 +161,17 @@ footer{background:var(--navy);padding:72px 48px 40px;}
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 .animate-in{animation:fadeUp 0.6s ease forwards;}
+
+@media(max-width:900px){
+  .contact-section{padding:60px 20px}
+  .contact-grid{grid-template-columns:1fr;gap:40px;margin-top:40px}
+  .map-card{grid-template-columns:1fr;padding:32px 20px}
+  .map-section{padding:60px 20px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media(max-width:640px){
+  .footer-top{grid-template-columns:1fr}
+}
 </style>
 <script src="/js/session.js"></script>
 </head>
