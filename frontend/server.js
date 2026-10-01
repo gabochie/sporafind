@@ -194,7 +194,14 @@ app.get('/blog', async (req, res) => {
       `${cat ? `&cat=${encodeURIComponent(cat)}` : ''}` +
       `${q ? `&q=${encodeURIComponent(q)}` : ''}`
     );
-    if (data) return render(data);
+    if (data) {
+      // A healthy-but-empty DB must not blank the blog: 60 articles exist on disk.
+      if (!data.items?.length && !req.query.tag && !req.query.cat && !q) {
+        console.warn('Blog API returned 0 posts — falling back to local posts.json');
+      } else {
+        return render(data);
+      }
+    }
   } catch (e) { console.error('Blog fetch error:', e); }
 
   // Offline / API-down fallback: same contract, served from local posts.json
