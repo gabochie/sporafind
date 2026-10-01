@@ -94,15 +94,12 @@ for (const [page, active] of Object.entries(PAGES)) {
     log.push('footer inserted');
   }
 
-  // subscribe demo forms (blog templates only)
-  if (page === 'views/blog.ejs' || page === 'views/blog-post.ejs') {
+  // subscribe demo forms (blog templates only) — skip pages already managed.
+  if ((page === 'views/blog.ejs' || page === 'views/blog-post.ejs') && !s.includes(S_S)) {
     const subRe = /<form[^>]*alert\('Subscribed! \(demo\)'\)[^>]*>[\s\S]*?<\/form\s*>/gi;
     if (subRe.test(s)) {
       s = s.replace(subRe, `${S_S}\n${subscribeTpl}\n${S_E}`);
       log.push('subscribe partialized');
-    } else {
-      r = swap(s, S_S, S_E, subscribeTpl);
-      if (r.hit) { s = r.out; log.push('subscribe refreshed'); }
     }
   }
 
