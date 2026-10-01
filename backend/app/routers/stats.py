@@ -10,7 +10,6 @@ from app.models.org import Org
 from app.models.blog import BlogPost
 from app.models.user import User
 from app.models.pricing import PricingPlan
-from app.routers.auth_utils import verify_public_access
 
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter(prefix="/stats", tags=["stats"])
@@ -21,7 +20,6 @@ router = APIRouter(prefix="/stats", tags=["stats"])
 async def get_stats(
     request: Request,
     db: AsyncSession = Depends(get_db),
-    _: bool = Depends(verify_public_access),
 ):
     try:
         profile_count = await db.execute(select(func.count(Profile.id)).where(Profile.is_active == True))
