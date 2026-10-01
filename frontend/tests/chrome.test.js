@@ -60,6 +60,14 @@ describe('shared chrome (header/footer)', () => {
     const bad = CHROME_PAGES.filter((p) => read(p).includes('href="admin.html" class="btn-ghost-nav"'));
     expect(bad).toEqual([]);
   });
+
+  it('mobile readiness: shared nav rules + no zero-media pages', () => {
+    const css = read('css/components.css');
+    expect(css).toContain('.nav-mobile-toggle');
+    expect(css).toContain('@media(max-width:900px)');
+    const noMedia = CHROME_PAGES.filter((p) => !read(p).includes('@media'));
+    expect(noMedia).toEqual([]);
+  });
 });
 
 describe('PWA installability', () => {
