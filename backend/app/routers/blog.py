@@ -88,21 +88,33 @@ async def list_posts(
     )
     items = rows.scalars().all()
 
-    # Get distinct categories and tags from published posts
+    # Category facets (names kept flat for API compatibility, counts alongside)
     cat_rows = await db.execute(
         select(BlogPost.category, func.count(BlogPost.id))
         .where(BlogPost.status == "published", BlogPost.category.isnot(None))
         .group_by(BlogPost.category)
+        .order_by(func.count(BlogPost.id).desc(), BlogPost.category)
     )
-    categories = [{"name": row[0], "count": row[1]} for row in cat_rows.all()]
+    category_counts = {row[0]: row[1] for row in cat_rows.all()}
+
+    # Tag facets, aggregated in Python so this works on any backend (no jsonb ops)
+    tag_rows = await db.execute(select(BlogPost.tags).where(BlogPost.status == "published"))
+    tag_counts: dict[str, int] = {}
+    for (raw_tags,) in tag_rows.all():
+        for t in raw_tags or []:
+            if t:
+                tag_counts[t] = tag_counts.get(t, 0) + 1
+    top_tags = sorted(tag_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:24]
 
     return {
         "items": [post_to_dict(p) for p in items],
         "total": total_count,
         "page": page,
         "page_size": page_size,
-        "categories": [c["name"] for c in categories],
-        "tags": [],
+        "categories": list(category_counts.keys()),
+        "category_counts": category_counts,
+        "tags": [{"name": n, "count": c} for n, c in top_tags],
+        "tag_total": len(tag_counts),
     }
 
 
