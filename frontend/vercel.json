@@ -1,17 +1,14 @@
 {
-  "builds": [
-    { "src": "api/server.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "js/*", "use": "@vercel/static" },
-    { "src": "data/*", "use": "@vercel/static" }
-  ],
   "cleanUrls": true,
-  "routes": [
-    { "src": "/blog(/.*)?", "dest": "api/server.js" },
-    { "src": "/api(/.*)?", "dest": "api/server.js" },
-    { "src": "/sitemap\\.xml", "dest": "api/server.js" },
-    { "src": "/rss\\.xml", "dest": "api/server.js" },
-    { "src": "/investors(/.*)?", "dest": "api/server.js" },
-    { "src": "/workspace(/.*)?", "dest": "api/server.js" }
+  "functions": {
+    "api/server.js": { "runtime": "nodejs20.x" }
+  },
+  "rewrites": [
+    { "source": "/blog/:path*", "destination": "/api/server.js" },
+    { "source": "/api/:path*", "destination": "/api/server.js" },
+    { "source": "/sitemap.xml", "destination": "/api/server.js" },
+    { "source": "/rss.xml", "destination": "/api/server.js" },
+    { "source": "/investors/:path*", "destination": "/api/server.js" },
+    { "source": "/workspace/:path*", "destination": "/api/server.js" }
   ]
 }
