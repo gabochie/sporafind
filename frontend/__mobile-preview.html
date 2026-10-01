@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sporafind PWA — Mobile Preview Lab</title>
+<link rel="stylesheet" href="/css/tokens.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:#0f0f0f;color:#e8e8e8;padding:24px;min-height:100vh}
+h1{font-size:20px;margin-bottom:4px}h1 span{color:#D4A017}
+.sub{color:#a0a0a0;font-size:13px;margin-bottom:6px}
+.note{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:12px 16px;font-size:12.5px;color:#a0a0a0;margin-bottom:18px;max-width:1100px}
+.note b{color:#e8e8e8}.note code{font-family:monospace;font-size:11px;background:#242424;padding:1px 5px;border-radius:4px;color:#00a85a}
+.lab{display:flex;gap:28px;align-items:flex-start;overflow-x:auto;padding-bottom:24px}
+.device{flex-shrink:0}
+.device-label{font-size:12px;color:#a0a0a0;margin-bottom:8px;display:flex;gap:8px;align-items:center}
+.device-label b{color:#e8e8e8}
+.device-label button{background:#242424;border:1px solid #2a2a2a;color:#e8e8e8;border-radius:6px;font-size:11px;padding:3px 10px;cursor:pointer}
+.frame{border:10px solid #242424;border-radius:36px;overflow:hidden;background:#000;position:relative}
+.frame iframe{border:0;display:block;background:#fff}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:110px;height:22px;background:#000;border-radius:12px;z-index:2}
+</style>
+</head>
+<body>
+<h1>Spora<span>find</span> PWA — Mobile Preview Lab</h1>
+<p class="sub">Live pages in true-pixel device frames · served from your local build</p>
+<div class="note">
+<b>What you're seeing:</b> the real site, not mockups. Interact with each frame (scroll, tap hamburger, try search).
+<b>PWA install test:</b> <code>chrome://apps</code> won't trigger from here — instead open <code>http://localhost:3001/</code> in desktop Chrome and look for the <b>install icon in the address bar</b> (localhost is a secure context, so installability works). On a phone: deploy to Vercel (HTTPS), open in Chrome → menu → <b>Add to Home screen / Install app</b>. Manifest, icons, theme-color and offline page are all wired; airplane-mode the phone to see <code>/offline.html</code>.
+</div>
+<div class="lab">
+  <div class="device">
+    <div class="device-label"><b>Android · 360×800</b> — home <button onclick="rel('f1')">reload</button></div>
+    <div class="frame" style="width:380px;height:820px"><div class="notch"></div><iframe id="f1" src="/" width="360" height="800"></iframe></div>
+  </div>
+  <div class="device">
+    <div class="device-label"><b>iPhone · 390×844</b> — pricing <button onclick="rel('f2')">reload</button></div>
+    <div class="frame" style="width:410px;height:864px"><div class="notch"></div><iframe id="f2" src="/pricing.html" width="390" height="844"></iframe></div>
+  </div>
+  <div class="device">
+    <div class="device-label"><b>iPhone · 390×844</b> — blog <button onclick="rel('f3')">reload</button></div>
+    <div class="frame" style="width:410px;height:864px"><div class="notch"></div><iframe id="f3" src="/blog" width="390" height="844"></iframe></div>
+  </div>
+  <div class="device">
+    <div class="device-label"><b>Tablet · 768×1024</b> — workspace <button onclick="rel('f4')">reload</button></div>
+    <div class="frame" style="width:788px;height:1044px"><iframe id="f4" src="/workspace/app" width="768" height="1024"></iframe></div>
+  </div>
+</div>
+<script>
+function rel(id){var f=document.getElementById(id);f.src=f.src;}
+</script>
+</body>
+</html>
