@@ -34,8 +34,8 @@ async def log_action(action: str, detail: str, user_id: str | None = None):
         await db.commit()
 
 
-async def verify_admin(x_admin_key: str = Header(...)):
-    if x_admin_key != settings.admin_key:
+async def verify_admin(x_admin_key: str | None = Header(default=None)):
+    if not settings.admin_key or x_admin_key != settings.admin_key:
         raise HTTPException(status_code=401, detail="Invalid admin key")
     return True
 

@@ -61,3 +61,58 @@ describe('shared chrome (header/footer)', () => {
     expect(bad).toEqual([]);
   });
 });
+
+describe('PWA installability', () => {
+  const HEAD_PAGES = [
+    'about.html', 'admin.html', 'api-docs.html', 'blog.html', 'careers.html',
+    'changelog.html', 'contact.html', 'features.html', 'fundraising.html', 'gdpr.html',
+    'index.html', 'press.html', 'pricing.html', 'privacy.html', 'roadmap.html',
+    'segments.html', 'sources.html', 'terms.html', 'workspace.html',
+    'views/blog.ejs', 'views/blog-post.ejs', 'views/workspace.ejs', 'views/investors.ejs',
+    'views/investor-login.ejs', 'views/investor-verify.ejs', 'views/investor-dashboard.ejs',
+    'views/investors-data-room.ejs', 'views/investors-deck.ejs', 'views/investors-financials.ejs',
+    'views/investors-metrics.ejs',
+  ];
+
+  it('every template carries PWA head tags matching the partial', () => {
+    const head = read('partials/head-pwa.html').trim();
+    const bad = [];
+    for (const p of HEAD_PAGES) {
+      const src = read(p);
+      const m = src.match(/<!--CHROME:HEAD:START-->([\s\S]*?)<!--CHROME:HEAD:END-->/);
+      if (!m) { bad.push(`${p}:missing-head`); continue; }
+      if (m[1].trim() !== head) bad.push(`${p}:head-drift`);
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('manifest is valid with required icons', () => {
+    const manifest = JSON.parse(read('manifest.webmanifest'));
+    expect(manifest.display).toBe('standalone');
+    expect(manifest.start_url).toBe('/');
+    expect(manifest.theme_color).toMatch(/^#[0-9a-fA-F]{6}$/);
+    const sizes = manifest.icons.map((i) => `${i.sizes}/${i.purpose}`);
+    expect(sizes).toContain('192x192/any');
+    expect(sizes).toContain('512x512/any');
+    expect(sizes).toContain('512x512/maskable');
+    for (const icon of manifest.icons) {
+      expect(fs.existsSync(path.join(ROOT, icon.src.replace(/^\//, '')))).toBe(true);
+    }
+  });
+
+  it('service worker guards auth and versions caches', () => {
+    const sw = read('sw.js');
+    expect(sw).toContain('hasAuth');
+    expect(sw).toContain("req.method !== 'GET'");
+    expect(sw).toContain('/offline.html');
+    expect(sw).toContain('push');
+    expect(sw).toMatch(/const VERSION = 'sf-v\d+'/);
+  });
+
+  it('pwa.js registers the worker and wires push via backend key', () => {
+    const pwa = read('js/pwa.js');
+    expect(pwa).toContain("register('/sw.js')");
+    expect(pwa).toContain('/api/push/vapid-key');
+    expect(pwa).toContain('/api/push/subscribe');
+  });
+});

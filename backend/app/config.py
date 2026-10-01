@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     stripe_price_enterprise_monthly: str = ""
     stripe_price_enterprise_yearly: str = ""
 
+    vapid_public_key: str = ""
+    vapid_private_key: str = ""
+    vapid_contact: str = "mailto:admin@sporafind.com"
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

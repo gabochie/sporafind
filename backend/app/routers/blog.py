@@ -112,6 +112,7 @@ async def get_post(
 
     post.views = (post.views or 0) + 1
     await db.commit()
+    await db.refresh(post)
 
     return post_to_dict(post)
 
@@ -167,9 +168,9 @@ async def post_analytics(
 
 # --- ADMIN ---
 
-async def verify_admin(x_admin_key: str = Header(...)):
+async def verify_admin(x_admin_key: str | None = Header(default=None)):
     from app.config import settings
-    if x_admin_key != settings.admin_key:
+    if not settings.admin_key or x_admin_key != settings.admin_key:
         raise HTTPException(status_code=401, detail="Invalid admin key")
     return True
 

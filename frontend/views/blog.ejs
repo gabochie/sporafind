@@ -2,6 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!--CHROME:HEAD:START-->
+<!-- SPORAFIND PWA HEAD — single source of truth.
+     Managed by scripts/build-chrome.js. Push reads its VAPID key from
+     GET /api/push/vapid-key at subscribe time (503 until configured). -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#080D1A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sporafind">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script src="/js/pwa.js" defer></script>
+<!--CHROME:HEAD:END-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog — Sporafind Intelligence</title>
 <meta name="description" content="Expert analysis, intelligence reports, and strategies for engaging the Ghanaian diaspora. AI-powered diaspora insights for professionals, investors, and institutions.">
@@ -220,10 +234,15 @@ document.addEventListener('click',function(e){
 <!-- SPORAFIND SHARED SUBSCRIBE FORM — single source of truth.
      Managed by scripts/build-chrome.js. NOTE: demo behavior (alert, no POST)
      until a subscribe endpoint exists — see gap report follow-ups. -->
+<!--CHROME:SUBSCRIBE:START-->
+<!-- SPORAFIND SHARED SUBSCRIBE FORM — single source of truth.
+     Managed by scripts/build-chrome.js. NOTE: demo behavior (alert, no POST)
+     until a subscribe endpoint exists — see gap report follow-ups. -->
 <form class="subscribe-form" onsubmit="event.preventDefault();alert('Subscribed! (demo)')">
   <input type="email" placeholder="you@organisation.com" required>
   <button type="submit">Subscribe</button>
 </form>
+<!--CHROME:SUBSCRIBE:END-->
 <!--CHROME:SUBSCRIBE:END-->
 </section>
 

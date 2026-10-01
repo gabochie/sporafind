@@ -312,6 +312,20 @@ app.get('/api/workspace/exports/:id/download', async (req, res) => {
 });
 app.all('/api/workspace/activity', (req, res) => proxyWorkspaceAPI(req, res));
 
+// Push proxy — subscribe/unsubscribe carry optional Bearer; vapid-key is public.
+app.all('/api/push/:action', async (req, res) => {
+  try {
+    const auth = req.headers.authorization || '';
+    const url = `${API_BASE}/push/${req.params.action}`;
+    const headers = { 'Content-Type': 'application/json' };
+    if (auth) headers['Authorization'] = auth;
+    const opts = { method: req.method, headers };
+    if (!['GET', 'DELETE'].includes(req.method)) opts.body = JSON.stringify(req.body);
+    const r = await fetch(url, opts);
+    return res.status(r.status).json(await r.json());
+  } catch { res.status(502).json({ error: 'Backend unavailable' }); }
+});
+
 // Billing proxy — forwards Bearer token same as workspace API
 async function proxyBilling(req, res) {
   try {
@@ -533,6 +547,12 @@ app.get('/rss.xml', async (req, res) => {
 app.use(express.static(DIR, {
   maxAge: '1h',
   etag: true,
+  setHeaders: (res, filePath) => {
+    // Service worker must never be HTTP-cached, or updates get stuck.
+    if (filePath.endsWith(`${path.sep}sw.js`)) {
+      res.setHeader('Cache-Control', 'no-store, must-revalidate');
+    }
+  },
 }));
 
 app.use((err, req, res, next) => {

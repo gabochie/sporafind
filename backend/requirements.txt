@@ -17,6 +17,7 @@ redis
 beautifulsoup4>=4.12,<5
 lxml>=5.0,<6
 stripe>=11.0,<12
+pywebpush>=2.0,<3
 
 pytest>=8,<9
 pytest-asyncio>=0.25,<1

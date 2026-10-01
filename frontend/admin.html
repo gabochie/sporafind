@@ -2,6 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!--CHROME:HEAD:START-->
+<!-- SPORAFIND PWA HEAD — single source of truth.
+     Managed by scripts/build-chrome.js. Push reads its VAPID key from
+     GET /api/push/vapid-key at subscribe time (503 until configured). -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#080D1A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sporafind">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<script src="/js/pwa.js" defer></script>
+<!--CHROME:HEAD:END-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sporafind — Admin Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">

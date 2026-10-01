@@ -61,6 +61,19 @@ async def verify_token(
     return user
 
 
+async def verify_token_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    db: AsyncSession = Depends(get_db),
+) -> User | None:
+    """Same as verify_token but returns None instead of 401 for anonymous callers."""
+    if credentials is None:
+        return None
+    try:
+        return await verify_token(credentials, db)
+    except HTTPException:
+        return None
+
+
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 

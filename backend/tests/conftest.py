@@ -1,4 +1,10 @@
 import os
+
+# Test env BEFORE app imports — Settings materialize at import time.
+os.environ["ENVIRONMENT"] = "test"
+os.environ["ADMIN_KEY"] = "test-admin-key"
+os.environ["PUBLIC_API_KEY"] = ""
+
 import pytest
 import pytest_asyncio
 from typing import AsyncGenerator
@@ -10,26 +16,13 @@ from app.database import Base, get_db
 from app.routers.auth_utils import verify_public_access
 from app.main import app
 
-os.environ.setdefault("ENVIRONMENT", "test")
-os.environ.setdefault("ADMIN_KEY", "test-admin-key")
-os.environ.setdefault("PUBLIC_API_KEY", "")
-
 TEST_DB_URL = os.environ.get(
     "TEST_DATABASE_URL",
     "postgresql+asyncpg://postgres:postgres@localhost:5432/sporafind_test",
 )
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    import asyncio
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    yield loop
-    loop.close()
-
-
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def engine():
     e = create_async_engine(TEST_DB_URL, echo=False)
     async with e.begin() as conn:

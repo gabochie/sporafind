@@ -10,6 +10,7 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const headerTpl = read('partials/header.html').trim();
 const footerTpl = read('partials/footer.html').trim();
 const subscribeTpl = read('partials/subscribe.html').trim();
+const headTpl = read('partials/head-pwa.html').trim();
 
 // page -> data-nav value to highlight (null = none)
 const PAGES = {
@@ -32,6 +33,20 @@ const F_S = '<!--CHROME:FOOTER:START-->';
 const F_E = '<!--CHROME:FOOTER:END-->';
 const S_S = '<!--CHROME:SUBSCRIBE:START-->';
 const S_E = '<!--CHROME:SUBSCRIBE:END-->';
+const P_S = '<!--CHROME:HEAD:START-->';
+const P_E = '<!--CHROME:HEAD:END-->';
+// Every template gets PWA head tags (manifest, theme-color, icons, pwa.js),
+// including app shells — installability must not depend on chrome choice.
+const HEAD_PAGES = [
+  'about.html', 'admin.html', 'api-docs.html', 'blog.html', 'careers.html',
+  'changelog.html', 'contact.html', 'features.html', 'fundraising.html', 'gdpr.html',
+  'index.html', 'press.html', 'pricing.html', 'privacy.html', 'roadmap.html',
+  'segments.html', 'sources.html', 'terms.html', 'workspace.html',
+  'views/blog.ejs', 'views/blog-post.ejs', 'views/workspace.ejs', 'views/investors.ejs',
+  'views/investor-login.ejs', 'views/investor-verify.ejs', 'views/investor-dashboard.ejs',
+  'views/investors-data-room.ejs', 'views/investors-deck.ejs', 'views/investors-financials.ejs',
+  'views/investors-metrics.ejs',
+];
 
 function withActive(tpl, active) {
   if (!active) return tpl;
@@ -94,5 +109,21 @@ for (const [page, active] of Object.entries(PAGES)) {
   fs.writeFileSync(fp, s);
   console.log(`${page}: ${log.join('; ')}`);
 }
+
+// PWA head tags on every template (public + app shells).
+for (const page of HEAD_PAGES) {
+  const fp = path.join(ROOT, page);
+  let s = fs.readFileSync(fp, 'utf8');
+  const r = swap(s, P_S, P_E, headTpl);
+  if (r.hit) {
+    s = r.out;
+  } else if (/<meta charset[^>]*>/i.test(s)) {
+    s = s.replace(/<meta charset[^>]*>/i, (m) => `${m}\n${P_S}\n${headTpl}\n${P_E}`);
+  } else {
+    s = s.replace(/<head[^>]*>/i, (b) => `${b}\n${P_S}\n${headTpl}\n${P_E}`);
+  }
+  fs.writeFileSync(fp, s);
+}
+console.log(`head tags stamped on ${HEAD_PAGES.length} templates`);
 console.log(`legacy toggles stripped: ${togglesStripped}`);
 console.log(`app shells untouched: ${APP_SHELLS.join(', ')}`);

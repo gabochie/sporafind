@@ -3,8 +3,17 @@
   "functions": {
     "api/server.js": { "runtime": "nodejs20.x" }
   },
-  "rewrites": [
-    { "source": "/blog/:path*", "destination": "/api/server.js" },
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-store, must-revalidate" }]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }]
+    }
+  ],
+  "rewrites": [    { "source": "/blog/:path*", "destination": "/api/server.js" },
     { "source": "/api/:path*", "destination": "/api/server.js" },
     { "source": "/sitemap.xml", "destination": "/api/server.js" },
     { "source": "/rss.xml", "destination": "/api/server.js" },
