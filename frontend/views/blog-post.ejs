@@ -20,6 +20,7 @@
 <title><%= post.metaTitle || post.title %></title>
 <meta name="description" content="<%= post.metaDesc || post.excerpt %>">
 <meta name="robots" content="index, follow">
+<meta name="author" content="Gabochie Intelligence">
 <link rel="canonical" href="https://sporafind.com/blog/<%= post.slug %>">
 
 <!-- OG -->
@@ -28,7 +29,10 @@
 <meta property="og:description" content="<%= post.metaDesc || post.excerpt %>">
 <meta property="og:url" content="https://sporafind.com/blog/<%= post.slug %>">
 <meta property="og:image" content="https://sporafind.com/og-blog.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="article:published_time" content="<%= post.publishedAt %>">
+<meta property="article:modified_time" content="<%= post.updatedAt || post.publishedAt %>">
 <meta property="article:author" content="Sporafind Intelligence">
 <meta property="article:section" content="<%= post.category %>">
 <% (post.tags||[]).forEach(function(t){ %><meta property="article:tag" content="<%= t %>">
@@ -40,7 +44,7 @@
 <meta name="twitter:description" content="<%= post.metaDesc || post.excerpt %>">
 
 <!-- JSON-LD Article -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"<%= post.title.replace(/"/g,'\\"') %>","description":"<%= post.excerpt.replace(/"/g,'\\"') %>","author":{"@type":"Organization","name":"Sporafind"},"datePublished":"<%= post.publishedAt %>","dateModified":"<%= post.updatedAt %>","publisher":{"@type":"Organization","name":"Sporafind"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://sporafind.com/blog/<%= post.slug %>"},"image":"https://sporafind.com/og-blog.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"<%= post.title.replace(/"/g,'\\"') %>","description":"<%= post.excerpt.replace(/"/g,'\\"') %>","author":{"@type":"Organization","name":"Gabochie Intelligence","url":"https://sporafind.com/about"},"datePublished":"<%= post.publishedAt %>","dateModified":"<%= post.updatedAt || post.publishedAt %>","publisher":{"@type":"Organization","name":"Sporafind"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://sporafind.com/blog/<%= post.slug %>"},"image":"https://sporafind.com/og-blog.png","wordCount":<%= Math.round(post.readMinutes * 220) %>,"inLanguage":"en","articleSection":"<%= post.category %>"}</script>
 
 <!-- Breadcrumb JSON-LD -->
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Blog","item":"https://sporafind.com/blog"},{"@type":"ListItem","position":2,"name":"<%= post.category %>","item":"https://sporafind.com/blog?cat=<%= encodeURIComponent(post.category) %>"},{"@type":"ListItem","position":3,"name":"<%= post.title.replace(/"/g,'\\"') %>"}]}</script>
@@ -57,73 +61,163 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-dark);line-height:1.6;-webkit-font-smoothing:antialiased}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
 
 /* Nav + footer come from shared chrome: /css/components.css */
-/* Breadcrumb */
-.breadcrumb{max-width:740px;margin:0 auto;padding:20px 32px 0;font-size:13px;color:var(--text-muted)}
-.breadcrumb a{color:var(--text-muted);text-decoration:none}
-.breadcrumb a:hover{color:var(--green)}
-.breadcrumb span{color:var(--text-mid)}
 
-/* Article */
-.article-wrap{max-width:740px;margin:0 auto;padding:32px 32px 60px}
-.article-head{margin-bottom:32px;padding-bottom:24px;border-bottom:0.5px solid var(--cream2)}
-.article-cat{display:inline-block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--green);margin-bottom:12px}
-.article-h1{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:16px;color:var(--navy)}
-.article-meta{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--text-muted)}
-.article-meta span{display:flex;align-items:center;gap:5px}
-.article-meta .views{color:var(--gold)}
-.article-body{font-size:16px;line-height:1.8;color:var(--text-mid)}
-.article-body h2{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--navy);margin:36px 0 12px;letter-spacing:-0.3px}
-.article-body h3{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;color:var(--navy);margin:28px 0 10px}
-.article-body p{margin-bottom:18px}
-.article-body p:last-child{margin-bottom:0}
-.article-body a{color:var(--green);text-decoration:underline;text-underline-offset:2px}
-.article-body a:hover{color:var(--gold);text-decoration-color:var(--gold)}
-.article-body ul,.article-body ol{padding-left:24px;margin-bottom:18px}
-.article-body li{margin-bottom:6px}
-.article-body strong{color:var(--text-dark)}
-.article-body blockquote{border-left:3px solid var(--gold);padding:16px 20px;margin:24px 0;background:var(--gold-light);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-style:italic;color:var(--text-dark)}
-.article-body blockquote p{margin-bottom:0}
+/* Reading progress */
+.read-bar{position:fixed;top:0;left:0;height:3px;width:100%;z-index:200;background:transparent;pointer-events:none}
+.read-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#E8C25A);transition:width .1s linear}
 
-/* Tags */
-.article-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;padding-top:20px;border-top:0.5px solid var(--cream2)}
-.article-tags a{padding:6px 14px;border-radius:15px;font-size:12px;font-weight:500;background:var(--cream2);color:var(--text-mid);text-decoration:none;transition:all .12s}
-.article-tags a:hover{background:var(--green);color:#fff}
+/* ---------- Article header ---------- */
+.article-hero{background:var(--navy);position:relative;overflow:hidden;padding:0 48px 56px}
+.article-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.article-hero::after{content:'';position:absolute;top:-60%;left:50%;transform:translateX(-50%);width:820px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,23,0.10) 0%,transparent 62%);pointer-events:none}
+.article-hero-inner{max-width:880px;margin:0 auto;position:relative;z-index:2;padding-top:32px}
+.crumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px}
+.crumb a{color:rgba(255,255,255,0.55);text-decoration:none;transition:color .14s}
+.crumb a:hover{color:var(--gold)}
+.crumb .sep{opacity:0.4}
+.crumb .now{color:rgba(255,255,255,0.75);max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero-cat{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);background:rgba(212,160,23,0.12);border:0.5px solid rgba(212,160,23,0.28);padding:6px 14px;border-radius:16px;margin-bottom:20px}
+.article-h1{font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:800;line-height:1.14;letter-spacing:-1.4px;color:#fff;margin-bottom:18px}
+.article-dek{font-size:18px;line-height:1.65;color:rgba(255,255,255,0.6);max-width:720px;margin-bottom:28px}
+.article-byline{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:24px;border-top:0.5px solid rgba(255,255,255,0.08)}
+.author-mark{width:40px;height:40px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.author-mark .nav-star{width:16px;height:16px}
+.byline-text{display:flex;flex-direction:column;gap:1px;margin-right:auto}
+.byline-text b{font-size:14px;font-weight:600;color:#fff}
+.byline-text span{font-size:12px;color:rgba(255,255,255,0.4)}
+.byline-meta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,0.45)}
+.byline-meta span{display:inline-flex;align-items:center;gap:6px}
+.byline-meta .views{color:var(--gold)}
 
-/* Related */
-.related-sect{max-width:740px;margin:0 auto;padding:40px 32px 60px;border-top:0.5px solid var(--cream2)}
-.related-hdr{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:20px}
-.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.related-card{background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-md);padding:20px;text-decoration:none;color:inherit;transition:box-shadow .2s}
-.related-card:hover{box-shadow:0 4px 16px rgba(8,13,26,0.06)}
-.related-card .rc-date{font-size:11px;color:var(--text-muted);margin-bottom:4px}
-.related-card .rc-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;line-height:1.3;color:var(--text-dark)}
+/* ---------- Layout ---------- */
+.article-layout{max-width:1200px;margin:0 auto;padding:56px 48px 96px;display:grid;grid-template-columns:minmax(0,1fr) 232px;gap:56px;align-items:start}
+.article-main{min-width:0}
+.article-body{font-size:17px;line-height:1.78;color:var(--text-mid);max-width:68ch}
+.article-body>*+*{margin-top:20px}
+.article-body h2{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-0.6px;line-height:1.3;margin-top:48px;padding-top:24px;border-top:0.5px solid var(--cream2);scroll-margin-top:96px}
+.article-body h2:first-child{margin-top:0;padding-top:0;border-top:none}
+.article-body h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:var(--navy);margin-top:34px;line-height:1.4;letter-spacing:-0.3px;scroll-margin-top:96px}
+.article-body h4{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:var(--navy);margin-top:28px}
+.article-body strong{color:var(--text-dark);font-weight:600}
+.article-body a{color:var(--green);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;transition:color .14s}
+.article-body a:hover{color:var(--gold-dark);text-decoration-color:var(--gold)}
+.article-body ul,.article-body ol{padding-left:22px}
+.article-body li{margin-bottom:10px;padding-left:4px}
+.article-body li::marker{color:var(--green)}
+.article-body ul li::marker{color:var(--green)}
+.article-body blockquote{border-left:3px solid var(--gold);padding:18px 22px;margin:28px 0;background:var(--gold-light);border-radius:0 var(--radius) var(--radius) 0}
+.article-body blockquote p{margin:0;color:var(--text-dark)}
+.article-body hr{border:none;border-top:0.5px solid var(--cream2);margin:36px 0}
+.article-body img{max-width:100%;height:auto;border-radius:var(--radius)}
+.article-body code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.88em;background:var(--bg);border:0.5px solid var(--cream2);border-radius:4px;padding:2px 6px}
+.article-body pre{background:var(--navy);color:#E6EAF2;border-radius:var(--radius);padding:18px 20px;overflow-x:auto;font-size:13px;line-height:1.6}
+.article-body pre code{background:none;border:none;padding:0;color:inherit}
+.article-body table{width:100%;border-collapse:collapse;font-size:14px;display:block;overflow-x:auto}
+.article-body th,.article-body td{border:0.5px solid var(--cream2);padding:10px 12px;text-align:left}
+.article-body th{background:var(--cream);color:var(--navy);font-weight:600}
+.article-body .tldr{background:var(--green-light);border-left:3px solid var(--green);border-radius:0 var(--radius) var(--radius) 0;padding:18px 22px;font-size:16px;line-height:1.7;color:var(--text-dark)}
+.article-body .tldr strong{color:var(--green-dark)}
 
-/* Newsletter */
-.newsletter-box{max-width:740px;margin:0 auto;padding:24px 32px 0}
-.newsletter-inner{background:var(--navy);border-radius:var(--radius-md);padding:36px 40px;text-align:center}
-.newsletter-inner h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
-.newsletter-inner p{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px}
-.newsletter-inner form{display:flex;gap:8px;max-width:380px;margin:0 auto}
-.newsletter-inner input{flex:1;padding:10px 14px;border-radius:var(--radius-sm);border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;font-size:13px;font-family:'Inter',sans-serif;outline:none}
-.newsletter-inner input::placeholder{color:var(--slate2)}
-.newsletter-inner button{padding:10px 22px;background:var(--gold);color:#0A0E1A;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;transition:background .12s}
-.newsletter-inner button:hover{background:var(--gold-dark)}
+/* ---------- Tags, share, author ---------- */
+.article-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:44px;padding-top:24px;border-top:0.5px solid var(--cream2)}
+.article-tags a{padding:7px 15px;border-radius:16px;font-size:12px;font-weight:500;background:var(--white);border:0.5px solid var(--cream2);color:var(--text-mid);text-decoration:none;transition:all .14s}
+.article-tags a:hover{background:var(--green);border-color:var(--green);color:#fff}
 
-/* (footer styles in shared chrome) */
+.share-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:28px}
+.share-row .share-label{font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin-right:4px}
+.share-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:20px;border:0.5px solid var(--cream2);background:var(--white);color:var(--text-mid);font-size:13px;font-weight:500;text-decoration:none;transition:all .14s;min-height:36px}
+.share-btn:hover{border-color:var(--navy);color:var(--navy)}
+.share-btn i{font-size:15px}
 
-@media(max-width: 900px){
-  nav{padding:0 16px}
-  .nav-links{display:none}
-  .nav-mobile-toggle{display:block}
-  .article-wrap{padding:24px 16px 40px}
-  .article-h1{font-size:26px}
-  .related-sect{padding:32px 16px 40px}
+.author-box{display:flex;gap:16px;align-items:flex-start;margin-top:44px;padding:24px;background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-lg)}
+.author-box .author-mark{width:48px;height:48px}
+.author-box .author-mark .nav-star{width:19px;height:19px}
+.author-box b{display:block;font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--navy);margin-bottom:4px}
+.author-box p{font-size:14px;line-height:1.65;color:var(--text-mid);margin-bottom:12px}
+.author-box a{font-size:13px;font-weight:600;color:var(--green);text-decoration:none}
+.author-box a:hover{text-decoration:underline}
+
+/* ---------- Prev / next ---------- */
+.post-nav{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.post-nav a{display:flex;flex-direction:column;gap:8px;padding:20px 22px;background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-md);text-decoration:none;transition:all .16s}
+.post-nav a:hover{border-color:var(--gold);box-shadow:var(--shadow)}
+.post-nav .dir{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted)}
+.post-nav .t{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;line-height:1.4;color:var(--text-dark);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-nav .next{text-align:right;align-items:flex-end}
+.post-nav .next .dir i{order:2}
+
+/* ---------- TOC ---------- */
+.toc{position:sticky;top:96px}
+.toc-title{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+.toc-list{border-left:0.5px solid var(--cream2);padding-left:0;margin:0;list-style:none}
+.toc-list li a{display:block;padding:7px 0 7px 16px;font-size:13px;line-height:1.45;color:var(--text-muted);text-decoration:none;border-left:2px solid transparent;margin-left:-0.5px;transition:all .14s}
+.toc-list li a:hover{color:var(--text-dark)}
+.toc-list li a.active{color:var(--green);border-left-color:var(--green);font-weight:600}
+.toc-cta{margin-top:24px;padding:20px;background:var(--navy);border-radius:var(--radius-md)}
+.toc-cta h4{font-family:'Space Grotesk',sans-serif;font-size:15px;color:#fff;margin-bottom:6px}
+.toc-cta p{font-size:12.5px;color:rgba(255,255,255,0.45);line-height:1.55;margin-bottom:14px}
+.toc-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--radius-sm);background:var(--gold);color:#0A0E1A;font-size:13px;font-weight:700;text-decoration:none;transition:background .14s}
+.toc-cta a:hover{background:var(--gold-dark)}
+
+/* ---------- Related ---------- */
+.related-sect{max-width:1200px;margin:0 auto;padding:0 48px 72px}
+.related-hdr{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:24px;letter-spacing:-0.5px}
+.related-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.related-card{display:flex;flex-direction:column;background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-md);overflow:hidden;text-decoration:none;transition:all .2s}
+.related-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.related-card .cover{height:110px}
+.related-card .cover .cover-icon{font-size:52px}
+.related-body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.rc-meta{font-size:11.5px;color:var(--text-muted);margin-bottom:8px}
+.rc-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;line-height:1.35;color:var(--text-dark);letter-spacing:-0.2px}
+
+/* ---------- Newsletter ---------- */
+.newsletter-box{max-width:1200px;margin:0 auto;padding:0 48px 88px}
+.newsletter-inner{background:var(--navy);border-radius:var(--radius-lg);padding:44px 48px;text-align:center;position:relative;overflow:hidden}
+.newsletter-inner::after{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:640px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,23,0.10) 0%,transparent 65%);pointer-events:none}
+.newsletter-inner>*{position:relative;z-index:2}
+.newsletter-inner h3{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:8px}
+.newsletter-inner p{color:rgba(255,255,255,0.5);font-size:14.5px;margin-bottom:20px}
+.subscribe-form{display:flex;gap:10px;max-width:400px;margin:0 auto}
+.subscribe-form input{flex:1;min-width:0;padding:12px 16px;border-radius:var(--radius-sm);border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none}
+.subscribe-form input::placeholder{color:var(--slate2)}
+.subscribe-form input:focus{border-color:var(--gold)}
+.subscribe-form button{padding:12px 24px;background:var(--gold);color:#0A0E1A;font-weight:700;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;white-space:nowrap;transition:background .14s}
+.subscribe-form button:hover{background:var(--gold-dark)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+
+@media(max-width:1200px){
+  .article-layout{grid-template-columns:minmax(0,1fr);gap:40px}
+  .toc{display:none}
+  .article-h1{font-size:36px}
+}
+@media(max-width:900px){
+  .article-hero{padding:0 20px 40px}
+  .article-hero-inner{padding-top:20px}
+  .article-h1{font-size:28px;letter-spacing:-0.8px}
+  .article-dek{font-size:16px}
+  .article-layout{padding:32px 20px 64px}
+  .article-body{font-size:16.5px}
+  .article-body h2{font-size:22px;margin-top:36px;padding-top:20px}
+  .article-body h3{font-size:18px}
+  .byline-meta{width:100%}
+  .related-sect{padding:0 20px 48px}
   .related-grid{grid-template-columns:1fr}
-  .newsletter-inner{padding:24px 20px}
-  .newsletter-inner form{flex-direction:column}
-  .footer{padding:32px 16px 24px}
+  .newsletter-box{padding:0 20px 56px}
+  .newsletter-inner{padding:28px 22px}
+  .newsletter-inner h3{font-size:20px}
+  .subscribe-form{flex-direction:column}
+  .post-nav{grid-template-columns:1fr}
+  .post-nav .next{text-align:left;align-items:flex-start}
+  .post-nav .next .dir i{order:0}
+  .crumb .now{display:none}
 }
 </style>
 </head>
@@ -164,39 +258,110 @@ document.addEventListener('click',function(e){
 </script>
 <!--CHROME:HEADER:END-->
 
-<div class="breadcrumb">
-  <a href="/blog">Blog</a> / <a href="/blog?cat=<%= encodeURIComponent(post.category) %>"><%= post.category %></a> / <span><%= post.title %></span>
-</div>
+<%
+  var compact = new Intl.NumberFormat('en',{notation:'compact',maximumFractionDigits:1});
+  var shareUrl = 'https://sporafind.com/blog/' + post.slug;
+  var shareTitle = post.title;
+%>
 
-<article class="article-wrap">
-  <div class="article-head">
-    <div class="article-cat"><%= post.category %></div>
+<div class="read-bar" aria-hidden="true"><i id="readFill"></i></div>
+
+<header class="article-hero">
+  <div class="article-hero-inner">
+    <nav class="crumb" aria-label="Breadcrumb">
+      <a href="/blog">Blog</a><span class="sep">/</span>
+      <a href="/blog?cat=<%= encodeURIComponent(post.category) %>"><%= post.category %></a><span class="sep">/</span>
+      <span class="now"><%= post.title %></span>
+    </nav>
+    <span class="hero-cat"><i class="ti <%= post.coverIcon %>"></i> <%= post.category %></span>
     <h1 class="article-h1"><%= post.title %></h1>
-    <div class="article-meta">
-      <span><i class="ti ti-calendar"></i> <%= new Date(post.publishedAt).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) %></span>
-      <span><i class="ti ti-clock"></i> <%= Math.ceil(post.body.split(' ').length / 200) %> min read</span>
-      <span><i class="ti ti-user"></i> Sporafind Intelligence</span>
-      <span class="views"><i class="ti ti-eye"></i> <%= post.views %> views</span>
+    <p class="article-dek"><%= post.excerpt %></p>
+    <div class="article-byline">
+      <div class="author-mark"><div class="nav-star"></div></div>
+      <div class="byline-text">
+        <b>Gabochie Intelligence</b>
+        <span>Research desk, Accra</span>
+      </div>
+      <div class="byline-meta">
+        <span><i class="ti ti-calendar"></i> <time datetime="<%= post.publishedAt %>"><%= post.dateLabel %></time></span>
+        <span><i class="ti ti-clock"></i> <%= post.readMinutes %> min read</span>
+        <span class="views"><i class="ti ti-eye"></i> <%= compact.format(post.views) %> views</span>
+      </div>
     </div>
   </div>
-  <div class="article-body">
-    <%- post.body %>
-  </div>
-  <div class="article-tags">
-    <% (post.tags||[]).forEach(function(t){ %>
-      <a href="/blog?tag=<%= encodeURIComponent(t) %>">#<%= t %></a>
-    <% }) %>
-  </div>
-</article>
+</header>
+
+<div class="article-layout">
+  <main class="article-main">
+    <article class="article-body">
+      <%- post.body %>
+    </article>
+
+    <div class="article-tags">
+      <% (post.tags||[]).forEach(function(t){ %>
+        <a href="/blog?tag=<%= encodeURIComponent(t) %>">#<%= t %></a>
+      <% }) %>
+    </div>
+
+    <div class="share-row">
+      <span class="share-label">Share</span>
+      <a class="share-btn" href="https://twitter.com/intent/tweet?text=<%= encodeURIComponent(shareTitle) %>&url=<%= encodeURIComponent(shareUrl) %>" target="_blank" rel="noopener noreferrer"><i class="ti ti-brand-x"></i> X</a>
+      <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=<%= encodeURIComponent(shareUrl) %>" target="_blank" rel="noopener noreferrer"><i class="ti ti-brand-linkedin"></i> LinkedIn</a>
+      <a class="share-btn" href="https://wa.me/?text=<%= encodeURIComponent(shareTitle + ' ' + shareUrl) %>" target="_blank" rel="noopener noreferrer"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>
+      <button type="button" class="share-btn" id="copyLink" data-url="<%= shareUrl %>"><i class="ti ti-link"></i> <span>Copy link</span></button>
+    </div>
+
+    <div class="author-box">
+      <div class="author-mark"><div class="nav-star"></div></div>
+      <div>
+        <b>Gabochie Intelligence</b>
+        <p>The research desk behind Sporafind. We turn diaspora datasets into decision-ready briefs for operators, investors and institutions.</p>
+        <a href="/about.html">More about the team →</a>
+      </div>
+    </div>
+
+    <% if(prevPost || nextPost){ %>
+    <nav class="post-nav" aria-label="Article navigation">
+      <% if(prevPost){ %>
+        <a href="/blog/<%= prevPost.slug %>" rel="prev">
+          <span class="dir"><i class="ti ti-arrow-left"></i> Previous</span>
+          <span class="t"><%= prevPost.title %></span>
+        </a>
+      <% } %>
+      <% if(nextPost){ %>
+        <a href="/blog/<%= nextPost.slug %>" class="next" rel="next">
+          <span class="dir">Next <i class="ti ti-arrow-right"></i></span>
+          <span class="t"><%= nextPost.title %></span>
+        </a>
+      <% } %>
+    </nav>
+    <% } %>
+  </main>
+
+  <aside class="toc" aria-label="On this page">
+    <div class="toc-title">On this page</div>
+    <ul class="toc-list" id="tocList"></ul>
+    <div class="toc-cta">
+      <h4>Need this data?</h4>
+      <p>Search verified diaspora profiles and organisations in the workspace.</p>
+      <a href="/workspace.html">Open workspace <i class="ti ti-arrow-right"></i></a>
+    </div>
+  </aside>
+</div>
 
 <% if(related.length > 0) { %>
 <section class="related-sect">
-  <h2 class="related-hdr">Related articles</h2>
+  <h2 class="related-hdr">Keep reading</h2>
   <div class="related-grid">
     <% related.forEach(function(r){ %>
       <a href="/blog/<%= r.slug %>" class="related-card">
-        <div class="rc-date"><%= new Date(r.publishedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) %></div>
-        <div class="rc-title"><%= r.title %></div>
+        <div class="cover cover-<%= r.coverTheme %>">
+          <i class="ti <%= r.coverIcon %> cover-icon"></i>
+        </div>
+        <div class="related-body">
+          <div class="rc-meta"><%= r.dateLabel %> · <%= r.readMinutes %> min</div>
+          <div class="rc-title"><%= r.title %></div>
+        </div>
       </a>
     <% }) %>
   </div>
@@ -205,8 +370,8 @@ document.addEventListener('click',function(e){
 
 <div class="newsletter-box">
   <div class="newsletter-inner">
-    <h3>Stay informed</h3>
-    <p>Get diaspora intelligence directly in your inbox.</p>
+    <h3>Get the monthly intelligence brief</h3>
+    <p>One email a month: what moved, what it means, and who to talk to.</p>
     <!--CHROME:SUBSCRIBE:START-->
 <!-- SPORAFIND SHARED SUBSCRIBE FORM — single source of truth.
      Managed by scripts/build-chrome.js. NOTE: demo behavior (alert, no POST)
@@ -271,12 +436,65 @@ document.addEventListener('click',function(e){
 
 <script src="/js/session.js"></script>
 <script>
-// Track page view
-fetch('/api/analytics/pageview', {
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({slug:'<%= post.slug %>'})
-}).catch(function(){});
+// Reading progress + table of contents (progressive enhancement)
+(function(){
+  var fill = document.getElementById('readFill');
+  var body = document.querySelector('.article-body');
+  if(fill){
+    var tick = function(){
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      fill.style.width = (h > 0 ? Math.min(100, Math.max(0, (window.scrollY / h) * 100)) : 0) + '%';
+    };
+    tick();
+    window.addEventListener('scroll', tick, {passive:true});
+    window.addEventListener('resize', tick);
+  }
+
+  var copy = document.getElementById('copyLink');
+  if(copy){
+    copy.addEventListener('click', function(){
+      var label = copy.querySelector('span');
+      var done = function(text, icon){
+        label.textContent = text;
+        copy.querySelector('i').className = icon;
+        setTimeout(function(){ label.textContent = 'Copy link'; copy.querySelector('i').className = 'ti ti-link'; }, 2000);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(copy.getAttribute('data-url'))
+          .then(function(){ done('Copied', 'ti ti-check'); })
+          .catch(function(){ done('Press Ctrl+C', 'ti ti-alert-circle'); });
+      } else { done('Press Ctrl+C', 'ti ti-alert-circle'); }
+    });
+  }
+
+  var list = document.getElementById('tocList');
+  if(!list || !body) return;
+  var heads = [].slice.call(body.querySelectorAll('h2'));
+  if(heads.length < 2){ document.querySelector('.toc-title').textContent = 'In this brief'; return; }
+
+  var links = heads.map(function(h, i){
+    if(!h.id) h.id = 's' + (i + 1) + '-' + h.textContent.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
+    return a;
+  });
+
+  var setActive = function(idx){ links.forEach(function(a, i){ a.classList.toggle('active', i === idx); }); };
+  if('IntersectionObserver' in window){
+    var visible = {};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ visible[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = -1, bestRatio = 0;
+      heads.forEach(function(h, i){ if((visible[h.id] || 0) > bestRatio){ bestRatio = visible[h.id]; best = i; } });
+      if(best >= 0) setActive(best);
+    }, {rootMargin:'-96px 0px -60% 0px', threshold:[0, 0.25, 0.5, 1]});
+    heads.forEach(function(h){ io.observe(h); });
+  }
+})();
 </script>
 </body>
 </html>
