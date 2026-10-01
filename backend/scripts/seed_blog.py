@@ -24,7 +24,7 @@ SEED_FILE = ROOT / "frontend" / "data" / "posts.json"
 
 sys.path.insert(0, str(ROOT / "backend"))
 
-from app.database import SessionLocal  # noqa: E402
+from app.database import get_session  # noqa: E402
 from app.models.blog import BlogPost  # noqa: E402
 
 
@@ -49,7 +49,7 @@ async def seed(dry_run: bool = False) -> int:
         return 1
 
     inserted = updated = 0
-    async with SessionLocal() as db:
+    async with get_session()() as db:
         from sqlalchemy import select
 
         existing = {
