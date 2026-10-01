@@ -148,6 +148,20 @@ footer{background:var(--navy);padding:72px 48px 40px;}
 .footer-bottom-links{display:flex;gap:24px;}
 .footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);}
 .footer-bottom-links a:hover{color:rgba(255,255,255,0.7);}
+
+@media(max-width:900px){
+  .blog-section{padding:60px 20px}
+  .blog-section-inner{grid-template-columns:1fr}
+  .featured-post-inner{grid-template-columns:1fr;min-height:0}
+  .blog-grid{grid-template-columns:1fr}
+  .blog-hero-title{font-size:40px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media(max-width:640px){
+  .footer-top{grid-template-columns:1fr}
+  .featured-post-body{padding:28px 20px}
+  .post-title{font-size:22px}
+}
 </style>
 <script src="/js/session.js"></script>
 </head>
