@@ -59,7 +59,11 @@ input::placeholder{color:var(--tm)}
 .demo-hint a:hover{text-decoration:underline}
 .steps{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
 .step{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)}
-.step-num{width:24px;height:24px;border-radius:50%;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--tm);flex-shrink:0}
+  .step-num{width:24px;height:24px;border-radius:50%;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--tm);flex-shrink:0}
+  @media(max-width:640px){
+    .login-wrap{padding:48px 16px}
+    .login-card{padding:28px 20px}
+  }
 </style>
 </head>
 <body>
