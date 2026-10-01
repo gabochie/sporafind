@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     admin_key: str = ""
     public_api_key: str = ""
     redis_url: str = "redis://localhost:6379"
-    cors_origins: str = "http://localhost:8000,http://localhost:3000,https://www.sporafind.com"
+    cors_origins: str = "http://localhost:8000,http://localhost:3000,http://localhost:3001,https://sporafind.com,https://www.sporafind.com,https://api.sporafind.com"
     environment: str = "development"
 
     stripe_secret_key: str = ""
