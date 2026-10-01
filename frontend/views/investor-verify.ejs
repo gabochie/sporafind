@@ -27,7 +27,10 @@
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{font-family:'Inter',sans-serif;background:var(--s0);color:var(--t1);min-height:100vh;display:flex;align-items:center;justify-content:center;line-height:1.5}
-.card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:40px 32px;max-width:400px;width:100%;margin:24px;text-align:center}
+  .card{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:40px 32px;max-width:400px;width:100%;margin:24px;text-align:center}
+  @media(max-width:640px){
+    .card{padding:28px 20px;margin:16px}
+  }
 h1{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;margin-bottom:8px;color:var(--gl)}
 p{font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.6}
 .spinner i{font-size:32px;color:var(--gl);animation:spin 1s linear infinite;display:inline-block;margin-bottom:16px}
