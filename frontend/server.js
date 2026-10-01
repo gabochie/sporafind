@@ -62,7 +62,36 @@ function dateLabel(d) {
     : dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+// Curated, licensed feature photos (scripts/fetch_feature_images.py).
+// Posts without a vetted photo keep their designed cover, so nothing on the
+// site renders an unreviewed or wrongly-captioned image.
+let FEATURE_IMAGES = { themes: {}, post_images: {} };
+try {
+  const fiPath = path.join(DATA_DIR, 'feature-images.json');
+  if (fs.existsSync(fiPath)) {
+    const fi = JSON.parse(fs.readFileSync(fiPath, 'utf8'));
+    FEATURE_IMAGES = { themes: fi.themes || {}, postImages: fi.post_images || {} };
+  }
+} catch (e) { console.error('feature-images.json unreadable:', e.message); }
+
+function featureImage(p) {
+  const src = FEATURE_IMAGES.postImages[p.slug];
+  if (!src) return null;
+  const key = Object.keys(FEATURE_IMAGES.themes).find((k) => FEATURE_IMAGES.themes[k].file === src);
+  const meta = key ? FEATURE_IMAGES.themes[key] : null;
+  if (!meta) return null;
+  return {
+    src,
+    alt: meta.alt || p.title,
+    author: meta.author || 'Unknown',
+    licence: meta.licence || '',
+    licenceUrl: meta.licence_url || '',
+    filePage: meta.file_page || '',
+  };
+}
+
 function decoratePost(p) {
+  const img = featureImage(p);
   return {
     ...p,
     views: Number(p.views) || 0,
@@ -70,6 +99,11 @@ function decoratePost(p) {
     dateLabel: dateLabel(p.publishedAt),
     coverTheme: stableHash(p.slug || p.title || '') % 6,
     coverIcon: coverIcon(p.category),
+    featureImage: img ? img.src : null,
+    featureImageAlt: img ? img.alt : '',
+    featureImageCredit: img ? `${img.author} / ${img.licence}` : '',
+    featureImageLicenceUrl: img ? img.licenceUrl : '',
+    featureImageFilePage: img ? img.filePage : '',
   };
 }
 
@@ -184,6 +218,13 @@ app.get('/blog', async (req, res) => {
       tags: payload.tags || [],
       tagTotal: payload.tag_total || (payload.tags || []).length,
       pageWindow: pageWindow(page, totalPages),
+      hasQuery: Boolean(q),
+      hasTag: Boolean(tag),
+      hasCat: Boolean(cat),
+      // Filtered/search variants are noindex; paginated pages keep their own canonical.
+      canonicalUrl: page > 1
+        ? `https://sporafind.com/blog?page=${page}`
+        : 'https://sporafind.com/blog',
       blogQs: (overrides = {}) => blogQueryString({
         page: overrides.page ?? page, tag, cat, q,
       }),
@@ -679,10 +720,23 @@ app.get('/sitemap.xml', async (req, res) => {
   } catch (e) { console.error('Sitemap fetch error:', e); }
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published');
   const site = 'https://sporafind.com';
-  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n';
   const staticPages = ['/', '/features', '/segments', '/pricing', '/api-docs', '/changelog', '/about', '/blog', '/careers', '/press', '/contact', '/privacy', '/terms', '/gdpr', '/sources', '/roadmap', '/fundraising', '/investors', '/investors/login', '/workspace'];
   staticPages.forEach(p => { xml += `  <url><loc>${site}${p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`; });
-  blogPosts.forEach(p => { xml += `  <url><loc>${site}/blog/${p.slug}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`; });
+  blogPosts.forEach(p => {
+    xml += `  <url><loc>${site}/blog/${esc(p.slug)}</loc>`;
+    const lastmod = p.updatedAt || p.updated_at || p.publishedAt || p.published_at;
+    if (lastmod) {
+      const d = new Date(lastmod);
+      if (!Number.isNaN(d.getTime())) xml += `<lastmod>${d.toISOString().slice(0, 10)}</lastmod>`;
+    }
+    xml += `<changefreq>monthly</changefreq><priority>0.7</priority>`;
+    // Every post ships a unique social card; listing it helps image-aware search.
+    xml += `<image:image><image:loc>${site}/img/og/${esc(p.slug)}.jpg</image:loc><image:title>${esc(p.title)}</image:title></image:image>`;
+    xml += `</url>\n`;
+  });
   xml += '</urlset>';
   res.header('Content-Type', 'application/xml').send(xml);
 });
@@ -695,18 +749,50 @@ app.get('/rss.xml', async (req, res) => {
   } catch (e) { console.error('RSS fetch error:', e); }
   if (!blogPosts.length) blogPosts = readPosts().filter(p => p.status === 'published').sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   const site = 'https://sporafind.com';
-  let rss = '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel>\n';
-  rss += `<title>Sporafind Blog</title>\n<link>${site}/blog</link>\n<description>Ghanaian diaspora intelligence, insights, and strategies</description>\n<language>en</language>\n`;
+  let rss = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" ' +
+    'xmlns:dc="http://purl.org/dc/elements/1.1/" ' +
+    'xmlns:content="http://purl.org/rss/1.0/modules/content/" ' +
+    'xmlns:media="http://search.yahoo.com/mrss/"><channel>\n';
+  rss += `<title>Sporafind Blog</title>\n<link>${site}/blog</link>\n` +
+    `<atom:link href="${site}/rss.xml" rel="self" type="application/rss+xml"/>\n` +
+    `<description>Ghanaian diaspora intelligence, insights, and strategies</description>\n` +
+    `<language>en</language>\n` +
+    `<managingEditor>editorial@sporafind.com (Sporafind Intelligence)</managingEditor>\n` +
+    `<webMaster>editorial@sporafind.com (Sporafind Intelligence)</webMaster>\n` +
+    `<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n` +
+    `<generator>sporafind</generator>\n`;
   blogPosts.forEach(p => {
-    rss += `<item><title><![CDATA[${p.title}]]></title><link>${site}/blog/${p.slug}</link><guid>${site}/blog/${p.slug}</guid>`;
+    const escXml = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    rss += `<item><title><![CDATA[${p.title}]]></title><link>${site}/blog/${escXml(p.slug)}</link><guid isPermaLink="true">${site}/blog/${escXml(p.slug)}</guid>`;
     const pd = p.publishedAt || p.published_at;
-    rss += `<pubDate>${new Date(pd).toUTCString()}</pubDate><description><![CDATA[${p.excerpt || ''}]]></description>`;
-    rss += `<category>${p.category || 'Uncategorised'}</category>`;
-    (p.tags || []).forEach(t => { rss += `<tag>${t}</tag>`; });
+    if (pd && !Number.isNaN(new Date(pd).getTime())) rss += `<pubDate>${new Date(pd).toUTCString()}</pubDate>`;
+    rss += `<dc:creator>Sporafind Intelligence</dc:creator>`;
+    rss += `<description><![CDATA[${p.excerpt || ''}]]></description>`;
+    rss += `<content:encoded><![CDATA[${p.body || p.excerpt || ''}]]></content:encoded>`;
+    rss += `<media:content url="${site}/img/og/${escXml(p.slug)}.jpg" medium="image" width="1200" height="630"/>`;
+    rss += `<media:thumbnail url="${site}/img/og/${escXml(p.slug)}.jpg" width="1200" height="630"/>`;
+    rss += `<category>${escXml(p.category || 'Uncategorised')}</category>`;
+    (p.tags || []).forEach(t => { rss += `<category><![CDATA[${t}]]></category>`; });
     rss += `</item>\n`;
   });
   rss += '</channel></rss>';
   res.header('Content-Type', 'application/rss+xml').send(rss);
+});
+
+app.get('/robots.txt', (req, res) => {
+  const body = [
+    'User-agent: *',
+    'Allow: /',
+    'Disallow: /api/',
+    'Disallow: /investors/dashboard',
+    'Disallow: /workspace/app',
+    'Disallow: /admin',
+    '',
+    'Sitemap: https://sporafind.com/sitemap.xml',
+    '',
+  ].join('\n');
+  res.header('Content-Type', 'text/plain').send(body);
 });
 
 app.use(express.static(DIR, {
