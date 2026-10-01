@@ -105,11 +105,11 @@ a{text-decoration:none;color:inherit}
 /* HEADER */
 .ws-header{height:var(--header-h);background:var(--white);border-bottom:.5px solid var(--cream2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px}
 .ws-header-left{display:flex;align-items:center;gap:12px}
-.mobile-toggle{display:none;width:34px;height:34px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:transparent;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:18px}
+.mobile-toggle{display:none;min-width:40px;height:40px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:transparent;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:18px}
 .ws-breadcrumb{font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px}
 .ws-breadcrumb span{color:var(--text-dark);font-weight:500}
 .ws-header-right{display:flex;align-items:center;gap:6px}
-.ws-hdr-btn{width:34px;height:34px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:17px;transition:all .12s;position:relative}
+.ws-hdr-btn{min-width:40px;height:40px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:17px;transition:all .12s;position:relative}
 .ws-hdr-btn:hover{background:var(--bg);border-color:var(--cream3)}
 .ws-hdr-btn .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--red-deep);border:1.5px solid var(--white)}
 .ws-hdr-avatar{width:34px;height:34px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
@@ -190,7 +190,7 @@ a{text-decoration:none;color:inherit}
 .profile-card-meta-item{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
 .profile-card-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
 .profile-card-actions{display:flex;gap:4px;flex-shrink:0;align-items:center}
-.profile-card-action{width:30px;height:30px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:15px;transition:all .12s}
+.profile-card-action{min-width:40px;height:40px;border-radius:var(--radius-sm);border:.5px solid var(--cream2);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:15px;transition:all .12s}
 .profile-card-action:hover{background:var(--bg);border-color:var(--slate3);color:var(--text-dark)}
 .profile-card-action.saved{background:var(--green-light);color:var(--green);border-color:var(--green)}
 .profile-card-conf{display:flex;align-items:center;gap:6px}
@@ -208,7 +208,7 @@ a{text-decoration:none;color:inherit}
 .slide-over-backdrop.open{display:block}
 .slide-over-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:.5px solid var(--cream2);flex-shrink:0}
 .slide-over-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--text-dark)}
-.slide-over-close{width:30px;height:30px;border-radius:var(--radius-sm);border:none;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:17px}
+.slide-over-close{min-width:40px;height:40px;border-radius:var(--radius-sm);border:none;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-mid);font-size:17px}
 .slide-over-close:hover{background:var(--bg2)}
 .slide-over-body{flex:1;overflow-y:auto;padding:24px}
 .slide-over-section{margin-bottom:24px}
@@ -270,7 +270,7 @@ a{text-decoration:none;color:inherit}
 .btn-ghost:hover{background:var(--bg);color:var(--text-dark)}
 .btn-danger{background:var(--red-deep);color:#fff}
 .btn-danger:hover{background:#B91C1C}
-.btn-icon{width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center}
+.btn-icon{min-width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center}
 
 /* SAVED LISTS */
 .lists-header{padding:28px 32px 20px;border-bottom:.5px solid var(--cream2)}
@@ -289,8 +289,8 @@ a{text-decoration:none;color:inherit}
 .exports-header{padding:28px 32px 20px;border-bottom:.5px solid var(--cream2)}
 .exports-header h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.5px}
 .exports-header p{font-size:13px;color:var(--text-muted);margin-top:4px}
-.exports-body{padding:24px 32px}
-.exports-table{width:100%;border-collapse:collapse;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden}
+.exports-body{padding:24px 32px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.exports-table{width:100%;min-width:560px;border-collapse:collapse;background:var(--white);border:.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden}
 .exports-table th{text-align:left;padding:12px 18px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);background:var(--bg);border-bottom:.5px solid var(--cream2)}
 .exports-table td{padding:12px 18px;font-size:13px;color:var(--text-mid);border-bottom:.5px solid var(--cream2)}
 .exports-table tr:last-child td{border-bottom:none}
@@ -441,12 +441,19 @@ a{text-decoration:none;color:inherit}
   .acct-row{flex-direction:column;align-items:stretch;gap:8px}
   .acct-input,.acct-select{width:100%}
   .notif-dropdown{position:fixed;left:12px;right:12px;width:auto}
+  .login-screen{flex-direction:column;overflow-y:auto}
+  .login-left{display:none}
+  .login-right{width:100%;padding:32px 20px}
 }
 @media(max-width: 640px){
   .search-filters{flex-wrap:wrap}
   .profile-card{flex-direction:column}
   .profile-card-actions{align-self:flex-end}
   .search-examples{display:none}
+  .ob-card{padding:32px 20px 28px}
+  .ob-steps{grid-template-columns:1fr}
+  .ob-actions{flex-wrap:wrap}
+  .ob-tour{max-width:calc(100vw - 24px)}
 }
 </style>
 </head>
@@ -933,7 +940,7 @@ a{text-decoration:none;color:inherit}
   <div class="slide-over-footer">
     <button class="btn btn-outline btn-sm"><i class="ti ti-mail"></i> Draft email</button>
     <button class="btn btn-outline btn-sm"><i class="ti ti-plus"></i> Save to list</button>
-    <button class="btn btn-primary btn-sm"><i class="ti ti-download"></i> Export</button>
+    <button class="btn btn-primary btn-sm" id="exportBtn" onclick="runExport(this)"><i class="ti ti-download"></i> Export</button>
   </div>
 </div>
 
@@ -1001,13 +1008,25 @@ function setSession(token, user) { localStorage.setItem(WS_TOKEN_KEY, token); lo
 function clearSession() { localStorage.removeItem(WS_TOKEN_KEY); localStorage.removeItem(WS_USER_KEY); }
 function isLoggedIn() { return !!getToken(); }
 
-async function api(path, opts = {}) {
+async function api(path, opts = {}, retry = true) {
   const token = getToken();
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = 'Bearer ' + token;
-  const r = await fetch(path, { ...opts, headers: { ...headers, ...opts.headers } });
-  if (r.status === 401) { clearSession(); window.location.reload(); return null; }
-  return r;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 30000);
+  try {
+    const r = await fetch(path, { ...opts, headers: { ...headers, ...opts.headers }, signal: ctrl.signal });
+    if (r.status === 401) { clearSession(); window.location.reload(); return null; }
+    return r;
+  } catch (err) {
+    // Cold starts (Supabase pooler) can exceed normal latency: retry once.
+    if (retry && (err.name === 'AbortError' || err instanceof TypeError)) {
+      return api(path, opts, false);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 // ===== STATE =====
@@ -1366,6 +1385,52 @@ async function loadLists() {
 }
 
 // ===== EXPORTS =====
+function currentFilters() {
+  const segs = [];
+  document.querySelectorAll('.filter-seg:checked').forEach(cb => segs.push(cb.value));
+  const f = { q: (document.getElementById('searchInput')?.value || '').trim() };
+  if (segs.length) f.segment = segs[0];
+  const country = document.getElementById('filterCountry')?.value;
+  if (country) f.country = country;
+  return f;
+}
+
+async function runExport(btn) {
+  const target = btn || document.getElementById('exportBtn');
+  if (target) { target.disabled = true; }
+  showToast('Preparing your export…');
+  try {
+    const r = await api('/api/workspace/exports', {
+      method: 'POST',
+      body: JSON.stringify({ export_type: 'profiles', filters: currentFilters() }),
+    });
+    if (!r) return;
+    const exp = await r.json();
+    if (!r.ok) { showToast(exp.detail || 'Export failed', true); return; }
+    showToast(exp.truncated
+      ? `Exported ${exp.item_count} of ${exp.limit}+ matches (plan limit)`
+      : `Exported ${exp.item_count} profiles`);
+    // Download the CSV (auth header required — anchor tags can't send it).
+    const token = getToken();
+    const dl = await fetch(`/api/workspace/exports/${exp.id}/download`, {
+      headers: token ? { 'Authorization': 'Bearer ' + token } : {},
+    });
+    if (!dl.ok) { showToast('Download failed — find it under Exports', true); loadExports(); return; }
+    const blob = await dl.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `sporafind-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    loadExports();
+  } catch {
+    showToast('Export failed — please try again', true);
+  } finally {
+    if (target) { target.disabled = false; }
+  }
+}
+
 async function loadExports() {
   try {
     const r = await api('/api/workspace/exports');
