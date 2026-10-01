@@ -192,7 +192,8 @@ img{display:block}
 .activity-user{font-size:12px;color:var(--slate);display:flex;align-items:center;gap:6px;margin-top:4px}
 
 /* DATA TABLE */
-.data-table-wrap{background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);overflow:hidden}
+.data-table-wrap{background:var(--white);border:0.5px solid var(--cream2);border-radius:var(--radius-lg);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.data-table{min-width:640px}
 .data-table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid var(--cream2);gap:12px;flex-wrap:wrap}
 .data-table-toolbar-left{display:flex;align-items:center;gap:10px;flex:1}
 .data-table-toolbar-right{display:flex;align-items:center;gap:8px}
@@ -214,7 +215,7 @@ img{display:block}
 .data-table .td-check input[type=checkbox]{accent-color:var(--green);width:15px;height:15px;cursor:pointer}
 .data-table-pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:0.5px solid var(--cream2);font-size:12px;color:var(--text-muted)}
 .data-table-pagination .pagination-btns{display:flex;gap:4px}
-.data-table-pagination .page-btn{width:30px;height:30px;border-radius:var(--radius-sm);border:0.5px solid var(--cream2);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--text-mid);font-family:'Inter',sans-serif}
+.data-table-pagination .page-btn{min-width:40px;height:40px;border-radius:var(--radius-sm);border:0.5px solid var(--cream2);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--text-mid);font-family:'Inter',sans-serif}
 .data-table-pagination .page-btn:hover{background:var(--bg)}
 .data-table-pagination .page-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
 .data-table-pagination .page-btn:disabled{opacity:0.3;cursor:not-allowed}
@@ -731,20 +732,20 @@ img{display:block}
               <span class="chart-card-action" onclick="loadSmokeTestStats()">Refresh <i class="ti ti-refresh"></i></span>
             </div>
             <div id="smokeTestCard">
-              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
-                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px">
+                <div style="background:var(--bg);border:1px solid var(--cream2);border-radius:8px;padding:12px;text-align:center">
                   <div id="smokeUptime" style="font-size:22px;font-weight:700">—</div>
                   <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Uptime (24h)</div>
                 </div>
-                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                <div style="background:var(--bg);border:1px solid var(--cream2);border-radius:8px;padding:12px;text-align:center">
                   <div id="smokePassed" style="font-size:22px;font-weight:700;color:var(--green)">—</div>
                   <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Passed</div>
                 </div>
-                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                <div style="background:var(--bg);border:1px solid var(--cream2);border-radius:8px;padding:12px;text-align:center">
                   <div id="smokeFailed" style="font-size:22px;font-weight:700;color:var(--red-deep)">—</div>
                   <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Failed</div>
                 </div>
-                <div style="background:var(--surface-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+                <div style="background:var(--bg);border:1px solid var(--cream2);border-radius:8px;padding:12px;text-align:center">
                   <div id="smokeAvgMs" style="font-size:22px;font-weight:700">—</div>
                   <div style="font-size:10px;color:var(--text-muted);margin-top:4px">Avg response</div>
                 </div>
@@ -1640,7 +1641,7 @@ img{display:block}
           <button class="btn btn-outline btn-md" id="importRefreshBtn" onclick="loadImportHistory()"><i class="ti ti-refresh"></i> Refresh Status</button>
         </div>
 
-        <div id="importCurrent" style="display:none;background:var(--surface-bg);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px">
+        <div id="importCurrent" style="display:none;background:var(--bg);border:1px solid var(--cream2);border-radius:10px;padding:20px;margin-bottom:24px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
             <div style="font-size:14px;font-weight:600">Current Import <span id="importRunId" style="font-size:11px;color:var(--text-muted)"></span></div>
             <span id="importStatusBadge" class="badge" style="padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">Pending</span>
@@ -1649,11 +1650,11 @@ img{display:block}
             <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px">
               <span>Progress</span><span id="importProgressText">0 / 0</span>
             </div>
-            <div style="width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+            <div style="width:100%;height:6px;background:var(--cream2);border-radius:3px;overflow:hidden">
               <div id="importProgressBar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--green),#00c86e);border-radius:3px;transition:width .3s"></div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;font-size:11px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-top:12px;font-size:11px">
             <div><span style="color:var(--text-muted)">Found</span><br><span id="impFound" style="font-weight:600">0</span></div>
             <div><span style="color:var(--text-muted)">Imported</span><br><span id="impImported" style="font-weight:600;color:var(--green)">0</span></div>
             <div><span style="color:var(--text-muted)">Failed</span><br><span id="impFailed" style="font-weight:600;color:#ef4444">0</span></div>
@@ -2347,7 +2348,7 @@ async function loadSmokeTestStats() {
 
       endpoints.innerHTML = `
         <table style="width:100%;border-collapse:collapse;font-size:12px">
-          <thead><tr style="border-bottom:1px solid var(--border)">
+          <thead><tr style="border-bottom:1px solid var(--cream2)">
             <th style="text-align:left;padding:4px 8px;color:var(--text-muted)">Endpoint</th>
             <th style="text-align:center;padding:4px 8px;color:var(--text-muted)">Status</th>
             <th style="text-align:right;padding:4px 8px;color:var(--text-muted)">Code</th>
@@ -2355,7 +2356,7 @@ async function loadSmokeTestStats() {
           </tr></thead>
           <tbody>
             ${data.latest.slice(0,6).map(r => `
-              <tr style="border-bottom:1px solid var(--border)">
+              <tr style="border-bottom:1px solid var(--cream2)">
                 <td style="padding:4px 8px;font-family:monospace;font-size:11px">${r.endpoint}</td>
                 <td style="text-align:center;padding:4px 8px"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.passed ? 'var(--green)' : 'var(--red-deep)'}"></span></td>
                 <td style="text-align:right;padding:4px 8px;font-family:monospace">${r.status_code || 'ERR'}</td>
