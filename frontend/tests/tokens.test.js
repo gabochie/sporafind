@@ -47,4 +47,16 @@ describe('design-token consistency', () => {
     const bad = pages.filter((p) => /--header-w|--shadow-sm/.test(read(p)));
     expect(bad).toEqual([]);
   });
+
+  it('safe-area tokens defined (installed-app notch clearance)', () => {
+    const tokens = read('css/tokens.css');
+    for (const t of ['--safe-top:', '--safe-bottom:', '--safe-left:', '--safe-right:']) {
+      expect(tokens).toContain(t);
+    }
+    // The app shells fix their header to var(--header-h); without the inset the
+    // iOS status bar covers it in standalone mode.
+    for (const shell of ['workspace.html', 'admin.html']) {
+      expect(read(shell)).toContain('--safe-top');
+    }
+  });
 });

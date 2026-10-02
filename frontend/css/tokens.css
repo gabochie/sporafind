@@ -78,4 +78,11 @@
   /* App layout */
   --sidebar-w: 240px;
   --header-h: 64px;
+
+  /* Device safe areas. env() resolves to 0 on any browser without a notch or
+     home indicator, so these need no media query — they are additive. */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
