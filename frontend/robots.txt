@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /investors/dashboard
+Disallow: /workspace/app
+Disallow: /admin
+
+Sitemap: https://sporafind.com/sitemap.xml
