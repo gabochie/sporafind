@@ -224,6 +224,9 @@ THEMES = [
       posts=("fintech-licence-ghana-bank-of-ghana-requirements",)),
     T("ghana_register", "Ghana market trader", "A trader at a market in Ghana.",
       match=("trader", "market", "shop", "business"),
+      # Not "A trader at Makola Market.jpg" -- accra_market already uses it,
+      # and two themes fetching one Commons file render as a visible dupe.
+      pick="File:A trader displaying her wares in a market in northern ghana.jpg",
       posts=("how-to-register-business-ghana-orc-gipa-gra-walkthrough",
              "doing-business-ghana-diaspora-bureaucracy-guide")),
     T("ghana_farm", "Ghana farmer crops", "A farmer selling produce in Ghana.",
@@ -312,9 +315,10 @@ THEMES = [
       match=("flood", "water", "inundation"),
       posts=("accra-flood-zones-where-not-to-buy",)),
     T("ghana_bank_of_ghana", "Ghana bank building Accra",
-      "The Bank of Ghana head office in Accra.",
+      "A bank head office in Accra.",
       match=("bank", "accra", "ghana"),
-      pick="File:Bank of Ghana High Street.jpg",
+      # Not "Bank of Ghana High Street.jpg" -- ghana_bank already uses it.
+      pick="File:CalBank Head Office.jpg",
       posts=("fintech-licence-ghana-bank-of-ghana-requirements",)),
     T("ghana_computer", "Ghana computer", "Computer equipment in Ghana.",
       match=("computer", "laptop", "hardware", "electronics", "technician"),
@@ -475,6 +479,15 @@ def main():
 
     manifest = {"themes": {}, "post_images": {}, "source": "Wikimedia Commons",
                 "unresolved": []}
+    # Two themes that resolve to the same Commons file download the same photo
+    # twice and render as an obvious duplicate, so never reuse one.
+    used_titles = set()
+    if not args.force and MANIFEST.exists():
+        used_titles = {
+            v.get("title") for v in
+            json.loads(MANIFEST.read_text(encoding="utf-8")).get("themes", {}).values()
+            if v.get("title")
+        }
     for spec in THEMES:
         key, dest = spec["key"], OUT_DIR / f"{spec['key']}.jpg"
         chosen = None
@@ -502,7 +515,19 @@ def main():
                     print(f"WARN  {key}: pinned file not found ({spec['pick']!r})")
                     manifest["unresolved"].append(key)
                     continue
+            # Never reuse a Commons file another theme already claimed.
+            dupes = [c for c in cands if c["title"] in used_titles]
+            fresh = [c for c in cands if c["title"] not in used_titles]
+            if dupes and not spec.get("pick"):
+                print(f"WARN  {key}: skipping {len(dupes)} candidate(s) already used "
+                      f"by another theme ({dupes[0]['title']})")
+                cands = fresh or []
+                if not cands:
+                    print(f"WARN  {key}: every candidate already used, unresolved")
+                    manifest["unresolved"].append(key)
+                    continue
             chosen = cands[0]
+            used_titles.add(chosen["title"])
             try:
                 size = download(chosen["download"], dest)
             except Exception as exc:
