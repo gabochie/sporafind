@@ -128,7 +128,8 @@ THEMES = [
     # ---------- housing / land ----------
     T("ghana_housing", "Accra residential houses", "Residential housing in Accra.",
       match=("house", "housing", "residential", "apartment", "home"),
-      posts=("accra-rent-trap-diaspora-guide",)),
+      posts=("accra-rent-trap-diaspora-guide",
+             "accra-agent-fees-renoviction-renters-defense")),
     T("ghana_construction", "Accra building construction site",
       "A building under construction in Accra.", match=("construction", "building"),
       posts=("monitoring-ghana-construction-from-abroad",
@@ -152,7 +153,8 @@ THEMES = [
       # an alleged former witch", which is unfit for a commercial property guide.
       pick="File:Apartment Modern.jpg",
       posts=("gated-communities-ghana-sanbra-guide",
-             "off-plan-property-ghana-due-diligence-checklist")),
+             "off-plan-property-ghana-due-diligence-checklist",
+             "ghana-rent-act-tenant-rights-2026")),
     # ---------- infrastructure / utilities ----------
     T("ghana_meter", "Ghana electricity meter ECG", "An electricity meter in Ghana.",
       match=("meter", "electricity", "ecg"),
@@ -222,7 +224,8 @@ THEMES = [
       posts=("fintech-licence-ghana-bank-of-ghana-requirements",)),
     T("ghana_register", "Ghana market trader", "A trader at a market in Ghana.",
       match=("trader", "market", "shop", "business"),
-      posts=("how-to-register-business-ghana-orc-gipa-gra-walkthrough",)),
+      posts=("how-to-register-business-ghana-orc-gipa-gra-walkthrough",
+             "doing-business-ghana-diaspora-bureaucracy-guide")),
     T("ghana_farm", "Ghana farmer crops", "A farmer selling produce in Ghana.",
       match=("farmer", "farm", "crop", "agriculture", "harvest", "produce"),
       posts=("diaspora-farm-investment-9-rules-before-sending-money",)),
@@ -304,8 +307,7 @@ THEMES = [
       match=("office", "ministry", "department", "authority", "gra"),
       pick="File:Kwabenya NHIA Office, Accra.jpg",
       posts=("forged-land-documents-ghana-red-flags",
-             "gipc-requirements-foreigners-2026-gipa-update",
-             "doing-business-ghana-diaspora-bureaucracy-guide")),
+             "gipc-requirements-foreigners-2026-gipa-update")),
     T("ghana_flood", "Ghana flood", "Flooding in Ghana.",
       match=("flood", "water", "inundation"),
       posts=("accra-flood-zones-where-not-to-buy",)),
@@ -522,7 +524,13 @@ def main():
                 "description": chosen["description"],
             }
         # Map every post that declared this theme to the image path.
-        manifest["post_images"].update({s: f"/img/blog/{key}.jpg" for s in spec["posts"]})
+        for s in spec["posts"]:
+            prior = manifest["post_images"].get(s)
+            if prior and prior != f"/img/blog/{key}.jpg":
+                # Resolution is last-theme-wins, which is easy to get wrong when
+                # re-pointing a post. Surface it instead of silently overriding.
+                print(f"WARN  post {s!r} already mapped to {prior}, remapped to {key}")
+            manifest["post_images"][s] = f"/img/blog/{key}.jpg"
 
     # Carry forward metadata for skipped themes so the manifest stays complete.
     if not args.force and MANIFEST.exists():
