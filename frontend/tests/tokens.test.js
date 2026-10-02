@@ -5,8 +5,12 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+// Generated local-only artifacts. They are gitignored, but the glob below
+// reads the filesystem, so they would otherwise be linted as if they were
+// shipped pages and fail the shared-stylesheet rules.
+const GENERATED = new Set(['photo-review.html']);
 const pages = [
-  ...fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')),
+  ...fs.readdirSync(ROOT).filter((f) => f.endsWith('.html') && !GENERATED.has(f)),
   ...fs.readdirSync(path.join(ROOT, 'views')).filter((f) => f.endsWith('.ejs')).map((f) => `views/${f}`),
 ];
 
