@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "functions": {
     "api/server.js": {
-      "includeFiles": ["data/**", "views/**", "data/posts.json", "data/feature-images.json"]
+      "includeFiles": "data/**,views/**"
     }
   },
   "headers": [
