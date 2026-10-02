@@ -615,9 +615,13 @@ app.post('/api/analytics/pageview', async (req, res) => {
     });
     return res.json({ ok: true });
   } catch (e) { console.error('Pageview error:', e); }
-  const posts = readPosts();
-  const post = posts.find(p => p.slug === req.body.slug);
-  if (post) { post.views = (post.views || 0) + 1; fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2)); }
+  // Local-only fallback: the serverless bundle is read-only, so counting a
+  // view in posts.json is a no-op in production (the API path above owns it).
+  if (!IS_SERVERLESS) {
+    const posts = readPosts();
+    const post = posts.find(p => p.slug === req.body.slug);
+    if (post) { post.views = (post.views || 0) + 1; fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2)); }
+  }
   res.json({ ok: true });
 });
 

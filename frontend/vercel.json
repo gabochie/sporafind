@@ -1,5 +1,10 @@
 {
   "cleanUrls": true,
+  "functions": {
+    "api/server.js": {
+      "includeFiles": ["data/**", "views/**", "data/posts.json", "data/feature-images.json"]
+    }
+  },
   "headers": [
     {
       "source": "/sw.js",
@@ -10,11 +15,15 @@
       "headers": [{ "key": "Content-Type", "value": "application/manifest+json" }]
     }
   ],
-  "rewrites": [    { "source": "/blog/:path*", "destination": "/api/server.js" },
+  "rewrites": [
+    { "source": "/blog", "destination": "/api/server.js" },
+    { "source": "/blog/:path*", "destination": "/api/server.js" },
     { "source": "/api/:path*", "destination": "/api/server.js" },
     { "source": "/sitemap.xml", "destination": "/api/server.js" },
     { "source": "/rss.xml", "destination": "/api/server.js" },
+    { "source": "/investors", "destination": "/api/server.js" },
     { "source": "/investors/:path*", "destination": "/api/server.js" },
+    { "source": "/workspace", "destination": "/api/server.js" },
     { "source": "/workspace/:path*", "destination": "/api/server.js" }
   ]
 }
