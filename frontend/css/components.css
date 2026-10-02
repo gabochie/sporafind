@@ -65,15 +65,16 @@ footer{background:var(--navy);padding:72px 48px 40px}
 .footer-inner{max-width:1100px;margin:0 auto}
 .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:0.5px solid rgba(255,255,255,0.07)}
 .footer-brand p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;margin-top:12px;max-width:260px}
+.footer-socials{display:flex;align-items:center;gap:10px;margin-top:18px}
+.footer-social{width:36px;height:36px;border-radius:10px;border:0.5px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:17px;color:rgba(255,255,255,0.55);background:rgba(255,255,255,0.03);transition:all 0.2s}
+.footer-social:hover{color:#fff;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);transform:translateY(-1px)}
+.footer-social:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .footer-col-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-bottom:16px}
 .footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:10px;text-decoration:none;transition:color 0.15s}
 .footer-col a:hover{color:#fff}
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:32px;flex-wrap:wrap;gap:16px}
 .footer-copy{font-size:13px;color:rgba(255,255,255,0.25)}
 .footer-copy span{color:var(--gold)}
-.footer-bottom-links{display:flex;gap:24px}
-.footer-bottom-links a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none}
-.footer-bottom-links a:hover{color:rgba(255,255,255,0.7)}
 
 /* Decorative glow guard (700px glows must never cause page scroll) */
 .hero-bg-glow,.login-bg-glow{max-width:100vw}
