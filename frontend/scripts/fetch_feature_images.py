@@ -58,6 +58,10 @@ LICENCE_BLOCK = {"nc", "nd", "fair use", "non-free", "copyright"}
 
 MIN_WIDTH = 1400
 MIN_HEIGHT = 800
+# Cap the aspect ratio too. The gate above reads the *original* dimensions but
+# downloads a 1920px-wide thumbnail, so an original of e.g. 4027x1364 passes the
+# height test and then downloads as a 1920x650 strip that crops badly in a card.
+MAX_ASPECT = 2.2
 
 # Ghana markers. A theme flagged ghana_only=True is rejected unless the file's
 # own title or description names Ghana/Accra (or a major Ghanaian city). Without
@@ -96,9 +100,10 @@ def is_negative(*texts):
 #   match      all-of tokens; the file must mention these to be on-topic
 #   ghana_only require a Ghana/Accra marker in title or description
 #   posts      slugs that can use this theme
-def T(key, query, alt, match=(), ghana_only=True, posts=()):
+def T(key, query, alt, match=(), ghana_only=True, posts=(), pick=None):
     return {"key": key, "query": query, "alt": alt,
-            "match": tuple(match), "ghana_only": ghana_only, "posts": tuple(posts)}
+            "match": tuple(match), "ghana_only": ghana_only, "posts": tuple(posts),
+            "pick": pick}
 
 
 THEMES = [
@@ -116,8 +121,8 @@ THEMES = [
     T("trotro", "Accra minibus tro tro", "A minibus (tro-tro) in Accra street traffic.",
       match=("minibus", "tro-tro", "trotro", "bus"),
       posts=("accra-transport-costs-trotro-bolt-owning-car",)),
-    T("ghana_cedi", "Ghana cedi banknote", "Ghanaian cedi banknotes.",
-      match=("cedi", "ghana", "banknote", "currency"),
+    T("ghana_cedi", "Ghana bank branch", "A bank branch in Ghana.",
+      match=("bank", "currency", "cedi", "money", "atm"),
       posts=("ghana-cost-of-living-truth-diaspora-2026",
              "obroni-pricing-ghana-how-to-negotiate")),
     # ---------- housing / land ----------
@@ -129,6 +134,9 @@ THEMES = [
       "A building under construction in Accra.", match=("construction", "building"),
       posts=("monitoring-ghana-construction-from-abroad",
              "building-material-inflation-ghana-timing")),
+    # No honest photo exists: Commons has no reportage of Ghanaian land
+    # registry/title documents (searches return logos, maps and scans that die
+    # the mime/size/landscape gates). These posts keep the designed cover.
     T("ghana_title_search", "Ghana lands commission title",
       "Land registry and title documents.", match=("title", "deed", "land", "certificate", "document"),
       posts=("lands-commission-title-search-ghana-walkthrough",
@@ -139,8 +147,11 @@ THEMES = [
     T("ghana_village", "Ghana village community", "A village settlement in Ghana.",
       match=("village", "community"),
       posts=("pan-african-village-asebu-lessons-diaspora",)),
-    T("ghana_estate", "Ghana gated estate houses", "A gated residential estate in Ghana.",
-      match=("estate", "gated", "residential"),
+    T("ghana_estate", "Ghana apartment", "A residential apartment building in Ghana.",
+      match=("apartment", "estate", "bungalow", "housing", "residential"),
+      # Not the top-ranked hit: that file's own title reads "a unit apartment for
+      # an alleged former witch", which is unfit for a commercial property guide.
+      pick="File:Apartment Modern.jpg",
       posts=("gated-communities-ghana-sanbra-guide",
              "off-plan-property-ghana-due-diligence-checklist")),
     # ---------- infrastructure / utilities ----------
@@ -148,13 +159,16 @@ THEMES = [
       match=("meter", "electricity", "ecg"),
       posts=("ecg-prepaid-meter-draining-fast-rights-fixes",
              "solar-inverter-setup-ghana-homes-costs")),
-    T("ghana_solar", "Ghana solar panel installation", "A solar panel installation in Ghana.",
+    T("ghana_solar", "Ghana solar panel", "A solar panel installation in Ghana.",
       match=("solar", "panel", "inverter"),
       posts=("solar-inverter-setup-ghana-homes-costs",)),
-    T("ghana_water", "Ghana water tank borehole", "A water storage tank in Ghana.",
-      match=("water", "borehole", "tank", "pump", "reservoir"),
+    T("ghana_water", "Ghana water supply", "A water supply point in Ghana.",
+      match=("water", "borehole", "tank", "pump", "reservoir", "supply"),
       posts=("water-security-ghana-home-tanks-boreholes-costs",
              "dumsor-water-internet-ghana-infrastructure-playbook")),
+    # Only fibre photos on Commons are Australian NBN crews (Wagga, NSW). They
+    # pass every gate but are not Ghanaian, so this theme stays unresolved by
+    # design rather than shipping a misleading image.
     T("ghana_fibre", "Ghana fibre optic network", "Fibre optic network cabling in Ghana.",
       match=("fibre", "fiber", "optic", "cable", "telecom", "internet"),
       posts=("internet-remote-workers-ghana-fibre-dual-sim-stack",
@@ -171,45 +185,61 @@ THEMES = [
     T("ghana_malaria", "Ghana malaria mosquito net", "A treated mosquito net in Ghana.",
       match=("malaria", "mosquito", "net", "bed"),
       posts=("malaria-vaccinations-ghana-returnee-health-brief",)),
-    T("ghana_medication", "Ghana pharmacy medicine", "Pharmacy shelves and medicines in Ghana.",
-      match=("pharmacy", "medicine", "drug", "medication", "pharmaceutical"),
+    T("ghana_medication", "Ghana pharmacy", "A pharmacy in Ghana.",
+      match=("pharmacy", "medicine", "drug", "medication", "chemist", "pharmaceutical"),
       posts=("chronic-medication-ghana-availability-planning",)),
     T("ghana_school", "Ghana school classroom pupils", "Pupils in a Ghanaian classroom.",
       match=("school", "classroom", "pupil", "student", "teacher"),
       posts=("international-schools-accra-fees-admissions-2026",
              "ghana-healthcare-schools-diaspora-families-guide")),
-    T("ghana_nhis", "Ghana NHIS health insurance card", "A health insurance card and form.",
-      match=("insurance", "nhis", "card", "health"),
+    T("ghana_nhis", "Ghana doctor nurse hospital",
+      "Ghanaian health workers treating a patient.",
+      match=("doctor", "nurse", "hospital", "clinic", "medical", "health"),
+      # The only photograph actually taken inside a Ghanaian hospital is a
+      # 4027x1364 strip (rejected by MAX_ASPECT). These are a joint
+      # US-Ghana medical training exercise, but they do show Ghanaian health
+      # workers treating a patient, which is what the alt text claims.
+      pick="File:American, Ghanaian medical professionals partner to treat patients, hone skills 170209-A-IO170-062.jpg",
       posts=("nhis-enrolment-diaspora-guide-eligibility-process",)),
     # ---------- documents / money / business ----------
-    T("ghana_passport", "Ghana passport visa", "Ghanaian passport and visa documents.",
-      match=("passport", "visa", "immigration"),
+    # Passport/visa documents themselves are not documented on Commons; the
+    # airport arrival shot is honest reportage for a visa guide.
+    T("ghana_passport", "Kotoka International Airport terminal",
+      "Arrivals at Kotoka International Airport, Accra.",
+      match=("airport", "kotoka", "terminal", "accra"),
+      # "Accra Ghana 2.jpg" ranks first but is a generic city shot; pin the file
+      # that actually shows the arrivals entrance the alt text describes.
+      pick="File:Accra Intl Airport arrivals entrance.jpg",
       posts=("ghana-visa-guide-diaspora-types-fees-fast-track",)),
     T("ghana_bank", "Bank of Ghana building Accra", "A bank building in Accra.",
       match=("bank",),
       posts=("diaspora-mortgages-ghana-compared-2026",
              "build-vs-buy-ghana-diaspora-framework")),
+    # Commons has no Ghanaian mobile-money/fintech reportage: agent and phone
+    # searches return zero usable frames, and cash/money searches surface a euro
+    # area map. Kept unresolved rather than mislabeling an unrelated photo.
     T("ghana_mobile_money", "Ghana mobile money payment", "A mobile money payment in Ghana.",
       match=("mobile money", "momo", "payment", "fintech", "cash"),
       posts=("fintech-licence-ghana-bank-of-ghana-requirements",)),
-    T("ghana_register", "Ghana company registration office", "Business registration in Ghana.",
-      match=("registration", "registry", "certificate", "licence", "license", "company"),
+    T("ghana_register", "Ghana market trader", "A trader at a market in Ghana.",
+      match=("trader", "market", "shop", "business"),
       posts=("how-to-register-business-ghana-orc-gipa-gra-walkthrough",
              "gipc-requirements-foreigners-2026-gipa-update",
              "doing-business-ghana-diaspora-bureaucracy-guide")),
     T("ghana_farm", "Ghana farmer crops", "A farmer selling produce in Ghana.",
       match=("farmer", "farm", "crop", "agriculture", "harvest", "produce"),
       posts=("diaspora-farm-investment-9-rules-before-sending-money",)),
-    T("ghana_materials", "Ghana construction site cement blocks",
-      "Stacked construction materials in Ghana.",
+    T("ghana_materials", "Ghana cement",
+      "Cement and building materials in Ghana.",
       match=("cement", "concrete", "brick", "timber", "scaffold", "aggregate"),
       posts=("building-material-inflation-ghana-timing",)),
     # ---------- community ----------
     T("ghana_church", "Ghana church congregation", "A congregation gathered in a Ghanaian church.",
       match=("church", "congregation", "cathedral", "mosque"),
       posts=("finding-community-ghana-returnees-churches-associations",)),
-    T("ghana_greeting", "Ghana traditional greeting", "Two people greeting each other in Ghana.",
-      match=("greeting", "handshake", "welcome", "dance", "ceremony"),
+    T("ghana_greeting", "Ghana traditional dance festival",
+      "A traditional dance celebration in Ghana.",
+      match=("dance", "festival", "traditional", "cultural"),
       posts=("twi-ga-greetings-etiquette-returnees-starter",)),
     T("ghana_community", "Ghana community gathering", "People gathered at a community event in Ghana.",
       match=("community", "gathering", "event", "association", "meeting"),
@@ -229,8 +259,8 @@ THEMES = [
     T("ghana_data", "data analytics dashboard", "A data dashboard on a screen.",
       match=("dashboard", "data", "analytics", "chart", "screen"),
       ghana_only=False, posts=("ai-powered-diaspora-segmentation",)),
-    T("ghana_power_plant", "Ghana electricity power plant", "An electricity installation in Ghana.",
-      match=("power", "electricity", "grid", "plant", "generator"),
+    T("ghana_power_plant", "Akosombo Dam", "The Akosombo hydroelectric dam in Ghana.",
+      match=("dam", "hydro", "reservoir", "power"),
       posts=("ecg-prepaid-meter-draining-fast-rights-fixes",)),
     T("ghana_attorney", "notary public stamping document office",
       "A notary public at work.",
@@ -240,16 +270,21 @@ THEMES = [
              "consularized-power-of-attorney-ghana-diaspora",
              "escrow-ghana-property-transactions-guide",
              "ghana-land-fraud-survival-guide")),
-    T("ghana_citizenship", "Ghana citizenship ceremony passport",
-      "Citizenship and residency documentation.",
-      match=("citizenship", "residency", "passport", "immigration", "permit"),
+    # Citizenship documents themselves are not on Commons; Independence Day is
+    # honest reportage for the citizenship/right-of-abode guides.
+    T("ghana_citizenship", "Ghana independence day",
+      "Ghana's Independence Day celebration.",
+      match=("independence", "celebration", "parade", "ceremony"),
       posts=("ghana-citizenship-right-of-abode-guide-2026",
              "can-foreigners-own-land-ghana-50-year-rule",
              "stool-land-concurrence-ghana-explained",
              "land-guards-ghana-law-protection-guide")),
-    T("ghana_enterprise", "Ghana small business owner shop",
-      "A small business owner at work in Ghana.",
-      match=("business", "shop", "enterprise", "trader", "owner", "enterprise"),
+    # "Ghana bakery" is contaminated: unrelated Hong Kong bakery photos pass
+    # every gate because their captions merely mention Ghana. A real Ghanaian
+    # small-business shop is the honest alternative.
+    T("ghana_enterprise", "Elmina salon Ghana",
+      "A hairdressing salon in Elmina, Ghana.",
+      match=("salon", "hair", "barber", "shop"),
       posts=("diaspora-entrepreneurship-ecosystem",
              "managing-artisans-staff-ghana-diaspora-employers",
              "gra-tax-foreign-businesses-ghana-assessment-disputes",
@@ -323,7 +358,7 @@ def search_candidates(spec, limit=25):
         if w < MIN_WIDTH or h < MIN_HEIGHT:
             continue
         # Landscape only: these render as wide card/hero images.
-        if w < h * 1.15:
+        if w < h * 1.15 or w > h * MAX_ASPECT:
             continue
         title = p.get("title", "")
         meta = info.get("extmetadata") or {}
@@ -411,6 +446,17 @@ def main():
                 print(f"WARN  {key}: NO on-topic licensed candidate ({spec['query']!r})")
                 manifest["unresolved"].append(key)
                 continue
+            # Honour an explicit pick: Commons search order is relevance, not
+            # editorial quality, so a chosen file is pinned to guarantee the
+            # published photo matches its alt text and avoids files whose very
+            # title makes them unsuitable for a commercial page.
+            chosen = None
+            if spec.get("pick"):
+                cands = [c for c in cands if c["title"] == spec["pick"]]
+                if not cands:
+                    print(f"WARN  {key}: pinned file not found ({spec['pick']!r})")
+                    manifest["unresolved"].append(key)
+                    continue
             chosen = cands[0]
             try:
                 size = download(chosen["download"], dest)
