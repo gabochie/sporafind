@@ -1,5 +1,27 @@
 {
   "themes": {
+    "ghana_register": {
+      "file": "/img/blog/ghana_register.jpg",
+      "alt": "A trader at a market in Ghana.",
+      "query": "Ghana market trader",
+      "title": "File:A trader displaying her wares in a market in northern ghana.jpg",
+      "file_page": "https://commons.wikimedia.org/wiki/File%3AA_trader_displaying_her_wares_in_a_market_in_northern_ghana.jpg",
+      "author": "Musahfm",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "description": "A trader displaying her wares in a market in northern ghana"
+    },
+    "ghana_bank_of_ghana": {
+      "file": "/img/blog/ghana_bank_of_ghana.jpg",
+      "alt": "A bank head office in Accra.",
+      "query": "Ghana bank building Accra",
+      "title": "File:CalBank Head Office.jpg",
+      "file_page": "https://commons.wikimedia.org/wiki/File%3ACalBank_Head_Office.jpg",
+      "author": "Gradexx911",
+      "licence": "CC BY-SA 4.0",
+      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "description": "CalBank's ultramodern Head Office Tower located on the 23 Independence Avenue in Accra."
+    },
     "ghana_court": {
       "file": "/img/blog/ghana_court.jpg",
       "alt": "The Law Courts Complex in Accra.",
@@ -65,17 +87,6 @@
       "licence": "CC BY-SA 4.0",
       "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
       "description": "Some part of the road flooded and rubbish spread on the street in Ghana"
-    },
-    "ghana_bank_of_ghana": {
-      "file": "/img/blog/ghana_bank_of_ghana.jpg",
-      "alt": "The Bank of Ghana head office in Accra.",
-      "query": "Ghana bank building Accra",
-      "title": "File:Bank of Ghana High Street.jpg",
-      "file_page": "https://commons.wikimedia.org/wiki/File%3ABank_of_Ghana_High_Street.jpg",
-      "author": "Natsubee",
-      "licence": "CC BY-SA 3.0",
-      "licence_url": "https://creativecommons.org/licenses/by-sa/3.0",
-      "description": "Bank of Ghana building on High Street in Accra"
     },
     "ghana_computer": {
       "file": "/img/blog/ghana_computer.jpg",
@@ -208,17 +219,6 @@
       "licence": "CC BY-SA 4.0",
       "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
       "description": "Aide Chemists Pharmacy and shops"
-    },
-    "ghana_register": {
-      "file": "/img/blog/ghana_register.jpg",
-      "alt": "A trader at a market in Ghana.",
-      "query": "Ghana market trader",
-      "title": "File:A trader at Makola Market.jpg",
-      "file_page": "https://commons.wikimedia.org/wiki/File%3AA_trader_at_Makola_Market.jpg",
-      "author": "Vrinda Khushu",
-      "licence": "CC BY-SA 4.0",
-      "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
-      "description": "A trader waiting for her customer at Makola Market"
     },
     "ghana_materials": {
       "file": "/img/blog/ghana_materials.jpg",
