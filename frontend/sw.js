@@ -1,6 +1,6 @@
 /* Sporafind service worker — precache shell, runtime caches, push.
  * Versioned caches; auth'd traffic is NEVER cached. */
-const VERSION = 'sf-v1';
+const VERSION = 'sf-v2';
 const STATIC_CACHE = VERSION + '-static';
 const PAGE_CACHE = VERSION + '-pages';
 const API_CACHE = VERSION + '-api';
@@ -8,6 +8,7 @@ const CDN_CACHE = VERSION + '-cdn';
 
 const PRECACHE = [
   '/',
+  '/blog',
   '/offline.html',
   '/manifest.webmanifest',
   '/css/tokens.css',
@@ -18,9 +19,16 @@ const PRECACHE = [
   '/icons/icon-512.png',
 ];
 
+// addAll() is all-or-nothing: one 404 rejects the whole install and the worker
+// never activates, so the app silently loses offline support. Cache each entry
+// independently and tolerate individual failures.
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE)
+      .then((c) => Promise.all(
+        PRECACHE.map((url) => c.add(url).catch((err) => console.warn('[sw] precache miss', url, err)))
+      ))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -89,7 +97,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   if (url.pathname === '/sw.js' || url.pathname === '/manifest.webmanifest') return;
-  if (/^\/(css|js|icons)\//.test(url.pathname) || url.pathname === '/favicon.svg' || url.pathname === '/offline.html') {
+  // img/ was missing here, so feature photos and OG cards fell through to the
+  // network-first catch-all instead of being cached like other static assets.
+  if (/^\/(css|js|icons|img)\//.test(url.pathname) || url.pathname === '/favicon.svg' || url.pathname === '/offline.html') {
     event.respondWith(staleWhileRevalidate(req, STATIC_CACHE, 60));
     return;
   }
