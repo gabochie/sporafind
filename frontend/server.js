@@ -12,8 +12,17 @@ const DATA_DIR = path.join(DIR, 'data');
 const POSTS_FILE = path.join(DATA_DIR, 'posts.json');
 const API_BASE = process.env.API_BASE || 'http://localhost:8000';
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, {recursive: true});
-if (!fs.existsSync(POSTS_FILE)) fs.writeFileSync(POSTS_FILE, JSON.stringify([], null, 2));
+// Seed a missing posts.json for local dev only. On Vercel the serverless
+// bundle is read-only, so touching the filesystem at require-time would crash
+// the function (every route -> edge 404). data/posts.json is committed and
+// always present in the bundle.
+const IS_SERVERLESS = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NOW_REGION);
+if (!IS_SERVERLESS) {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, {recursive: true});
+    if (!fs.existsSync(POSTS_FILE)) fs.writeFileSync(POSTS_FILE, JSON.stringify([], null, 2));
+  } catch (e) { console.warn('Local data bootstrap skipped:', e.message); }
+}
 
 function readPosts() {
   try { return JSON.parse(fs.readFileSync(POSTS_FILE, 'utf8')); } catch { return []; }
