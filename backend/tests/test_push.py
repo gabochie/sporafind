@@ -15,7 +15,9 @@ def _no_vapid_keys(monkeypatch):
 def test_push_routes_registered():
     from app.main import app
 
-    paths = {r.path for r in app.routes if hasattr(r, "path")}
+    # Introspect via OpenAPI, not app.routes: FastAPI>=0.14x stores included
+    # routers lazily (_IncludedRouter), so raw route objects carry no paths.
+    paths = set(app.openapi()["paths"])
     assert "/push/vapid-key" in paths
     assert "/push/subscribe" in paths
     assert "/push/unsubscribe" in paths
