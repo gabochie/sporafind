@@ -1,0 +1,2 @@
+DEMO CANARY - planted for red-green test, not a real credential
+internal_api_key = 9f3b7a1ce04d5f6a8b2c9d0e1f3a5b7c8d0e2f4a6b8c0d2e4f6a8b0c2d4e6

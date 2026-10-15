@@ -1,2 +1,0 @@
-DEMO PLANTED FINDING - delete with branch
-aws_access_key_id=AKIAIOSFODNN7EXAMPLE
